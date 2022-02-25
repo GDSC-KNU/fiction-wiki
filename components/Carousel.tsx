@@ -9,7 +9,7 @@ export default function Carousel() {
   //   const slideI = () => {
   //     let pos = 0;
   //     setInterval(() => {
-  //       pos = (pos + 1) % 4;
+  //       pos = (pos + 1) % 3;
   //       let target = document.querySelector(`#img_div_${pos}`);
   //       target?.classList.add("-ml-[100%]");
   //     }, 2000);
