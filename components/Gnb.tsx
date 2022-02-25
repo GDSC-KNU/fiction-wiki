@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Gnb() {
   return (
-    <header className="flex bg-blue-200 fixed top-0 w-full py-2">
+    <header className="flex bg-blue-200 fixed top-0 w-full py-2 z-10">
       <nav className="flex w-full justify-between items-center">
         <ul className="flex uppercase font-bold">
           <Link href="/">

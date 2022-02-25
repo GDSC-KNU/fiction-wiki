@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
+import Carousel from "../components/Carousel";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <div className="bg-inherit font-bold">Carousel</div>
+      <Carousel />
       It's Home Lorem Ipsum is simply dummy text of the printing and typesetting
       industry. Lorem Ipsum has been the industry's standard dummy text ever
       since the 1500s, when an unknown printer took a galley of type and
