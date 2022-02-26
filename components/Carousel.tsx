@@ -44,7 +44,7 @@ export default function Carousel() {
   }, [currentSlide]);
 
   return (
-    <div className=" h-[45vh] overflow-hidden w-[100%] max-h-[250px] min-h-[213px] !mx-0">
+    <div className=" h-[45vh] overflow-hidden w-[100vw] max-h-[250px] min-h-[213px] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
       <div
         className=" overflow-hidden flex w-[300%] transition-all duration-1000"
         id="img_container"
