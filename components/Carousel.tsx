@@ -23,6 +23,10 @@ export default function Carousel() {
     }
   };
 
+  const changeSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   const prevSlide = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TOTAL_SLIDES);
@@ -32,15 +36,23 @@ export default function Carousel() {
   };
 
   useEffect(() => {
+    // slideRef.current = `-ml-[${100 * currentSlide}%]`;
+
+    let cur = `-ml-[${100 * currentSlide}%]`;
+    console.log(cur);
     console.log(currentSlide);
-    slideRef.current = `-ml-[${100 * currentSlide}%]`;
-    console.log(slideRef);
     let imgCon = document.querySelector("#img_container");
     imgCon?.classList.remove("-ml-[0%]");
     imgCon?.classList.remove("-ml-[100%]");
     imgCon?.classList.remove("-ml-[200%]");
     imgCon?.classList.remove("-ml-[300%]");
-    imgCon?.classList.add(slideRef.current);
+    imgCon?.classList.add(cur);
+
+    let indexBCon = document.querySelector("#indexButtonContainer");
+    indexBCon?.children[0].classList.remove("bg-blue-300");
+    indexBCon?.children[1].classList.remove("bg-blue-300");
+    indexBCon?.children[2].classList.remove("bg-blue-300");
+    indexBCon?.children[currentSlide].classList.add("bg-blue-300");
   }, [currentSlide]);
 
   return (
@@ -72,16 +84,33 @@ export default function Carousel() {
       <div className="flex justify-between mx-5 space-x-8 relative bottom-36 opacity-60">
         <button
           onClick={prevSlide}
-          className=" bg-gray-400 border-solid px-2 py-5 hover:bg-white transition-all  rounded-xl font-bold"
+          className=" bg-black text-white hover:text-black border-solid px-2 py-5 hover:bg-white transition-all  rounded-xl font-bold"
         >
           &lt;
         </button>
         <button
           onClick={nextSlide}
-          className=" bg-gray-500 border-solid px-2 py-5 hover:bg-white transition-all rounded-xl font-bold"
+          className=" bg-black text-white hover:text-black border-solid px-2 py-5 hover:bg-white transition-all rounded-xl font-bold"
         >
           &gt;
         </button>
+      </div>
+      <div
+        id="indexButtonContainer"
+        className=" absolute top-[85%] left-1/2 -translate-x-1/2 opacity-60"
+      >
+        <button
+          onClick={(e) => changeSlide(0)}
+          className=" bg-black rounded-xl w-4 h-4 hover:bg-white transition-all"
+        ></button>
+        <button
+          onClick={(e) => changeSlide(1)}
+          className=" bg-black rounded-xl w-4 h-4 mx-8 hover:bg-white transition-all"
+        ></button>
+        <button
+          onClick={(e) => changeSlide(2)}
+          className=" bg-black rounded-xl w-4 h-4 hover:bg-white transition-all "
+        ></button>
       </div>
     </div>
   );

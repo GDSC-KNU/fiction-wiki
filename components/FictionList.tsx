@@ -7,11 +7,8 @@ export default function FictionList() {
       <div className=" flex justify-center">
         <ul className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-1 py-2">
           {arr.map((item) => (
-            <Link href={`/fictions/${item}`}>
-              <li
-                key={item}
-                className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer"
-              >
+            <Link key={item} href={`/fictions/${item}`}>
+              <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer">
                 <img
                   className=" w-full rounded-xl"
                   src={`https://picsum.photos/160/225?random=${item}`}
