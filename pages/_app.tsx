@@ -5,13 +5,12 @@ import Footer from "../components/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className=" min-w-[300px] bg-gray-200 max-h-fit flex">
+    <div className=" min-w-[300px] bg-gray-100 max-h-fit flex flex-col items-center min-h-[100vh] relative">
       <Top />
-      <div className=" mt-10 mx-3 flex-column items-center">
+      <section className=" mt-10 mx-3 flex-column items-center pb-[60px]">
         <Component {...pageProps} />
-
-        <Footer />
-      </div>
+      </section>
+      <Footer />
     </div>
   );
 }
