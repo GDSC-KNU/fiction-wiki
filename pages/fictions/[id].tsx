@@ -71,10 +71,10 @@ const Fiction: NextPage = () => {
             <ul>
               {Object.keys(dummyComment).map((item) => (
                 <ul className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative">
-                  <li className=" mt-2 text-sm overflow-hidden mr-14">
+                  <li className=" mt-2 text-sm overflow-hidden mr-16">
                     {dummyComment[item]}
                   </li>
-                  <li className=" mt-2 text-sm absolute right-20">{item}</li>
+                  <li className=" mt-2 text-sm absolute right-24">{item}</li>
                   <li className=" mt-2 ml-5 text-sm min-w-[78px]">
                     👍 👎 (+3)
                   </li>

@@ -49,10 +49,13 @@ export default function Carousel() {
     imgCon?.classList.add(cur);
 
     let indexBCon = document.querySelector("#indexButtonContainer");
-    indexBCon?.children[0].classList.remove("bg-blue-300");
-    indexBCon?.children[1].classList.remove("bg-blue-300");
-    indexBCon?.children[2].classList.remove("bg-blue-300");
-    indexBCon?.children[currentSlide].classList.add("bg-blue-300");
+    indexBCon?.children[0].classList.replace("bg-blue-200", "bg-black");
+    indexBCon?.children[1].classList.replace("bg-blue-200", "bg-black");
+    indexBCon?.children[2].classList.replace("bg-blue-200", "bg-black");
+    indexBCon?.children[currentSlide].classList.replace(
+      "bg-black",
+      "bg-blue-200"
+    );
   }, [currentSlide]);
 
   return (
