@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import FictionList from "../../components/FictionList";
+import FictionList from "@components/FictionList";
 
 const Fictions: NextPage = () => {
   return (

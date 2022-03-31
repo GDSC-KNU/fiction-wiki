@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 
 interface LoginForm {
   username: string;
   password: string;
   email: string;
+  errors?: string;
 }
 
 export default function Forms() {
@@ -12,11 +12,16 @@ export default function Forms() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setError,
+    setValue,
+    reset,
+    resetField,
   } = useForm<LoginForm>({
-    mode: "onBlur",
+    mode: "onChange",
   });
   const onValid = (data: LoginForm) => {
-    console.log("Im valid bb");
+    console.log("im valid bby");
   };
   const onInvalid = (errors: FieldErrors) => {
     console.log(errors);
@@ -26,7 +31,7 @@ export default function Forms() {
     <form onSubmit={handleSubmit(onValid, onInvalid)}>
       <input
         {...register("username", {
-          required: "username is required",
+          required: "Username is required",
           minLength: {
             message: "The username should be longer than 5 chars.",
             value: 5,
@@ -35,9 +40,10 @@ export default function Forms() {
         type="text"
         placeholder="Username"
       />
+      {errors.username?.message}
       <input
         {...register("email", {
-          required: "email is required",
+          required: "Email is required",
           validate: {
             notGmail: (value) =>
               !value.includes("@gmail.com") || "Gmail is not allowed",
@@ -48,13 +54,12 @@ export default function Forms() {
       />
       {errors.email?.message}
       <input
-        {...register("password", {
-          required: "password is required",
-        })}
+        {...register("password", { required: "Password is required" })}
         type="password"
         placeholder="Password"
       />
-      <input type="submit" value="Create Account" required />
+      <input type="submit" value="Create Account" />
+      {errors.errors?.message}
     </form>
   );
 }

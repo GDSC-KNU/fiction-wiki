@@ -1,19 +1,31 @@
-import { useState, useEffect, useRef } from "react";
+import next from "next";
+import { useState, useEffect, useRef, TouchEvent } from "react";
 
 export default function Carousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slideRef = useRef("");
+  // const [offSet, setOffSet] = useState(0);
+  // const slideRef = useRef("");
+
+  // window.onload = function touchControll() {
+  //   const screenWidth = imgCon?.clientWidth;
+  //   let imgCon = document.querySelector("#img_container");
+
+  //   imgCon?.addEventListener("touchstart", (e) => {
+  //     // startPos = e.touches[0].pageX;
+  //     console.log("2222");
+  //   });
+  // };
 
   const TOTAL_SLIDES = 2;
 
-  //   const slideI = () => {
-  //     let pos = 0;
-  //     setInterval(() => {
-  //       pos = (pos + 1) % 3;
-  //       let target = document.querySelector(`#img_div_${pos}`);
-  //       target?.classList.add("-ml-[100%]");
-  //     }, 2000);
-  //   };
+  const slideI = () => {
+    let pos = 0;
+    setInterval(() => {
+      pos = (pos + 1) % 3;
+      let target = document.querySelector(`#img_div_${pos}`);
+      target?.classList.add("-ml-[100%]");
+    }, 2000);
+  };
 
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
@@ -35,18 +47,55 @@ export default function Carousel() {
     }
   };
 
+  // //touch slide
+  // let startPos = 0;
+
+  // let curPos = 0;
+
+  // const touchStart = (event: any) => {
+  //   let imgCon = document.querySelector("#img_container");
+  //   console.log(event?.touches[0].pageX);
+  // };
+
+  // const touchMove = (event: any) => {
+  //   let imgICon = document.querySelector("#img_inner_container");
+
+  //   setOffSet(
+  //     Math.round((curPos + (event.targetTouches[0].pageX - startPos)) / 100) *
+  //       100
+  //   );
+  // };
+
+  // const touchEnd = (event: any) => {
+  //   // let imgCon = document.querySelector("#img_container");
+  //   // const screenWidth: any = imgCon?.clientWidth;
+  //   // const sum = curPos + (event?.touches[0]?.pageX - startPos);
+  //   // let destination = Math.round(sum / screenWidth) * screenWidth;
+  //   // if (destination > 0) {
+  //   //   destination = 0;
+  //   // } else if (destination < -(screenWidth * (3 - 1))) {
+  //   //   destination = -(screenWidth * (3 - 1));
+  //   // }
+
+  //   // console.log(event?.touches[0]?.pageX);
+  //   console.log(offSet);
+  //   console.log("touchend");
+  // };
+
+  //   //touch slide end
+
   useEffect(() => {
     // slideRef.current = `-ml-[${100 * currentSlide}%]`;
 
     let cur = `-ml-[${100 * currentSlide}%]`;
     console.log(cur);
     console.log(currentSlide);
-    let imgCon = document.querySelector("#img_container");
-    imgCon?.classList.remove("-ml-[0%]");
-    imgCon?.classList.remove("-ml-[100%]");
-    imgCon?.classList.remove("-ml-[200%]");
-    imgCon?.classList.remove("-ml-[300%]");
-    imgCon?.classList.add(cur);
+    let imgICon = document.querySelector("#img_inner_container");
+    imgICon?.classList.remove("-ml-[0%]");
+    imgICon?.classList.remove("-ml-[100%]");
+    imgICon?.classList.remove("-ml-[200%]");
+    imgICon?.classList.remove("-ml-[300%]");
+    imgICon?.classList.add(cur);
 
     let indexBCon = document.querySelector("#indexButtonContainer");
     indexBCon?.children[0].classList.replace("bg-blue-200", "bg-black");
@@ -56,31 +105,53 @@ export default function Carousel() {
       "bg-black",
       "bg-blue-200"
     );
+
+    // let imgCon = document.querySelector("#img_container");
+    // imgCon.className = ` translate-x-[${offSet}px] transition-all duration-[0ms]`;
+    // imgCon?.addEventListener("touchstart", (e: any) => {
+    //   // startPos = e.changedTouches;
+    //   console.log(e.changedTouches[0].pageX);
+    // });
   }, [currentSlide]);
 
+  // useEffect(() => {
+  //   let imgCon = document.querySelector("#img_container");
+  //   imgCon.className = ` translate-x-[${offSet}px] transition-all duration-[0ms]`;
+  //   console.log("hi22");
+  //   console.log(offSet);
+  // }, [offSet]);
+
   return (
-    <div className=" h-[45vh] overflow-hidden w-[100vw] max-h-[250px] min-h-[213px] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+    <div className=" transition-all h-[45vh] overflow-hidden w-[100vw] max-h-[250px] min-h-[213px] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
       <div
-        className=" overflow-hidden flex w-[300%] transition-all duration-1000"
+        className=" "
         id="img_container"
+        // onTouchStart={touchStart}
+        // onTouchMove={touchMove}
+        // onTouchEnd={touchEnd}
       >
-        <div className=" h-[250px] w-[100%] " id="img_div_1">
-          <img
-            src="https://picsum.photos/1422/362?random=1"
-            className=" h-full w-full"
-          ></img>
-        </div>
-        <div className=" h-[250px] w-[100%] " id="img_div_2">
-          <img
-            src="https://picsum.photos/1422/362?random=2"
-            className=" h-full w-full"
-          ></img>
-        </div>
-        <div className=" h-[250px] w-[100%] " id="img_div_3">
-          <img
-            src="https://picsum.photos/1422/362?random=3"
-            className=" h-full w-full"
-          ></img>
+        <div
+          id="img_inner_container"
+          className=" overflow-hidden flex w-[300%] transition-all duration-1000 relative"
+        >
+          <div className=" h-[250px] w-[100%] " id="img_div_1">
+            <img
+              src="https://picsum.photos/1422/362?random=1"
+              className=" h-full w-full"
+            ></img>
+          </div>
+          <div className=" h-[250px] w-[100%] " id="img_div_2">
+            <img
+              src="https://picsum.photos/1422/362?random=2"
+              className=" h-full w-full"
+            ></img>
+          </div>
+          <div className=" h-[250px] w-[100%] " id="img_div_3">
+            <img
+              src="https://picsum.photos/1422/362?random=3"
+              className=" h-full w-full"
+            ></img>
+          </div>
         </div>
       </div>
 

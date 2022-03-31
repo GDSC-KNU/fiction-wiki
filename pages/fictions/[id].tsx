@@ -51,8 +51,11 @@ const Fiction: NextPage = () => {
             <div className=" mb-10 pb-3 px- w-full bg-white">
               <h2 className=" font-bold pt-1 px-2">Keywords</h2>
               <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
-                {dummyKeyword.map((item) => (
-                  <li className=" text-sm text-center ring-2 ring-offset-1 mx-1 my-1 rounded-md h-fit">
+                {dummyKeyword.map((item, index) => (
+                  <li
+                    key={index}
+                    className=" text-sm text-center ring-2 ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                  >
                     {item}
                   </li>
                 ))}
@@ -69,8 +72,11 @@ const Fiction: NextPage = () => {
           <div className=" h-fit w-full bg-white">
             <h2 className=" font-bold pt-1 px-2"> Comments</h2>
             <ul>
-              {Object.keys(dummyComment).map((item) => (
-                <ul className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative">
+              {Object.keys(dummyComment).map((item, index) => (
+                <ul
+                  key={index}
+                  className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
+                >
                   <li className=" mt-2 text-sm overflow-hidden mr-16">
                     {dummyComment[item]}
                   </li>

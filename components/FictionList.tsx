@@ -14,7 +14,7 @@ export default function FictionList() {
                   src={`https://picsum.photos/160/225?random=${item}`}
                 ></img>
                 <div className=" flex-col">
-                  <div className=" font-bold">도쿄 리벤져스</div>
+                  <div className=" font-bold">아이언맨 2</div>
                   <div>number : {item}</div>
                   <div>Author : name</div>
                   {console.log(item)}
