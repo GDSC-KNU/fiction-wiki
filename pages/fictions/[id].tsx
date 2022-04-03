@@ -1,4 +1,6 @@
 import type { NextPage } from "next";
+import RadarChart from "@components/FictionRadarChart";
+import FictionRadarChart from "@components/FictionRadarChart";
 
 const Fiction: NextPage = () => {
   const dummyKeyword = [
@@ -61,12 +63,13 @@ const Fiction: NextPage = () => {
                 ))}
               </ul>
             </div>
-            <div className=" min-h-[176px] bg-white mb-10 xl:ml-10 w-full">
+            <div className=" h-max bg-white mb-10 xl:ml-10 w-full">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
-              <img
+              {/* <img
                 className=" mx-auto"
                 src="http://picsum.photos/350/350?random=1"
-              ></img>
+              ></img> */}
+              <FictionRadarChart />
             </div>
           </div>
           <div className=" h-fit w-full bg-white">
