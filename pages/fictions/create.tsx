@@ -12,12 +12,14 @@ import { FieldErrors, useForm } from "react-hook-form";
 interface CreateForm {
   title: string;
   author: string;
-  date: number;
   nationality: string;
+  genre: string[];
+  date: Date[];
   status: number[];
   synopsis: string;
   characters: string;
   tags: string[];
+  original: string;
 }
 
 const create: NextPage = () => {
@@ -35,7 +37,7 @@ const create: NextPage = () => {
     console.log(data);
   };
   const onInvalid = (erros: FieldErrors) => {};
-  console.log(watch().status);
+  console.log(watch());
 
   const wTags: string[] = watch().tags;
   const wStatus: number[] = watch().status;
@@ -57,7 +59,7 @@ const create: NextPage = () => {
         <form className=" w-[90vw]" onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
-              <div className=" bg-white col-span-2 mx-5 mt-7 h-fit">
+              <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md">
                 <img
                   className=" min-h-[330px] w-full"
                   src="https://picsum.photos/462/599?random=1"
@@ -100,7 +102,15 @@ const create: NextPage = () => {
                     ></input>
                   </div>
                   <div className=" mb-2">
-                    <input type="date"></input>~<input type="date"></input>
+                    <input
+                      {...register("date.0", { required: true })}
+                      type="date"
+                    ></input>
+                    ~
+                    <input
+                      {...register("date.1", { required: true })}
+                      type="date"
+                    ></input>
                   </div>
 
                   <div className=" mb-2">500화 완결</div>
@@ -108,7 +118,7 @@ const create: NextPage = () => {
               </div>
               <div className=" col-span-3 mx-5 mt-7">
                 <div className=" grid xl:grid-cols-2 sm:grid-cols-1">
-                  <div className=" mb-10 pb-3 px- w-full bg-white">
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
                     <h2 className=" font-bold pt-1 px-2">Keywords</h2>
                     <input
                       className=" w-full"
@@ -130,7 +140,7 @@ const create: NextPage = () => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" h-max bg-white mb-10 xl:ml-10 w-full">
+                  <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart wStatus={wStatus} />
                     <div className=" grid grid-cols-5">
@@ -173,13 +183,13 @@ const create: NextPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className=" h-fit w-full bg-white">
+                {/* <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
                   <h2 className=" font-bold pt-1 px-2"> Comments</h2>
                   <ul></ul>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className=" mx-5 my-7 bg-white px-3 py-3">
+            <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
               <div className=" ">
                 <h2 className=" font-bold text-xl">줄거리</h2>
                 <textarea

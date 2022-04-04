@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import RadarChart from "@components/FictionRadarChart";
 import FictionRadarChart from "@components/FictionRadarChart";
 
 const Fiction: NextPage = () => {
@@ -35,7 +34,7 @@ const Fiction: NextPage = () => {
   return (
     <div className=" max-w-[1500px]">
       <div className=" grid grid-cols-1 sm:grid-cols-5 ">
-        <div className=" bg-white col-span-2 mx-5 mt-7 h-fit">
+        <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md">
           <img
             className=" min-h-[330px] w-full"
             src="https://picsum.photos/462/599?random=1"
@@ -43,14 +42,15 @@ const Fiction: NextPage = () => {
           <div className=" px-4 py-3">
             <h2 className=" font-semibold text-2xl mb-2">끝이 아닌 시작</h2>
             <div className=" mb-2">CuttleFish</div>
-            <div className=" mb-2">2021.01.12 ~ 2022.01.12</div>
             <div className=" mb-2">미국</div>
+            <div className=" mb-2">2021.01.12 ~ 2022.01.12</div>
+
             <div className=" mb-2">500화 완결</div>
           </div>
         </div>
         <div className=" col-span-3 mx-5 mt-7">
           <div className=" grid xl:grid-cols-2 sm:grid-cols-1">
-            <div className=" mb-10 pb-3 px- w-full bg-white">
+            <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">Keywords</h2>
               <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
                 {dummyKeyword.map((item, index) => (
@@ -63,7 +63,7 @@ const Fiction: NextPage = () => {
                 ))}
               </ul>
             </div>
-            <div className=" h-max bg-white mb-10 xl:ml-10 w-full">
+            <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
               {/* <img
                 className=" mx-auto"
@@ -72,7 +72,7 @@ const Fiction: NextPage = () => {
               <FictionRadarChart />
             </div>
           </div>
-          <div className=" h-fit w-full bg-white">
+          <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
             <h2 className=" font-bold pt-1 px-2"> Comments</h2>
             <ul>
               {Object.keys(dummyComment).map((item, index) => (
@@ -93,7 +93,7 @@ const Fiction: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className=" mx-5 my-7 bg-white px-3 py-3">
+      <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
         <div className=" ">
           <h2 className=" font-bold text-xl">줄거리</h2>
           <p>
