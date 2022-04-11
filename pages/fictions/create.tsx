@@ -1,4 +1,5 @@
 import FictionRadarChart from "@components/FictionRadarChart";
+import useMutation from "@libs/client2/useMutation";
 import type { NextPage } from "next";
 import React, {
   KeyboardEvent,
@@ -20,9 +21,13 @@ interface CreateForm {
   characters: string;
   tags: string[];
   original: string;
+  platforms: string[];
 }
 
-const create: NextPage = () => {
+const Create: NextPage = () => {
+  const [create, { loading, data, error }] = useMutation(
+    "/api/fictions/create"
+  );
   const {
     register,
     handleSubmit,
@@ -35,8 +40,10 @@ const create: NextPage = () => {
 
   const onValid = (data: CreateForm) => {
     console.log(data);
+    create(data);
   };
   const onInvalid = (erros: FieldErrors) => {};
+
   console.log(watch());
 
   const wTags: string[] = watch().tags;
@@ -48,7 +55,10 @@ const create: NextPage = () => {
 
     if (key === ",") {
       e.preventDefault();
-      setValue("tags", [...wTags, wTags[0]]);
+
+      if (!wTags.slice(1).includes(wTags[0].trim())) {
+        setValue("tags", [wTags[0], ...wTags]);
+      }
       resetField("tags.0");
     }
   };
@@ -59,7 +69,7 @@ const create: NextPage = () => {
         <form className=" w-[90vw]" onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
-              <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md">
+              <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                 <img
                   className=" min-h-[330px] w-full"
                   src="https://picsum.photos/462/599?random=1"
@@ -89,42 +99,57 @@ const create: NextPage = () => {
                   <span className=" text-sm">{errors.title?.message}</span>
                   <input
                     className=" w-full mb-2"
-                    {...register("author", { required: true })}
+                    {...register("author")}
                     type="text"
                     placeholder="작가"
                   ></input>
                   <div className=" mb-2">
                     <input
                       className=" w-full mb-2"
-                      {...register("nationality", { required: true })}
+                      {...register("nationality")}
                       type="text"
                       placeholder="국가"
                     ></input>
                   </div>
                   <div className=" mb-2">
                     <input
-                      {...register("date.0", { required: true })}
-                      type="date"
-                    ></input>
-                    ~
-                    <input
-                      {...register("date.1", { required: true })}
-                      type="date"
+                      className=" w-full mb-2"
+                      {...register("genre")}
+                      type="text"
+                      placeholder="장르"
                     ></input>
                   </div>
-
-                  <div className=" mb-2">500화 완결</div>
+                  <div className=" mb-2">
+                    <input {...register("date.0")} type="date"></input>~
+                    <input {...register("date.1")} type="date"></input>
+                  </div>
+                  <div className=" mb-2">
+                    <input
+                      className=" w-full mb-2"
+                      {...register("original")}
+                      type="text"
+                      placeholder="원본"
+                    ></input>
+                  </div>
+                  <div className="">
+                    <input
+                      className=" w-full mb-2"
+                      {...register("platforms.0")}
+                      type="text"
+                      placeholder="플랫폼"
+                    ></input>
+                  </div>
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
                 <div className=" grid xl:grid-cols-2 sm:grid-cols-1">
-                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                     <h2 className=" font-bold pt-1 px-2">Keywords</h2>
                     <input
                       className=" w-full"
                       {...register("tags.0")}
                       type="text"
-                      placeholder="키워드(,를 눌러서 입력하세요)"
+                      placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown}
                     ></input>
                     <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
@@ -132,7 +157,7 @@ const create: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" text-sm text-center ring-2 ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
                             key={index}
                           >
                             {item}
@@ -140,7 +165,7 @@ const create: NextPage = () => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
+                  <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart wStatus={wStatus} />
                     <div className=" grid grid-cols-5">
@@ -189,7 +214,7 @@ const create: NextPage = () => {
                 </div> */}
               </div>
             </div>
-            <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
+            <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
               <div className=" ">
                 <h2 className=" font-bold text-xl">줄거리</h2>
                 <textarea
@@ -217,4 +242,4 @@ const create: NextPage = () => {
   );
 };
 
-export default create;
+export default Create;
