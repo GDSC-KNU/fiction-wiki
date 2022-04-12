@@ -11,16 +11,20 @@ datasource db {
 
 model Fiction {
   id            Int                 @id @default(autoincrement())
-  title         String
-  fictiondetail FictionDetail?
   categories    CategoriesOnFictions[]
   keywords      KeywordsOnFictions[]
+  fictionStat   FictionStat?
+  title         String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  image         String
 }
 
-model FictionDetail {
+model FictionStat {
   id          Int       @id @default(autoincrement())
-  fiction     Fiction   @relation(fields: [fictionId], references : [id])
+  fiction     Fiction   @relation(fields: [fictionId], references: [id])
   fictionId   Int
+  StatInfo    Int[]
 }
 
 model Category {
