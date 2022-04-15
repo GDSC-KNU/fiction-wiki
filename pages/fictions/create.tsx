@@ -1,5 +1,8 @@
+import Button from "@components/button";
 import FictionRadarChart from "@components/FictionRadarChart";
-import useMutation from "@libs/client2/useMutation";
+import Input from "@components/input";
+import Textarea from "@components/textarea";
+import useMutation from "@libs/client/useMutation";
 import type { NextPage } from "next";
 import React, {
   KeyboardEvent,
@@ -10,7 +13,7 @@ import React, {
 } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 
-interface CreateForm {
+interface CreateFictionForm {
   title: string;
   author: string;
   nationality: string;
@@ -25,7 +28,7 @@ interface CreateForm {
 }
 
 const Create: NextPage = () => {
-  const [create, { loading, data, error }] = useMutation(
+  const [createFiction, { loading, data, error }] = useMutation(
     "/api/fictions/create"
   );
   const {
@@ -36,13 +39,16 @@ const Create: NextPage = () => {
     watch,
     formState: { errors },
     setValue,
-  } = useForm<CreateForm>({ mode: "onBlur" });
+  } = useForm<CreateFictionForm>({ mode: "onBlur" });
 
-  const onValid = (data: CreateForm) => {
+  const onValid = (data: CreateFictionForm) => {
+    if (loading) return;
     console.log(data);
-    create(data);
+    createFiction(data);
   };
-  const onInvalid = (erros: FieldErrors) => {};
+  const onInvalid = (erros: FieldErrors) => {
+    if (loading) return;
+  };
 
   console.log(watch());
 
@@ -70,75 +76,70 @@ const Create: NextPage = () => {
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
               <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                <img
-                  className=" min-h-[330px] w-full"
-                  src="https://picsum.photos/462/599?random=1"
-                ></img>
+                <div className=" min-h-[330px] w-full">
+                  <label className="w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
+                    <svg
+                      className="h-12 w-12"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 48 48"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <input className="hidden" type="file" />
+                  </label>
+                </div>
                 <div className=" px-4 py-3">
-                  <input
-                    className={`${
-                      Boolean(errors.title?.message)
-                        ? " w-full mb-2 border-red-400 border-2"
-                        : " w-full mb-2"
-                    }`}
-                    {...register("title", {
-                      required: "Title is required",
-                      minLength: {
-                        message: "The title should be longer than 2",
-                        value: 2,
-                      },
-                      validate: {
-                        notGmail: (value) =>
-                          !value.includes("@gmail.com") ||
-                          "Gmail is not allowed",
-                      },
-                    })}
+                  <Input
+                    register={register("title", { required: true })}
+                    required
+                    label="Title"
+                    name="title"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("author", { required: true })}
+                    required
+                    label="Author"
+                    name="author"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("nationality", { required: true })}
+                    required
+                    label="Nationality"
+                    name="nationality"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("genre")}
+                    required
+                    label="Genre"
+                    name="genre"
+                    type="text_detail"
+                  />
+                  <input {...register("date.0")} type="date"></input>~
+                  <input {...register("date.1")} type="date"></input>
+                  <Input
+                    register={register("original", { required: true })}
+                    required
+                    label="Original"
+                    name="original"
                     type="text"
-                    placeholder="제목"
-                  ></input>
-                  <span className=" text-sm">{errors.title?.message}</span>
-                  <input
-                    className=" w-full mb-2"
-                    {...register("author")}
+                  />
+                  <Input
+                    register={register("platforms.0")}
+                    required
+                    label="Platforms"
+                    name="platforms"
                     type="text"
-                    placeholder="작가"
-                  ></input>
-                  <div className=" mb-2">
-                    <input
-                      className=" w-full mb-2"
-                      {...register("nationality")}
-                      type="text"
-                      placeholder="국가"
-                    ></input>
-                  </div>
-                  <div className=" mb-2">
-                    <input
-                      className=" w-full mb-2"
-                      {...register("genre")}
-                      type="text"
-                      placeholder="장르"
-                    ></input>
-                  </div>
-                  <div className=" mb-2">
-                    <input {...register("date.0")} type="date"></input>~
-                    <input {...register("date.1")} type="date"></input>
-                  </div>
-                  <div className=" mb-2">
-                    <input
-                      className=" w-full mb-2"
-                      {...register("original")}
-                      type="text"
-                      placeholder="원본"
-                    ></input>
-                  </div>
-                  <div className="">
-                    <input
-                      className=" w-full mb-2"
-                      {...register("platforms.0")}
-                      type="text"
-                      placeholder="플랫폼"
-                    ></input>
-                  </div>
+                  />
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
@@ -168,7 +169,7 @@ const Create: NextPage = () => {
                   <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart wStatus={wStatus} />
-                    <div className=" grid grid-cols-5">
+                    <div className=" grid grid-cols-2">
                       <input
                         {...register("status.0")}
                         className=" text-xs text-center"
@@ -215,27 +216,21 @@ const Create: NextPage = () => {
               </div>
             </div>
             <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-              <div className=" ">
-                <h2 className=" font-bold text-xl">줄거리</h2>
-                <textarea
-                  className=" w-full h-40 border-2"
-                  {...register("synopsis", { required: true })}
-                  placeholder="줄거리"
-                ></textarea>
-              </div>
-              <div className=" mt-3">
-                <h3 className=" font-bold text-xl">등장인물</h3>
-                <textarea
-                  className=" w-full min-h-[150px] border-2"
-                  {...register("characters", { required: false })}
-                  placeholder="등장인물"
-                ></textarea>
-              </div>
+              <Textarea
+                register={register("synopsis")}
+                name="synopsis"
+                label="Synopsis"
+                required
+              />
+              <Textarea
+                register={register("characters")}
+                name="characters"
+                label="Characters"
+                required
+              />
             </div>
           </div>
-          <button className=" w-full bg-blue-200" type="submit">
-            저장
-          </button>
+          <Button text={loading ? "Loading..." : "저장"} />
         </form>
       </div>
     </>

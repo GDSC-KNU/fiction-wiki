@@ -14,17 +14,28 @@ model Fiction {
   categories    CategoriesOnFictions[]
   keywords      KeywordsOnFictions[]
   fictionStat   FictionStat?
-  title         String
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
-  image         String
+  title         String
+  startDate     DateTime
+  endDate       DateTime
+  image         String              @db.MediumText
+  description   String              @db.MediumText
+  characters    String              @db.MediumText
+  user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
+  userId        Int
 }
 
 model FictionStat {
-  id          Int       @id @default(autoincrement())
-  fiction     Fiction   @relation(fields: [fictionId], references: [id])
-  fictionId   Int
-  StatInfo    Int[]
+  id                Int       @id @default(autoincrement())
+  fiction           Fiction   @relation(fields: [fictionId], references: [id])
+  fictionId         Int     
+  originality       Int
+  verisimilitude    Int
+  synopsis          Int
+  character         Int
+  writing           Int
+  value             Int
 }
 
 model Category {
@@ -68,6 +79,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tokens    Token[]
+  fictions  Fiction[]
 }
 
 model Token {
