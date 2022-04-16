@@ -3,7 +3,7 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 interface InputProps {
   label: string;
   name: string;
-  kind?: "text" | "phone" | "price" | "text_detail" | "status";
+  kind?: "text" | "phone" | "price" | "text_detail" | "status" | "date";
   type: string;
   register: UseFormRegisterReturn;
   required: boolean;
@@ -19,22 +19,27 @@ export default function Input({
 }: InputProps) {
   return (
     <div className=" mb-2">
-      <label
-        className="mb-1 block text-sm font-medium text-gray-700"
-        htmlFor={name}
-      >
-        {label}
-      </label>
       {kind === "text" ? (
-        <div className="rounded-md relative flex  items-center shadow-sm">
-          <input
-            id={name}
-            required={required}
-            {...register}
-            type={type}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
-          />
-        </div>
+        <>
+          <label
+            className="mb-1 block text-sm font-medium text-gray-700"
+            htmlFor={name}
+          >
+            {label}
+          </label>
+          <div
+            className="rounded-md re
+        lative flex  items-center shadow-sm"
+          >
+            <input
+              id={name}
+              required={required}
+              {...register}
+              type={type}
+              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            />
+          </div>
+        </>
       ) : null}
       {kind === "text_detail" ? (
         <div className="rounded-md relative flex  items-center shadow-sm">
@@ -47,14 +52,39 @@ export default function Input({
           />
         </div>
       ) : null}
+      {kind === "date" ? (
+        <>
+          <label
+            className="mb-1 block text-sm font-medium text-gray-700"
+            htmlFor={name}
+          >
+            {label}
+          </label>
+          <div
+            className="rounded-md re
+        lative flex  items-center shadow-sm"
+          >
+            <input
+              id={name}
+              required={required}
+              {...register}
+              type={type}
+              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            />
+          </div>
+        </>
+      ) : null}
       {kind === "status" ? (
-        <div className="rounded-md relative flex  items-center shadow-sm">
+        <div className="rounded-md relative flex  items-center">
+          <span className=" w-2/4 px-3 pb-1 text-xs">{label}</span>
           <input
             id={name}
-            required={required}
+            placeholder={label}
             {...register}
             type={type}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            min="0"
+            max="5"
+            className="appearance-none w-2/4 px-3 py-1 border text-xs border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
           />
         </div>
       ) : null}
@@ -76,18 +106,26 @@ export default function Input({
         </div>
       ) : null}
       {kind === "phone" ? (
-        <div className="flex rounded-md shadow-sm">
-          <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
-            +82
-          </span>
-          <input
-            id={name}
-            required={required}
-            {...register}
-            type={type}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-          />
-        </div>
+        <>
+          <label
+            className="mb-1 block text-sm font-medium text-gray-700"
+            htmlFor={name}
+          >
+            {label}
+          </label>
+          <div className="flex rounded-md shadow-sm">
+            <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
+              +82
+            </span>
+            <input
+              id={name}
+              required={required}
+              {...register}
+              type={type}
+              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            />
+          </div>
+        </>
       ) : null}
     </div>
   );

@@ -3,7 +3,10 @@ import FictionRadarChart from "@components/FictionRadarChart";
 import Input from "@components/input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
+import { Fiction } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, {
   KeyboardEvent,
   KeyboardEventHandler,
@@ -27,10 +30,16 @@ interface CreateFictionForm {
   platforms: string[];
 }
 
+interface CreateFictionMutation {
+  ok: boolean;
+  fiction: Fiction;
+}
+
 const Create: NextPage = () => {
-  const [createFiction, { loading, data, error }] = useMutation(
-    "/api/fictions/create"
-  );
+  const { user, isLoading } = useUser();
+  const router = useRouter();
+  const [createFiction, { loading, data, error }] =
+    useMutation<CreateFictionMutation>("/api/fictions");
   const {
     register,
     handleSubmit,
@@ -43,14 +52,18 @@ const Create: NextPage = () => {
 
   const onValid = (data: CreateFictionForm) => {
     if (loading) return;
-    console.log(data);
     createFiction(data);
   };
+
+  useEffect(() => {
+    if (data?.ok) {
+      router.push(`/fiction/${data.fiction.id}`);
+    }
+  }, [data, router]);
+
   const onInvalid = (erros: FieldErrors) => {
     if (loading) return;
   };
-
-  console.log(watch());
 
   const wTags: string[] = watch().tags;
   const wStatus: number[] = watch().status;
@@ -124,8 +137,26 @@ const Create: NextPage = () => {
                     name="genre"
                     type="text_detail"
                   />
-                  <input {...register("date.0")} type="date"></input>~
-                  <input {...register("date.1")} type="date"></input>
+                  <div className=" flex relative items-center justify-between">
+                    <div className=" w-[48%]">
+                      <Input
+                        register={register("date.0")}
+                        required
+                        label="StartDate"
+                        name="startDate"
+                        type="date"
+                      />
+                    </div>
+                    <div className=" w-[48%]">
+                      <Input
+                        register={register("date.1")}
+                        required
+                        label="EndDate"
+                        name="endDate"
+                        type="date"
+                      />
+                    </div>
+                  </div>
                   <Input
                     register={register("original", { required: true })}
                     required
@@ -169,42 +200,57 @@ const Create: NextPage = () => {
                   <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart wStatus={wStatus} />
-                    <div className=" grid grid-cols-2">
-                      <input
-                        {...register("status.0")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="오리지널리티"
+                    <div className=" grid grid-cols-2 mx-2">
+                      <Input
+                        register={register("status.0", {
+                          max: 5,
+                          min: 0,
+                        })}
+                        required
+                        label="오리지널리티"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
-                      <input
-                        {...register("status.1")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="필력"
+                      <Input
+                        register={register("status.1")}
+                        required
+                        label="필력"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
-                      <input
-                        {...register("status.2")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="캐릭터성"
+                      <Input
+                        register={register("status.2")}
+                        required
+                        label="캐릭터성"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
-                      <input
-                        {...register("status.3")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="핍진성"
+                      <Input
+                        register={register("status.3")}
+                        required
+                        label="핍진성"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
-                      <input
-                        {...register("status.4")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="스토리"
+                      <Input
+                        register={register("status.4")}
+                        required
+                        label="스토리"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
-                      <input
-                        {...register("status.5")}
-                        className=" text-xs text-center"
-                        type="text"
-                        placeholder="작품성"
+                      <Input
+                        register={register("status.5")}
+                        required
+                        label="작품성"
+                        name="status"
+                        type="number"
+                        kind="status"
                       />
                     </div>
                   </div>

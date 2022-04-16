@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 
-interface CreateForm {
+interface CreateFictionForm {
   title: string;
   author: string;
   nationality: string;
@@ -36,9 +36,9 @@ const Create: NextPage = () => {
     watch,
     formState: { errors },
     setValue,
-  } = useForm<CreateForm>({ mode: "onBlur" });
+  } = useForm<CreateFictionForm>({ mode: "onBlur" });
 
-  const onValid = (data: CreateForm) => {
+  const onValid = (data: CreateFictionForm) => {
     console.log(data);
     create(data);
   };
