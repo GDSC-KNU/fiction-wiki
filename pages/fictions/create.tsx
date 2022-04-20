@@ -57,7 +57,7 @@ const Create: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push(`/fiction/${data.fiction.id}`);
+      router.push(`/fictions/${data.fiction.id}`);
     }
   }, [data, router]);
 

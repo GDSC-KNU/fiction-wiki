@@ -38,6 +38,18 @@ async function handler(
       },
       session: { user },
     } = req;
+
+    tags.filter(function (item: any) {
+      return item !== null && item !== undefined && item !== "";
+    });
+    const keywordMany = tags.map((item: string) => ({
+      keyword: {
+        create: {
+          name: item,
+        },
+      },
+    }));
+
     const fiction = await client.fiction.create({
       data: {
         title,
@@ -52,16 +64,10 @@ async function handler(
         synopsis,
         characters,
         categories: {
-          create: [
-            { category: { create: { name: "mystery" } } },
-            { category: { create: { name: "fantasy" } } },
-          ],
+          create: { category: { create: { name: genre } } },
         },
         keywords: {
-          create: [
-            { keyword: { create: { name: "munchiken" } } },
-            { keyword: { create: { name: "post-apocalypse" } } },
-          ],
+          create: [...keywordMany],
         },
         fictionStat: {
           create: {
@@ -81,6 +87,7 @@ async function handler(
       },
     });
     console.log(fiction);
+    console.log(tags);
     res.json({ ok: true, fiction });
   }
 }
