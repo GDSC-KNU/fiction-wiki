@@ -22,6 +22,7 @@ model Fiction {
   genre         String
   startDate     DateTime
   endDate       DateTime
+  currentState String      
   original      String
   platforms     String
   image         String              @db.MediumText
@@ -29,6 +30,7 @@ model Fiction {
   characters    String              @db.MediumText
   user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        Int
+  favs          Fav[]
 }
 
 model FictionStat {
@@ -81,6 +83,7 @@ model User {
   updatedAt DateTime @updatedAt
   tokens    Token[]
   fictions  Fiction[]
+  fav       Fav[]
 }
 
 model Token {
@@ -88,6 +91,16 @@ model Token {
   payload       String      @unique
   user          User        @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Fav {
+  id            Int         @id @default(autoincrement())
+  user          User        @relation(fields: [userId], references: [id], onDelete:Cascade)
+  userId        Int
+  fiction       Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
+  fictionId     Int
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }

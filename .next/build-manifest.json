@@ -30,15 +30,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/fictions": [
+    "/enter": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/fictions.js"
-    ],
-    "/fictions/[id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/fictions/[id].js"
+      "static/chunks/pages/enter.js"
     ]
   },
   "ampFirstPages": []

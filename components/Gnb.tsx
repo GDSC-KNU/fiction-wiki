@@ -22,16 +22,26 @@ export default function Gnb() {
           <Link href="/fictions/create">
             <li className="mr-3">Create</li>
           </Link>
+          <Link href="/enter">
+            <li className="mr-3">Enter</li>
+          </Link>
         </ul>
-        <ul className="cursor-pointer">
+        <ul className=" flex cursor-pointer">
+          <Link href="/enter">
+            <li className=" mr-5 font-bold">Enter</li>
+          </Link>
           {session ? (
             <li className=" flex mr-5">
               <div className=" mr-5 font-bold">{session.user?.email}</div>
-              <button onClick={() => signOut()}>Sign out</button>
+              <button className=" font-bold" onClick={() => signOut()}>
+                Sign out
+              </button>
             </li>
           ) : (
             <li className=" flex mr-5">
-              <button onClick={() => signIn()}>Sign in</button>
+              <button className=" font-bold" onClick={() => signIn()}>
+                Sign in
+              </button>
             </li>
           )}
         </ul>

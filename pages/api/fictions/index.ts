@@ -15,13 +15,14 @@ async function handler(
     });
   }
   if (req.method === "POST") {
-    const {
+    let {
       body: {
         title,
         author,
         nationality,
         genre,
         date,
+        currentState,
         status: [
           originality,
           writing,
@@ -39,9 +40,8 @@ async function handler(
       session: { user },
     } = req;
 
-    tags.filter(function (item: any) {
-      return item !== null && item !== undefined && item !== "";
-    });
+    tags = tags.filter((item: any) => item !== "");
+
     const keywordMany = tags.map((item: string) => ({
       keyword: {
         create: {
@@ -63,6 +63,7 @@ async function handler(
         image: "",
         synopsis,
         characters,
+        currentState: "",
         categories: {
           create: { category: { create: { name: genre } } },
         },

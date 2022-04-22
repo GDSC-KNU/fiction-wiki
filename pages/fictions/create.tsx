@@ -25,6 +25,7 @@ interface CreateFictionForm {
   status: number[];
   synopsis: string;
   characters: string;
+  currentState: string;
   tags: string[];
   original: string;
   platforms: string[];
@@ -72,12 +73,15 @@ const Create: NextPage = () => {
     const { key } = e;
     console.log(key);
 
-    if (key === ",") {
+    if (key === "," && wTags[0].trim() !== "") {
       e.preventDefault();
 
       if (!wTags.slice(1).includes(wTags[0].trim())) {
+        wTags[0] = wTags[0].trim();
+        wTags.filter((item) => item !== " ");
         setValue("tags", [wTags[0], ...wTags]);
       }
+      console.log(wTags);
       resetField("tags.0");
     }
   };
@@ -169,6 +173,13 @@ const Create: NextPage = () => {
                     required
                     label="Platforms"
                     name="platforms"
+                    type="text"
+                  />
+                  <Input
+                    register={register("currentState")}
+                    required
+                    label="CurrentState"
+                    name="currentState"
                     type="text"
                   />
                 </div>
