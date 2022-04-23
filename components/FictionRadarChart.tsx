@@ -49,34 +49,35 @@ export default function FictionRadarChart(props: any) {
   ];
 
   return (
-    <div className=" mx-auto w-fit h-[510px]">
+    <ResponsiveContainer width="100%" height={400} className=" overflow-hidden">
       <RadarChart
-        cx={200}
-        cy={250}
-        outerRadius={150}
-        width={400}
-        height={500}
+        className=" mx-auto"
+        // cx={200}
+        // cy={250}
+        // outerRadius={150}
+        // width={400}
+        // height={500}
         data={data}
       >
         <PolarGrid />
         <PolarAngleAxis dataKey="subject" />
         <PolarRadiusAxis angle={30} domain={[0, 5]} />
         <Radar
-          name="남성"
+          name="독자 스코어"
           dataKey="A"
           stroke="#8884d8"
           fill="#8884d8"
           fillOpacity={0.6}
         />
         <Radar
-          name="여성"
+          name="FDBS 스코어"
           dataKey="B"
-          stroke="#82ca9d"
-          fill="#82ca9d"
+          stroke="#BFDBFE"
+          fill="#BFDBFE"
           fillOpacity={0.6}
         />
         <Legend />
       </RadarChart>
-    </div>
+    </ResponsiveContainer>
   );
 }

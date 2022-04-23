@@ -8,13 +8,15 @@ import { cls } from "@libs/client/utils";
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  const { data } = useSWR<FictionDetailResponse>(
+  const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
   const onFavClick = () => {
     toggleFav({});
+    if (!data) return;
+    boundMutate({ ...data, isLiked: !data.isLiked }, false);
   };
 
   interface FictionWithMore extends Fiction {

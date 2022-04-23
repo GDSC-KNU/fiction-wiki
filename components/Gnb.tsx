@@ -22,11 +22,11 @@ export default function Gnb() {
           <Link href="/fictions/create">
             <li className="mr-3">Create</li>
           </Link>
-          <Link href="/enter">
-            <li className="mr-3">Enter</li>
-          </Link>
         </ul>
         <ul className=" flex cursor-pointer">
+          <Link href="/me">
+            <li className=" mr-5 font-bold">Profile</li>
+          </Link>
           <Link href="/enter">
             <li className=" mr-5 font-bold">Enter</li>
           </Link>
