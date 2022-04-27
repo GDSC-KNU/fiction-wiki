@@ -23,6 +23,8 @@ async function handler(
           keyword: {
             select: {
               name: true,
+              isOfHeroine: true,
+              isOfMC: true,
             },
           },
         },

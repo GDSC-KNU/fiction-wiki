@@ -47,14 +47,14 @@ const ItemDetail: NextPage = () => {
     익명1238: "안녕하세요",
   };
 
-  console.log(data?.similarFictions);
+  console.log(data?.fiction?.keywords);
 
   return (
     <div className=" max-w-[1500px]">
-      <div className=" grid grid-cols-1 sm:grid-cols-5 ">
-        <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+      <div className=" grid grid-cols-1 sm:grid-cols-5 h-fit">
+        <div className=" bg-white col-span-2 mx-5 mt-7 border-[0.5px] h-[96.6%] border-[#BBBBBB] rounded-md overflow-hidden">
           <img
-            className=" min-h-[330px] w-full"
+            className=" min-h-[442px] max-h-[469px] w-full"
             src="https://picsum.photos/462/599?random=2"
           ></img>
           <div className=" px-4 py-3">
@@ -117,26 +117,28 @@ const ItemDetail: NextPage = () => {
           </div>
         </div>
         <div className=" col-span-3 mx-5 mt-7">
-          <div className=" grid xl:grid-cols-2 sm:grid-cols-1">
+          <div className=" ">
             <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">Keywords</h2>
-              <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+              <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 pt-3 px-3">
                 {data?.fiction?.keywords?.map((item: any, index: any) => (
                   <li
                     key={index}
-                    className=" text-sm text-center ring-2 ring-offset-1 ring-gray-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                    className={
+                      item.keyword.isOfMC
+                        ? " text-sm text-center ring-2 ring-offset-1 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                        : item.keyword.isOfHeroine
+                        ? " text-sm text-center ring-2 ring-offset-1 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                        : " text-sm text-center ring-2 ring-offset-1 ring-gray-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                    }
                   >
                     {item?.keyword?.name}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
+            <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
-              {/* <img
-                className=" mx-auto"
-                src="http://picsum.photos/350/350?random=1"
-              ></img> */}
               <FictionRadarChart />
             </div>
           </div>

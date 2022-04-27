@@ -41,19 +41,40 @@ async function handler(
         ],
         synopsis,
         characters,
-        tags,
+        keywords,
+        mcKeywords,
+        subKeywords,
         original,
         platforms,
       },
       session: { user },
     } = req;
 
-    tags = tags.filter((item: any) => item !== "");
-
-    const keywordMany = tags.map((item: string) => ({
+    keywords = keywords.filter((item: any) => item !== "");
+    const keywordMany = keywords.map((item: string) => ({
       keyword: {
         create: {
           name: item,
+        },
+      },
+    }));
+
+    mcKeywords = mcKeywords.filter((item: any) => item !== "");
+    const mckeywordMany = mcKeywords.map((item: string) => ({
+      keyword: {
+        create: {
+          name: item,
+          isOfMC: true,
+        },
+      },
+    }));
+
+    subKeywords = subKeywords.filter((item: any) => item !== "");
+    const subkeywordMany = subKeywords.map((item: string) => ({
+      keyword: {
+        create: {
+          name: item,
+          isOfHeroine: true,
         },
       },
     }));
@@ -76,7 +97,7 @@ async function handler(
           create: { category: { create: { name: genre } } },
         },
         keywords: {
-          create: [...keywordMany],
+          create: [...subkeywordMany, ...mckeywordMany, ...keywordMany],
         },
         fictionStat: {
           create: {
@@ -96,7 +117,7 @@ async function handler(
       },
     });
     console.log(fiction);
-    console.log(tags);
+
     res.json({ ok: true, fiction });
   }
 }

@@ -26,7 +26,9 @@ interface CreateFictionForm {
   synopsis: string;
   characters: string;
   currentState: string;
-  tags: string[];
+  keywords: string[];
+  mcKeywords: string[];
+  subKeywords: string[];
   original: string;
   platforms: string[];
 }
@@ -66,23 +68,60 @@ const Create: NextPage = () => {
     if (loading) return;
   };
 
-  const wTags: string[] = watch().tags;
+  /// watch state (react-hook-form)
+  const wKeywords: string[] = watch().keywords;
+  const wKeywords2: string[] = watch().mcKeywords;
+  const wKeywords3: string[] = watch().subKeywords;
   const wStatus: number[] = watch().status;
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
     console.log(key);
 
-    if (key === "," && wTags[0].trim() !== "") {
+    if (key === "," && wKeywords[0].trim() !== "") {
       e.preventDefault();
 
-      if (!wTags.slice(1).includes(wTags[0].trim())) {
-        wTags[0] = wTags[0].trim();
-        wTags.filter((item) => item !== " ");
-        setValue("tags", [wTags[0], ...wTags]);
+      if (!wKeywords.slice(1).includes(wKeywords[0].trim())) {
+        wKeywords[0] = wKeywords[0].trim();
+        wKeywords.filter((item) => item !== " ");
+        setValue("keywords", [wKeywords[0], ...wKeywords]);
       }
-      console.log(wTags);
-      resetField("tags.0");
+      console.log(wKeywords);
+      resetField("keywords.0");
+    }
+  };
+
+  const onKeyDown2: any = (e: any) => {
+    const { key } = e;
+    console.log(key);
+
+    if (key === "," && wKeywords2[0].trim() !== "") {
+      e.preventDefault();
+
+      if (!wKeywords2.slice(1).includes(wKeywords2[0].trim())) {
+        wKeywords2[0] = wKeywords2[0].trim();
+        wKeywords2.filter((item) => item !== " ");
+        setValue("mcKeywords", [wKeywords2[0], ...wKeywords2]);
+      }
+      console.log(wKeywords2);
+      resetField("mcKeywords.0");
+    }
+  };
+
+  const onKeyDown3: any = (e: any) => {
+    const { key } = e;
+    console.log(key);
+
+    if (key === "," && wKeywords3[0].trim() !== "") {
+      e.preventDefault();
+
+      if (!wKeywords3.slice(1).includes(wKeywords3[0].trim())) {
+        wKeywords3[0] = wKeywords3[0].trim();
+        wKeywords3.filter((item) => item !== " ");
+        setValue("subKeywords", [wKeywords3[0], ...wKeywords3]);
+      }
+      console.log(wKeywords3);
+      resetField("subKeywords.0");
     }
   };
 
@@ -185,18 +224,18 @@ const Create: NextPage = () => {
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
-                <div className=" grid xl:grid-cols-2 sm:grid-cols-1">
+                <div className=" grid  sm:grid-cols-1">
                   <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                     <h2 className=" font-bold pt-1 px-2">Keywords</h2>
                     <input
                       className=" w-full"
-                      {...register("tags.0")}
+                      {...register("keywords.0")}
                       type="text"
                       placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown}
                     ></input>
                     <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
-                      {wTags
+                      {wKeywords
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
@@ -208,7 +247,52 @@ const Create: NextPage = () => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" h-max bg-white mb-10 xl:ml-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                    <h2 className=" font-bold pt-1 px-2">Mc Keywords</h2>
+                    <input
+                      className=" w-full"
+                      {...register("mcKeywords.0")}
+                      type="text"
+                      placeholder=" 키워드(,를 눌러서 입력하세요)"
+                      onKeyDown={onKeyDown2}
+                    ></input>
+                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                      {wKeywords2
+                        ?.filter((item) => item !== undefined)
+                        .map((item, index) => (
+                          <li
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            key={index}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                    <h2 className=" font-bold pt-1 px-2">Sub Keywords</h2>
+                    <input
+                      className=" w-full"
+                      {...register("subKeywords.0")}
+                      type="text"
+                      placeholder=" 키워드(,를 눌러서 입력하세요)"
+                      onKeyDown={onKeyDown3}
+                    ></input>
+                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                      {wKeywords3
+                        ?.filter((item) => item !== undefined)
+                        .map((item, index) => (
+                          <li
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            key={index}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+
+                  <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart wStatus={wStatus} />
                     <div className=" grid grid-cols-2 mx-2">

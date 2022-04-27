@@ -52,9 +52,11 @@ model Category {
 }
 
 model Keyword {
-  id Int                    @id @default(autoincrement())
-  name String
-  fictions KeywordsOnFictions[]
+  id            Int                    @id @default(autoincrement())
+  name          String
+  isOfMC        Boolean     @default(false)
+  isOfHeroine   Boolean     @default(false)
+  fictions      KeywordsOnFictions[]
 }
 
 model KeywordsOnFictions {
