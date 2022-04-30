@@ -9,41 +9,42 @@ import {
 } from "recharts";
 
 export default function FictionRadarChart(props: any) {
+  console.log(props);
   const data = [
     {
       subject: "오리지널리티",
-      A: props.wStatus ? props?.wStatus[0] : 0,
-      B: 1,
+      A: props.props ? props?.props[0] : 0,
+      B: props.props ? props.props.originality : 0,
       fullMark: 5,
     },
     {
       subject: "필력",
-      A: props.wStatus ? props?.wStatus[1] : 0,
-      B: 3,
+      A: props.props ? props?.props[1] : 0,
+      B: props.props ? props.props.writing : 0,
       fullMark: 5,
     },
     {
       subject: "캐릭터성",
-      A: props.wStatus ? props?.wStatus[2] : 0,
-      B: 3,
+      A: props.props ? props?.props[2] : 0,
+      B: props.props ? props.props.character : 0,
       fullMark: 5,
     },
     {
       subject: "핍진성",
-      A: props.wStatus ? props?.wStatus[3] : 0,
-      B: 1,
+      A: props.props ? props?.props[3] : 0,
+      B: props.props ? props.props.verisimilitude : 0,
       fullMark: 5,
     },
     {
       subject: "스토리",
-      A: props.wStatus ? props?.wStatus[4] : 0,
-      B: 5,
+      A: props.props ? props?.props[4] : 0,
+      B: props.props ? props.props.synopsisComposition : 0,
       fullMark: 5,
     },
     {
       subject: "작품성",
-      A: props.wStatus ? props?.wStatus[5] : 0,
-      B: 3,
+      A: props.props ? props?.props[5] : 0,
+      B: props.props ? props.props.value : 0,
       fullMark: 5,
     },
   ];
@@ -63,7 +64,7 @@ export default function FictionRadarChart(props: any) {
         <PolarAngleAxis dataKey="subject" />
         <PolarRadiusAxis angle={30} domain={[0, 5]} />
         <Radar
-          name="독자 스코어"
+          name="유저 스코어"
           dataKey="A"
           stroke="#8884d8"
           fill="#8884d8"

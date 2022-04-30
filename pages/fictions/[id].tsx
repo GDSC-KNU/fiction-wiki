@@ -2,9 +2,10 @@ import type { NextPage } from "next";
 import FictionRadarChart from "@components/FictionRadarChart";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { Fiction, Keyword } from "@prisma/client";
+import { Fiction, FictionStat, Keyword } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import Input from "@components/input";
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const ItemDetail: NextPage = () => {
 
   interface FictionWithMore extends Fiction {
     keywords: [Keyword];
+    fictionStat: [FictionStat];
   }
 
   interface FictionDetailResponse {
@@ -47,7 +49,7 @@ const ItemDetail: NextPage = () => {
     익명1238: "안녕하세요",
   };
 
-  console.log(data?.fiction?.keywords);
+  console.log(data?.fiction?.fictionStat);
 
   return (
     <div className=" max-w-[1500px]">
@@ -139,7 +141,15 @@ const ItemDetail: NextPage = () => {
             </div>
             <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
-              <FictionRadarChart />
+              <FictionRadarChart props={data?.fiction?.fictionStat} />
+              <div>
+                {/* <Input
+                  label="Originality"
+                  name="originality"
+                  kind="text"
+                  register={data?.fiction}
+                ></Input> */}
+              </div>
             </div>
           </div>
           <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">

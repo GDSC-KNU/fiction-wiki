@@ -43,6 +43,7 @@ async function handler(
     });
   }
 
+  console.log(user);
   res.json({ ok: true });
 }
 

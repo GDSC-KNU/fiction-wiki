@@ -14,6 +14,7 @@ model Fiction {
   categories    CategoriesOnFictions[]
   keywords      KeywordsOnFictions[]
   fictionStat   FictionStat?
+  userFictionStat UserFictionStat? 
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   title         String
@@ -31,6 +32,7 @@ model Fiction {
   user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        Int
   favs          Fav[]
+  isAdult       Boolean?            @default(false)
 }
 
 model FictionStat {
@@ -43,6 +45,19 @@ model FictionStat {
   character             Int
   writing               Int
   value                 Int
+}
+
+model UserFictionStat {
+    id                    Int       @id @default(autoincrement())
+    fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
+    fictionId             Int
+    users                 User[]
+    originality           Int
+    verisimilitude        Int
+    synopsisComposition   Int
+    character             Int
+    writing               Int
+    value                 Int
 }
 
 model Category {
@@ -86,6 +101,9 @@ model User {
   tokens    Token[]
   fictions  Fiction[]
   fav       Fav[]
+  // ratedFictionStat FictionStatFromUser @relation(fields: [ratedFictionStatId], references: [id], onUpdate: NoAction)
+  // ratedFictionStatId Int
+  ratedFictions UserFictionStat[]
 }
 
 model Token {

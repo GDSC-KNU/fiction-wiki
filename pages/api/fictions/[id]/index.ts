@@ -17,7 +17,7 @@ async function handler(
       id: +id.toString(),
     },
     include: {
-      fictionStat: {},
+      fictionStat: true,
       keywords: {
         include: {
           keyword: {

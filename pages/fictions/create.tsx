@@ -294,7 +294,7 @@ const Create: NextPage = () => {
 
                   <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
-                    <FictionRadarChart wStatus={wStatus} />
+                    <FictionRadarChart props={wStatus} />
                     <div className=" grid grid-cols-2 mx-2">
                       <Input
                         register={register("status.0", {
