@@ -3,8 +3,8 @@ import Carousel from "@components/Carousel";
 import useUser from "@libs/client/useUser";
 
 const Home: NextPage = () => {
-  const { user, isLoading } = useUser();
-  console.log(user);
+  // const { user, isLoading } = useUser();
+
   return (
     <div>
       <Carousel />

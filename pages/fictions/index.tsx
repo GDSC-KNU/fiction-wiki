@@ -10,7 +10,7 @@ interface FictionsResponse {
 }
 
 const Fictions: NextPage = () => {
-  const { user, isLoading } = useUser();
+  // const { user, isLoading } = useUser();
   const { data } = useSWR<FictionsResponse>("/api/fictions");
   console.log(data);
 

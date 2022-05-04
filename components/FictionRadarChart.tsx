@@ -1,16 +1,26 @@
 import {
-  Radar,
-  RadarChart,
-  PolarGrid,
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
   Legend,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-} from "recharts";
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 export default function FictionRadarChart(props: any) {
   console.log(props);
-  const data = [
+  const data2 = [
     {
       subject: "오리지널리티",
       A: props.props ? props?.props[0] : 0,
@@ -48,37 +58,74 @@ export default function FictionRadarChart(props: any) {
       fullMark: 5,
     },
   ];
+  console.log(props);
+
+  let data = {
+    labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
+    datasets: [
+      {
+        label: "FDBS (admin)",
+        data: [
+          props.props ? props?.props["originality"] : 0,
+          props.props ? props?.props["writing"] : 0,
+          props.props ? props?.props["character"] : 0,
+          props.props ? props?.props["verisimilitude"] : 0,
+          props.props ? props?.props["synopsisComposition"] : 0,
+          props.props ? props?.props["value"] : 0,
+        ],
+        backgroundColor: "rgba(191, 219, 254, 0.5)",
+        borderColor: "rgba(187, 187, 187, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "유저 (n)",
+        data: [4, 5, 2, 3, 3, 3],
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        borderColor: "rgba(187, 187, 187, 1)",
+        borderWidth: 1,
+      },
+      // {
+      //   data: [0, 0, 0, 0, 0, 0],
+      // },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      r: {
+        // suggestedMin: 0,
+        // suggestedMax: 5,
+        min: 0,
+        max: 5,
+        ticks: {
+          stepSize: 1,
+        },
+        pointLabels: {
+          font: {
+            size: 16,
+            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+            color: "#BBBBBB",
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          // This more specific font property overrides the global property
+          font: {
+            size: 13,
+          },
+        },
+      },
+    },
+  };
 
   return (
-    <ResponsiveContainer width="100%" height={400} className=" overflow-hidden">
-      <RadarChart
-        className=" mx-auto"
-        // cx={200}
-        // cy={250}
-        // outerRadius={150}
-        // width={400}
-        // height={500}
-        data={data}
-      >
-        <PolarGrid />
-        <PolarAngleAxis dataKey="subject" />
-        <PolarRadiusAxis angle={30} domain={[0, 5]} />
-        <Radar
-          name="유저 스코어"
-          dataKey="A"
-          stroke="#8884d8"
-          fill="#8884d8"
-          fillOpacity={0.6}
-        />
-        <Radar
-          name="FDBS 스코어"
-          dataKey="B"
-          stroke="#BFDBFE"
-          fill="#BFDBFE"
-          fillOpacity={0.6}
-        />
-        <Legend />
-      </RadarChart>
-    </ResponsiveContainer>
+    <div className=" mx-10 ">
+      <Radar data={data} options={options} />
+    </div>
   );
 }

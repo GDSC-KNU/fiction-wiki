@@ -6,6 +6,8 @@ import { Fiction, FictionStat, Keyword } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import Input from "@components/input";
+import { useForm } from "react-hook-form";
+import UserStat from "@components/UserStat";
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
@@ -139,16 +141,21 @@ const ItemDetail: NextPage = () => {
                 ))}
               </ul>
             </div>
-            <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
+            <div className=" h-fit bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
+
               <FictionRadarChart props={data?.fiction?.fictionStat} />
-              <div>
-                {/* <Input
-                  label="Originality"
-                  name="originality"
-                  kind="text"
-                  register={data?.fiction}
-                ></Input> */}
+
+              <div className=" w-full px-3 h-fit mx-auto my-2">
+                <details>
+                  <summary
+                    style={{ listStyle: "none" }}
+                    className=" text-center font-bold cursor-pointer my-2 border-[0.5px] border-[#BBBBBB] rounded-md"
+                  >
+                    평가하기
+                  </summary>
+                  <UserStat />
+                </details>
               </div>
             </div>
           </div>
