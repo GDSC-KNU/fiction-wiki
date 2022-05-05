@@ -5,6 +5,7 @@ import userRate from "pages/api/fictions/[id]/userRate";
 import { FieldErrors, useForm } from "react-hook-form";
 import Button from "./button";
 import Input from "./input";
+import useSWR, { useSWRConfig } from "swr";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
@@ -12,10 +13,14 @@ interface RateUserStatForm {
 
 export default function UserStat() {
   const router = useRouter();
+  const { mutate: unboundMutate } = useSWRConfig();
   const [rateUserStat, { loading, data, error }] =
     useMutation<RateUserStatMutation>(
       `/api/fictions/${router.query.id}/userRate`
     );
+  const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
+    router.query.id ? `/api/fictions/${router.query.id}` : null
+  );
 
   interface RateUserStatMutation {
     ok: boolean;
@@ -32,11 +37,52 @@ export default function UserStat() {
     setValue,
   } = useForm<RateUserStatForm>({ mode: "onBlur" });
 
+  let [
+    curOriginality,
+    curWriting,
+    curCharacter,
+    curVerisimilitude,
+    curSynopsisCompositon,
+    curValue,
+  ] = watch()?.UserFictionStat || [0, 0, 0, 0, 0, 0];
+
+  let userCount = UserStatData?.fiction?.userFictionStat?._count?.users;
+
   const onRateClick = (data: RateUserStatForm) => {
     rateUserStat(data);
+    unboundMutate(
+      `/api/fictions/${router.query.id}`,
+      (prev: any) => ({
+        ...prev,
+        fiction: {
+          ...prev.fiction,
+          userFictionStat: {
+            ...prev.fiction.userFictionStat,
+            _count: {
+              users: (+prev?.fiction?.userFictionStat?._count?.users || 0) + 1,
+            },
+          },
+        },
+        ration: {
+          originality: (+prev?.ration?.["originality"] || 0) + +curOriginality,
+          writing: (+prev?.ration?.["writing"] || 0) + +curWriting,
+          character: (+prev?.ration?.["character"] || 0) + +curCharacter,
+          verisimilitude:
+            (+prev?.ration?.["verisimilitude"] || 0) + +curVerisimilitude,
+          synopsisComposition:
+            (+prev?.ration?.["synopsisComposition"] || 0) +
+            +curSynopsisCompositon,
+          value: (+prev?.ration?.["value"] || 0) + +curValue,
+        },
+      }),
+      false
+    );
   };
 
-  console.log(watch());
+  // console.log(data ? data : null);
+  // console.log("Hi");
+  console.log(UserStatData);
+  console.log(userCount);
 
   return (
     <form className=" w-full" onSubmit={handleSubmit(onRateClick)}>

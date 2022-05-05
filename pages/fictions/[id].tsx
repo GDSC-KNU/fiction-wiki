@@ -51,7 +51,7 @@ const ItemDetail: NextPage = () => {
     익명1238: "안녕하세요",
   };
 
-  console.log(data?.fiction?.fictionStat);
+  // console.log(data?.fiction?.fictionStat);
 
   return (
     <div className=" max-w-[1500px]">

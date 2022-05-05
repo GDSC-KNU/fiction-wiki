@@ -116,7 +116,7 @@ async function handler(
         },
       },
     });
-    console.log(fiction);
+    // console.log(fiction);
 
     res.json({ ok: true, fiction });
   }

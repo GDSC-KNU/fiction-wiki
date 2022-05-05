@@ -7,7 +7,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useRouter } from "next/router";
 import { Radar } from "react-chartjs-2";
+import useSWR, { useSWRConfig } from "swr";
 
 ChartJS.register(
   RadialLinearScale,
@@ -18,47 +20,16 @@ ChartJS.register(
   Legend
 );
 
+interface RateUserStatForm {
+  UserFictionStat: number[];
+}
+
 export default function FictionRadarChart(props: any) {
-  console.log(props);
-  const data2 = [
-    {
-      subject: "오리지널리티",
-      A: props.props ? props?.props[0] : 0,
-      B: props.props ? props.props.originality : 0,
-      fullMark: 5,
-    },
-    {
-      subject: "필력",
-      A: props.props ? props?.props[1] : 0,
-      B: props.props ? props.props.writing : 0,
-      fullMark: 5,
-    },
-    {
-      subject: "캐릭터성",
-      A: props.props ? props?.props[2] : 0,
-      B: props.props ? props.props.character : 0,
-      fullMark: 5,
-    },
-    {
-      subject: "핍진성",
-      A: props.props ? props?.props[3] : 0,
-      B: props.props ? props.props.verisimilitude : 0,
-      fullMark: 5,
-    },
-    {
-      subject: "스토리",
-      A: props.props ? props?.props[4] : 0,
-      B: props.props ? props.props.synopsisComposition : 0,
-      fullMark: 5,
-    },
-    {
-      subject: "작품성",
-      A: props.props ? props?.props[5] : 0,
-      B: props.props ? props.props.value : 0,
-      fullMark: 5,
-    },
-  ];
-  console.log(props);
+  const router = useRouter();
+
+  const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
+    router.query.id ? `/api/fictions/${router.query.id}` : null
+  );
 
   let data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
@@ -78,8 +49,35 @@ export default function FictionRadarChart(props: any) {
         borderWidth: 1,
       },
       {
-        label: "유저 (n)",
-        data: [4, 5, 2, 3, 3, 3],
+        label: `유저 ${
+          UserStatData?.fiction?.userFictionStat?._count?.users || 0
+        }명`,
+        data: [
+          UserStatData?.ration
+            ? UserStatData.ration["originality"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+          UserStatData?.ration
+            ? UserStatData.ration["writing"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+          UserStatData?.ration
+            ? UserStatData.ration["character"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+          UserStatData?.ration
+            ? UserStatData.ration["verisimilitude"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+          UserStatData?.ration
+            ? UserStatData.ration["synopsisComposition"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+          UserStatData?.ration
+            ? UserStatData.ration["value"] /
+              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            : 0,
+        ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",
         borderWidth: 1,

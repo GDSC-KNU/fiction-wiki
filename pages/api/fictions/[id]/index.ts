@@ -18,6 +18,15 @@ async function handler(
     },
     include: {
       fictionStat: true,
+      userFictionStat: {
+        include: {
+          _count: {
+            select: {
+              users: true,
+            },
+          },
+        },
+      },
       keywords: {
         include: {
           keyword: {
@@ -73,7 +82,22 @@ async function handler(
       },
     })
   );
-  res.json({ ok: true, fiction, isLiked, similarFictions });
+
+  const ration = await client.userFictionStat.findFirst({
+    where: {
+      fictionId: fiction?.id,
+    },
+    select: {
+      originality: true,
+      writing: true,
+      character: true,
+      verisimilitude: true,
+      synopsisComposition: true,
+      value: true,
+    },
+  });
+
+  res.json({ ok: true, fiction, isLiked, ration, similarFictions });
 }
 
 export default withApiSession(

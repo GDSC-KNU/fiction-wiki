@@ -51,26 +51,15 @@ async function handler(
         synopsisComposition: +UserFictionStat[4],
         value: +UserFictionStat[5],
       },
+      include: {
+        _count: {
+          select: {
+            users: true,
+          },
+        },
+      },
     });
-    console.log(Ration);
   } else {
-    // let sum: Array<number> = [];
-    // let prev = [
-    //   Number(alreadyExists?.originality),
-    //   Number(alreadyExists?.writing),
-    //   Number(alreadyExists?.character),
-    //   Number(alreadyExists?.verisimilitude),
-    //   Number(alreadyExists?.synopsisComposition),
-    //   Number(alreadyExists?.value),
-    // ];
-
-    // UserFictionStat.map((stat: any, index: number) => {
-    //   let eachSum =
-    //     (prev[index] * alreadyExists!._count?.users + +stat) /
-    //     (+alreadyExists!._count?.users + 1);
-    //   sum.push(+eachSum.toFixed(3));
-    // });
-
     let temp: Array<any> = [];
     alreadyExists.users.map((user) => {
       temp.push(user.id);
@@ -96,15 +85,13 @@ async function handler(
         },
       });
     } else {
-      console.log("You already rated");
+      Ration = alreadyExists;
     }
   }
 
-  // console.log(userFictionStat);
   console.log(Ration);
-  // console.log(UserFictionStat);
-  // console.log(user);
-  res.json({ ok: true, Ration });
+
+  res.json({ ok: true });
 }
 
 export default withApiSession(
