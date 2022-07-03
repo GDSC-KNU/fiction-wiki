@@ -1,24 +1,118 @@
 import type { NextPage } from "next";
 import Carousel from "@components/Carousel";
 import useUser from "@libs/client/useUser";
+import { Fiction } from "@prisma/client";
+import useSWR from "swr";
+import Link from "next/link";
+
+interface FictionsResponse {
+  ok: boolean;
+  fictions: Fiction[];
+}
 
 const Home: NextPage = () => {
+  const { data } = useSWR<FictionsResponse>("/api/fictions");
+  // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
+  //   router.query.id ? `/api/fictions/${router.query.id}` : null
+  // );
+
   // const { user, isLoading } = useUser();
+  console.log(data?.fictions);
 
   return (
     <div>
       <Carousel />
-      It's Home Lorem Ipsum is simply dummy text of the printing and typesetting
-      industry. Lorem Ipsum has been the industry's standard dummy text ever
-      since the 1500s, when an unknown printer took a galley of type and
-      scrambled it to make a type specimen book. It has survived not only five
-      centuries, but also the leap into electronic typesetting, remaining
-      essentially unchanged. It was popularised in the 1960s with the release of
-      Letraset sheets containing Lorem Ipsum passages, and more recently with
-      desktop publishing software like Aldus PageMaker including versions of
-      Lorem Ipsum. Why do we use it? It is a long established fact that a reader
-      will be distracted by the readable content of a page when looking at its
-      layout. The point of using Lorem Ipsum is that it has a more-or-less n
+      {/* 화면크기 sm 이상 */}
+      <div className=" hidden sm:block">
+        <section className="">
+          <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
+          <ul className=" flex">
+            {data?.fictions?.map((fiction, i) => (
+              <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
+                <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                  <img
+                    className=""
+                    src={`https://picsum.photos/160/225?random=${fiction.id}`}
+                  ></img>
+                  <div className=" flex-col px-2 py-2">
+                    <div className=" text-xs text-gray-400">
+                      {fiction.genre}
+                    </div>
+                    <div className=" font-bold">{fiction.title}</div>
+                    <div className=" text-xs">
+                      {fiction.currentState || "500화 완결"}
+                    </div>
+                    <div className=" overflow-hidden text-xs">
+                      {fiction.author}
+                    </div>
+                    <div className=" text-xs">{fiction.nationality}</div>
+                  </div>
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <div className="mt-5 font-bold text-xl">Editor's Pick</div>
+          <ul className=" flex">
+            {data?.fictions?.map((fiction, i) => (
+              <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
+                <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                  <img
+                    className=" overflow-hidden"
+                    src={`https://picsum.photos/160/225?random=${fiction.id}`}
+                  ></img>
+                  <div className=" flex-col px-2 py-2">
+                    <div className=" text-xs text-gray-400">
+                      {fiction.genre}
+                    </div>
+                    <div className=" font-bold">{fiction.title}</div>
+                    <div className=" text-xs">
+                      {fiction.currentState || "500화 완결"}
+                    </div>
+                    <div className=" overflow-hidden text-xs">
+                      {fiction.author}
+                    </div>
+                    <div className=" text-xs">{fiction.nationality}</div>
+                  </div>
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </section>
+      </div>
+      <div className=" md:hidden">
+        <section className="">
+          <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
+          <ul className=" flex-col w-96">
+            {data?.fictions?.map((fiction, i) => (
+              <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
+                <li className=" flex h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                  <img
+                    className=" w-[110.19px] h-[165.28px]"
+                    src={`https://picsum.photos/160/225?random=${fiction.id}`}
+                  ></img>
+                  <div className=" flex-col px-2 py-2">
+                    <div className=" text-xs text-gray-400">
+                      {fiction.genre}
+                    </div>
+                    <div className=" font-bold">{fiction.title}</div>
+                    <div className=" text-xs">
+                      {fiction.currentState || "500화 완결"}
+                    </div>
+                    <div className=" overflow-hidden text-xs">
+                      {fiction.author}, {fiction.nationality}
+                    </div>
+                    <div className=" text-xs mt-2">
+                      {fiction.synopsis.slice(1, 100) + "..."}{" "}
+                    </div>
+                  </div>
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 };

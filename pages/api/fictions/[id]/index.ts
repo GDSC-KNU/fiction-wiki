@@ -97,7 +97,13 @@ async function handler(
     },
   });
 
-  res.json({ ok: true, fiction, isLiked, ration, similarFictions });
+  const userRation = await client.userRationOnFiction.findFirst({
+    where: {
+      userId: user?.id,
+    },
+  });
+
+  res.json({ ok: true, fiction, isLiked, ration, userRation, similarFictions });
 }
 
 export default withApiSession(

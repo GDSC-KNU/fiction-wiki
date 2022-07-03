@@ -22,11 +22,18 @@ async function handler(
         },
       },
       users: true,
+      userRationOnFictions: {
+        where: {
+          userId: +user!.id.toString(),
+        },
+      },
     },
     where: {
       fictionId: +id.toString(),
     },
   });
+
+  //console.log(alreadyExists);
 
   //  let {id, fictionId, originality, verisimilitude, synopsisComposition, character, writing,value,users[],count }= alreadyExists;
   // let sum: Array<number> = [];
@@ -42,6 +49,18 @@ async function handler(
         users: {
           connect: {
             id: +user!.id.toString(),
+          },
+        },
+        userRationOnFictions: {
+          create: {
+            userId: +user!.id.toString(),
+            originality: +UserFictionStat[0],
+            writing: +UserFictionStat[1],
+            character: +UserFictionStat[2],
+            verisimilitude: +UserFictionStat[3],
+            synopsisComposition: +UserFictionStat[4],
+            value: +UserFictionStat[5],
+            comment: "",
           },
         },
         originality: +UserFictionStat[0],
@@ -75,6 +94,21 @@ async function handler(
               id: +user!.id.toString(),
             },
           },
+          userRationOnFictions: {
+            update: {
+              where: {
+                id: alreadyExists.userRationOnFictions[0].id,
+              },
+              data: {
+                originality: +UserFictionStat[0],
+                writing: +UserFictionStat[1],
+                character: +UserFictionStat[2],
+                verisimilitude: +UserFictionStat[3],
+                synopsisComposition: +UserFictionStat[4],
+                value: +UserFictionStat[5],
+              },
+            },
+          },
           originality: alreadyExists?.originality + +UserFictionStat[0],
           writing: alreadyExists.writing + +UserFictionStat[1],
           character: alreadyExists.character + +UserFictionStat[2],
@@ -85,11 +119,61 @@ async function handler(
         },
       });
     } else {
-      Ration = alreadyExists;
+      Ration = await client.userFictionStat.update({
+        where: {
+          id: +alreadyExists.id.toString(),
+        },
+        data: {
+          users: {
+            connect: {
+              id: +user!.id.toString(),
+            },
+          },
+          userRationOnFictions: {
+            update: {
+              where: {
+                id: alreadyExists.userRationOnFictions[0].id,
+              },
+              data: {
+                originality: +UserFictionStat[0],
+                writing: +UserFictionStat[1],
+                character: +UserFictionStat[2],
+                verisimilitude: +UserFictionStat[3],
+                synopsisComposition: +UserFictionStat[4],
+                value: +UserFictionStat[5],
+              },
+            },
+          },
+          originality:
+            alreadyExists?.originality -
+            alreadyExists.userRationOnFictions[0].originality +
+            +UserFictionStat[0],
+          writing:
+            alreadyExists.writing -
+            alreadyExists.userRationOnFictions[0].writing +
+            +UserFictionStat[1],
+          character:
+            alreadyExists.character -
+            alreadyExists.userRationOnFictions[0].character +
+            +UserFictionStat[2],
+          verisimilitude:
+            alreadyExists.verisimilitude -
+            alreadyExists.userRationOnFictions[0].verisimilitude +
+            +UserFictionStat[3],
+          synopsisComposition:
+            alreadyExists.synopsisComposition -
+            alreadyExists.userRationOnFictions[0].synopsisComposition +
+            +UserFictionStat[4],
+          value:
+            alreadyExists.value -
+            alreadyExists.userRationOnFictions[0].value +
+            +UserFictionStat[5],
+        },
+      });
     }
   }
 
-  console.log(Ration);
+  // console.log(Ration);
 
   res.json({ ok: true });
 }

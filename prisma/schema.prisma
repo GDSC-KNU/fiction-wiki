@@ -23,7 +23,7 @@ model Fiction {
   genre         String
   startDate     DateTime
   endDate       DateTime
-  currentState String      
+  currentState  String      
   original      String
   platforms     String
   image         String              @db.MediumText
@@ -52,6 +52,7 @@ model UserFictionStat {
     fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
     fictionId             Int
     users                 User[]
+    userRationOnFictions  UserRationOnFiction[]
     originality           Int
     verisimilitude        Int
     synopsisComposition   Int
@@ -104,6 +105,22 @@ model User {
   // ratedFictionStat FictionStatFromUser @relation(fields: [ratedFictionStatId], references: [id], onUpdate: NoAction)
   // ratedFictionStatId Int
   ratedFictions UserFictionStat[]
+  userRationOnFictions  UserRationOnFiction[]
+}
+
+model UserRationOnFiction {
+  id                    Int       @id @default(autoincrement())
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                Int       @unique
+  userFictionStat       UserFictionStat @relation(fields: [userFictionStatId], references: [id], onDelete:Cascade)
+  userFictionStatId     Int
+  originality           Int
+  verisimilitude        Int
+  synopsisComposition   Int
+  character             Int
+  writing               Int
+  value                 Int
+  comment               String
 }
 
 model Token {

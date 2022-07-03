@@ -53,28 +53,28 @@ export default function FictionRadarChart(props: any) {
           UserStatData?.fiction?.userFictionStat?._count?.users || 0
         }명`,
         data: [
-          UserStatData?.ration
-            ? UserStatData.ration["originality"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.originality /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
-          UserStatData?.ration
-            ? UserStatData.ration["writing"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.writing /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
-          UserStatData?.ration
-            ? UserStatData.ration["character"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.character /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
-          UserStatData?.ration
-            ? UserStatData.ration["verisimilitude"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.verisimilitude /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
-          UserStatData?.ration
-            ? UserStatData.ration["synopsisComposition"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.synopsisComposition /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
-          UserStatData?.ration
-            ? UserStatData.ration["value"] /
+          UserStatData?.fiction?.userFictionStat
+            ? UserStatData?.fiction?.userFictionStat?.value /
               (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
             : 0,
         ],
@@ -120,6 +120,7 @@ export default function FictionRadarChart(props: any) {
       },
     },
   };
+  console.log(UserStatData);
 
   return (
     <div className=" mx-10 ">

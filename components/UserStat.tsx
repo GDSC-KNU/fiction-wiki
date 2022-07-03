@@ -6,6 +6,7 @@ import { FieldErrors, useForm } from "react-hook-form";
 import Button from "./button";
 import Input from "./input";
 import useSWR, { useSWRConfig } from "swr";
+import { validateRequest } from "twilio/lib/webhooks/webhooks";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
@@ -55,24 +56,54 @@ export default function UserStat() {
       (prev: any) => ({
         ...prev,
         fiction: {
-          ...prev.fiction,
+          ...prev?.fiction,
           userFictionStat: {
-            ...prev.fiction.userFictionStat,
+            originality: +curOriginality,
+            writing: +curWriting,
+            character: +curCharacter,
+            verisimilitude: +curVerisimilitude,
+            synopsisComposition: +curSynopsisCompositon,
+            value: +curValue,
             _count: {
-              users: (+prev?.fiction?.userFictionStat?._count?.users || 0) + 1,
+              users: UserStatData.userRation
+                ? +prev?.fiction?.userFictionStat?._count?.users || 0
+                : (+prev?.fiction?.userFictionStat?._count?.users || 0) + 1,
             },
           },
         },
         ration: {
-          originality: (+prev?.ration?.["originality"] || 0) + +curOriginality,
-          writing: (+prev?.ration?.["writing"] || 0) + +curWriting,
-          character: (+prev?.ration?.["character"] || 0) + +curCharacter,
+          originality:
+            (+prev?.fiction?.userFictionStat?.originality || 0) -
+            (+prev?.userRation?.originality || 0) +
+            +curOriginality,
+          writing:
+            (+prev?.fiction?.userFictionStat?.writing || 0) -
+            prev?.userRation?.writing +
+            +curWriting,
+          character:
+            (+prev?.fiction?.userFictionStat?.character || 0) -
+            prev?.userRation?.character +
+            +curCharacter,
           verisimilitude:
-            (+prev?.ration?.["verisimilitude"] || 0) + +curVerisimilitude,
+            (+prev?.fiction?.userFictionStat?.verisimilitude || 0) -
+            prev?.userRation?.verisimilitude +
+            +curVerisimilitude,
           synopsisComposition:
-            (+prev?.ration?.["synopsisComposition"] || 0) +
+            (+prev?.fiction?.userFictionStat?.synopsisComposition || 0) -
+            prev?.userRation?.synopsisComposition +
             +curSynopsisCompositon,
-          value: (+prev?.ration?.["value"] || 0) + +curValue,
+          value:
+            (+prev?.fiction?.userFictionStat?.value || 0) -
+            prev?.userRation?.value +
+            +curValue,
+        },
+        userRation: {
+          originality: +curOriginality,
+          writing: +curWriting,
+          character: +curOriginality,
+          verisimilitude: +curVerisimilitude,
+          synopsisComposition: +curSynopsisCompositon,
+          value: +curValue,
         },
       }),
       false
@@ -81,8 +112,8 @@ export default function UserStat() {
 
   // console.log(data ? data : null);
   // console.log("Hi");
-  console.log(UserStatData);
-  console.log(userCount);
+  // console.log(UserStatData);
+  // console.log(userCount);
 
   return (
     <form className=" w-full" onSubmit={handleSubmit(onRateClick)}>
