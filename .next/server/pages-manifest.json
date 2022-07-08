@@ -1,8 +1,9 @@
 {
-  "/_middleware": "pages/_middleware.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
   "/_app": "pages/_app.js",
-  "/api/fictions": "pages/api/fictions.js",
-  "/api/fictions/[id]": "pages/api/fictions/[id].js"
+  "/_document": "pages/_document.js",
+  "/_error": "pages/_error.js",
+  "/api/fictions/[id]/fav": "pages/api/fictions/[id]/fav.js",
+  "/fictions": "pages/fictions.js",
+  "/api/fictions/[id]": "pages/api/fictions/[id].js",
+  "/fictions/[id]": "pages/fictions/[id].js"
 }

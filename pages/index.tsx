@@ -4,20 +4,27 @@ import useUser from "@libs/client/useUser";
 import { Fiction } from "@prisma/client";
 import useSWR from "swr";
 import Link from "next/link";
+import client from "@libs/server/client";
+
+export interface FictionWithCount extends Fiction {
+  _count: {
+    favs: number;
+  };
+}
 
 interface FictionsResponse {
   ok: boolean;
-  fictions: Fiction[];
+  fictions: FictionWithCount[];
 }
 
-const Home: NextPage = () => {
+const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
   const { data } = useSWR<FictionsResponse>("/api/fictions");
+
   // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
 
   // const { user, isLoading } = useUser();
-  console.log(data?.fictions);
 
   return (
     <div>
@@ -53,7 +60,7 @@ const Home: NextPage = () => {
           </ul>
         </section>
         <section>
-          <div className="mt-5 font-bold text-xl">Editor's Pick</div>
+          <div className="mt-5 font-bold text-xl">Editors Pick</div>
           <ul className=" flex">
             {data?.fictions?.map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
@@ -85,7 +92,7 @@ const Home: NextPage = () => {
         <section className="">
           <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
           <ul className=" flex-col w-96">
-            {data?.fictions?.map((fiction, i) => (
+            {fictions?.map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <img
@@ -116,5 +123,16 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+// export async function getServerSideProps() {
+//   const fictions = await client.fiction.findMany({});
+//   console.log("Hi");
+//   // console.log(fictions);
+//   return {
+//     props: {
+//       fictions: JSON.parse(JSON.stringify(fictions)),
+//     },
+//   };
+// }
 
 export default Home;

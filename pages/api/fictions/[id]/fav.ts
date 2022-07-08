@@ -8,13 +8,14 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
+  let isLiked;
   const {
     query: { id },
     session: { user },
   } = req;
   const alreadyExists = await client.fav.findFirst({
     where: {
-      fictionId: +id.toString(),
+      fictionId: +id!.toString(),
       userId: user?.id,
     },
   });
@@ -25,6 +26,7 @@ async function handler(
         id: alreadyExists.id,
       },
     });
+    isLiked = false;
   } else {
     //create
     await client.fav.create({
@@ -36,19 +38,20 @@ async function handler(
         },
         fiction: {
           connect: {
-            id: +id.toString(),
+            id: +id!.toString(),
           },
         },
       },
     });
+    isLiked = true;
   }
 
-  res.json({ ok: true });
+  res.json({ isLiked, ok: true });
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["POST"],
+    methods: ["POST", "GET"],
     handler,
   })
 );

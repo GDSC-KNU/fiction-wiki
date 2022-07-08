@@ -4,45 +4,23 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { title } from "process";
 import useSWR from "swr";
+import client from "@libs/server/client";
 
 interface FictionsResponse {
   ok: boolean;
   fictions: Fiction[];
 }
 
-const Fictions: NextPage = () => {
+const Fictions: NextPage<FictionsResponse> = ({ fictions }) => {
   // const { user, isLoading } = useUser();
-  const { data } = useSWR<FictionsResponse>("/api/fictions");
-  console.log(data);
-
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const { data } = useSWR<FictionsResponse>("/api/fictions");
+  // console.log(data);
 
   return (
-    // <div className=" ">
-    //   <ul className=" ">
-    //     {data?.fictions?.map((fiction, i) => {
-    //       <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
-    //         <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer">
-    //           <img
-    //             className=" w-full rounded-xl"
-    //             src={`https://picsum.photos/160/225?random=${fiction.id}`}
-    //           ></img>
-    //           <div className=" flex-col">
-    //             <div className=" font-bold">아이언맨 2</div>
-    //             <div>제목 : {fiction.title}</div>
-    //             <div>작가 : {fiction.author}</div>
-    //           </div>
-    //         </li>
-    //         <li>asd</li>
-    //       </Link>;
-    //     })}
-    //   </ul>
-    // </div>
-
     <div className=" mt-10">
       <div className=" flex justify-center">
         <ul className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-1 py-2 ">
-          {data?.fictions?.map((fiction, i) => (
+          {fictions?.map((fiction, i) => (
             <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
               <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                 <img
@@ -68,5 +46,15 @@ const Fictions: NextPage = () => {
     </div>
   );
 };
+
+export async function getStaticProps() {
+  console.log("BUILDING fictions index Statically");
+  const fictions = await client.fiction.findMany();
+  return {
+    props: {
+      fictions: JSON.parse(JSON.stringify(fictions)),
+    },
+  };
+}
 
 export default Fictions;

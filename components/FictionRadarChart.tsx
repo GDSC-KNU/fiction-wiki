@@ -120,7 +120,7 @@ export default function FictionRadarChart(props: any) {
       },
     },
   };
-  console.log(UserStatData);
+  // console.log(UserStatData);
 
   return (
     <div className=" mx-10 ">

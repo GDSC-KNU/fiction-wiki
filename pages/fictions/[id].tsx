@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import FictionRadarChart from "@components/FictionRadarChart";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -8,31 +8,44 @@ import { cls } from "@libs/client/utils";
 import Input from "@components/input";
 import { useForm } from "react-hook-form";
 import UserStat from "@components/UserStat";
+import client from "@libs/server/client";
+import Id from "pages/api/fictions/[id]";
 
-const ItemDetail: NextPage = () => {
+interface FictionDetailResponse {
+  ok: boolean;
+  fiction: FictionWithMore;
+  similarFictions: Fiction[];
+  isLiked: boolean;
+}
+
+interface FictionWithMore extends Fiction {
+  keywords: [Keyword];
+  fictionStat: [FictionStat];
+}
+
+const ItemDetail: NextPage<FictionDetailResponse> = ({
+  fiction,
+  similarFictions,
+  isLiked,
+}) => {
   const router = useRouter();
+
+  // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
+  // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
+  //   router.query.id ? `/api/fictions/${router.query.id}` : null
+  // );
+
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-    router.query.id ? `/api/fictions/${router.query.id}` : null
+    router.query.id ? `/api/fictions/${router.query.id}/fav` : null
   );
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
   const onFavClick = () => {
     toggleFav({});
     if (!data) return;
+    console.log(data);
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
   };
-
-  interface FictionWithMore extends Fiction {
-    keywords: [Keyword];
-    fictionStat: [FictionStat];
-  }
-
-  interface FictionDetailResponse {
-    ok: boolean;
-    fiction: FictionWithMore;
-    similarFictions: Fiction[];
-    isLiked: boolean;
-  }
 
   interface dummyCommentI {
     [key: string]: string;
@@ -51,6 +64,14 @@ const ItemDetail: NextPage = () => {
     익명1238: "안녕하세요",
   };
 
+  if (router.isFallback) {
+    return (
+      <div title="Loaidng for youuuuuuu">
+        <span>I love you</span>
+      </div>
+    );
+  }
+
   // console.log(data?.fiction?.fictionStat);
 
   return (
@@ -64,7 +85,7 @@ const ItemDetail: NextPage = () => {
           <div className=" px-4 py-3">
             <div className=" flex justify-between">
               <h2 className=" font-semibold text-2xl mb-2 pt-2">
-                {data?.fiction?.title}
+                {fiction?.title}
               </h2>
               <button
                 onClick={onFavClick}
@@ -107,16 +128,16 @@ const ItemDetail: NextPage = () => {
                 )}
               </button>
             </div>
-            <div className=" mb-2">{data?.fiction?.author}</div>
-            <div className=" mb-2">{data?.fiction?.nationality}</div>
-            <div className=" mb-2">{data?.fiction?.genre}</div>
+            <div className=" mb-2">{fiction?.author}</div>
+            <div className=" mb-2">{fiction?.nationality}</div>
+            <div className=" mb-2">{fiction?.genre}</div>
             <div className=" mb-2">
-              {data?.fiction?.startDate} ~ {data?.fiction?.endDate}
+              {fiction?.startDate} ~ {data?.fiction?.endDate}
             </div>
-            <div className=" mb-2">{data?.fiction?.original}</div>
-            <div className=" mb-2">{data?.fiction?.platforms}</div>
+            <div className=" mb-2">{fiction?.original}</div>
+            <div className=" mb-2">{fiction?.platforms}</div>
             <div className=" mb-2">
-              {data?.fiction?.currentState || "500화 완결 (예시)"}
+              {fiction?.currentState || "500화 완결 (예시)"}
             </div>
           </div>
         </div>
@@ -125,7 +146,7 @@ const ItemDetail: NextPage = () => {
             <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">Keywords</h2>
               <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 pt-3 px-3">
-                {data?.fiction?.keywords?.map((item: any, index: any) => (
+                {fiction?.keywords?.map((item: any, index: any) => (
                   <li
                     key={index}
                     className={
@@ -144,7 +165,7 @@ const ItemDetail: NextPage = () => {
             <div className=" h-fit bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md">
               <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
 
-              <FictionRadarChart props={data?.fiction?.fictionStat} />
+              <FictionRadarChart props={fiction?.fictionStat} />
 
               <div className=" w-full px-3 h-fit mx-auto my-2">
                 <details>
@@ -183,17 +204,17 @@ const ItemDetail: NextPage = () => {
       <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
         <div className=" ">
           <h2 className=" font-bold text-xl">줄거리</h2>
-          <p>{data?.fiction?.synopsis}</p>
+          <p>{fiction?.synopsis}</p>
         </div>
         <div className=" mt-3">
           <h3 className=" font-bold text-xl">등장인물</h3>
-          {data?.fiction?.characters}
+          {fiction?.characters}
         </div>
       </div>
       <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
         <h2 className=" font-bold text-xl">비슷한 소설</h2>
         <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data?.similarFictions?.slice(0, 4).map((fiction) => (
+          {similarFictions?.slice(0, 4).map((fiction) => (
             <div key={fiction.id}>
               <div className="h-56 w-full mb-4 bg-slate-300"></div>
               <h3 className=" text-gray-700 -mb-1">{fiction.title}</h3>
@@ -204,6 +225,105 @@ const ItemDetail: NextPage = () => {
       </div>
     </div>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  if (!ctx?.params?.id) {
+    return {
+      props: {},
+    };
+  }
+  const fiction = await client.fiction.findUnique({
+    where: {
+      id: +ctx.params.id!.toString(),
+    },
+    include: {
+      fictionStat: true,
+      userFictionStat: {
+        include: {
+          _count: {
+            select: {
+              users: true,
+            },
+          },
+        },
+      },
+      keywords: {
+        include: {
+          keyword: {
+            select: {
+              name: true,
+              isOfHeroine: true,
+              isOfMC: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const arr: any[] = [];
+  fiction?.keywords.map((item) => arr.push(item.keyword.name));
+  const keywordSame = arr.map((word) => ({
+    keywords: {
+      some: {
+        keyword: {
+          name: {
+            equals: word,
+          },
+        },
+      },
+    },
+  }));
+
+  const arr2: any[] = [];
+  const similarFictions = await client.fiction.findMany({
+    where: {
+      OR: keywordSame,
+      AND: {
+        id: {
+          not: fiction?.id,
+        },
+      },
+    },
+  });
+
+  similarFictions.map((item) => arr2.push([item.id, item.title]));
+  //   console.log(arr2);
+
+  // console.log(similarFictions);
+
+  const isLiked = false;
+
+  const ration = await client.userFictionStat.findFirst({
+    where: {
+      fictionId: fiction?.id,
+    },
+    select: {
+      originality: true,
+      writing: true,
+      character: true,
+      verisimilitude: true,
+      synopsisComposition: true,
+      value: true,
+    },
+  });
+
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  return {
+    props: {
+      fiction: JSON.parse(JSON.stringify(fiction)),
+      similarFictions: JSON.parse(JSON.stringify(similarFictions)),
+      isLiked,
+    },
+  };
 };
 
 export default ItemDetail;

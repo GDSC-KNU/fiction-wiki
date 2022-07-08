@@ -14,7 +14,7 @@ async function handler(
   } = req;
   const fiction = await client.fiction.findUnique({
     where: {
-      id: +id.toString(),
+      id: +id!.toString(),
     },
     include: {
       fictionStat: true,

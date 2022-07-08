@@ -29,7 +29,7 @@ async function handler(
       },
     },
     where: {
-      fictionId: +id.toString(),
+      fictionId: +id!.toString(),
     },
   });
 
@@ -43,7 +43,7 @@ async function handler(
       data: {
         fiction: {
           connect: {
-            id: +id.toString(),
+            id: +id!.toString(),
           },
         },
         users: {

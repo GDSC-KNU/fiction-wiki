@@ -117,6 +117,7 @@ async function handler(
       },
     });
     // console.log(fiction);
+    await res.revalidate("/fictions");
 
     res.json({ ok: true, fiction });
   }

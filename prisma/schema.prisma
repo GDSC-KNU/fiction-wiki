@@ -38,7 +38,7 @@ model Fiction {
 model FictionStat {
   id                    Int       @id @default(autoincrement())
   fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
-  fictionId             Int     
+  fictionId             Int     @unique
   originality           Int
   verisimilitude        Int
   synopsisComposition   Int
@@ -50,7 +50,7 @@ model FictionStat {
 model UserFictionStat {
     id                    Int       @id @default(autoincrement())
     fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
-    fictionId             Int
+    fictionId             Int @unique
     users                 User[]
     userRationOnFictions  UserRationOnFiction[]
     originality           Int
