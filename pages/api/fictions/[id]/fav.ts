@@ -19,31 +19,36 @@ async function handler(
       userId: user?.id,
     },
   });
-  if (alreadyExists) {
-    //delete
-    await client.fav.delete({
-      where: {
-        id: alreadyExists.id,
-      },
-    });
-    isLiked = false;
-  } else {
-    //create
-    await client.fav.create({
-      data: {
-        user: {
-          connect: {
-            id: user?.id,
+  if (req.method === "GET") {
+    if (alreadyExists) isLiked = true;
+    else isLiked = false;
+  } else if (req.method === "POST") {
+    if (alreadyExists) {
+      //delete
+      await client.fav.delete({
+        where: {
+          id: alreadyExists.id,
+        },
+      });
+      isLiked = false;
+    } else {
+      //create
+      await client.fav.create({
+        data: {
+          user: {
+            connect: {
+              id: user?.id,
+            },
+          },
+          fiction: {
+            connect: {
+              id: +id!.toString(),
+            },
           },
         },
-        fiction: {
-          connect: {
-            id: +id!.toString(),
-          },
-        },
-      },
-    });
-    isLiked = true;
+      });
+      isLiked = true;
+    }
   }
 
   res.json({ isLiked, ok: true });
@@ -51,7 +56,7 @@ async function handler(
 
 export default withApiSession(
   withHandler({
-    methods: ["POST", "GET"],
+    methods: ["GET", "POST"],
     handler,
   })
 );

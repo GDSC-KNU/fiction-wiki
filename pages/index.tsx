@@ -18,7 +18,7 @@ interface FictionsResponse {
 }
 
 const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
-  const { data } = useSWR<FictionsResponse>("/api/fictions");
+  // const { data } = useSWR<FictionsResponse>("/api/fictions");
 
   // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
@@ -34,7 +34,7 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
         <section className="">
           <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
           <ul className=" flex">
-            {data?.fictions?.map((fiction, i) => (
+            {fictions?.slice(0, 5).map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <img
@@ -62,7 +62,7 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
         <section>
           <div className="mt-5 font-bold text-xl">Editors Pick</div>
           <ul className=" flex">
-            {data?.fictions?.map((fiction, i) => (
+            {fictions?.slice(0, 5).map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <img
@@ -124,15 +124,15 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
   );
 };
 
-// export async function getServerSideProps() {
-//   const fictions = await client.fiction.findMany({});
-//   console.log("Hi");
-//   // console.log(fictions);
-//   return {
-//     props: {
-//       fictions: JSON.parse(JSON.stringify(fictions)),
-//     },
-//   };
-// }
+export async function getServerSideProps() {
+  const fictions = await client.fiction.findMany({});
+  console.log("Hi");
+  // console.log(fictions);
+  return {
+    props: {
+      fictions: JSON.parse(JSON.stringify(fictions)),
+    },
+  };
+}
 
 export default Home;

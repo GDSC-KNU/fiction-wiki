@@ -26,11 +26,10 @@ interface FictionWithMore extends Fiction {
 const ItemDetail: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
-  isLiked,
 }) => {
   const router = useRouter();
 
-  // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
+  // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
@@ -40,10 +39,11 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
   );
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
+
   const onFavClick = () => {
     toggleFav({});
     if (!data) return;
-    console.log(data);
+    // console.log(data);
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
   };
 
@@ -73,7 +73,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
   }
 
   // console.log(data?.fiction?.fictionStat);
-
+  // console.log(data);
   return (
     <div className=" max-w-[1500px]">
       <div className=" grid grid-cols-1 sm:grid-cols-5 h-fit">
@@ -132,7 +132,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
             <div className=" mb-2">{fiction?.nationality}</div>
             <div className=" mb-2">{fiction?.genre}</div>
             <div className=" mb-2">
-              {fiction?.startDate} ~ {data?.fiction?.endDate}
+              {fiction?.startDate} ~ {fiction?.endDate}
             </div>
             <div className=" mb-2">{fiction?.original}</div>
             <div className=" mb-2">{fiction?.platforms}</div>
@@ -215,9 +215,9 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
         <h2 className=" font-bold text-xl">비슷한 소설</h2>
         <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {similarFictions?.slice(0, 4).map((fiction) => (
-            <div key={fiction.id}>
+            <div key={fiction?.id}>
               <div className="h-56 w-full mb-4 bg-slate-300"></div>
-              <h3 className=" text-gray-700 -mb-1">{fiction.title}</h3>
+              <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
               <span>description</span>
             </div>
           ))}
@@ -230,7 +230,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: true,
+    fallback: "blocking",
   };
 };
 

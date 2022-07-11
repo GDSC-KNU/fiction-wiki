@@ -122,6 +122,7 @@ export default function UserStat() {
           register={register("UserFictionStat.0", {
             max: 5,
             min: 0,
+            pattern: /^[0-9]*$/,
           })}
           required
           label="오리지널리티"
@@ -130,7 +131,11 @@ export default function UserStat() {
           kind="status"
         />
         <Input
-          register={register("UserFictionStat.1")}
+          register={register("UserFictionStat.1", {
+            max: 5,
+            min: 0,
+            pattern: /^[0-9]*$/,
+          })}
           required
           label="필력"
           name="UserFictionStat"
@@ -138,7 +143,11 @@ export default function UserStat() {
           kind="status"
         />
         <Input
-          register={register("UserFictionStat.2")}
+          register={register("UserFictionStat.2", {
+            max: 5,
+            min: 0,
+            pattern: /^[0-9]*$/,
+          })}
           required
           label="캐릭터성"
           name="UserFictionStat"
@@ -146,7 +155,11 @@ export default function UserStat() {
           kind="status"
         />
         <Input
-          register={register("UserFictionStat.3")}
+          register={register("UserFictionStat.3", {
+            max: 5,
+            min: 0,
+            pattern: /^[0-9]*$/,
+          })}
           required
           label="핍진성"
           name="UserFictionStat"
@@ -154,7 +167,11 @@ export default function UserStat() {
           kind="status"
         />
         <Input
-          register={register("UserFictionStat.4")}
+          register={register("UserFictionStat.4", {
+            max: 5,
+            min: 0,
+            pattern: /^[0-9]*$/,
+          })}
           required
           label="스토리"
           name="UserFictionStat"
@@ -162,7 +179,11 @@ export default function UserStat() {
           kind="status"
         />
         <Input
-          register={register("UserFictionStat.5")}
+          register={register("UserFictionStat.5", {
+            max: 5,
+            min: 0,
+            pattern: /^[0-9]*$/,
+          })}
           required
           label="작품성"
           name="UserFictionStat"
