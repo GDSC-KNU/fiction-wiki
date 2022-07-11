@@ -27,9 +27,11 @@ export default function Gnb() {
           <Link href="/me">
             <li className=" mr-5 font-bold">Profile</li>
           </Link>
-          <Link href="/enter">
-            <li className=" mr-5 font-bold">Enter</li>
-          </Link>
+          {session ? null : (
+            <Link href="/enter">
+              <li className=" mr-5 font-bold">Enter</li>
+            </Link>
+          )}
           {session ? (
             <li className=" flex mr-5">
               <div className=" mr-5 font-bold">{session.user?.email}</div>

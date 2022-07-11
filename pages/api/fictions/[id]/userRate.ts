@@ -24,7 +24,7 @@ async function handler(
       users: true,
       userRationOnFictions: {
         where: {
-          userId: +user!.id.toString(),
+          userId: user!.id,
         },
       },
     },
@@ -48,12 +48,12 @@ async function handler(
         },
         users: {
           connect: {
-            id: +user!.id.toString(),
+            id: user!.id,
           },
         },
         userRationOnFictions: {
           create: {
-            userId: +user!.id.toString(),
+            userId: user!.id,
             originality: +UserFictionStat[0],
             writing: +UserFictionStat[1],
             character: +UserFictionStat[2],
@@ -91,7 +91,7 @@ async function handler(
         data: {
           users: {
             connect: {
-              id: +user!.id.toString(),
+              id: user!.id,
             },
           },
           userRationOnFictions: {
@@ -126,7 +126,7 @@ async function handler(
         data: {
           users: {
             connect: {
-              id: +user!.id.toString(),
+              id: user!.id,
             },
           },
           userRationOnFictions: {
