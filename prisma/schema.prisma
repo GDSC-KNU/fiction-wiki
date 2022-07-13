@@ -33,6 +33,7 @@ model Fiction {
   userId        String
   favs          Fav[]
   isAdult       Boolean?            @default(false)
+  comments      Comment[]
 }
 
 model FictionStat {
@@ -111,6 +112,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  comments      Comment[]
 }
 
 model UserRationOnFiction {
@@ -147,6 +149,8 @@ model Fav {
   updatedAt     DateTime    @updatedAt
 }
 
+//for next-auth
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -180,4 +184,15 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Comment {
+  id                Int  @id @default(autoincrement())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  comment           String   @db.MediumText
+  createdBy         User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById       String
+  fiction           Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
+  fictionId         Int
 }

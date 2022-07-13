@@ -15,11 +15,6 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -30,15 +25,25 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/fictions/[id]": [
+    "/authors": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/fictions/[id].js"
+      "static/chunks/pages/authors.js"
     ],
-    "/fictions/create": [
+    "/fictions": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/fictions/create.js"
+      "static/chunks/pages/fictions.js"
+    ],
+    "/profile": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/profile.js"
+    ],
+    "/ranking": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/ranking.js"
     ]
   },
   "ampFirstPages": []

@@ -20,6 +20,14 @@
       "@components/*": ["components/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "next-env.d.js",
+    "**/*.ts",
+    "**/*.tsx",
+    "types/**/*.ts",
+    "types/**/*.js",
+    "pages/api/auth/[...nextauth].js"
+  ],
   "exclude": ["node_modules"]
 }
