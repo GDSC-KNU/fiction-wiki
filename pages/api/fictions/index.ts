@@ -46,6 +46,7 @@ async function handler(
         subKeywords,
         original,
         platforms,
+        thumbId,
       },
       session: { user },
     } = req;
@@ -89,7 +90,7 @@ async function handler(
         endDate: new Date(date[1]),
         original,
         platforms: platforms[0],
-        image: "",
+        image: thumbId,
         synopsis,
         characters,
         currentState: "",

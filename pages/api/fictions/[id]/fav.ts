@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { getSession } from "next-auth/react";
 
 async function handler(
   req: NextApiRequest,
@@ -13,10 +14,12 @@ async function handler(
     query: { id },
     session: { user },
   } = req;
+  const session = await getSession({ req });
+
   const alreadyExists = await client.fav.findFirst({
     where: {
       fictionId: +id!.toString(),
-      userId: user?.id,
+      userId: session?.user?.id,
     },
   });
   if (req.method === "GET") {
@@ -37,7 +40,7 @@ async function handler(
         data: {
           user: {
             connect: {
-              id: user?.id,
+              id: session?.user?.id,
             },
           },
           fiction: {

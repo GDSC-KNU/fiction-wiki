@@ -7,6 +7,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Radar } from "react-chartjs-2";
 import useSWR, { useSWRConfig } from "swr";
@@ -25,6 +26,7 @@ interface RateUserStatForm {
 }
 
 export default function FictionRadarChart(props: any) {
+  const { data: session } = useSession();
   const router = useRouter();
 
   const { data: UserStatData, mutate: boundMutate } = useSWR<any>(

@@ -1,18 +1,19 @@
 import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
 import { useRouter } from "next/router";
-import userRate from "pages/api/fictions/[id]/userRate";
 import { FieldErrors, useForm } from "react-hook-form";
 import Button from "./button";
 import Input from "./input";
 import useSWR, { useSWRConfig } from "swr";
 import { validateRequest } from "twilio/lib/webhooks/webhooks";
+import { useSession } from "next-auth/react";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
 }
 
 export default function UserStat() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { mutate: unboundMutate } = useSWRConfig();
   const [rateUserStat, { loading, data, error }] =
@@ -58,44 +59,24 @@ export default function UserStat() {
         fiction: {
           ...prev?.fiction,
           userFictionStat: {
-            originality: +curOriginality,
-            writing: +curWriting,
-            character: +curCharacter,
-            verisimilitude: +curVerisimilitude,
-            synopsisComposition: +curSynopsisCompositon,
-            value: +curValue,
+            originality:
+              (+prev?.fiction?.userFictionStat?.originality || 0) +
+              +curOriginality,
+            writing:
+              (+prev?.fiction?.userFictionStat?.writing || 0) + +curWriting,
+            character:
+              (+prev?.fiction?.userFictionStat?.character || 0) + +curCharacter,
+            verisimilitude:
+              (+prev?.fiction?.userFictionStat?.verisimilitude || 0) +
+              +curVerisimilitude,
+            synopsisComposition:
+              (+prev?.fiction?.userFictionStat?.synopsisComposition || 0) +
+              +curSynopsisCompositon,
+            value: (+prev?.fiction?.userFictionStat?.value || 0) + +curValue,
             _count: {
-              users: UserStatData.userRation
-                ? +prev?.fiction?.userFictionStat?._count?.users || 0
-                : (+prev?.fiction?.userFictionStat?._count?.users || 0) + 1,
+              users: +prev?.fiction?.userFictionStat?._count?.users + 1 || 1,
             },
           },
-        },
-        ration: {
-          originality:
-            (+prev?.fiction?.userFictionStat?.originality || 0) -
-            (+prev?.userRation?.originality || 0) +
-            +curOriginality,
-          writing:
-            (+prev?.fiction?.userFictionStat?.writing || 0) -
-            prev?.userRation?.writing +
-            +curWriting,
-          character:
-            (+prev?.fiction?.userFictionStat?.character || 0) -
-            prev?.userRation?.character +
-            +curCharacter,
-          verisimilitude:
-            (+prev?.fiction?.userFictionStat?.verisimilitude || 0) -
-            prev?.userRation?.verisimilitude +
-            +curVerisimilitude,
-          synopsisComposition:
-            (+prev?.fiction?.userFictionStat?.synopsisComposition || 0) -
-            prev?.userRation?.synopsisComposition +
-            +curSynopsisCompositon,
-          value:
-            (+prev?.fiction?.userFictionStat?.value || 0) -
-            prev?.userRation?.value +
-            +curValue,
         },
         userRation: {
           originality: +curOriginality,

@@ -26,7 +26,7 @@ const Profile: NextPage = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   console.log(session);
   return (
-    <div className="  h-[45vh] overflow-hidden w-[100vw] max-h-[250px] max-w-[1300px] min-h-[213px] ">
+    <div className="   w-[100vw] max-w-[1300px] min-h-[213px] ">
       <div className=" bg-slate-400 mb-7 pl-6 py-4">
         <h5 className=" font-bold">계정 정보</h5>
         <div className=" ">

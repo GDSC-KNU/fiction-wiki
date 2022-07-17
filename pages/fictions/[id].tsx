@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import UserStat from "@components/UserStat";
 import client from "@libs/server/client";
 import Id from "pages/api/fictions/[id]";
+import Image from "next/image";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -77,11 +78,18 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
   return (
     <div className=" max-w-[1500px]">
       <div className=" grid grid-cols-1 sm:grid-cols-5 h-fit">
-        <div className=" bg-white col-span-2 mx-5 mt-7 border-[0.5px] h-[96.6%] border-[#BBBBBB] rounded-md overflow-hidden">
-          <img
+        <div className=" object-cover bg-white col-span-2 mx-5 mt-7 border-[0.5px] h-[96.6%] border-[#BBBBBB] rounded-md overflow-hidden">
+          {/* <img
             className=" min-h-[442px] max-h-[469px] w-full"
             src="https://picsum.photos/462/599?random=2"
-          ></img>
+          ></img> */}
+          <div className=" relative pb-[600px]">
+            <Image
+              className=" object-fill"
+              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
+              layout="fill"
+            />
+          </div>
           <div className=" px-4 py-3">
             <div className=" flex justify-between">
               <h2 className=" font-semibold text-2xl mb-2 pt-2">

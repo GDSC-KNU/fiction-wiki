@@ -5,6 +5,7 @@ import { Fiction } from "@prisma/client";
 import useSWR from "swr";
 import Link from "next/link";
 import client from "@libs/server/client";
+import Image from "next/image";
 
 export interface FictionWithCount extends Fiction {
   _count: {
@@ -37,11 +38,13 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
             {fictions?.slice(0, 5).map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                  <img
+                  <Image
                     className=""
-                    src={`https://picsum.photos/160/225?random=${fiction.id}`}
-                  ></img>
-                  <div className=" flex-col px-2 py-2">
+                    src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
+                    width={142}
+                    height={199.69}
+                  />
+                  <div className=" flex-col px-2 pb-2">
                     <div className=" text-xs text-gray-400">
                       {fiction.genre}
                     </div>

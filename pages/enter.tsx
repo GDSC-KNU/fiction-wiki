@@ -167,15 +167,15 @@ const Enter: NextPage = () => {
 
             {session ? (
               <button
-                className=" font-bold flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                className=" flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 onClick={() => signOut()}
               >
                 Google Sign out
-                <span>{session.user?.email}</span>
+                {/* <span>{session.user?.email}</span> */}
               </button>
             ) : (
               <button
-                className=" font-bold flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                className=" flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 onClick={() => signIn()}
               >
                 Google Sign in

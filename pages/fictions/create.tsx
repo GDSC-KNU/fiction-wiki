@@ -15,6 +15,7 @@ import React, {
   useState,
 } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
+import Image from "next/image";
 
 interface CreateFictionForm {
   title: string;
@@ -31,6 +32,7 @@ interface CreateFictionForm {
   subKeywords: string[];
   original: string;
   platforms: string[];
+  thumb?: FileList;
 }
 
 interface CreateFictionMutation {
@@ -53,9 +55,20 @@ const Create: NextPage = () => {
     setValue,
   } = useForm<CreateFictionForm>({ mode: "onBlur" });
 
-  const onValid = (data: CreateFictionForm) => {
+  const onValid = async (data: CreateFictionForm) => {
     if (loading) return;
-    createFiction(data);
+    if (data.thumb && data.thumb.length > 0) {
+      const { uploadURL } = await (await fetch(`/api/files`)).json();
+      const form = new FormData();
+      form.append("file", data.thumb[0], data.title);
+      const {
+        result: { id },
+      } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
+      createFiction({ ...data, thumbId: id });
+    } else {
+      createFiction(data);
+    }
+    return;
   };
 
   useEffect(() => {
@@ -63,6 +76,15 @@ const Create: NextPage = () => {
       router.push(`/fictions/${data.fiction.id}`);
     }
   }, [data, router]);
+  const [thumbPreview, setThumbPreview] = useState("");
+  const thumb = watch("thumb");
+
+  useEffect(() => {
+    if (thumb && thumb.length > 0) {
+      const file = thumb[0];
+      setThumbPreview(URL.createObjectURL(file));
+    }
+  }, [thumb]);
 
   const onInvalid = (erros: FieldErrors) => {
     if (loading) return;
@@ -133,23 +155,43 @@ const Create: NextPage = () => {
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
               <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                 <div className=" min-h-[330px] w-full">
-                  <label className="w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
-                    <svg
-                      className="h-12 w-12"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                  {thumbPreview ? (
+                    <label className=" relative pb-100 w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
+                      <Image
+                        className=" object-cover"
+                        src={thumbPreview || "/"}
+                        layout="fill"
                       />
-                    </svg>
-                    <input className="hidden" type="file" />
-                  </label>
+                      <input
+                        {...register("thumb")}
+                        className="hidden"
+                        type="file"
+                      />
+                    </label>
+                  ) : (
+                    <label className="w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
+                      <svg
+                        className="h-12 w-12"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+
+                      <input
+                        {...register("thumb")}
+                        className="hidden"
+                        type="file"
+                      />
+                    </label>
+                  )}
                 </div>
                 <div className=" px-4 py-3">
                   <Input

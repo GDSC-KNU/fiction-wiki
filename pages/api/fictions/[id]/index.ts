@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { getSession } from "next-auth/react";
 
 async function handler(
   req: NextApiRequest,
@@ -12,6 +13,8 @@ async function handler(
     query: { id },
     session: { user },
   } = req;
+  const session = await getSession({ req });
+  console.log(session?.user?.id);
   const fiction = await client.fiction.findUnique({
     where: {
       id: +id!.toString(),
@@ -75,7 +78,7 @@ async function handler(
     await client.fav.findFirst({
       where: {
         fictionId: fiction?.id,
-        userId: user?.id,
+        userId: session?.user?.id,
       },
       select: {
         id: true,
@@ -99,7 +102,7 @@ async function handler(
 
   const userRation = await client.userRationOnFiction.findFirst({
     where: {
-      userId: user?.id,
+      userId: session?.user?.id,
     },
   });
 
