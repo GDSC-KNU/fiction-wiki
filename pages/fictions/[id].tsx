@@ -76,9 +76,9 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
   // console.log(data?.fiction?.fictionStat);
   // console.log(data);
   return (
-    <div className=" max-w-[1500px]">
+    <div className=" max-w-[1100px]">
       <div className=" grid grid-cols-1 sm:grid-cols-5 h-fit">
-        <div className=" object-cover bg-white col-span-2 mx-5 mt-7 border-[0.5px] h-[96.6%] border-[#BBBBBB] rounded-md overflow-hidden">
+        <div className="  sm:max-w-[380px] object-cover bg-white col-span-2 mx-5 mt-7 border-[0.5px] h-[96.6%] border-[#BBBBBB] rounded-md overflow-hidden">
           {/* <img
             className=" min-h-[442px] max-h-[469px] w-full"
             src="https://picsum.photos/462/599?random=2"
@@ -86,7 +86,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
           <div className=" relative pb-[600px]">
             <Image
               className=" object-fill"
-              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
+              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/public`}
               layout="fill"
             />
           </div>
@@ -159,10 +159,10 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
                     key={index}
                     className={
                       item.keyword.isOfMC
-                        ? " text-sm text-center ring-2 ring-offset-1 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                        ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
                         : item.keyword.isOfHeroine
-                        ? " text-sm text-center ring-2 ring-offset-1 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                        : " text-sm text-center ring-2 ring-offset-1 ring-gray-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                        ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                        : " text-sm text-center ring-2 ring-gray-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
                     }
                   >
                     {item?.keyword?.name}

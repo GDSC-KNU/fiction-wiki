@@ -4,7 +4,11 @@
   ],
   "middleware": {
     "/": {
-      "env": [],
+      "env": [
+        "NEXTAUTH_URL",
+        "VERCEL_URL",
+        "NEXTAUTH_URL_INTERNAL"
+      ],
       "files": [
         "server/edge-runtime-webpack.js",
         "server/middleware.js"

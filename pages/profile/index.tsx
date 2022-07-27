@@ -24,7 +24,7 @@ const Profile: NextPage = () => {
   const { data: session, status } = useSession();
 
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  console.log(session);
+  // console.log(session);
   return (
     <div className="   w-[100vw] max-w-[1300px] min-h-[213px] ">
       <div className=" bg-slate-400 mb-7 pl-6 py-4">

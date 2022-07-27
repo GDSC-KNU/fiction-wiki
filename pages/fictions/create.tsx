@@ -41,7 +41,7 @@ interface CreateFictionMutation {
 }
 
 const Create: NextPage = () => {
-  const { user, isLoading } = useUser();
+  // const { user, isLoading } = useUser();
   const router = useRouter();
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");

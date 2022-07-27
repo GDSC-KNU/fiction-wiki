@@ -77,15 +77,15 @@ model Keyword {
 }
 
 model KeywordsOnFictions {
-  fiction       Fiction     @relation(fields: [fictionId], references: [id])
+  fiction       Fiction?     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId     Int
-  keyword       Keyword     @relation(fields: [keywordId], references: [id])
+  keyword       Keyword?     @relation(fields: [keywordId], references: [id], onDelete:Cascade)
   keywordId     Int
   @@id([fictionId, keywordId])
 }
 
 model CategoriesOnFictions {
-  fiction       Fiction     @relation(fields: [fictionId], references: [id])
+  fiction       Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId     Int
   category      Category @relation(fields: [categoryId], references: [id])
   categoryId    Int 
