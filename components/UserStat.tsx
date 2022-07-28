@@ -50,7 +50,33 @@ export default function UserStat() {
 
   let userCount = UserStatData?.fiction?.userFictionStat?._count?.users;
 
+  function btnOnOff() {
+    const target = document.getElementById(
+      "rateButton"
+    ) as HTMLButtonElement | null;
+    target!.disabled = !target?.disabled;
+  }
+
   const onRateClick = (data: RateUserStatForm) => {
+    btnOnOff();
+    if (!session) {
+      alert("Please log in");
+      btnOnOff();
+      return;
+    }
+
+    if (
+      !curOriginality ||
+      !curWriting ||
+      !curCharacter ||
+      !curVerisimilitude ||
+      !curSynopsisCompositon ||
+      !curValue
+    ) {
+      alert("Please fill in the blanks");
+      btnOnOff();
+      return;
+    }
     rateUserStat(data);
     unboundMutate(
       `/api/fictions/${router.query.id}`,
@@ -89,6 +115,7 @@ export default function UserStat() {
       }),
       false
     );
+    btnOnOff();
   };
 
   // console.log(data ? data : null);
@@ -173,6 +200,7 @@ export default function UserStat() {
         />
       </div>
       <button
+        id="rateButton"
         type="submit"
         className="w-full bg-white  hover:border-gray-300 text-black  px-4 border-[0.5px] border-[#BBBBBB] border-transparent rounded-md shadow-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:outline-none"
       >

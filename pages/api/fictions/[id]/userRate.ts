@@ -19,7 +19,7 @@ async function handler(
     res.json({ ok: false });
     return;
   } else {
-    console.log(session?.user?.email);
+    // console.log(session?.user?.email);
     const alreadyExists = await client.userFictionStat.findFirst({
       include: {
         _count: {
@@ -39,7 +39,7 @@ async function handler(
       },
     });
 
-    console.log(alreadyExists);
+    // console.log(alreadyExists);
 
     let Ration;
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
@@ -90,10 +90,10 @@ async function handler(
           userId: session?.user?.id,
         },
       });
-      if (userRated) console.log(userRated);
+      // if (userRated) console.log(userRated);
       // 유저가 처음 제출하는 경우
       if (!userRated) {
-        console.log(alreadyExists.userRationOnFictions);
+        // console.log(alreadyExists.userRationOnFictions);
         Ration = await client.userFictionStat.update({
           where: {
             id: alreadyExists.id,
