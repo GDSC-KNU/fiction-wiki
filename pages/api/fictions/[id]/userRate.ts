@@ -9,6 +9,12 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
+  //평점 평균 산출 함수
+  const average = function (n: number) {
+    let m = Number((Math.abs(n) * 100).toPrecision(15));
+    return Math.round(m) / (100 * Math.sign(n));
+  };
+
   const {
     query: { id },
     // session: { user },
@@ -74,6 +80,15 @@ async function handler(
           verisimilitude: +UserFictionStat[3],
           synopsisComposition: +UserFictionStat[4],
           value: +UserFictionStat[5],
+          total: average(
+            (+UserFictionStat[0] +
+              +UserFictionStat[1] +
+              +UserFictionStat[2] +
+              +UserFictionStat[3] +
+              +UserFictionStat[4] +
+              +UserFictionStat[5]) /
+              6
+          ),
         },
         include: {
           _count: {
@@ -88,6 +103,11 @@ async function handler(
       const userRated = await client.userRationOnFiction.findFirst({
         where: {
           userId: session?.user?.id,
+          userFictionStat: {
+            fiction: {
+              id: +id!.toString(),
+            },
+          },
         },
       });
       // if (userRated) console.log(userRated);
@@ -136,6 +156,17 @@ async function handler(
             synopsisComposition:
               alreadyExists.synopsisComposition + +UserFictionStat[4],
             value: alreadyExists.value + +UserFictionStat[5],
+            total: average(
+              ((alreadyExists.total || 0) * alreadyExists._count.users +
+                (+UserFictionStat[0] +
+                  +UserFictionStat[1] +
+                  +UserFictionStat[2] +
+                  +UserFictionStat[3] +
+                  +UserFictionStat[4] +
+                  +UserFictionStat[5]) /
+                  6) /
+                (alreadyExists._count.users + 1)
+            ),
           },
         });
       }

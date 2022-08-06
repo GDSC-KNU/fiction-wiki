@@ -60,6 +60,7 @@ model UserFictionStat {
     character             Int
     writing               Int
     value                 Int
+    total                 Float?
 }
 
 model Category {

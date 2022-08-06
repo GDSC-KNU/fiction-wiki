@@ -4,6 +4,7 @@ import {
   Keyword,
   FictionStat,
   KeywordsOnFictions,
+  UserFictionStat,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import React, { useEffect, useState } from "react";
 interface FictionWithMore extends Fiction {
   keywords: [KeywordsOnFictionsWithMore];
   fictionStat: [FictionStat];
+  userFictionStat: UserFictionStat;
 }
 
 interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
@@ -93,6 +95,16 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [checkedGenres, setCheckedGenres] = useState(new Set());
   const [checkedNationalities, setCheckedNationalities] = useState(new Set());
+  const [checkedSortings, setCheckedSortings] = useState(new Set());
+  const sortingList = [
+    "총점",
+    "캐릭터성",
+    "오리지널리티",
+    "스토리",
+    "작품성",
+    "핍진성",
+    "필력",
+  ];
 
   let [sFictions, setSFictions] = useState(fictions);
 
@@ -105,31 +117,28 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
       currentTarget.parentNode,
       currentTarget.value,
       currentTarget.checked,
-      currentTarget.id
+      currentTarget.id,
+      currentTarget
     );
   };
 
-  const checkedItemHandler = (box, name, isChecked, id) => {
+  const checkedItemHandler = (box, name, isChecked, id, target) => {
     // console.log(name);
     // console.log(isChecked);
-
+    // 키워드
     if (isChecked && id === "keyword") {
       checkedItems.add(name);
       setCheckedItems(checkedItems);
-      box.style.backgroundColor = "blue";
-      box.style.color = "white";
+      // box.style.backgroundColor = "blue";
+      // box.style.color = "white";
     } else if (!isChecked && checkedItems.has(name) && id === "keyword") {
       checkedItems.delete(name);
       setCheckedItems(checkedItems);
-      box.style.backgroundColor = "white";
-      box.style.color = "black";
     }
-
+    // 국가
     if (isChecked && id === "nationality") {
       checkedNationalities.add(name);
       setCheckedNationalities(checkedNationalities);
-      box.style.backgroundColor = "blue";
-      box.style.color = "white";
     } else if (
       !isChecked &&
       checkedNationalities.has(name) &&
@@ -137,31 +146,36 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
     ) {
       checkedNationalities.delete(name);
       setCheckedNationalities(checkedNationalities);
-      box.style.backgroundColor = "white";
-      box.style.color = "black";
     }
-
+    // 장르
     if (isChecked && id === "genre") {
       checkedGenres.add(name);
       setCheckedGenres(checkedGenres);
-      box.style.backgroundColor = "blue";
-      box.style.color = "white";
     } else if (!isChecked && checkedGenres.has(name) && id === "genre") {
       checkedGenres.delete(name);
       setCheckedGenres(checkedGenres);
-      box.style.backgroundColor = "white";
-      box.style.color = "black";
+    }
+    // 정렬
+    if (isChecked && id === "sorting") {
+      checkedSortings.clear();
+      checkedSortings.add(name);
+      setCheckedSortings(checkedSortings);
+      // console.log(name);
+    } else if (!isChecked && checkedSortings.has(name) && id === "sorting") {
+      checkedSortings.delete(name);
+      setCheckedSortings(checkedSortings);
     }
     // return checkedItems;
   };
   // console.log(fictions);
   // console.log(checkedItems);
   // console.log(checkedGenres);
-  console.log(checkedNationalities);
+  // console.log(checkedNationalities);
 
   let temp: any = [];
   let temp2: any = [];
   let temp3: any = [];
+
   const rerenderList = () => {
     sFictions = fictions;
     setSFictions(sFictions);
@@ -190,9 +204,9 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
     if (!temp.length) temp = allTemp;
     if (!temp2.length) temp2 = allTemp;
     if (!temp3.length) temp3 = allTemp;
-    console.log(temp);
-    console.log(temp2);
-    console.log(temp3);
+    // console.log(temp);
+    // console.log(temp2);
+    // console.log(temp3);
 
     temp = temp
       .filter((x: any) => temp2.includes(x))
@@ -201,7 +215,7 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
     sFictions = sFictions.filter((fiction) => temp.includes(fiction.id));
     setSFictions(sFictions);
 
-    console.log(temp);
+    // console.log(temp);
 
     if (!sFictions.length) {
       sFictions = fictions;
@@ -210,6 +224,51 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
 
     //장르 필터링
     sFictions = sFictions.filter((fiction) => fiction.id);
+    console.log(sFictions);
+
+    //정렬 Sorting
+    if (checkedSortings.has("오리지널리티")) {
+      sFictions = sFictions.sort(
+        (a, b) => b.userFictionStat.originality - a.userFictionStat.originality
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("캐릭터성")) {
+      sFictions = sFictions.sort(
+        (a, b) => b.userFictionStat.character - a.userFictionStat.character
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("스토리")) {
+      sFictions = sFictions.sort(
+        (a, b) =>
+          b.userFictionStat.synopsisComposition -
+          a.userFictionStat.synopsisComposition
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("작품성")) {
+      sFictions = sFictions.sort(
+        (a, b) => b.userFictionStat.value - a.userFictionStat.value
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("핍진성")) {
+      sFictions = sFictions.sort(
+        (a, b) =>
+          b.userFictionStat.verisimilitude - a.userFictionStat.verisimilitude
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("필력")) {
+      sFictions = sFictions.sort(
+        (a, b) => b.userFictionStat.writing - a.userFictionStat.writing
+      );
+      setSFictions(sFictions);
+    } else if (checkedSortings.has("총점")) {
+      sFictions = sFictions.sort(
+        (a, b) =>
+          (b.userFictionStat?.total || 0) - (a.userFictionStat?.total || 0)
+      );
+      setSFictions(sFictions);
+    }
+
+    console.log(checkedSortings);
   };
 
   return (
@@ -225,31 +284,46 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {/* <tr>
                 <th className=" w-16">제목</th>
+                <td>
+                  <input
+                    className=" w-full"
+                    type="text"
+                    placeholder="검색어"
+                  ></input>
+                </td>
+                <span className=" hover:border-gray-400 hover:bg-gray-200 bg-white border-[0.5px] border-[#BBBBBB] rounded-md mt-2 p-1">
+                  {" "}
+                  검색
+                </span>
+              </tr> */}
+              {/* <tr>
+                <th>작가</th>
                 <td>
                   <input type="text" placeholder="검색어"></input>
                 </td>
-              </tr>
-              <tr>
-                <th>작가</th>
-              </tr>
+                <span className=" hover:border-gray-400 hover:bg-gray-200 bg-white border-[0.5px] border-[#BBBBBB] rounded-md mt-2 p-1">
+                  {" "}
+                  검색
+                </span>
+              </tr> */}
               <tr>
                 <th>국가</th>
                 <td className=" leading-[1.8rem] flex flex-wrap">
                   {nationalities.map((nationality, i) => (
-                    <label
-                      key={i}
-                      className=" cursor-pointer flex hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]"
-                    >
+                    <label key={i} className=" cursor-pointer flex">
                       <input
                         onClick={(e) => checkHandler(e)}
                         type="checkbox"
-                        className=" hidden"
+                        className=" hidden peer"
                         id="nationality"
                         value={nationality}
                       />
-                      <div className=" "> {nationality}</div>
+                      <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
+                        {" "}
+                        {nationality}
+                      </div>
                     </label>
                   ))}
                 </td>
@@ -258,18 +332,18 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
                 <th>장르</th>
                 <td className=" leading-[1.8rem] flex flex-wrap">
                   {genres.map((genre, i) => (
-                    <label
-                      key={i}
-                      className=" cursor-pointer flex hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]"
-                    >
+                    <label key={i} className=" cursor-pointer flex">
                       <input
                         onClick={(e) => checkHandler(e)}
                         type="checkbox"
                         id="genre"
-                        className=" hidden"
+                        className=" hidden peer"
                         value={genre}
                       />
-                      <div className=" "> {genre}</div>
+                      <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
+                        {" "}
+                        {genre}
+                      </div>
                     </label>
                   ))}
                 </td>
@@ -278,18 +352,39 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
                 <th className=" min-w-[50px]">키워드</th>
                 <td className=" leading-[1.8rem] flex flex-wrap">
                   {keywords.map((keyword) => (
-                    <label
-                      key={keyword.id}
-                      className=" cursor-pointer flex text-cent hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]"
-                    >
+                    <label key={keyword.id} className=" cursor-pointer flex ">
                       <input
                         onClick={(e) => checkHandler(e)}
                         type="checkbox"
                         id="keyword"
-                        className=" hidden"
+                        className=" hidden peer"
                         value={keyword.name}
                       />
-                      <div className=" "> {keyword.name}</div>
+                      <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
+                        {" "}
+                        {keyword.name}
+                      </div>
+                    </label>
+                  ))}
+                </td>
+              </tr>
+              <tr>
+                <th>정렬</th>
+                <td className=" leading-[1.8rem] flex flex-wrap">
+                  {sortingList.map((sorting, i) => (
+                    <label key={i} className=" bg-white  cursor-pointer flex ">
+                      <input
+                        // defaultChecked
+                        onClick={(e) => checkHandler(e)}
+                        type="radio"
+                        className=" hidden peer"
+                        id="sorting"
+                        value={sorting}
+                        name="sorting"
+                      ></input>
+                      <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
+                        {sorting}
+                      </div>
                     </label>
                   ))}
                 </td>
@@ -318,7 +413,14 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
                   height={199.69}
                 />
                 <div className=" flex-col px-2 pb-2">
-                  <div className=" text-xs text-gray-400">{fiction.genre}</div>
+                  <div className=" flex justify-between">
+                    <div className=" text-xs text-gray-400">
+                      {fiction.genre}
+                    </div>
+                    <div className="  text-xs font-bold">
+                      {fiction.userFictionStat?.total}
+                    </div>
+                  </div>
                   <div className=" font-bold">{fiction.title}</div>
                   <div className=" text-xs">
                     {fiction.currentState || "???화 완결"}
@@ -346,6 +448,7 @@ export async function getStaticProps() {
           keyword: true,
         },
       },
+      userFictionStat: true,
     },
   });
   const keywords = await client.keyword.findMany();

@@ -14,7 +14,7 @@ async function handler(
     session: { user },
   } = req;
   const session = await getSession({ req });
-  console.log(session?.user?.id);
+  // console.log(session?.user?.id);
   const fiction = await client.fiction.findUnique({
     where: {
       id: +id!.toString(),
@@ -45,7 +45,7 @@ async function handler(
   });
 
   const arr: any[] = [];
-  fiction?.keywords.map((item) => arr.push(item.keyword.name));
+  fiction?.keywords.map((item) => arr.push(item.keyword?.name));
   const keywordSame = arr.map((word) => ({
     keywords: {
       some: {
