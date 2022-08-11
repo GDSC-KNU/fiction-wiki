@@ -22,6 +22,10 @@ export default function withHandler({
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
+    // if (!req.session.user) {
+    //   console.log("not logged in");
+    //   return res.status(200).json({ ok: false, error: "Plase Log in" });
+    // }
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }

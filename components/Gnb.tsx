@@ -6,8 +6,11 @@ import { useEffect } from "react";
 import router from "next/router";
 
 export default function Gnb() {
-  const { data: session } = useSession();
-  // const { data } = useSWR("/api/users/me");
+  const { data: nextSession } = useSession();
+  const { user, isLoading } = useUser();
+  // const { data: CredentailSession } = useSWR("/api/users/me");
+  // console.log(user);
+  // console.log(nextSession);
   // useEffect(() => {
   //   if (data && !data.ok) {
   //     router.replace("/enter");
@@ -30,17 +33,20 @@ export default function Gnb() {
           <Link href="/ranking">
             <li className="mr-3">Ranking</li>
           </Link>
-          {/* <Link href="/fictions/create">
-            <li className="mr-3">Create</li>
-          </Link> */}
-        </ul>
-        <ul className=" flex cursor-pointer font-bold">
-          {session ? (
-            <Link href="/profile">
-              <li className="mr-3">{session.user!.name}</li>
+          {user ? (
+            <Link href="/fictions/create">
+              <li className="mr-3">Create</li>
             </Link>
           ) : null}
-          {session ? (
+        </ul>
+        <ul className=" flex cursor-pointer font-bold">
+          {user ? <li className="mr-3">{user?.email}</li> : null}
+          {nextSession ? (
+            <Link href="/profile">
+              <li className="mr-3">{nextSession.user!.name}</li>
+            </Link>
+          ) : null}
+          {nextSession ? (
             <button className=" mr-5" onClick={() => signOut()}>
               Sign out
             </button>

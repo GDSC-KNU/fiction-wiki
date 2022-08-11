@@ -40,12 +40,12 @@ model FictionStat {
   id                    Int       @id @default(autoincrement())
   fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId             Int     @unique
-  originality           Int
-  verisimilitude        Int
-  synopsisComposition   Int
-  character             Int
-  writing               Int
-  value                 Int
+  originality           Float
+  verisimilitude        Float
+  synopsisComposition   Float
+  character             Float
+  writing               Float
+  value                 Float
 }
 
 model UserFictionStat {
@@ -53,14 +53,14 @@ model UserFictionStat {
     fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
     fictionId             Int @unique
     users                 User[]
-    userRationOnFictions  UserRationOnFiction[]
-    originality           Int
-    verisimilitude        Int
-    synopsisComposition   Int
-    character             Int
-    writing               Int
-    value                 Int
-    total                 Float?
+    userRationOnFictions  UserRationOnFiction[] 
+    originality           Float
+    verisimilitude        Float
+    synopsisComposition   Float
+    character             Float
+    writing               Float
+    value                 Float
+    total                 Float
 }
 
 model Category {
@@ -122,12 +122,12 @@ model UserRationOnFiction {
   userId                String    
   userFictionStat       UserFictionStat @relation(fields: [userFictionStatId], references: [id], onDelete:Cascade)
   userFictionStatId     Int
-  originality           Int
-  verisimilitude        Int
-  synopsisComposition   Int
-  character             Int
-  writing               Int
-  value                 Int
+  originality           Float
+  verisimilitude        Float
+  synopsisComposition   Float
+  character             Float
+  writing               Float
+  value                 Float
   comment               String
 }
 

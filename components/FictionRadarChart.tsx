@@ -56,28 +56,22 @@ export default function FictionRadarChart(props: any) {
         }명`,
         data: [
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.originality /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.originality
             : 0,
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.writing /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.writing
             : 0,
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.character /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.character
             : 0,
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.verisimilitude /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.verisimilitude
             : 0,
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.synopsisComposition /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.synopsisComposition
             : 0,
           UserStatData?.fiction?.userFictionStat
-            ? UserStatData?.fiction?.userFictionStat?.value /
-              (UserStatData?.fiction?.userFictionStat?._count?.users || 1)
+            ? UserStatData?.fiction?.userFictionStat?.value
             : 0,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",

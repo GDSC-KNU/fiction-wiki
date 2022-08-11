@@ -175,6 +175,7 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
   let temp: any = [];
   let temp2: any = [];
   let temp3: any = [];
+  console.log(fictions);
 
   const rerenderList = () => {
     sFictions = fictions;
@@ -418,7 +419,8 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
                       {fiction.genre}
                     </div>
                     <div className="  text-xs font-bold">
-                      {fiction.userFictionStat?.total}
+                      {fiction.userFictionStat?.total || 0}(
+                      {fiction.userFictionStat?._count?.users || 0})
                     </div>
                   </div>
                   <div className=" font-bold">{fiction.title}</div>
@@ -448,7 +450,15 @@ export async function getStaticProps() {
           keyword: true,
         },
       },
-      userFictionStat: true,
+      userFictionStat: {
+        include: {
+          _count: {
+            select: {
+              users: true,
+            },
+          },
+        },
+      },
     },
   });
   const keywords = await client.keyword.findMany();

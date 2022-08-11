@@ -9,8 +9,8 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  //평점 평균 산출 함수
-  const average = function (n: number) {
+  //평균점수 - 소수점2자리 숫자로 변환
+  const fixFloat = function (n: number) {
     let m = Number((Math.abs(n) * 100).toPrecision(15));
     return Math.round(m) / (100 * Math.sign(n));
   };
@@ -18,7 +18,7 @@ async function handler(
   const {
     query: { id },
     // session: { user },
-    body: { UserFictionStat },
+    body: { UserFictionStat, comment },
   } = req;
   const session = await getSession({ req });
   if (!session) {
@@ -46,7 +46,8 @@ async function handler(
     });
 
     // console.log(alreadyExists);
-
+    // console.log(UserFictionStat);
+    // console.log(comment);
     let Ration;
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
     if (!alreadyExists) {
@@ -71,7 +72,7 @@ async function handler(
               verisimilitude: +UserFictionStat[3],
               synopsisComposition: +UserFictionStat[4],
               value: +UserFictionStat[5],
-              comment: "",
+              comment: comment.toString() || "",
             },
           },
           originality: +UserFictionStat[0],
@@ -80,7 +81,7 @@ async function handler(
           verisimilitude: +UserFictionStat[3],
           synopsisComposition: +UserFictionStat[4],
           value: +UserFictionStat[5],
-          total: average(
+          total: fixFloat(
             (+UserFictionStat[0] +
               +UserFictionStat[1] +
               +UserFictionStat[2] +
@@ -133,7 +134,7 @@ async function handler(
                 verisimilitude: +UserFictionStat[3],
                 synopsisComposition: +UserFictionStat[4],
                 value: +UserFictionStat[5],
-                comment: "",
+                comment: comment.toString() || "",
               },
               // update: {
               //   where: {
@@ -149,14 +150,37 @@ async function handler(
               //   },
               // },
             },
-            originality: alreadyExists?.originality + +UserFictionStat[0],
-            writing: alreadyExists.writing + +UserFictionStat[1],
-            character: alreadyExists.character + +UserFictionStat[2],
-            verisimilitude: alreadyExists.verisimilitude + +UserFictionStat[3],
-            synopsisComposition:
-              alreadyExists.synopsisComposition + +UserFictionStat[4],
-            value: alreadyExists.value + +UserFictionStat[5],
-            total: average(
+            originality: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[0]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            writing: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[1]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            character: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[2]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            verisimilitude: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[3]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            synopsisComposition: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[4]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            value: fixFloat(
+              (+alreadyExists.originality * alreadyExists._count.users +
+                +UserFictionStat[5]) /
+                (+alreadyExists._count.users + 1)
+            ),
+            total: fixFloat(
               ((alreadyExists.total || 0) * alreadyExists._count.users +
                 (+UserFictionStat[0] +
                   +UserFictionStat[1] +

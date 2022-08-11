@@ -1,5 +1,5 @@
 import useMutation from "@libs/client/useMutation";
-import { Fiction } from "@prisma/client";
+import { Fiction, UserRationOnFiction } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FieldErrors, useForm } from "react-hook-form";
 import Button from "./button";
@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
+  comment: string;
 }
 
 export default function UserStat() {
@@ -29,6 +30,7 @@ export default function UserStat() {
     fiction: Fiction;
   }
 
+  // Useform
   const {
     register,
     handleSubmit,
@@ -57,6 +59,12 @@ export default function UserStat() {
     target!.disabled = !target?.disabled;
   }
 
+  //소수점 둘째자리 숫자로 변환
+  const fixFloat = function (n: number) {
+    let m = Number((Math.abs(n) * 100).toPrecision(15));
+    return Math.round(m) / (100 * Math.sign(n));
+  };
+
   const onRateClick = (data: RateUserStatForm) => {
     btnOnOff();
     if (!session) {
@@ -77,6 +85,15 @@ export default function UserStat() {
       btnOnOff();
       return;
     }
+
+    // fixFloat(
+    //   (+alreadyExists.originality * alreadyExists._count.users +
+    //     +UserFictionStat[0]) /
+    //     (+alreadyExists._count.users + 1)
+    // )
+
+    // console.log(data);
+
     rateUserStat(data);
     unboundMutate(
       `/api/fictions/${router.query.id}`,
@@ -86,19 +103,35 @@ export default function UserStat() {
           ...prev?.fiction,
           userFictionStat: {
             originality:
-              (+prev?.fiction?.userFictionStat?.originality || 0) +
-              +curOriginality,
+              ((+prev?.fiction?.userFictionStat?.originality || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curOriginality) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
             writing:
-              (+prev?.fiction?.userFictionStat?.writing || 0) + +curWriting,
+              ((+prev?.fiction?.userFictionStat?.writing || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curWriting) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
             character:
-              (+prev?.fiction?.userFictionStat?.character || 0) + +curCharacter,
+              ((+prev?.fiction?.userFictionStat?.character || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curCharacter) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
             verisimilitude:
-              (+prev?.fiction?.userFictionStat?.verisimilitude || 0) +
-              +curVerisimilitude,
+              ((+prev?.fiction?.userFictionStat?.verisimilitude || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curVerisimilitude) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
             synopsisComposition:
-              (+prev?.fiction?.userFictionStat?.synopsisComposition || 0) +
-              +curSynopsisCompositon,
-            value: (+prev?.fiction?.userFictionStat?.value || 0) + +curValue,
+              ((+prev?.fiction?.userFictionStat?.synopsisComposition || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curSynopsisCompositon) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+            value:
+              ((+prev?.fiction?.userFictionStat?.value || 0) *
+                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+                +curValue) /
+              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
             _count: {
               users: +prev?.fiction?.userFictionStat?._count?.users + 1 || 1,
             },
@@ -120,7 +153,9 @@ export default function UserStat() {
 
   // console.log(data ? data : null);
   // console.log("Hi");
-  // console.log(UserStatData);
+  // console.log(watch());
+  // console.log(UserStatData?.UserFictionStat);
+
   // console.log(userCount);
 
   return (
@@ -199,6 +234,16 @@ export default function UserStat() {
           kind="status"
         />
       </div>
+      <Input
+        register={register("comment", {
+          maxLength: 40,
+        })}
+        required
+        label="코멘트"
+        name="Comment"
+        type="text"
+        kind="text"
+      ></Input>
       <button
         id="rateButton"
         type="submit"

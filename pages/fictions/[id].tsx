@@ -2,7 +2,13 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import FictionRadarChart from "@components/FictionRadarChart";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { Fiction, FictionStat, Keyword } from "@prisma/client";
+import {
+  Fiction,
+  FictionStat,
+  Keyword,
+  UserFictionStat,
+  UserRationOnFiction,
+} from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import Input from "@components/input";
@@ -22,6 +28,7 @@ interface FictionDetailResponse {
 interface FictionWithMore extends Fiction {
   keywords: [Keyword];
   fictionStat: [FictionStat];
+  userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
 }
 
 const ItemDetail: NextPage<FictionDetailResponse> = ({
@@ -75,6 +82,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
 
   // console.log(data?.fiction?.fictionStat);
   // console.log(data);
+  console.log(fiction);
   return (
     <div className=" max-w-[1100px]">
       <div className=" grid grid-cols-1 sm:grid-cols-5 h-fit">
@@ -191,20 +199,24 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
           <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
             <h2 className=" font-bold pt-1 px-2"> Comments</h2>
             <ul>
-              {Object.keys(dummyComment).map((item, index) => (
-                <ul
-                  key={index}
-                  className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
-                >
-                  <li className=" mt-2 text-sm overflow-hidden mr-16">
-                    {dummyComment[item]}
-                  </li>
-                  <li className=" mt-2 text-sm absolute right-24">{item}</li>
-                  <li className=" mt-2 ml-5 text-sm min-w-[78px]">
-                    👍 👎 (+3)
-                  </li>
-                </ul>
-              ))}
+              {fiction?.userFictionStat?.userRationOnFictions.map(
+                (item, index) => (
+                  <ul
+                    key={index}
+                    className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
+                  >
+                    <li className=" mt-2 text-sm overflow-hidden mr-16">
+                      {item.comment}
+                    </li>
+                    <li className=" mt-2 text-sm absolute right-24">
+                      {`${item.userId.slice(0, 5)}...`}
+                    </li>
+                    <li className=" mt-2 ml-5 text-sm min-w-[78px]">
+                      👍 👎 (+3)
+                    </li>
+                  </ul>
+                )
+              )}
             </ul>
           </div>
         </div>
@@ -256,6 +268,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       fictionStat: true,
       userFictionStat: {
         include: {
+          userRationOnFictions: true,
           _count: {
             select: {
               users: true,
@@ -278,7 +291,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   });
 
   const arr: any[] = [];
-  fiction?.keywords.map((item) => arr.push(item.keyword.name));
+  fiction?.keywords.map((item) => arr.push(item.keyword?.name));
   const keywordSame = arr.map((word) => ({
     keywords: {
       some: {
