@@ -1,3 +1,4 @@
+import { request } from "https";
 import { useState } from "react";
 
 interface UseMutationState<T> {
@@ -5,7 +6,10 @@ interface UseMutationState<T> {
   data?: T;
   error?: object;
 }
-type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>];
+type UseMutationResult<T> = [
+  (data: any, method: string) => void,
+  UseMutationState<T>
+];
 
 export default function useMutation<T = any>(
   url: string
@@ -15,10 +19,10 @@ export default function useMutation<T = any>(
     data: undefined,
     error: undefined,
   });
-  function mutation(data: any) {
+  function mutation(data: any, method: string) {
     setSate((prev) => ({ ...prev, loading: true }));
     fetch(url, {
-      method: "POST",
+      method: method?.toString() || "POST",
       headers: {
         "Content-Type": "application/json",
       },

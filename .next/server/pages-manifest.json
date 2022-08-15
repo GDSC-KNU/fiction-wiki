@@ -4,7 +4,6 @@
   "/_document": "pages/_document.js",
   "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
   "/api/users/me": "pages/api/users/me.js",
-  "/api/fictions/[id]/userRate": "pages/api/fictions/[id]/userRate.js",
-  "/api/fictions/[id]/fav": "pages/api/fictions/[id]/fav.js",
-  "/api/fictions/[id]": "pages/api/fictions/[id].js"
+  "/fictions/[id]": "pages/fictions/[id].js",
+  "/api/fictions/[id]/fav": "pages/api/fictions/[id]/fav.js"
 }

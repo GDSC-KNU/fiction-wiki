@@ -230,35 +230,42 @@ const Fictions: NextPage<FictionsResponse> = ({ fictions, keywords }) => {
     //정렬 Sorting
     if (checkedSortings.has("오리지널리티")) {
       sFictions = sFictions.sort(
-        (a, b) => b.userFictionStat.originality - a.userFictionStat.originality
+        (a, b) =>
+          (b.userFictionStat?.originality || 0) -
+          (a.userFictionStat?.originality || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("캐릭터성")) {
       sFictions = sFictions.sort(
-        (a, b) => b.userFictionStat.character - a.userFictionStat.character
+        (a, b) =>
+          (b.userFictionStat?.character || 0) -
+          (a.userFictionStat?.character || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("스토리")) {
       sFictions = sFictions.sort(
         (a, b) =>
-          b.userFictionStat.synopsisComposition -
-          a.userFictionStat.synopsisComposition
+          (b.userFictionStat?.synopsisComposition || 0) -
+          (a.userFictionStat?.synopsisComposition || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("작품성")) {
       sFictions = sFictions.sort(
-        (a, b) => b.userFictionStat.value - a.userFictionStat.value
+        (a, b) =>
+          (b.userFictionStat?.value || 0) - (a.userFictionStat?.value || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("핍진성")) {
       sFictions = sFictions.sort(
         (a, b) =>
-          b.userFictionStat.verisimilitude - a.userFictionStat.verisimilitude
+          (b.userFictionStat?.verisimilitude || 0) -
+          (a.userFictionStat?.verisimilitude || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("필력")) {
       sFictions = sFictions.sort(
-        (a, b) => b.userFictionStat.writing - a.userFictionStat.writing
+        (a, b) =>
+          (b.userFictionStat?.writing || 0) - (a.userFictionStat?.writing || 0)
       );
       setSFictions(sFictions);
     } else if (checkedSortings.has("총점")) {

@@ -94,7 +94,7 @@ export default function UserStat() {
 
     // console.log(data);
 
-    rateUserStat(data);
+    rateUserStat(data, "PUT");
     unboundMutate(
       `/api/fictions/${router.query.id}`,
       (prev: any) => ({

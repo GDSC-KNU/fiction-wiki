@@ -63,11 +63,7 @@ model UserFictionStat {
     total                 Float
 }
 
-model Category {
-  id    Int                 @id @default(autoincrement())
-  name  String
-  fictions CategoriesOnFictions[]
-}
+
 
 model Keyword {
   id            Int                    @id @default(autoincrement())
@@ -85,13 +81,21 @@ model KeywordsOnFictions {
   @@id([fictionId, keywordId])
 }
 
+model Category {
+  id    Int                 @id @default(autoincrement())
+  name  String              @unique
+  fictions CategoriesOnFictions[]
+}
+
 model CategoriesOnFictions {
-  fiction       Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
+  fiction       Fiction?     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId     Int
-  category      Category @relation(fields: [categoryId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id])
   categoryId    Int 
   @@id([fictionId, categoryId])
 }
+
+
 
 model User {
   id        String      @id @default(cuid())

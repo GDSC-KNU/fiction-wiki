@@ -5,7 +5,7 @@ export interface ResponseType {
   [key: string]: any;
 }
 
-type method = "GET" | "POST" | "DELETE";
+type method = "GET" | "POST" | "DELETE" | "PUT";
 
 interface ConfigType {
   methods: method[];
@@ -26,6 +26,7 @@ export default function withHandler({
     //   console.log("not logged in");
     //   return res.status(200).json({ ok: false, error: "Plase Log in" });
     // }
+    console.log(req.method);
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
