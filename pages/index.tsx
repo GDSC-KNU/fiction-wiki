@@ -1,24 +1,32 @@
 import type { NextPage } from "next";
 import Carousel from "@components/Carousel";
 import useUser from "@libs/client/useUser";
-import { Fiction } from "@prisma/client";
+import { Fiction, UserFictionStat } from "@prisma/client";
 import useSWR from "swr";
 import Link from "next/link";
 import client from "@libs/server/client";
 import Image from "next/image";
 
-export interface FictionWithCount extends Fiction {
+export interface UserFictionStatWithMore extends UserFictionStat {
+  total: number;
+  _count: {
+    users: number;
+  };
+}
+
+export interface FictionWithMore extends Fiction {
   _count: {
     favs: number;
   };
+  userFictionStat: UserFictionStatWithMore;
 }
 
 interface FictionsResponse {
   ok: boolean;
-  fictions: FictionWithCount[];
+  fictions: FictionWithMore[];
 }
 
-const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
+const Home: NextPage<{ fictions: FictionWithMore[] }> = ({ fictions }) => {
   // const { data } = useSWR<FictionsResponse>("/api/fictions");
 
   // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
@@ -26,6 +34,11 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
   // );
 
   // const { user, isLoading } = useUser();
+  // console.log(fictions[0].userFictionStat);
+
+  let top_total = fictions.sort(
+    (a, b) => (b.userFictionStat?.total || 0) - (a.userFictionStat?.total || 0)
+  );
 
   return (
     <div>
@@ -35,7 +48,7 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
         <section className="">
           <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
           <ul className=" flex">
-            {fictions?.slice(0, 5).map((fiction, i) => (
+            {top_total?.slice(0, 5).map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <Image
@@ -45,8 +58,14 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
                     height={199.69}
                   />
                   <div className=" flex-col px-2 pb-2">
-                    <div className=" text-xs text-gray-400">
-                      {fiction.genre}
+                    <div className=" flex justify-between">
+                      <div className=" text-xs text-gray-400">
+                        {fiction.genre}
+                      </div>
+                      <div className="  text-xs font-bold">
+                        {fiction.userFictionStat?.total || 0}(
+                        {fiction.userFictionStat?._count?.users || 0})
+                      </div>
                     </div>
                     <div className=" font-bold">{fiction.title}</div>
                     <div className=" text-xs">
@@ -65,7 +84,7 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
         <section>
           <div className="mt-5 font-bold text-xl">Editors Pick</div>
           <ul className=" flex">
-            {fictions?.slice(0, 5).map((fiction, i) => (
+            {top_total?.slice(0, 5).map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <Image
@@ -75,8 +94,14 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
                     height={199.69}
                   />
                   <div className=" flex-col px-2 pb-2">
-                    <div className=" text-xs text-gray-400">
-                      {fiction.genre}
+                    <div className=" flex justify-between">
+                      <div className=" text-xs text-gray-400">
+                        {fiction.genre}
+                      </div>
+                      <div className="  text-xs font-bold">
+                        {fiction.userFictionStat?.total || 0}(
+                        {fiction.userFictionStat?._count?.users || 0})
+                      </div>
                     </div>
                     <div className=" font-bold">{fiction.title}</div>
                     <div className=" text-xs">
@@ -97,7 +122,7 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
         <section className="">
           <div className="mt-5 font-bold text-xl">평점 TOP 5</div>
           <ul className=" flex-col w-96">
-            {fictions?.map((fiction, i) => (
+            {top_total?.map((fiction, i) => (
               <Link key={fiction.id} href={`/fictions/${fiction.id}`}>
                 <li className=" flex h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
                   <img
@@ -130,8 +155,22 @@ const Home: NextPage<{ fictions: FictionWithCount[] }> = ({ fictions }) => {
 };
 
 export async function getServerSideProps() {
-  const fictions = await client.fiction.findMany({});
-  console.log("Hi");
+  const fictions = await client.fiction.findMany({
+    include: {
+      userFictionStat: {
+        select: {
+          originality: true,
+          writing: true,
+          character: true,
+          verisimilitude: true,
+          synopsisComposition: true,
+          value: true,
+          total: true,
+          _count: true,
+        },
+      },
+    },
+  });
   // console.log(fictions);
   return {
     props: {

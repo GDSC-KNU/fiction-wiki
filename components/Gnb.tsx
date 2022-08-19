@@ -4,6 +4,7 @@ import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { useEffect } from "react";
 import router from "next/router";
+import Image from "next/image";
 
 export default function Gnb() {
   const { data: nextSession } = useSession();
@@ -39,15 +40,24 @@ export default function Gnb() {
             </Link>
           ) : null}
         </ul>
-        <ul className=" flex cursor-pointer font-bold">
+        <ul className=" flex font-bold items-center">
           {user ? <li className="mr-3">{user?.email}</li> : null}
           {nextSession ? (
-            <Link href="/profile">
-              <li className="mr-3">{nextSession.user!.name}</li>
-            </Link>
+            <li className=" mr-3 p-0 flex items-center cursor-pointer">
+              <Link className=" rounded-full" href="/profile">
+                <>
+                  <Image
+                    className=" rounded-full"
+                    src={nextSession.user!.image || ""}
+                    width={26}
+                    height={26}
+                  ></Image>
+                </>
+              </Link>
+            </li>
           ) : null}
           {nextSession ? (
-            <button className=" mr-5" onClick={() => signOut()}>
+            <button className=" mr-5 font-bold" onClick={() => signOut()}>
               Sign out
             </button>
           ) : (

@@ -50,7 +50,7 @@ export default function UserStat() {
     curValue,
   ] = watch()?.UserFictionStat || [0, 0, 0, 0, 0, 0];
 
-  let userCount = UserStatData?.fiction?.userFictionStat?._count?.users;
+  let userCount = UserStatData?.prevFiction?.userFictionStat?._count?.users;
 
   function btnOnOff() {
     const target = document.getElementById(
@@ -94,46 +94,47 @@ export default function UserStat() {
 
     // console.log(data);
 
-    rateUserStat(data, "PUT");
+    rateUserStat(data, "POST");
     unboundMutate(
       `/api/fictions/${router.query.id}`,
       (prev: any) => ({
         ...prev,
-        fiction: {
-          ...prev?.fiction,
+        prevFiction: {
+          ...prev?.prevFiction,
           userFictionStat: {
             originality:
-              ((+prev?.fiction?.userFictionStat?.originality || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.originality || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curOriginality) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             writing:
-              ((+prev?.fiction?.userFictionStat?.writing || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.writing || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curWriting) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             character:
-              ((+prev?.fiction?.userFictionStat?.character || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.character || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curCharacter) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             verisimilitude:
-              ((+prev?.fiction?.userFictionStat?.verisimilitude || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.verisimilitude || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curVerisimilitude) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             synopsisComposition:
-              ((+prev?.fiction?.userFictionStat?.synopsisComposition || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.synopsisComposition || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curSynopsisCompositon) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             value:
-              ((+prev?.fiction?.userFictionStat?.value || 0) *
-                (+prev?.fiction?.userFictionStat?._count?.users || 0) +
+              ((+prev?.prevFiction?.userFictionStat?.value || 0) *
+                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
                 +curValue) /
-              ((+prev?.fiction?.userFictionStat?._count?.users || 0) + 1),
+              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
             _count: {
-              users: +prev?.fiction?.userFictionStat?._count?.users + 1 || 1,
+              users:
+                +prev?.prevFiction?.userFictionStat?._count?.users + 1 || 1,
             },
           },
         },
@@ -242,7 +243,7 @@ export default function UserStat() {
         label="코멘트"
         name="Comment"
         type="text"
-        kind="text"
+        kind="comment"
       ></Input>
       <button
         id="rateButton"

@@ -8,6 +8,7 @@ import {
   Fiction,
   FictionStat,
   Keyword,
+  KeywordsOnFictions,
   UserFictionStat,
   UserRationOnFiction,
 } from "@prisma/client";
@@ -40,6 +41,11 @@ interface EditFictionForm {
   original: string;
   platforms: string[];
   thumb?: FileList;
+  volume?: number;
+  relatedTitle?: string;
+  relatedAuthor?: string;
+  type?: string;
+  mediaMix?: string;
 }
 
 interface EditFictionMutation {
@@ -54,8 +60,12 @@ interface FictionDetailResponse {
   isLiked: boolean;
 }
 
+interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
+  keyword: Keyword;
+}
+
 interface FictionWithMore extends Fiction {
-  keywords: [Keyword];
+  keywords: [KeywordsOnFictionsWithMore];
   fictionStat: {
     originality: number;
     writing: number;
@@ -85,19 +95,34 @@ const EditFiction: NextPage = () => {
     setValue,
   } = useForm<EditFictionForm>({ mode: "onBlur" });
 
+  //날짜변환 function
+  function formatDate(date: any) {
+    let d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
   useEffect(() => {
     if (fiction) {
       setValue("title", fiction.prevFiction.title);
+      setValue("relatedTitle", fiction.prevFiction.relatedTitle || "");
       setValue("author", fiction.prevFiction.author);
+      setValue("relatedAuthor", fiction.prevFiction.relatedAuthor || "");
       setValue("nationality", fiction.prevFiction.nationality);
+      setValue("type", fiction.prevFiction.type || "");
       setValue("genre", fiction.prevFiction.genre);
       setValue("original", fiction.prevFiction.original);
       setValue("platforms", [fiction.prevFiction.platforms]);
       setValue("currentState", fiction.prevFiction.currentState);
       setValue("synopsis", fiction.prevFiction.synopsis);
       setValue("characters", fiction.prevFiction.characters);
-      setValue("date.0", fiction.prevFiction.startDate);
-      setValue("date.1", fiction.prevFiction.endDate);
+      setValue("date.0", formatDate(fiction.prevFiction.startDate));
+      setValue("date.1", formatDate(fiction.prevFiction.endDate));
       setValue("currentState", fiction.prevFiction.currentState);
       setValue("status.0", fiction.prevFiction.fictionStat.originality);
       setValue("status.1", fiction.prevFiction.fictionStat.writing);
@@ -105,10 +130,26 @@ const EditFiction: NextPage = () => {
       setValue("status.3", fiction.prevFiction.fictionStat.verisimilitude);
       setValue("status.4", fiction.prevFiction.fictionStat.synopsisComposition);
       setValue("status.5", fiction.prevFiction.fictionStat.value);
+      setValue("volume", +fiction.prevFiction.volume!.toString() || 0);
+      setValue("mediaMix", fiction.prevFiction.mediaMix || "");
+      // Keywords, mcKeywords, subKeywords
+      fiction.prevFiction.keywords
+        .filter(
+          (item) =>
+            item.keyword.isOfHeroine === false && item.keyword.isOfMC === false
+        )
+        .map((item, i) => setValue(`keywords.${i}`, item.keyword.name));
+      fiction.prevFiction.keywords
+        .filter((item) => item.keyword.isOfMC === true)
+        .map((item, i) => setValue(`mcKeywords.${i}`, item.keyword.name));
+      fiction.prevFiction.keywords
+        .filter((item) => item.keyword.isOfHeroine === true)
+        .map((item, i) => setValue(`subKeywords.${i}`, item.keyword.name));
+
+      // setValue("keywords.0", "asd");
     }
-    console.log();
   }, [fiction, setValue]);
-  console.log(fiction?.prevFiction.fictionStat);
+  console.log(fiction);
 
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;
@@ -119,7 +160,7 @@ const EditFiction: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      editFiction({ ...data, thumbId: id }, "POST");
+      editFiction({ ...data, thumbId: id }, "PUT");
     } else {
       editFiction(data, "PUT");
     }
@@ -146,14 +187,15 @@ const EditFiction: NextPage = () => {
   };
 
   /// watch state (react-hook-form)
-  const wKeywords: string[] = watch().keywords;
-  const wKeywords2: string[] = watch().mcKeywords;
-  const wKeywords3: string[] = watch().subKeywords;
-  const wStatus: number[] = watch().status;
+  let wKeywords: string[] = watch().keywords;
+  let wKeywords2: string[] = watch().mcKeywords;
+  let wKeywords3: string[] = watch().subKeywords;
+  let wStatus: number[] = watch().status;
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
     console.log(key);
+    console.log(wKeywords);
 
     if (key === "," && wKeywords[0].trim() !== "") {
       e.preventDefault();
@@ -257,10 +299,31 @@ const EditFiction: NextPage = () => {
                     type="text_detail"
                   />
                   <Input
+                    register={register("relatedTitle", { required: true })}
+                    required
+                    label="RelatedTitle"
+                    name="relatedTitle"
+                    type="text_detail"
+                  />
+                  <Input
                     register={register("author", { required: true })}
                     required
                     label="Author"
                     name="author"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("relatedAuthor", { required: true })}
+                    required
+                    label="RelatedAuthor"
+                    name="relatedAuthor"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("type", { required: true })}
+                    required
+                    label="Type"
+                    name="type"
                     type="text_detail"
                   />
                   <Input
@@ -318,6 +381,20 @@ const EditFiction: NextPage = () => {
                     name="currentState"
                     type="text"
                   />
+                  <Input
+                    register={register("volume")}
+                    required
+                    label="Volume"
+                    name="volume"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("mediaMix")}
+                    required={false}
+                    label="MediaMix"
+                    name="mediaMix"
+                    type="text_detail"
+                  />
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
@@ -336,8 +413,15 @@ const EditFiction: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords = wKeywords.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>
@@ -358,8 +442,15 @@ const EditFiction: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords2 = wKeywords2.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords2);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>
@@ -380,8 +471,15 @@ const EditFiction: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords3 = wKeywords3.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords3);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>

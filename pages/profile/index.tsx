@@ -45,10 +45,10 @@ const Profile: NextPage = () => {
               className=" flex place-content-between items-center mb-2"
             >
               <div className=" text-xs ring-black bg-black text-white p-1 rounded">
-                {comment.fiction.title}
+                {comment?.userFictionStat?.fiction.title}
               </div>
               <div>{comment.comment}</div>
-              <div className=" relative right-0">{comment.createdAt}</div>
+              <div className=" relative right-0">{}</div>
 
               {/* <li
                   key={index}

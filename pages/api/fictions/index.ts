@@ -26,7 +26,9 @@ async function handler(
     let {
       body: {
         title,
+        relatedTitle,
         author,
+        relatedAuthor,
         nationality,
         genre,
         date,
@@ -47,6 +49,9 @@ async function handler(
         original,
         platforms,
         thumbId,
+        volume,
+        type,
+        mediaMix,
       },
       session: { user },
     } = req;
@@ -54,8 +59,13 @@ async function handler(
     keywords = keywords.filter((item: any) => item !== "");
     const keywordMany = keywords.map((item: string) => ({
       keyword: {
-        create: {
-          name: item,
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+          },
         },
       },
     }));
@@ -63,9 +73,13 @@ async function handler(
     mcKeywords = mcKeywords.filter((item: any) => item !== "");
     const mckeywordMany = mcKeywords.map((item: string) => ({
       keyword: {
-        create: {
-          name: item,
-          isOfMC: true,
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+          },
         },
       },
     }));
@@ -73,9 +87,13 @@ async function handler(
     subKeywords = subKeywords.filter((item: any) => item !== "");
     const subkeywordMany = subKeywords.map((item: string) => ({
       keyword: {
-        create: {
-          name: item,
-          isOfHeroine: true,
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+          },
         },
       },
     }));
@@ -83,7 +101,9 @@ async function handler(
     const fiction = await client.fiction.create({
       data: {
         title,
+        relatedTitle,
         author,
+        relatedAuthor,
         nationality,
         genre,
         startDate: new Date(date[0]),
@@ -93,9 +113,24 @@ async function handler(
         image: thumbId,
         synopsis,
         characters,
-        currentState: "",
+        currentState,
+        volume: +volume?.toString(),
+        type,
+        mediaMix,
         categories: {
-          create: { category: { create: { name: genre } } },
+          // create: { category: { create: { name: genre } } },
+          create: {
+            category: {
+              connectOrCreate: {
+                where: {
+                  name: genre,
+                },
+                create: {
+                  name: genre,
+                },
+              },
+            },
+          },
         },
         keywords: {
           create: [...subkeywordMany, ...mckeywordMany, ...keywordMany],

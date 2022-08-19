@@ -33,6 +33,11 @@ interface CreateFictionForm {
   original: string;
   platforms: string[];
   thumb?: FileList;
+  volume?: number;
+  relatedTitle?: string;
+  relatedAuthor?: string;
+  type?: string;
+  mediaMix?: string;
 }
 
 interface CreateFictionMutation {
@@ -64,9 +69,9 @@ const Create: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      createFiction({ ...data, thumbId: id });
+      createFiction({ ...data, thumbId: id }, "POST");
     } else {
-      createFiction(data);
+      createFiction(data, "POST");
     }
     return;
   };
@@ -91,10 +96,10 @@ const Create: NextPage = () => {
   };
 
   /// watch state (react-hook-form)
-  const wKeywords: string[] = watch().keywords;
-  const wKeywords2: string[] = watch().mcKeywords;
-  const wKeywords3: string[] = watch().subKeywords;
-  const wStatus: number[] = watch().status;
+  let wKeywords: string[] = watch().keywords;
+  let wKeywords2: string[] = watch().mcKeywords;
+  let wKeywords3: string[] = watch().subKeywords;
+  let wStatus: number[] = watch().status;
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
@@ -202,10 +207,31 @@ const Create: NextPage = () => {
                     type="text_detail"
                   />
                   <Input
+                    register={register("relatedTitle", { required: true })}
+                    required
+                    label="RelatedTitle"
+                    name="relatedTitle"
+                    type="text_detail"
+                  />
+                  <Input
                     register={register("author", { required: true })}
                     required
                     label="Author"
                     name="author"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("relatedAuthor", { required: true })}
+                    required
+                    label="RelatedAuthor"
+                    name="relatedAuthor"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("type", { required: true })}
+                    required
+                    label="Type"
+                    name="type"
                     type="text_detail"
                   />
                   <Input
@@ -263,6 +289,13 @@ const Create: NextPage = () => {
                     name="currentState"
                     type="text"
                   />
+                  <Input
+                    register={register("volume", { required: true })}
+                    required
+                    label="Volume"
+                    name="volume"
+                    type="text_detail"
+                  />
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
@@ -281,8 +314,15 @@ const Create: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords = wKeywords.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>
@@ -303,8 +343,15 @@ const Create: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords2 = wKeywords2.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords2);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>
@@ -325,8 +372,15 @@ const Create: NextPage = () => {
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit"
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
                             key={index}
+                            onClick={(e) => {
+                              wKeywords3 = wKeywords3.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("keywords", wKeywords3);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
                           >
                             {item}
                           </li>

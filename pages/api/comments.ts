@@ -20,11 +20,30 @@ async function handler(
   //   id : string;
   // }
 
-  const comments = await client.comment.findMany({
+  // const comments = await client.comment.findMany({
+  //   where: {
+  //     createdById: session?.user!.id,
+  //   },
+  //   include: { fiction: true },
+  // });
+
+  const comments = await client.userRationOnFiction.findMany({
     where: {
-      createdById: session?.user!.id,
+      userId: session?.user?.id,
     },
-    include: { fiction: true },
+    select: {
+      userFictionStat: {
+        select: {
+          fiction: {
+            select: {
+              title: true,
+              id: true,
+            },
+          },
+        },
+      },
+      comment: true,
+    },
   });
 
   res.json({
