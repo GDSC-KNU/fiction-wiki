@@ -15,6 +15,7 @@ async function handler(
             favs: true,
           },
         },
+        author: true,
       },
     });
     res.json({
@@ -102,7 +103,16 @@ async function handler(
       data: {
         title,
         relatedTitle,
-        author,
+        author: {
+          connectOrCreate: {
+            where: {
+              name: author,
+            },
+            create: {
+              name: author,
+            },
+          },
+        },
         relatedAuthor,
         nationality,
         genre,

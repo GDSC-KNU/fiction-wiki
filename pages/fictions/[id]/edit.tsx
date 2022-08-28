@@ -1,10 +1,11 @@
 import Button from "@components/button";
 import FictionRadarChart from "@components/FictionRadarChart";
-import Input from "@components/input";
+import Input from "@components/Input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import {
+  Author,
   Fiction,
   FictionStat,
   Keyword,
@@ -75,6 +76,7 @@ interface FictionWithMore extends Fiction {
     value: number;
   };
   userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
+  author: Author;
 }
 
 const EditFiction: NextPage = () => {
@@ -111,8 +113,8 @@ const EditFiction: NextPage = () => {
     if (fiction) {
       setValue("title", fiction.prevFiction.title);
       setValue("relatedTitle", fiction.prevFiction.relatedTitle || "");
-      setValue("author", fiction.prevFiction.author);
-      setValue("relatedAuthor", fiction.prevFiction.relatedAuthor || "");
+      setValue("author", fiction.prevFiction.author?.name || "");
+      setValue("relatedAuthor", fiction.prevFiction.author?.relatedName || "");
       setValue("nationality", fiction.prevFiction.nationality);
       setValue("type", fiction.prevFiction.type || "");
       setValue("genre", fiction.prevFiction.genre);
@@ -299,8 +301,8 @@ const EditFiction: NextPage = () => {
                     type="text_detail"
                   />
                   <Input
-                    register={register("relatedTitle", { required: true })}
-                    required
+                    register={register("relatedTitle", { required: false })}
+                    required={false}
                     label="RelatedTitle"
                     name="relatedTitle"
                     type="text_detail"
@@ -313,15 +315,15 @@ const EditFiction: NextPage = () => {
                     type="text_detail"
                   />
                   <Input
-                    register={register("relatedAuthor", { required: true })}
-                    required
+                    register={register("relatedAuthor", { required: false })}
+                    required={false}
                     label="RelatedAuthor"
                     name="relatedAuthor"
                     type="text_detail"
                   />
                   <Input
-                    register={register("type", { required: true })}
-                    required
+                    register={register("type", { required: false })}
+                    required={false}
                     label="Type"
                     name="type"
                     type="text_detail"

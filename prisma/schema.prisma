@@ -22,7 +22,6 @@ model Fiction {
   updatedAt     DateTime            @updatedAt
   title         String
   relatedTitle  String?
-  author        String
   relatedAuthor String?
   nationality   String
   genre         String
@@ -39,6 +38,18 @@ model Fiction {
   favs          Fav[]
   isAdult       Boolean?            @default(false)
   comments      Comment[]
+  author        Author?              @relation(fields: [authorId], references: [id])
+  authorId      Int?                 
+}
+
+model Author {
+  id        Int       @id @default(autoincrement())
+  fictions  Fiction[]
+  name          String    @unique
+  relatedName   String?
+  description   String?   @db.MediumText
+  nationality   String?
+  sns           String?
 }
 
 model FictionStat {

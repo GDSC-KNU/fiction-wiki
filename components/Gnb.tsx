@@ -41,18 +41,18 @@ export default function Gnb() {
           ) : null}
         </ul>
         <ul className=" flex font-bold items-center">
-          {user ? <li className="mr-3">{user?.email}</li> : null}
+          {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
-            <li className=" mr-3 p-0 flex items-center cursor-pointer">
+            <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">
               <Link className=" rounded-full" href="/profile">
-                <>
+                <div className=" flex items-center">
                   <Image
                     className=" rounded-full"
                     src={nextSession.user!.image || ""}
                     width={26}
                     height={26}
                   ></Image>
-                </>
+                </div>
               </Link>
             </li>
           ) : null}
@@ -62,7 +62,7 @@ export default function Gnb() {
             </button>
           ) : (
             <Link href="/enter">
-              <li className=" mr-5">Enter</li>
+              <li className=" mr-5 hover:cursor-pointer">Enter</li>
             </Link>
           )}
         </ul>

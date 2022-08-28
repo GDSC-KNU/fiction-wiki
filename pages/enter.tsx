@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@components/button";
-import Input from "@components/input";
+import Input from "@components/Input";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import { useRouter } from "next/router";
@@ -42,12 +42,12 @@ const Enter: NextPage = () => {
   };
   const onValid = (validForm: EnterForm) => {
     if (loading) return;
-    enter(validForm);
+    enter(validForm, "POST");
   };
 
   const onTokenValid = (validForm: TokenForm) => {
     if (tokenLoading) return;
-    confirmToken(validForm);
+    confirmToken(validForm, "POST");
   };
 
   const router = useRouter();

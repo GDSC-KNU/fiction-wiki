@@ -51,6 +51,12 @@ async function handler(
           category: true,
         },
       },
+      author: {
+        select: {
+          name: true,
+          relatedName: true,
+        },
+      },
     },
   });
 
@@ -225,7 +231,16 @@ async function handler(
       data: {
         title,
         relatedTitle,
-        author,
+        author: {
+          connectOrCreate: {
+            where: {
+              name: author,
+            },
+            create: {
+              name: author,
+            },
+          },
+        },
         relatedAuthor,
         nationality,
         genre,

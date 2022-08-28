@@ -9,10 +9,11 @@ import {
   UserFictionStat,
   UserRationOnFiction,
   KeywordsOnFictions,
+  Author,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import Input from "@components/input";
+import Input from "@components/Input";
 import { useForm } from "react-hook-form";
 import UserStat from "@components/UserStat";
 import client from "@libs/server/client";
@@ -35,9 +36,10 @@ interface FictionWithMore extends Fiction {
   keywords: [KeywordsOnFictionsWithMore];
   fictionStat: [FictionStat];
   userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
+  author: Author;
 }
 
-const ItemDetail: NextPage<FictionDetailResponse> = ({
+const FictionDetail: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
 }) => {
@@ -116,16 +118,12 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
       ) : null}
 
       <div className=" grid grid-cols-1 sm:grid-cols-10 h-fit">
-        <div className="  sm:max-w-[380px] object-cover bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
-          {/* <img
-            className=" min-h-[442px] max-h-[469px] w-full"
-            src="https://picsum.photos/462/599?random=2"
-          ></img> */}
-          <div className=" relative pb-[600px]">
+        <div className="  sm:max-w-[380px] object-cover h-fit bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
+          <div className="  w-full h-[467px] relative">
             <Image
-              className=" object-fill"
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
               layout="fill"
+              objectFit="contain"
             />
           </div>
           <div className=" px-4">
@@ -181,7 +179,11 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">작가</div>
-                <div className=" col-span-6">{fiction?.author}</div>
+                <Link href={`/authors/${fiction?.author?.name}`}>
+                  <div className=" col-span-6 hover:cursor-pointer text-blue-500">
+                    {fiction?.author?.name}
+                  </div>
+                </Link>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">국가</div>
@@ -239,7 +241,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
                   {fiction?.relatedTitle} &nbsp;
-                  {fiction?.relatedAuthor}
+                  {fiction?.author?.relatedName}
                 </div>
               </div>
             </div>
@@ -252,11 +254,11 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
             <div className=" mb-2"></div>
           </div>
         </div>
-        <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-6 ">
+        <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-6">
           <div className=" grid grid-cols-10 row-span-3">
             <div className=" col-span-10 lg:col-span-5 sm:pl-5 lg:px-5 h-full pb-3">
               <div className=" mb-5 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
-                <h2 className=" pt-1 px-2">메인 태그</h2>
+                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">메인 태그</h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction?.keywords
                     ?.filter(
@@ -279,7 +281,9 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
                       </li>
                     ))}
                 </ul>
-                <h2 className=" pt-1 px-2">주인공 태그</h2>
+                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                  주인공 태그
+                </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction.keywords
                     .filter((item) => item.keyword.isOfMC === true)
@@ -292,7 +296,9 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
                       </li>
                     ))}
                 </ul>
-                <h2 className=" pt-1 px-2">히로인 태그</h2>
+                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                  서브캐릭터 태그
+                </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction.keywords
                     .filter((item) => item.keyword.isOfHeroine === true)
@@ -329,7 +335,7 @@ const ItemDetail: NextPage<FictionDetailResponse> = ({
           </div>
           <div className=" row-span-3">
             <div className=" sm:pl-5 h-full">
-              <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
+              <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-fit">
                 <h2 className=" font-bold pt-1 px-2 "></h2>
                 <ul className=" ">
                   {fiction?.userFictionStat?.userRationOnFictions.map(
@@ -422,6 +428,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
           },
         },
       },
+      author: true,
     },
   });
 
@@ -482,4 +489,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default ItemDetail;
+export default FictionDetail;
