@@ -10,6 +10,7 @@ import {
   UserRationOnFiction,
   KeywordsOnFictions,
   Author,
+  Comment,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
@@ -20,6 +21,8 @@ import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
+import Pagination from "react-js-pagination";
+import { useState } from "react";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -39,6 +42,16 @@ interface FictionWithMore extends Fiction {
   author: Author;
 }
 
+// interface CommentWithMore extends Comment {
+//   ok: boolean;
+// }
+
+interface CommentResponse {
+  comments: Comment[];
+  commentsCount: number;
+  ok: boolean;
+}
+
 const FictionDetail: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
@@ -49,37 +62,25 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
-
+  const [commentIndex, setCommentIndex] = useState(1);
   const { user, isLoading } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}/fav` : null
   );
 
-  const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
+  const { data: commentsResponse } = useSWR<CommentResponse>(
+    router.query.id
+      ? `/api/fictions/${router.query.id}/comment?page=${commentIndex}`
+      : null
+  );
 
+  const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
   const onFavClick = () => {
     toggleFav({}, "GET");
     if (!data) return;
-    // console.log(data);
+
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
-  };
-
-  interface dummyCommentI {
-    [key: string]: string;
-    익명1234: any;
-    익명1235: any;
-    익명1236: any;
-    익명1237: any;
-    익명1238: any;
-  }
-
-  const dummyComment: dummyCommentI = {
-    익명1234: "안녕하세요, 반갑습니다, 추천합니다. 강추!!",
-    익명1235: "안녕하세요, ㅎㅇㅎㅇ",
-    익명1236: "ㅂㅊ",
-    익명1237: "안녕하세요, 반갑습니다",
-    익명1238: "안녕하세요",
   };
 
   if (router.isFallback) {
@@ -90,16 +91,17 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     );
   }
 
-  // console.log(data?.fiction?.fictionStat);
-  // console.log(data);
+  const handlePageChange = (PI: number) => {
+    setCommentIndex(PI);
+  };
 
-  // console.log(data?.prevFiction?.startDate);
-  // console.log(new Date(fiction?.startDate).getDate());
-  // console.log(new Date(fiction?.startDate).getMonth());
-  // console.log(new Date(fiction?.startDate).getFullYear());
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
-  console.log(fiction);
+  console.log(
+    fiction?.categories.reduce((acc, cur) => [...acc, cur?.category?.name], [])
+  );
+  console.log(fiction?.categories);
+
   return (
     <div className=" max-w-[1100px]">
       {user ? (
@@ -191,7 +193,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">장르</div>
-                <div className=" col-span-6">{fiction?.genre}</div>
+                <div className=" col-span-6">
+                  <span>
+                    {fiction?.categories
+                      .reduce((acc, cur) => [...acc, cur?.category?.name], [])
+                      .join(", ")}
+                  </span>
+                </div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">연재기간</div>
@@ -222,7 +230,22 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 sm:col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">플랫폼</div>
-                <div className=" col-span-6">{fiction?.platforms}</div>
+                <div className=" col-span-6 text-blue-500">
+                  <a className=" flex" href={fiction?.platforms}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-link"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
+                      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
+                    </svg>
+                    바로가기
+                  </a>
+                </div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">상태</div>
@@ -241,7 +264,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
                   {fiction?.relatedTitle} &nbsp;
-                  {fiction?.author?.relatedName}
+                  {fiction?.relatedAuthor}
                 </div>
               </div>
             </div>
@@ -254,7 +277,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             <div className=" mb-2"></div>
           </div>
         </div>
-        <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-6">
+        <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-5">
           <div className=" grid grid-cols-10 row-span-3">
             <div className=" col-span-10 lg:col-span-5 sm:pl-5 lg:px-5 h-full pb-3">
               <div className=" mb-5 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
@@ -264,21 +287,26 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     ?.filter(
                       (item) =>
                         item.keyword.isOfHeroine === false &&
-                        item.keyword.isOfMC === false
+                        item.keyword.isOfMC === false &&
+                        item.keyword.isOfCons === false
                     )
                     .map((item: any, index: any) => (
-                      <li
+                      <Link
                         key={index}
-                        className={
-                          item.keyword.isOfMC
-                            ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                            : item.keyword.isOfHeroine
-                            ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                            : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap "
-                        }
+                        href={`/search/keyword/${item.keyword.name}`}
                       >
-                        #{item?.keyword?.name}
-                      </li>
+                        <li
+                          className={
+                            item.keyword.isOfMC
+                              ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                              : item.keyword.isOfHeroine
+                              ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                              : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
+                          }
+                        >
+                          #{item?.keyword?.name}
+                        </li>
+                      </Link>
                     ))}
                 </ul>
                 <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
@@ -311,6 +339,21 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       </li>
                     ))}
                 </ul>
+                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                  하차 포인트
+                </h2>
+                <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                  {fiction.keywords
+                    .filter((item) => item.keyword.isOfCons === true)
+                    .map((item: any, index: any) => (
+                      <li
+                        key={index}
+                        className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
+                      >
+                        #{item?.keyword?.name}
+                      </li>
+                    ))}
+                </ul>
               </div>
             </div>
             <div className=" col-span-10 sm:pl-5 lg:px-0 lg:col-span-5 pb-3">
@@ -333,22 +376,22 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
             </div>
           </div>
-          <div className=" row-span-3">
-            <div className=" sm:pl-5 h-full">
+          <div className=" row-span-3 mt-2">
+            <div className=" sm:pl-5 ">
               <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-fit">
                 <h2 className=" font-bold pt-1 px-2 "></h2>
                 <ul className=" ">
-                  {fiction?.userFictionStat?.userRationOnFictions.map(
-                    (item, index) => (
+                  {commentsResponse?.comments?.map(
+                    (comment: Comment, index: number) => (
                       <ul
                         key={index}
                         className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
                       >
                         <li className=" mt-2 text-sm overflow-hidden mr-16">
-                          {item.comment}
+                          {comment.comment}
                         </li>
                         <li className=" mt-2 text-sm absolute right-24">
-                          {`${item.userId.slice(0, 5)}...`}
+                          {`${comment.createdById.slice(0, 5)}...`}
                         </li>
                         <li className=" mt-2 ml-5 text-sm min-w-[78px]">
                           👍 👎 (+3)
@@ -357,6 +400,21 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     )
                   )}
                 </ul>
+                <div className=" mb-2 mt-7">
+                  <Pagination
+                    activePage={commentIndex}
+                    itemsCountPerPage={7}
+                    totalItemsCount={commentsResponse?.commentsCount || 1}
+                    pageRangeDisplayed={5}
+                    prevPageText={"‹"}
+                    nextPageText={"›"}
+                    onChange={handlePageChange}
+                    innerClass=" flex justify-center mt-[15px]"
+                    itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
+                    linkClass=" w-full flex justify-center mt-[0.8px]"
+                    activeClass=" text-blue-400"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -424,8 +482,14 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
               name: true,
               isOfHeroine: true,
               isOfMC: true,
+              isOfCons: true,
             },
           },
+        },
+      },
+      categories: {
+        include: {
+          category: true,
         },
       },
       author: true,
@@ -459,27 +523,23 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   });
 
   similarFictions.map((item) => arr2.push([item.id, item.title]));
-  //   console.log(arr2);
-
-  // console.log(similarFictions);
 
   const isLiked = false;
 
-  const ration = await client.userFictionStat.findFirst({
-    where: {
-      fictionId: fiction?.id,
-    },
-    select: {
-      originality: true,
-      writing: true,
-      character: true,
-      verisimilitude: true,
-      synopsisComposition: true,
-      value: true,
-    },
-  });
+  // const ration = await client.userFictionStat.findFirst({
+  //   where: {
+  //     fictionId: fiction?.id,
+  //   },
+  //   select: {
+  //     originality: true,
+  //     writing: true,
+  //     character: true,
+  //     verisimilitude: true,
+  //     synopsisComposition: true,
+  //     value: true,
+  //   },
+  // });
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     props: {
       fiction: JSON.parse(JSON.stringify(fiction)),

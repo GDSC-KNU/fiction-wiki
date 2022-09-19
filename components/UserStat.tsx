@@ -7,6 +7,7 @@ import Input from "@components/Input";
 import useSWR, { useSWRConfig } from "swr";
 import { validateRequest } from "twilio/lib/webhooks/webhooks";
 import { useSession } from "next-auth/react";
+import { useRef } from "react";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
@@ -65,7 +66,18 @@ export default function UserStat() {
     return Math.round(m) / (100 * Math.sign(n));
   };
 
+  const buttonFlag = useRef(true);
   const onRateClick = (data: RateUserStatForm) => {
+    // console.log(buttonFlag.current);
+    if (!buttonFlag.current) {
+      alert("평가는 한번만 가능합니다.");
+      return;
+    }
+    buttonFlag.current = !buttonFlag.current;
+    setTimeout(() => {
+      buttonFlag.current = !buttonFlag.current;
+      // console.log("해제완료");
+    }, 5000);
     btnOnOff();
     if (!session) {
       alert("Please log in");

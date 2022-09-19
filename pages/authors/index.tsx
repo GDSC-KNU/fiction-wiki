@@ -7,100 +7,85 @@ import {
   UserFictionStat,
   Author,
 } from "@prisma/client";
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  NextPage,
+} from "next";
 import Link from "next/link";
-import { title } from "process";
-import useSWR from "swr";
 import client from "@libs/server/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import authorDetail from "./[slug]";
+import { useRecoilState } from "recoil";
+import { authorPageAtom } from "pages/atoms";
+import FictionList from "@components/FictionList";
+import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 interface AuthorResponse {
   authors: Author[];
+  authorsCount: number;
 }
 
-const Author: NextPage<AuthorResponse> = ({ authors }) => {
-  // const { user, isLoading } = useUser();
+interface IParams extends ParsedUrlQuery {
+  page: string;
+}
+
+const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
+  const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
+  let router = useRouter();
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  console.log(authors);
+  console.log(authorPageIndex);
+
+  useEffect(() => {
+    setAuthorPageIndex(authorPageIndex);
+    router.push(`/authors/${authorPageIndex}`);
+  }, [authorPageIndex]);
 
   return (
-    <div className=" mt-10">
-      {/* <div className=" bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
-        <form>
-          <table className=" leading-7">
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>국가</th>
-                <td className=" leading-[1.8rem] flex flex-wrap"></td>
-              </tr>
-              <tr>
-                <th>장르</th>
-                <td className=" leading-[1.8rem] flex flex-wrap"></td>
-              </tr>
-              <tr>
-                <th className=" min-w-[50px]">키워드</th>
-                <td className=" leading-[1.8rem] flex flex-wrap"></td>
-              </tr>
-              <tr>
-                <th>정렬</th>
-                <td className=" leading-[1.8rem] flex flex-wrap"></td>
-              </tr>
-            </tbody>
-          </table>
-        </form>
-      </div>
-      <div className=" w-full flex justify-end">
-        <button className=" hover:border-gray-400 hover:bg-gray-200 bg-white border-[0.5px] border-[#BBBBBB] rounded-md mt-2 p-1">
-          새로고침
-        </button>
-      </div> */}
-      <div className=" flex justify-center">
-        <ul className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-1 py-2 ">
-          {authors?.map((author, i) => (
-            <Link key={author.id} href={`/authors/${author.name}`}>
-              <li className=" relative flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                <Image
-                  className=" "
-                  src="/anoynymous_user.png"
-                  width={142}
-                  height={160}
-                />
-                <div className=" ml-1 absolute bottom-[17.2rem] z-10"></div>
-                <div className=" flex-col px-2 pb-2">
-                  <div className=" flex justify-between"></div>
-                  <div className=" font-bold">{author.name}</div>
-                </div>
-              </li>
-            </Link>
-          ))}
-        </ul>
-      </div>
+    <div className=" mt-12">
+      <FictionList
+        data={authors}
+        type={"authors_list"}
+        authorsCount={authorsCount}
+      />
     </div>
   );
 };
 
-export async function getStaticProps() {
+// export const getStaticProps: GetStaticProps = async (
+//   ctx: GetStaticPropsContext
+// ) => {
+
+export const getStaticProps: GetStaticProps = async (
+  ctx: GetStaticPropsContext
+) => {
+  // const { page } = ctx.params as IParams;
+  // if (!page) {
+  //   return {
+  //     props: {},
+  //   };
+  // }
+  // console.log(page);
+
   const authors = await client.author.findMany({
+    take: 18,
+    skip: 0,
     include: {
       fictions: true,
     },
   });
 
+  const authorsCount = await client.author.count({});
+
   return {
     props: {
       authors: JSON.parse(JSON.stringify(authors)),
+      authorsCount: JSON.parse(JSON.stringify(authorsCount)),
     },
   };
-}
+};
 
 // export async function getStaticProps() {
 //     const authors = await client.author.findUnique({

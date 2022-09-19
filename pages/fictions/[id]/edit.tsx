@@ -3,25 +3,16 @@ import FictionRadarChart from "@components/FictionRadarChart";
 import Input from "@components/Input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
-import useUser from "@libs/client/useUser";
 import {
   Author,
   Fiction,
-  FictionStat,
   Keyword,
   KeywordsOnFictions,
-  UserFictionStat,
   UserRationOnFiction,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, {
-  KeyboardEvent,
-  KeyboardEventHandler,
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import useSWR from "swr";
@@ -39,6 +30,7 @@ interface EditFictionForm {
   keywords: string[];
   mcKeywords: string[];
   subKeywords: string[];
+  consKeywords: string[];
   original: string;
   platforms: string[];
   thumb?: FileList;
@@ -109,22 +101,39 @@ const EditFiction: NextPage = () => {
 
     return [year, month, day].join("-");
   }
+  console.log(fiction?.prevFiction);
+  // console.log(
+  //   fiction?.prevFiction?.categories.reduce(
+  //     (prev, cur) =>
+  //       (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
+  //     ""
+  //   )
+  // );
   useEffect(() => {
     if (fiction) {
       setValue("title", fiction.prevFiction.title);
       setValue("relatedTitle", fiction.prevFiction.relatedTitle || "");
       setValue("author", fiction.prevFiction.author?.name || "");
-      setValue("relatedAuthor", fiction.prevFiction.author?.relatedName || "");
+      setValue("relatedAuthor", fiction.prevFiction.relatedAuthor || "");
       setValue("nationality", fiction.prevFiction.nationality);
       setValue("type", fiction.prevFiction.type || "");
-      setValue("genre", fiction.prevFiction.genre);
+      setValue(
+        "genre",
+        fiction?.prevFiction?.categories
+          .reduce(
+            (prev, cur) =>
+              (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
+            ""
+          )
+          .trim()
+      );
       setValue("original", fiction.prevFiction.original);
       setValue("platforms", [fiction.prevFiction.platforms]);
       setValue("currentState", fiction.prevFiction.currentState);
       setValue("synopsis", fiction.prevFiction.synopsis);
       setValue("characters", fiction.prevFiction.characters);
-      setValue("date.0", formatDate(fiction.prevFiction.startDate));
-      setValue("date.1", formatDate(fiction.prevFiction.endDate));
+      setValue("date.0", formatDate(fiction.prevFiction.startDate) as any);
+      setValue("date.1", formatDate(fiction.prevFiction.endDate) as any);
       setValue("currentState", fiction.prevFiction.currentState);
       setValue("status.0", fiction.prevFiction.fictionStat.originality);
       setValue("status.1", fiction.prevFiction.fictionStat.writing);
@@ -132,13 +141,15 @@ const EditFiction: NextPage = () => {
       setValue("status.3", fiction.prevFiction.fictionStat.verisimilitude);
       setValue("status.4", fiction.prevFiction.fictionStat.synopsisComposition);
       setValue("status.5", fiction.prevFiction.fictionStat.value);
-      setValue("volume", +fiction.prevFiction.volume!.toString() || 0);
+      setValue("volume", fiction?.prevFiction.volume || 0);
       setValue("mediaMix", fiction.prevFiction.mediaMix || "");
       // Keywords, mcKeywords, subKeywords
       fiction.prevFiction.keywords
         .filter(
           (item) =>
-            item.keyword.isOfHeroine === false && item.keyword.isOfMC === false
+            item.keyword.isOfHeroine === false &&
+            item.keyword.isOfMC === false &&
+            item.keyword.isOfCons === false
         )
         .map((item, i) => setValue(`keywords.${i}`, item.keyword.name));
       fiction.prevFiction.keywords
@@ -147,11 +158,14 @@ const EditFiction: NextPage = () => {
       fiction.prevFiction.keywords
         .filter((item) => item.keyword.isOfHeroine === true)
         .map((item, i) => setValue(`subKeywords.${i}`, item.keyword.name));
-
+      fiction.prevFiction.keywords
+        .filter((item) => item.keyword.isOfCons === true)
+        .map((item, i) => setValue(`consKeywords.${i}`, item.keyword.name));
       // setValue("keywords.0", "asd");
     }
   }, [fiction, setValue]);
-  console.log(fiction);
+  // console.log(fiction);
+  // console.log(fiction?.prevFiction.genre);
 
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;
@@ -192,12 +206,13 @@ const EditFiction: NextPage = () => {
   let wKeywords: string[] = watch().keywords;
   let wKeywords2: string[] = watch().mcKeywords;
   let wKeywords3: string[] = watch().subKeywords;
+  let wKeywords4: string[] = watch().consKeywords;
   let wStatus: number[] = watch().status;
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
-    console.log(key);
-    console.log(wKeywords);
+    // console.log(key);
+    // console.log(wKeywords);
 
     if (key === "," && wKeywords[0].trim() !== "") {
       e.preventDefault();
@@ -207,14 +222,14 @@ const EditFiction: NextPage = () => {
         wKeywords.filter((item) => item !== " ");
         setValue("keywords", [wKeywords[0], ...wKeywords]);
       }
-      console.log(wKeywords);
+      // console.log(wKeywords);
       resetField("keywords.0");
     }
   };
 
   const onKeyDown2: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords2[0].trim() !== "") {
       e.preventDefault();
@@ -224,14 +239,14 @@ const EditFiction: NextPage = () => {
         wKeywords2.filter((item) => item !== " ");
         setValue("mcKeywords", [wKeywords2[0], ...wKeywords2]);
       }
-      console.log(wKeywords2);
+      // console.log(wKeywords2);
       resetField("mcKeywords.0");
     }
   };
 
   const onKeyDown3: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords3[0].trim() !== "") {
       e.preventDefault();
@@ -241,8 +256,25 @@ const EditFiction: NextPage = () => {
         wKeywords3.filter((item) => item !== " ");
         setValue("subKeywords", [wKeywords3[0], ...wKeywords3]);
       }
-      console.log(wKeywords3);
+      // console.log(wKeywords3);
       resetField("subKeywords.0");
+    }
+  };
+
+  const onKeyDown4: any = (e: any) => {
+    const { key } = e;
+    console.log(key);
+
+    if (key === "," && wKeywords4[0].trim() !== "") {
+      e.preventDefault();
+
+      if (!wKeywords4.slice(1).includes(wKeywords4[0].trim())) {
+        wKeywords4[0] = wKeywords4[0].trim();
+        wKeywords4.filter((item) => item !== " ");
+        setValue("consKeywords", [wKeywords4[0], ...wKeywords4]);
+      }
+      console.log(wKeywords4);
+      resetField("consKeywords.0");
     }
   };
 
@@ -422,7 +454,7 @@ const EditFiction: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords);
-                              console.log(e.currentTarget.innerHTML);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -450,8 +482,8 @@ const EditFiction: NextPage = () => {
                               wKeywords2 = wKeywords2.filter(
                                 (item) => item !== e.currentTarget.innerHTML
                               );
-                              setValue("keywords", wKeywords2);
-                              console.log(e.currentTarget.innerHTML);
+                              setValue("mcKeywords", wKeywords2);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -479,8 +511,37 @@ const EditFiction: NextPage = () => {
                               wKeywords3 = wKeywords3.filter(
                                 (item) => item !== e.currentTarget.innerHTML
                               );
-                              setValue("keywords", wKeywords3);
-                              console.log(e.currentTarget.innerHTML);
+                              setValue("subKeywords", wKeywords3);
+                              // console.log(e.currentTarget.innerHTML);
+                            }}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                    <h2 className=" font-bold pt-1 px-2">Cons Keywords</h2>
+                    <input
+                      className=" w-full"
+                      {...register("consKeywords.0")}
+                      type="text"
+                      placeholder=" 키워드(,를 눌러서 입력하세요)"
+                      onKeyDown={onKeyDown4}
+                    ></input>
+                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                      {wKeywords4
+                        ?.filter((item) => item !== undefined)
+                        .map((item, index) => (
+                          <li
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            key={index}
+                            onClick={(e) => {
+                              wKeywords4 = wKeywords4.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("consKeywords", wKeywords4);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -547,10 +608,6 @@ const EditFiction: NextPage = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
-                  <h2 className=" font-bold pt-1 px-2"> Comments</h2>
-                  <ul></ul>
-                </div> */}
               </div>
             </div>
             <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">

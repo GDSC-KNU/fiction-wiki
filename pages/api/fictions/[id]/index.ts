@@ -8,17 +8,12 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  // console.log(req.query);
   let {
     query: { id },
     session: { user },
   } = req;
-  // console.log(req.query);
-  // console.log(+id!.toString());
-  // console.log(id);
+
   const session = await getSession({ req });
-  // console.log(session?.user?.id);
-  // console.log(req.body);
 
   const prevFiction = await client.fiction.findUnique({
     where: {
@@ -42,6 +37,7 @@ async function handler(
               name: true,
               isOfHeroine: true,
               isOfMC: true,
+              isOfCons: true,
             },
           },
         },
@@ -160,6 +156,7 @@ async function handler(
         keywords,
         mcKeywords,
         subKeywords,
+        consKeywords,
         original,
         platforms,
         thumbId,
@@ -170,10 +167,26 @@ async function handler(
       session: { user },
     } = req;
 
-    console.log(req.body);
+    genre = genre
+      .split(" ")
+      .join("")
+      .split(",")
+      .filter((item: any) => item !== "");
+    const genreMany = genre.map((item: string) => ({
+      category: {
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+          },
+        },
+      },
+    }));
 
     keywords = keywords.filter((item: any) => item !== "");
-    const keywordMany = keywords.map((item: string) => ({
+    const KeywordMany = keywords.map((item: string) => ({
       keyword: {
         connectOrCreate: {
           where: {
@@ -187,7 +200,7 @@ async function handler(
     }));
 
     mcKeywords = mcKeywords.filter((item: any) => item !== "");
-    const mckeywordMany = mcKeywords.map((item: string) => ({
+    const mcKeywordMany = mcKeywords.map((item: string) => ({
       keyword: {
         connectOrCreate: {
           where: {
@@ -202,7 +215,7 @@ async function handler(
     }));
 
     subKeywords = subKeywords.filter((item: any) => item !== "");
-    const subkeywordMany = subKeywords.map((item: string) => ({
+    const subKeywordMany = subKeywords.map((item: string) => ({
       keyword: {
         connectOrCreate: {
           where: {
@@ -211,6 +224,21 @@ async function handler(
           create: {
             name: item,
             isOfHeroine: true,
+          },
+        },
+      },
+    }));
+
+    consKeywords = consKeywords.filter((item: any) => item !== "");
+    const consKeywordMany = consKeywords.map((item: string) => ({
+      keyword: {
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+            isOfCons: true,
           },
         },
       },
@@ -243,7 +271,6 @@ async function handler(
         },
         relatedAuthor,
         nationality,
-        genre,
         startDate: new Date(date[0]),
         endDate: new Date(date[1]),
         original,
@@ -255,28 +282,39 @@ async function handler(
         volume: +volume?.toString(),
         type,
         mediaMix,
+        // categories: {
+        //   deleteMany: {
+        //     fictionId: +id!.toString(),
+        //   },
+        //   create: {
+        //     category: {
+        //       connectOrCreate: {
+        //         where: {
+        //           name: genre,
+        //         },
+        //         create: {
+        //           name: genre,
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
         categories: {
           deleteMany: {
             fictionId: +id!.toString(),
           },
-          create: {
-            category: {
-              connectOrCreate: {
-                where: {
-                  name: genre,
-                },
-                create: {
-                  name: genre,
-                },
-              },
-            },
-          },
+          create: [...genreMany],
         },
         keywords: {
           deleteMany: {
             fictionId: +id!.toString(),
           },
-          create: [...subkeywordMany, ...mckeywordMany, ...keywordMany],
+          create: [
+            ...subKeywordMany,
+            ...mcKeywordMany,
+            ...KeywordMany,
+            ...consKeywordMany,
+          ],
         },
         fictionStat: {
           update: {

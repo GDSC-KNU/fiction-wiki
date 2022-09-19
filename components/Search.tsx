@@ -27,9 +27,8 @@ export default function Search() {
   //   if (result) console.log(result);
 
   const onInvalid = (erros: FieldErrors) => {
-    return;
+    alert("한글, 영어, 숫자만 입력가능합니다.");
   };
-
   const {
     register,
     handleSubmit,
@@ -40,25 +39,33 @@ export default function Search() {
     setValue,
   } = useForm<SearchForm>({ mode: "onBlur" });
 
-  //   console.log(watch());
+  // console.log(errors);
 
   return (
-    <form onSubmit={handleSubmit(onValid, onInvalid)}>
-      {/* <input
+    <div className=" ">
+      <form
+        className=" max-w-[581px] mx-auto"
+        onSubmit={handleSubmit(onValid, onInvalid)}
+      >
+        {/* <input
         value={input}
         onChange={handleInputChange}
         placeholder="검색어를 입력하세요"
       /> */}
-      <Input
-        register={register("title", {
-          //   pattern: /^[0-9]*$/,
-        })}
-        required
-        label=""
-        name="title"
-        type="text"
-        kind="search"
-      />
-    </form>
+        <Input
+          register={register("title", {
+            pattern: {
+              value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
+              message: "한글,영어, 숫자만 입력할 수 있습니다.",
+            },
+          })}
+          required
+          label=""
+          name="title"
+          type="text"
+          kind="search"
+        />
+      </form>
+    </div>
   );
 }

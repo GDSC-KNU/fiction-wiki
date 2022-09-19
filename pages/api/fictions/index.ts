@@ -1,3 +1,4 @@
+import { UserFictionStat } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
@@ -8,7 +9,96 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
+    let {
+      query: { keywords, genres, nationalities, sorting, page },
+    } = req;
+
+    if (nationalities === "all") nationalities = "";
+    if (genres === "all") genres = "";
+    if (keywords === "all") keywords = "";
+    // if (sorting === "all") keywords = "";
+
+    // console.log(sorting);
+    const keywordMany =
+      keywords
+        ?.toString()
+        .split(",")
+        .map((item: string) => ({
+          keywords: { some: { keyword: { name: item || undefined } } },
+        })) || [];
+
+    const genresMany =
+      genres
+        ?.toString()
+        .split(",")
+        .map((item: string) => ({
+          categories: { some: { category: { name: item || undefined } } },
+        })) || [];
+
+    const nationalitiesMany =
+      nationalities
+        ?.toString()
+        .split(",")
+        .map((item: string) => ({
+          nationality: (item as string) || undefined,
+        })) || [];
+
+    const sortingOne = function () {
+      if (sorting === "총점" || "") {
+        return {
+          orderBy: { userFictionStat: { total: "desc" } },
+        };
+      } else if (sorting === "캐릭터성") {
+        return {
+          orderBy: { userFictionStat: { character: "desc" } },
+        };
+      } else if (sorting === "오리지널리티") {
+        return {
+          orderBy: { userFictionStat: { originality: "desc" } },
+        };
+      } else if (sorting === "스토리") {
+        return {
+          orderBy: {
+            userFictionStat: { synopsisComposition: "desc" },
+          },
+        };
+      } else if (sorting === "작품성") {
+        return {
+          orderBy: { userFictionStat: { value: "desc" } },
+        };
+      } else if (sorting === "핍진성") {
+        return {
+          orderBy: {
+            userFictionStat: { verisimilitude: "desc" },
+          },
+        };
+      } else if (sorting === "필력") {
+        return {
+          orderBy: { userFictionStat: { writing: "desc" } },
+        };
+      } else if (sorting === "화수") {
+        return {
+          orderBy: { volume: "desc" },
+        };
+      } else {
+        return undefined;
+      }
+    };
+
     const fictions = await client.fiction.findMany({
+      take: 18,
+      skip: (+page!.toString() - 1 || 0) * 18,
+      where: {
+        AND: [
+          { OR: [...genresMany] },
+          {
+            OR: [...nationalitiesMany],
+          },
+          {
+            AND: [...keywordMany],
+          },
+        ],
+      },
       include: {
         _count: {
           select: {
@@ -16,11 +106,53 @@ async function handler(
           },
         },
         author: true,
+        userFictionStat: {
+          include: {
+            _count: {
+              select: {
+                users: true,
+              },
+            },
+          },
+        },
+        keywords: {
+          include: {
+            keyword: true,
+          },
+        },
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+      ...sortingOne(),
+    });
+
+    const fictionsCount = await client.fiction.count({
+      where: {
+        AND: [
+          { OR: [...genresMany] },
+          {
+            OR: [...nationalitiesMany],
+          },
+          {
+            AND: [...keywordMany],
+          },
+        ],
       },
     });
+
+    // console.log(fictionsCount);
+
+    // console.log(sorting);
+    // console.log(fictions);
+    // const fictionsCount = await client.fiction.count({});
+
     res.json({
       ok: true,
       fictions,
+      fictionsCount,
     });
   }
   if (req.method === "POST") {
@@ -47,6 +179,7 @@ async function handler(
         keywords,
         mcKeywords,
         subKeywords,
+        consKeywords,
         original,
         platforms,
         thumbId,
@@ -56,6 +189,26 @@ async function handler(
       },
       session: { user },
     } = req;
+
+    // console.log(genre);
+    genre = genre
+      .split(" ")
+      .join("")
+      .split(",")
+      .filter((item: any) => item !== "");
+    // console.log(genre);
+    const genreMany = genre.map((item: string) => ({
+      category: {
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+          },
+        },
+      },
+    }));
 
     keywords = keywords.filter((item: any) => item !== "");
     const keywordMany = keywords.map((item: string) => ({
@@ -72,7 +225,7 @@ async function handler(
     }));
 
     mcKeywords = mcKeywords.filter((item: any) => item !== "");
-    const mckeywordMany = mcKeywords.map((item: string) => ({
+    const mcKeywordMany = mcKeywords.map((item: string) => ({
       keyword: {
         connectOrCreate: {
           where: {
@@ -80,13 +233,14 @@ async function handler(
           },
           create: {
             name: item,
+            isOfMC: true,
           },
         },
       },
     }));
 
     subKeywords = subKeywords.filter((item: any) => item !== "");
-    const subkeywordMany = subKeywords.map((item: string) => ({
+    const subKeywordMany = subKeywords.map((item: string) => ({
       keyword: {
         connectOrCreate: {
           where: {
@@ -94,6 +248,22 @@ async function handler(
           },
           create: {
             name: item,
+            isOfHeroine: true,
+          },
+        },
+      },
+    }));
+
+    consKeywords = consKeywords.filter((item: any) => item !== "");
+    const consKeywordMany = consKeywords.map((item: string) => ({
+      keyword: {
+        connectOrCreate: {
+          where: {
+            name: item,
+          },
+          create: {
+            name: item,
+            isOfCons: true,
           },
         },
       },
@@ -115,7 +285,7 @@ async function handler(
         },
         relatedAuthor,
         nationality,
-        genre,
+        genre: "",
         startDate: new Date(date[0]),
         endDate: new Date(date[1]),
         original,
@@ -129,21 +299,26 @@ async function handler(
         mediaMix,
         categories: {
           // create: { category: { create: { name: genre } } },
-          create: {
-            category: {
-              connectOrCreate: {
-                where: {
-                  name: genre,
-                },
-                create: {
-                  name: genre,
-                },
-              },
-            },
-          },
+          create:
+            // category: {
+            //   connectOrCreate: {
+            //     where: {
+            //       name: genre,
+            //     },
+            //     create: {
+            //       name: genre,
+            //     },
+            //   },
+            // },
+            [...genreMany],
         },
         keywords: {
-          create: [...subkeywordMany, ...mckeywordMany, ...keywordMany],
+          create: [
+            ...subKeywordMany,
+            ...mcKeywordMany,
+            ...KeywordMany,
+            ...consKeywordMany,
+          ],
         },
         fictionStat: {
           create: {

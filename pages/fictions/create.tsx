@@ -99,7 +99,9 @@ const Create: NextPage = () => {
   let wKeywords: string[] = watch().keywords;
   let wKeywords2: string[] = watch().mcKeywords;
   let wKeywords3: string[] = watch().subKeywords;
+  let wKeywords4: string[] = watch().consKeywords;
   let wStatus: number[] = watch().status;
+  // console.log(watch);
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
@@ -149,6 +151,23 @@ const Create: NextPage = () => {
       }
       console.log(wKeywords3);
       resetField("subKeywords.0");
+    }
+  };
+
+  const onKeyDown4: any = (e: any) => {
+    const { key } = e;
+    console.log(key);
+
+    if (key === "," && wKeywords4[0].trim() !== "") {
+      e.preventDefault();
+
+      if (!wKeywords4.slice(1).includes(wKeywords4[0].trim())) {
+        wKeywords4[0] = wKeywords4[0].trim();
+        wKeywords4.filter((item) => item !== " ");
+        setValue("consKeywords", [wKeywords4[0], ...wKeywords4]);
+      }
+      console.log(wKeywords4);
+      resetField("consKeywords.0");
     }
   };
 
@@ -378,7 +397,36 @@ const Create: NextPage = () => {
                               wKeywords3 = wKeywords3.filter(
                                 (item) => item !== e.currentTarget.innerHTML
                               );
-                              setValue("keywords", wKeywords3);
+                              setValue("subKeywords", wKeywords3);
+                              console.log(e.currentTarget.innerHTML);
+                            }}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+                    <h2 className=" font-bold pt-1 px-2">Cons Keywords</h2>
+                    <input
+                      className=" w-full"
+                      {...register("consKeywords.0")}
+                      type="text"
+                      placeholder=" 키워드(,를 눌러서 입력하세요)"
+                      onKeyDown={onKeyDown4}
+                    ></input>
+                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                      {wKeywords4
+                        ?.filter((item) => item !== undefined)
+                        .map((item, index) => (
+                          <li
+                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            key={index}
+                            onClick={(e) => {
+                              wKeywords4 = wKeywords4.filter(
+                                (item) => item !== e.currentTarget.innerHTML
+                              );
+                              setValue("consKeywords", wKeywords4);
                               console.log(e.currentTarget.innerHTML);
                             }}
                           >

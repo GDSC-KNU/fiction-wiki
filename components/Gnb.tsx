@@ -19,40 +19,48 @@ export default function Gnb() {
   // }, [data, router]);
   // console.log(data);
   return (
-    <header className="flex bg-blue-200 fixed top-0 w-full py-2 z-10">
+    <header className="flex bg-blue-200 fixed top-0 w-full py-2 z-20">
       <nav className="flex w-full justify-between items-center">
         <ul className="flex uppercase font-bold cursor-pointer">
-          <Link href="/">
-            <li className=" ml-3 mr-3">Logo</li>
-          </Link>
-          <Link href="/fictions">
-            <li className="mr-3">Fiction</li>
-          </Link>
-          <Link href="/authors">
-            <li className="mr-3">Author</li>
-          </Link>
-          <Link href="/ranking">
-            <li className="mr-3">Ranking</li>
-          </Link>
-          {user ? (
-            <Link href="/fictions/create">
-              <li className="mr-3">Create</li>
+          <li className=" ml-3 mr-3">
+            <Link href="/">
+              <a href="/">Logo</a>
             </Link>
+          </li>
+          <li className="mr-3">
+            <Link href="/fictions/all/all/all/1/all">
+              <a>작품</a>
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link href="/authors/1" passHref>
+              <a>작가</a>
+            </Link>
+          </li>
+          {/* <Link href="/ranking">
+            <li className="mr-3">Ranking</li>
+          </Link> */}
+          {user ? (
+            <li className="mr-3">
+              <Link href="/fictions/create">
+                <a>Create</a>
+              </Link>
+            </li>
           ) : null}
         </ul>
         <ul className=" flex font-bold items-center">
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
             <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">
-              <Link className=" rounded-full" href="/profile">
-                <div className=" flex items-center">
+              <Link className=" rounded-full" href="/profile" passHref>
+                <a className=" flex items-center">
                   <Image
                     className=" rounded-full"
                     src={nextSession.user!.image || ""}
                     width={26}
                     height={26}
                   ></Image>
-                </div>
+                </a>
               </Link>
             </li>
           ) : null}

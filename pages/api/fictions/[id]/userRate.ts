@@ -24,6 +24,8 @@ async function handler(
     res.json({ ok: false });
     return;
   } else {
+    let commentation;
+    let Ration;
     // console.log(session?.user?.email);
     const alreadyExists = await client.userFictionStat.findFirst({
       include: {
@@ -46,8 +48,7 @@ async function handler(
 
     // console.log(alreadyExists);
     // console.log(UserFictionStat);
-    // console.log(comment);
-    let Ration;
+
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
     if (!alreadyExists) {
       Ration = await client.userFictionStat.create({
@@ -71,7 +72,7 @@ async function handler(
               verisimilitude: +UserFictionStat[3],
               synopsisComposition: +UserFictionStat[4],
               value: +UserFictionStat[5],
-              comment: comment.toString() || "",
+              // comment: comment.toString() || "",
             },
           },
           originality: +UserFictionStat[0],
@@ -94,6 +95,22 @@ async function handler(
           _count: {
             select: {
               users: true,
+            },
+          },
+        },
+      });
+
+      commentation = await client.comment.create({
+        data: {
+          comment: comment,
+          createdBy: {
+            connect: {
+              id: session?.user?.id,
+            },
+          },
+          fiction: {
+            connect: {
+              id: +id!.toString(),
             },
           },
         },
@@ -133,7 +150,7 @@ async function handler(
                 verisimilitude: +UserFictionStat[3],
                 synopsisComposition: +UserFictionStat[4],
                 value: +UserFictionStat[5],
-                comment: comment.toString() || "",
+                // comment: comment.toString() || "",
               },
               // update: {
               //   where: {
@@ -190,6 +207,22 @@ async function handler(
                   6) /
                 (alreadyExists._count.users + 1)
             ),
+          },
+        });
+
+        commentation = await client.comment.create({
+          data: {
+            comment: comment,
+            createdBy: {
+              connect: {
+                id: session?.user?.id,
+              },
+            },
+            fiction: {
+              connect: {
+                id: +id!.toString(),
+              },
+            },
           },
         });
       }
