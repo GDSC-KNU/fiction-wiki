@@ -3,19 +3,17 @@ import FictionRadarChart from "@components/FictionRadarChart";
 import Input from "@components/Input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
-import useUser from "@libs/client/useUser";
+// import useUser from "@libs/client/useUser";
 import { Fiction } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, {
-  KeyboardEvent,
-  KeyboardEventHandler,
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+// import MdEditor from "@components/MdEditor";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 interface CreateFictionForm {
   title: string;
@@ -30,14 +28,17 @@ interface CreateFictionForm {
   keywords: string[];
   mcKeywords: string[];
   subKeywords: string[];
+  consKeywords: string[];
   original: string;
   platforms: string[];
   thumb?: FileList;
   volume?: number;
+  isTranslated?: string;
   relatedTitle?: string;
   relatedAuthor?: string;
   type?: string;
   mediaMix?: string;
+  setup?: string;
 }
 
 interface CreateFictionMutation {
@@ -45,8 +46,22 @@ interface CreateFictionMutation {
   fiction: Fiction;
 }
 
-const Create: NextPage = () => {
-  // const { user, isLoading } = useUser();
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
+
+const Create: NextPage = (props) => {
+  const [md, setMd] = useState<string | undefined>("# Hello World");
+
+  // const handleChange = useCallback((md) => {
+  //   setMd(md);
+  // }, []);
+
+  const handleChange = (md: any) => {
+    setMd(md);
+  };
+  ///////////
+  // console.log("redered");
   const router = useRouter();
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");
@@ -61,6 +76,7 @@ const Create: NextPage = () => {
   } = useForm<CreateFictionForm>({ mode: "onBlur" });
 
   const onValid = async (data: CreateFictionForm) => {
+    // if (data) console.log(data);
     if (loading) return;
     if (data.thumb && data.thumb.length > 0) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
@@ -69,9 +85,9 @@ const Create: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      createFiction({ ...data, thumbId: id }, "POST");
+      createFiction({ ...data, thumbId: id, setup: md }, "POST");
     } else {
-      createFiction(data, "POST");
+      createFiction({ ...data, setup: md }, "POST");
     }
     return;
   };
@@ -101,11 +117,11 @@ const Create: NextPage = () => {
   let wKeywords3: string[] = watch().subKeywords;
   let wKeywords4: string[] = watch().consKeywords;
   let wStatus: number[] = watch().status;
-  // console.log(watch);
+  // console.log(watch());
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords[0].trim() !== "") {
       e.preventDefault();
@@ -115,14 +131,13 @@ const Create: NextPage = () => {
         wKeywords.filter((item) => item !== " ");
         setValue("keywords", [wKeywords[0], ...wKeywords]);
       }
-      console.log(wKeywords);
+      // console.log(wKeywords);
       resetField("keywords.0");
     }
   };
-
   const onKeyDown2: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords2[0].trim() !== "") {
       e.preventDefault();
@@ -132,14 +147,13 @@ const Create: NextPage = () => {
         wKeywords2.filter((item) => item !== " ");
         setValue("mcKeywords", [wKeywords2[0], ...wKeywords2]);
       }
-      console.log(wKeywords2);
+      // console.log(wKeywords2);
       resetField("mcKeywords.0");
     }
   };
-
   const onKeyDown3: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords3[0].trim() !== "") {
       e.preventDefault();
@@ -149,14 +163,13 @@ const Create: NextPage = () => {
         wKeywords3.filter((item) => item !== " ");
         setValue("subKeywords", [wKeywords3[0], ...wKeywords3]);
       }
-      console.log(wKeywords3);
+      // console.log(wKeywords3);
       resetField("subKeywords.0");
     }
   };
-
   const onKeyDown4: any = (e: any) => {
     const { key } = e;
-    console.log(key);
+    // console.log(key);
 
     if (key === "," && wKeywords4[0].trim() !== "") {
       e.preventDefault();
@@ -166,7 +179,7 @@ const Create: NextPage = () => {
         wKeywords4.filter((item) => item !== " ");
         setValue("consKeywords", [wKeywords4[0], ...wKeywords4]);
       }
-      console.log(wKeywords4);
+      // console.log(wKeywords4);
       resetField("consKeywords.0");
     }
   };
@@ -315,6 +328,13 @@ const Create: NextPage = () => {
                     name="volume"
                     type="text_detail"
                   />
+                  <Input
+                    register={register("isTranslated", { required: false })}
+                    required
+                    label="IsTranslated"
+                    name="isTranslated"
+                    type="text_detail"
+                  />
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
@@ -340,7 +360,7 @@ const Create: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords);
-                              console.log(e.currentTarget.innerHTML);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -369,7 +389,7 @@ const Create: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords2);
-                              console.log(e.currentTarget.innerHTML);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -398,7 +418,7 @@ const Create: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("subKeywords", wKeywords3);
-                              console.log(e.currentTarget.innerHTML);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -427,7 +447,7 @@ const Create: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("consKeywords", wKeywords4);
-                              console.log(e.currentTarget.innerHTML);
+                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -435,7 +455,6 @@ const Create: NextPage = () => {
                         ))}
                     </ul>
                   </div>
-
                   <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
                     <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
                     <FictionRadarChart props={wStatus} />
@@ -513,6 +532,16 @@ const Create: NextPage = () => {
                 label="Characters"
                 required
               />
+              {/* <Textarea
+                register={register("setup", { required: false })}
+                name="setup"
+                label="Setup"
+                required
+              /> */}
+              <div>
+                {/* <MdEditor /> */}
+                <MDEditor value={md} onChange={handleChange} />
+              </div>
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

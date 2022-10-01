@@ -31,7 +31,9 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
         <Search />
       </div>
       <section className=" max-w-[1200px]">
-        <div className="mt-5 font-bold text-xl">평점 TOP </div>
+        <div className="mt-5 font-bold text-xl border-b-[1px] py-4">
+          평점 TOP{" "}
+        </div>
         <FictionList
           data={data}
           type={"fictions_list"}

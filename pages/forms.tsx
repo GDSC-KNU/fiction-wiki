@@ -21,10 +21,10 @@ export default function Forms() {
     mode: "onChange",
   });
   const onValid = (data: LoginForm) => {
-    console.log("im valid bby");
+    // console.log("im valid bby");
   };
   const onInvalid = (errors: FieldErrors) => {
-    console.log(errors);
+    // console.log(errors);
   };
 
   return (

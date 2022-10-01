@@ -11,6 +11,7 @@ import {
   KeywordsOnFictions,
   Author,
   Comment,
+  Category,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
@@ -23,6 +24,8 @@ import useUser from "@libs/client/useUser";
 import Link from "next/link";
 import Pagination from "react-js-pagination";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -40,6 +43,7 @@ interface FictionWithMore extends Fiction {
   fictionStat: [FictionStat];
   userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
   author: Author;
+  categories: [Category];
 }
 
 // interface CommentWithMore extends Comment {
@@ -97,10 +101,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
-  console.log(
-    fiction?.categories.reduce((acc, cur) => [...acc, cur?.category?.name], [])
-  );
-  console.log(fiction?.categories);
+  // console.log(
+  //   fiction?.categories.reduce((acc, cur) => [...acc, cur?.category?.name], [])
+  // );
+  // console.log(fiction?.categories);
 
   return (
     <div className=" max-w-[1100px]">
@@ -130,9 +134,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
           <div className=" px-4">
             <div className=" flex justify-between">
-              <h2 className=" font-semibold text-2xl mb-2 pt-2 ml-">
+              <h1 className=" font-semibold text-2xl mb-2 pt-2 ml-">
                 {fiction?.title}
-              </h2>
+              </h1>
               <button
                 onClick={onFavClick}
                 className={cls(
@@ -182,9 +186,12 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">작가</div>
                 <Link href={`/authors/${fiction?.author?.name}`}>
-                  <div className=" col-span-6 hover:cursor-pointer text-blue-500">
+                  <a
+                    title={`${fiction?.author?.name}`}
+                    className=" col-span-6 hover:cursor-pointer text-blue-500"
+                  >
                     {fiction?.author?.name}
-                  </div>
+                  </a>
                 </Link>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
@@ -196,7 +203,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-6">
                   <span>
                     {fiction?.categories
-                      .reduce((acc, cur) => [...acc, cur?.category?.name], [])
+                      .reduce(
+                        (acc: any, cur: any) => [...acc, cur?.category?.name],
+                        []
+                      )
                       .join(", ")}
                   </span>
                 </div>
@@ -212,7 +222,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px] ">
                 <div className=" col-span-4 font-bold font-sans ">원본</div>
                 <div className=" col-span-6 text-blue-500">
-                  <a className=" flex" href={fiction?.original}>
+                  <a
+                    className=" flex"
+                    href={fiction?.original}
+                    title={fiction?.original}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -231,7 +245,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 sm:col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">플랫폼</div>
                 <div className=" col-span-6 text-blue-500">
-                  <a className=" flex" href={fiction?.platforms}>
+                  <a
+                    className=" flex"
+                    href={fiction?.platforms}
+                    title={fiction?.platforms}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -260,6 +278,16 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 </div>
                 <div className=" col-span-6">{fiction?.mediaMix || "X"}</div>
               </div>
+              {fiction.isTranslated ? (
+                <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
+                  <div className=" col-span-4 font-bold font-sans">
+                    번역상태
+                  </div>
+                  <div className=" col-span-6">
+                    {fiction.isTranslated ? "O" : ""}
+                  </div>
+                </div>
+              ) : null}
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
@@ -291,22 +319,23 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         item.keyword.isOfCons === false
                     )
                     .map((item: any, index: any) => (
-                      <Link
+                      <li
                         key={index}
-                        href={`/search/keyword/${item.keyword.name}`}
+                        className={
+                          item.keyword.isOfMC
+                            ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                            : item.keyword.isOfHeroine
+                            ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                            : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
+                        }
                       >
-                        <li
-                          className={
-                            item.keyword.isOfMC
-                              ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                              : item.keyword.isOfHeroine
-                              ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                              : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
-                          }
+                        <Link
+                          href={`/search/keyword/${item.keyword.name}`}
+                          passHref
                         >
-                          #{item?.keyword?.name}
-                        </li>
-                      </Link>
+                          <a>#{item?.keyword?.name}</a>
+                        </Link>
+                      </li>
                     ))}
                 </ul>
                 <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
@@ -320,12 +349,17 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                       >
-                        #{item?.keyword?.name}
+                        <Link
+                          href={`/search/keyword/${item.keyword.name}`}
+                          passHref
+                        >
+                          <a>#{item?.keyword?.name}</a>
+                        </Link>
                       </li>
                     ))}
                 </ul>
                 <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                  서브캐릭터 태그
+                  히로인 태그
                 </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction.keywords
@@ -335,12 +369,17 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                       >
-                        #{item?.keyword?.name}
+                        <Link
+                          href={`/search/keyword/${item.keyword.name}`}
+                          passHref
+                        >
+                          <a>#{item?.keyword?.name}</a>
+                        </Link>
                       </li>
                     ))}
                 </ul>
                 <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                  하차 포인트
+                  호불호 키워드
                 </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction.keywords
@@ -350,7 +389,12 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
                       >
-                        #{item?.keyword?.name}
+                        <Link
+                          href={`/search/keyword/${item.keyword.name}`}
+                          passHref
+                        >
+                          <a>#{item?.keyword?.name}</a>
+                        </Link>
                       </li>
                     ))}
                 </ul>
@@ -420,18 +464,29 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
         </div>
       </div>
-      <div className=" mt-3 sm:mt-7  bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
+      <div className=" mt-3 sm:mt-7  px-3 py-3 ">
         <div className=" ">
-          <h2 className=" font-bold text-xl">줄거리</h2>
-          <p>{fiction?.synopsis}</p>
+          <h2 className=" font-bold text-xl border-b-[1px] py-2">줄거리</h2>
+          <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
         </div>
         <div className=" mt-3">
-          <h3 className=" font-bold text-xl">등장인물</h3>
+          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
+            등장인물
+          </h2>
           {fiction?.characters}
+        </div>
+        <div className=" ">
+          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
+            세계관 및 설정
+          </h2>
+          {/* <a className=" ">{fiction?.setup || ""}</a> */}
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {fiction.setup || ""}
+          </ReactMarkdown>
         </div>
       </div>
       <div className=" mt-3 sm:mt-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
-        <h2 className=" font-bold text-xl">비슷한 소설</h2>
+        <h3 className=" font-bold text-xl">비슷한 소설</h3>
         <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {similarFictions?.slice(0, 4).map((fiction) => (
             <div key={fiction?.id}>

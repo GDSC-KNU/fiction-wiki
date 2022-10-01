@@ -5,6 +5,7 @@ import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
 import {
   Author,
+  Category,
   Fiction,
   Keyword,
   KeywordsOnFictions,
@@ -12,10 +13,18 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import useSWR from "swr";
+import dynamic from "next/dynamic";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
 
 interface EditFictionForm {
   title: string;
@@ -35,10 +44,12 @@ interface EditFictionForm {
   platforms: string[];
   thumb?: FileList;
   volume?: number;
+  isTranslated?: string;
   relatedTitle?: string;
   relatedAuthor?: string;
   type?: string;
   mediaMix?: string;
+  setup?: string;
 }
 
 interface EditFictionMutation {
@@ -69,9 +80,16 @@ interface FictionWithMore extends Fiction {
   };
   userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
   author: Author;
+  categories: [Category];
 }
 
 const EditFiction: NextPage = () => {
+  ///setup MdEditor
+  const [md, setMd] = useState<string | undefined>("");
+  const handleChange = useCallback((md) => {
+    setMd(md);
+  }, []);
+
   // const { user, isLoading } = useUser();
   const router = useRouter();
   const { data: fiction } = useSWR<FictionDetailResponse>(
@@ -101,7 +119,8 @@ const EditFiction: NextPage = () => {
 
     return [year, month, day].join("-");
   }
-  console.log(fiction?.prevFiction);
+  // console.log(fiction?.prevFiction);
+  console.log(md);
   // console.log(
   //   fiction?.prevFiction?.categories.reduce(
   //     (prev, cur) =>
@@ -121,7 +140,7 @@ const EditFiction: NextPage = () => {
         "genre",
         fiction?.prevFiction?.categories
           .reduce(
-            (prev, cur) =>
+            (prev: any, cur: any) =>
               (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
             ""
           )
@@ -143,6 +162,12 @@ const EditFiction: NextPage = () => {
       setValue("status.5", fiction.prevFiction.fictionStat.value);
       setValue("volume", fiction?.prevFiction.volume || 0);
       setValue("mediaMix", fiction.prevFiction.mediaMix || "");
+      setValue("isTranslated", fiction.prevFiction.isTranslated || "");
+      if (md === "") {
+        setMd(fiction.prevFiction.setup || "");
+      }
+      // console.log(md);
+      // setValue("setup", fiction.prevFiction.setup || "");
       // Keywords, mcKeywords, subKeywords
       fiction.prevFiction.keywords
         .filter(
@@ -176,9 +201,9 @@ const EditFiction: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      editFiction({ ...data, thumbId: id }, "PUT");
+      editFiction({ ...data, thumbId: id, setup: md }, "PUT");
     } else {
-      editFiction(data, "PUT");
+      editFiction({ ...data, setup: md }, "PUT");
     }
     return;
   };
@@ -429,6 +454,13 @@ const EditFiction: NextPage = () => {
                     name="mediaMix"
                     type="text_detail"
                   />
+                  <Input
+                    register={register("isTranslated", { required: false })}
+                    required={false}
+                    label="IsTranslated"
+                    name="isTranslated"
+                    type="text_detail"
+                  />
                 </div>
               </div>
               <div className=" col-span-3 mx-5 mt-7">
@@ -623,6 +655,13 @@ const EditFiction: NextPage = () => {
                 label="Characters"
                 required
               />
+              {/* <Textarea
+                register={register("setup")}
+                name="setup"
+                label="Setup"
+                required
+              /> */}
+              <MDEditor value={md} onChange={handleChange} />
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

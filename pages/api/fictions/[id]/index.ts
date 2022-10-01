@@ -163,9 +163,13 @@ async function handler(
         volume,
         type,
         mediaMix,
+        isTranslated,
+        setup,
       },
       session: { user },
     } = req;
+
+    console.log(setup);
 
     genre = genre
       .split(" ")
@@ -281,7 +285,9 @@ async function handler(
         currentState,
         volume: +volume?.toString(),
         type,
+        isTranslated,
         mediaMix,
+        setup,
         // categories: {
         //   deleteMany: {
         //     fictionId: +id!.toString(),

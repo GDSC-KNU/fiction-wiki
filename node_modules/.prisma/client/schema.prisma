@@ -33,6 +33,7 @@ model Fiction {
   image         String              @db.MediumText
   synopsis      String              @db.MediumText
   characters    String              @db.MediumText
+  setup         String              @db.LongText  @default("")
   user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        String
   favs          Fav[]
@@ -40,6 +41,10 @@ model Fiction {
   comments      Comment[]
   author        Author?              @relation(fields: [authorId], references: [id])
   authorId      Int?                 
+  isTranslated  String?             @default("")
+
+  @@index([userId])
+  @@index([authorId])
 }
 
 model Author {
@@ -55,13 +60,15 @@ model Author {
 model FictionStat {
   id                    Int       @id @default(autoincrement())
   fiction               Fiction   @relation(fields: [fictionId], references: [id], onDelete:Cascade)
-  fictionId             Int     @unique
+  fictionId             Int       @unique
   originality           Float
   verisimilitude        Float
   synopsisComposition   Float
   character             Float
   writing               Float
   value                 Float
+
+  @@index([fictionId])
 }
 
 model UserFictionStat {
@@ -77,6 +84,8 @@ model UserFictionStat {
     writing               Float
     value                 Float
     total                 Float
+
+    @@index([fictionId])
 }
 
 
@@ -96,6 +105,9 @@ model KeywordsOnFictions {
   keyword       Keyword?     @relation(fields: [keywordId], references: [id], onDelete:Cascade)
   keywordId     Int
   @@id([fictionId, keywordId])
+
+  @@index([fictionId])
+  @@index([keywordId])
 }
 
 model Category {
@@ -110,6 +122,9 @@ model CategoriesOnFictions {
   category      Category? @relation(fields: [categoryId], references: [id])
   categoryId    Int 
   @@id([fictionId, categoryId])
+
+  @@index([fictionId])
+  @@index([categoryId])
 }
 
 
@@ -150,6 +165,9 @@ model UserRationOnFiction {
   writing               Float
   value                 Float
   comment               String?
+
+  @@index([userId])
+  @@index([userFictionStatId])
 }
 
 model Token {
@@ -159,6 +177,8 @@ model Token {
   userId        String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId])
 }
 
 model Fav {
@@ -169,6 +189,9 @@ model Fav {
   fictionId     Int
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([fictionId])
 }
 
 //for next-auth
@@ -198,6 +221,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -217,4 +242,7 @@ model Comment {
   createdById       String
   fiction           Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId         Int
+
+  @@index([createdById])
+  @@index([fictionId])
 }

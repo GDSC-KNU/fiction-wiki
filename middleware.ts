@@ -19,10 +19,18 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   if (
     req.nextUrl.pathname.startsWith("/fictions/create") &&
-    !req.cookies.get("fdbssession")
+    (!req.cookies.get("fdbssession") || !session)
   ) {
     return NextResponse.rewrite(new URL("/enter", req.url));
   }
+
+  if (
+    req.nextUrl.pathname.includes("/edit") &&
+    (!req.cookies.get("fdbssession") || !session)
+  ) {
+    return NextResponse.rewrite(new URL("/enter", req.url));
+  }
+
   if (req.nextUrl.pathname.startsWith("/profile") && !session) {
     if (!session) {
       return NextResponse.rewrite(new URL("/enter", req.url));

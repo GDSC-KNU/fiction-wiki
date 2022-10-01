@@ -1,14 +1,17 @@
-import useUser from "@libs/client/useUser";
-import { Fiction, User, Comment } from "@prisma/client";
+import { Fiction, User, Comment, UserFictionStat } from "@prisma/client";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import router from "next/router";
+
 import useSWR from "swr";
 import Image from "next/image";
 
 interface CommentWithUser extends Comment {
   createdBy: User;
+  fiction: Fiction;
+  userFictionStat: UserFictionStatWithFiction;
+}
+
+interface UserFictionStatWithFiction extends UserFictionStat {
   fiction: Fiction;
 }
 

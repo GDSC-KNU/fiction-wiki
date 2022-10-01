@@ -184,8 +184,10 @@ async function handler(
         platforms,
         thumbId,
         volume,
+        isTranslated,
         type,
         mediaMix,
+        setup,
       },
       session: { user },
     } = req;
@@ -295,8 +297,10 @@ async function handler(
         characters,
         currentState,
         volume: +volume?.toString(),
+        isTranslated,
         type,
         mediaMix,
+        setup,
         categories: {
           // create: { category: { create: { name: genre } } },
           create:
@@ -316,7 +320,7 @@ async function handler(
           create: [
             ...subKeywordMany,
             ...mcKeywordMany,
-            ...KeywordMany,
+            ...keywordMany,
             ...consKeywordMany,
           ],
         },

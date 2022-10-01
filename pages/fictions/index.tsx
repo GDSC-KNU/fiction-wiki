@@ -354,7 +354,7 @@ const Fictions: NextPage<FictionsResponse> = ({
 };
 
 export async function getStaticProps() {
-  console.log("BUILDING fictions index Statically");
+  // console.log("BUILDING fictions index Statically");
   const fictions = await client.fiction.findMany({
     select: {
       type: true,
@@ -372,6 +372,7 @@ export async function getStaticProps() {
           category: true,
         },
       },
+      isTranslated: true,
     },
   });
 

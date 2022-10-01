@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { useEffect } from "react";
 import router from "next/router";
 import Image from "next/image";
+import logo from "../public/fdb_logo.png";
 
 export default function Gnb() {
   const { data: nextSession } = useSession();
@@ -21,10 +22,17 @@ export default function Gnb() {
   return (
     <header className="flex bg-blue-200 fixed top-0 w-full py-2 z-20">
       <nav className="flex w-full justify-between items-center">
-        <ul className="flex uppercase font-bold cursor-pointer">
-          <li className=" ml-3 mr-3">
-            <Link href="/">
-              <a href="/">Logo</a>
+        <ul className="flex uppercase font-bold ">
+          <li className=" ml-3 mr-3 cursor-pointer">
+            <Link className=" " href="/" passHref>
+              <a className=" flex items-center ">
+                <Image
+                  className=" rounded-xl border-blue-800 border-4 border-solid"
+                  src={logo}
+                  width={26}
+                  height={26}
+                ></Image>
+              </a>
             </Link>
           </li>
           <li className="mr-3">
