@@ -1,6 +1,6 @@
 import useSearch from "@libs/client/useSearch";
 import React, { useEffect, useRef, useState } from "react";
-import Input from "@components/Input";
+import Input from "@components/input";
 import { FieldErrors, useForm } from "react-hook-form";
 import { Fiction } from "@prisma/client";
 import useSWR from "swr";
