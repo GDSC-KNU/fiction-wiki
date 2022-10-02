@@ -1,6 +1,6 @@
 import Button from "@components/button";
 import FictionRadarChart from "@components/FictionRadarChart";
-import Input from "@components/Input";
+import Input from "@components/input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
 import {
@@ -86,7 +86,7 @@ interface FictionWithMore extends Fiction {
 const EditFiction: NextPage = () => {
   ///setup MdEditor
   const [md, setMd] = useState<string | undefined>("");
-  const handleChange = useCallback((md) => {
+  const handleChange = useCallback((md: any) => {
     setMd(md);
   }, []);
 

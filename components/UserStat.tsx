@@ -3,7 +3,7 @@ import { Fiction, UserRationOnFiction } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FieldErrors, useForm } from "react-hook-form";
 import Button from "./button";
-import Input from "@components/Input";
+import Input from "@components/input";
 import useSWR, { useSWRConfig } from "swr";
 import { validateRequest } from "twilio/lib/webhooks/webhooks";
 import { useSession } from "next-auth/react";
