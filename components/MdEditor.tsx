@@ -10,7 +10,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 const MdEditor = () => {
   const [md, setMd] = useState<string | undefined>("# Hello World");
 
-  const handleChange = useCallback((md) => {
+  const handleChange = useCallback((md: any) => {
     setMd(md);
     console.log(md);
   }, []);

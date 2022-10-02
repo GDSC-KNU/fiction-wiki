@@ -15,10 +15,15 @@
       ],
       "name": "middleware",
       "page": "/",
-      "regexp": "^/.*$",
-      "wasm": []
+      "matchers": [
+        {
+          "regexp": "^/.*$"
+        }
+      ],
+      "wasm": [],
+      "assets": []
     }
   },
   "functions": {},
-  "version": 1
+  "version": 2
 }
