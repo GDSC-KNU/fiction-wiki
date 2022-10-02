@@ -2,19 +2,21 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Top from "@components/Top";
 import Footer from "@components/Footer";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { SWRConfig } from "swr";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { RecoilRoot } from "recoil";
+import { Session } from "next-auth";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+// const { data: session } = useSession();
+
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps<{
+  session: Session;
+}>) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={pageProps.session}>
       <SWRConfig
         value={{
           fetcher: (url: string) =>
