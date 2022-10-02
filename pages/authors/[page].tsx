@@ -34,7 +34,7 @@ interface IParams extends ParsedUrlQuery {
   page: string;
 }
 
-const authorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
+const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   const [pageIndex, setPageIndex] = useRecoilState(authorPageAtom);
   let router = useRouter();
 
@@ -88,4 +88,4 @@ export const getStaticProps: GetStaticProps = async (
   };
 };
 
-export default authorPage;
+export default AuthorPage;

@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import useUser from "@libs/client/useUser";
-import useSWR from "swr";
-import { useEffect } from "react";
-import router from "next/router";
 import Image from "next/image";
 import logo from "../public/fdb_logo.png";
 
@@ -64,9 +61,10 @@ export default function Gnb() {
                 <a className=" flex items-center">
                   <Image
                     className=" rounded-full"
-                    src={nextSession.user!.image || ""}
+                    src={nextSession.user!.image ?? ""}
                     width={26}
                     height={26}
+                    alt={nextSession.user!.id ?? ""}
                   ></Image>
                 </a>
               </Link>
@@ -77,9 +75,11 @@ export default function Gnb() {
               Sign out
             </button>
           ) : (
-            <Link href="/enter">
-              <li className=" mr-5 hover:cursor-pointer">Enter</li>
-            </Link>
+            <li>
+              <Link href="/enter">
+                <a className=" mr-5 hover:cursor-pointer">Enter</a>
+              </Link>
+            </li>
           )}
         </ul>
       </nav>

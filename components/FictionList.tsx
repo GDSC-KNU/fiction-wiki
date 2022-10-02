@@ -73,6 +73,7 @@ export default function FictionList(props: any) {
                           className=" cursor-pointer"
                           src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
                           layout="fill"
+                          alt={fiction.title}
                         />
                       </a>
                     )) || <a className=" w-[142px] h-[199.69px]"></a>}
@@ -309,6 +310,7 @@ export default function FictionList(props: any) {
                     src="/anoynymous_user.png"
                     width={142}
                     height={160}
+                    alt={author.name}
                   />
                   <div className=" ml-1 absolute bottom-[17.2rem] z-10"></div>
                   <div className=" flex-col px-2 pb-2">

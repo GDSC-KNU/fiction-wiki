@@ -34,7 +34,12 @@ const Profile: NextPage = () => {
         <h5 className=" font-bold">계정 정보</h5>
         <div className=" ">
           {/* <img src={session?.user?.image}></img> */}
-          <Image src={session?.user?.image || "/"} width={64} height={64} />
+          <Image
+            src={session?.user?.image || "/"}
+            width={64}
+            height={64}
+            alt={session?.user?.id}
+          />
           <div>{`사용자 - ` + session?.user?.name}</div>
         </div>
       </div>

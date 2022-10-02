@@ -6,7 +6,6 @@ import {
   Fiction,
   FictionStat,
   Keyword,
-  UserFictionStat,
   UserRationOnFiction,
   KeywordsOnFictions,
   Author,
@@ -15,8 +14,6 @@ import {
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import Input from "@components/Input";
-import { useForm } from "react-hook-form";
 import UserStat from "@components/UserStat";
 import client from "@libs/server/client";
 import Image from "next/image";
@@ -130,6 +127,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
               layout="fill"
               objectFit="contain"
+              alt={fiction.title}
             />
           </div>
           <div className=" px-4">
@@ -185,7 +183,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">작가</div>
-                <Link href={`/authors/${fiction?.author?.name}`}>
+                <Link passHref href={`/authors/${fiction?.author?.name}`}>
                   <a
                     title={`${fiction?.author?.name}`}
                     className=" col-span-6 hover:cursor-pointer text-blue-500"
