@@ -1,10 +1,6 @@
-import useSearch from "@libs/client/useSearch";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import Input from "@components/input";
 import { FieldErrors, useForm } from "react-hook-form";
-import { Fiction } from "@prisma/client";
-import useSWR from "swr";
-import Router from "next/router";
 import { useRouter } from "next/router";
 
 interface SearchForm {
@@ -13,8 +9,8 @@ interface SearchForm {
 }
 
 export default function Search() {
-  const [search, setSearch] = useState<string>();
-  const [input, setInput] = useState("");
+  // const [search, setSearch] = useState<string>();
+  // const [input, setInput] = useState("");
   const router = useRouter();
 
   const onValid = async (data: SearchForm) => {
