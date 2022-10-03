@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { useRecoilState } from "recoil";
-import { pageAtom } from "../../pages/atoms";
+import { pageAtom } from "../../atoms";
 
 export default function useSearch(search: string | undefined) {
   const [page, setPage] = useRecoilState(pageAtom);
