@@ -1,0 +1,1 @@
+{"c":["webpack"],"r":["pages/fictions/[...params]"],"m":["./components/fictionList.tsx","./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=C%3A%5CUsers%5Cmk448%5CDv_study%5Cfdbs_proto%5CfdbsVer1.0%5Cpages%5Cfictions%5C%5B...params%5D.tsx&page=%2Ffictions%2F%5B...params%5D!","./pages/atoms.ts","./pages/fictions/[...params].tsx"]}
