@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { pageAtom } from "pages/atoms";
+import { pageAtom } from "../../../../atoms";
 import { useRouter } from "next/router";
 
 interface IParams extends ParsedUrlQuery {

@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { pageAtom, searchPageAtom } from "pages/atoms";
+import { pageAtom, searchPageAtom } from "../../../../atoms";
 
 const SearchKeyword: NextPage = (fictions, fictionsCount) => {
   const router = useRouter();

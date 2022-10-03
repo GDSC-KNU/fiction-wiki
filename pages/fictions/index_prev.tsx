@@ -8,8 +8,6 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { title } from "process";
-import useSWR from "swr";
 import client from "@libs/server/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";

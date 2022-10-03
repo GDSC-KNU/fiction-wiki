@@ -29,11 +29,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/authors/[page].js"
-    ],
-    "/fictions/[...params]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/fictions/[...params].js"
     ]
   },
   "ampFirstPages": []
