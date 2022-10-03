@@ -1,6 +1,6 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { getSession } from "next-auth/react";
-import { NextResponse, userAgent } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const requestForNextAuth = {
@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   };
   //@ts-ignore
   const session = await getSession({ req: requestForNextAuth });
-  const ua = userAgent(req);
+  // const ua = userAgent(req);
   // if (ua?.isBot) {
   //   return NextResponse.next();
   // }

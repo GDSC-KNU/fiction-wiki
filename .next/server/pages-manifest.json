@@ -3,12 +3,10 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/search/keyword/[search]/[page]": "pages/search/keyword/[search]/[page].js",
   "/": "pages/index.js",
-  "/api/fictions/[id]/comment": "pages/api/fictions/[id]/comment.js",
-  "/api/fictions/[id]/fav": "pages/api/fictions/[id]/fav.js",
-  "/api/users/me": "pages/api/users/me.js",
-  "/api/fictions/[id]": "pages/api/fictions/[id].js",
   "/fictions/[id]": "pages/fictions/[id].js",
-  "/enter": "pages/enter.js"
+  "/api/fictions/[id]": "pages/api/fictions/[id].js",
+  "/api/users/me": "pages/api/users/me.js",
+  "/api/fictions/[id]/fav": "pages/api/fictions/[id]/fav.js",
+  "/api/fictions/[id]/comment": "pages/api/fictions/[id]/comment.js"
 }
