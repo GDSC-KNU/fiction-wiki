@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import Top from "@components/Top";
-import Footer from "@components/Footer";
+import Top from "@components/top";
+import Footer from "@components/footer";
 import { SessionProvider, useSession } from "next-auth/react";
 import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
