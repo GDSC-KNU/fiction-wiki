@@ -7,7 +7,7 @@ import type {
 import client from "@libs/server/client";
 import { Fiction, Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { authorPageAtom } from "pages/atoms";

@@ -19,7 +19,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { authorPageAtom } from "pages/atoms";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 
