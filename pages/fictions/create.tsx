@@ -1,9 +1,8 @@
 import Button from "@components/button";
 import FictionRadarChart from "@components/FictionRadarChart";
-import Input from "@components/input";
+import Input from "@components/Input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";
-// import useUser from "@libs/client/useUser";
 import { Fiction } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-// import MdEditor from "@components/MdEditor";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 
