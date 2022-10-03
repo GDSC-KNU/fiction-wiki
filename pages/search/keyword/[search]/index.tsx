@@ -1,4 +1,4 @@
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

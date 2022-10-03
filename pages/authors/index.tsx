@@ -1,21 +1,6 @@
-import useUser from "@libs/client/useUser";
-import {
-  Fiction,
-  Keyword,
-  FictionStat,
-  KeywordsOnFictions,
-  UserFictionStat,
-  Author,
-} from "@prisma/client";
-import type {
-  GetStaticPaths,
-  GetStaticProps,
-  GetStaticPropsContext,
-  NextPage,
-} from "next";
-import Link from "next/link";
+import { Author } from "@prisma/client";
+import type { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import client from "@libs/server/client";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { authorPageAtom } from "pages/atoms";
@@ -28,14 +13,14 @@ interface AuthorResponse {
   authorsCount: number;
 }
 
-interface IParams extends ParsedUrlQuery {
-  page: string;
-}
+// interface IParams extends ParsedUrlQuery {
+//   page: string;
+// }
 
 const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   let router = useRouter();
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   console.log(authorPageIndex);
 
   useEffect(() => {

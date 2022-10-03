@@ -10,7 +10,7 @@ import type { GetStaticPaths, NextPage } from "next";
 import useSWR from "swr";
 import client from "@libs/server/client";
 import React, { useEffect, useRef, useState } from "react";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { pageAtom } from "pages/atoms";

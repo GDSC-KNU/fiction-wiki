@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import FictionRadarChart from "@components/FictionRadarChart";
+import FictionRadarChart from "@components/fictionRadarChart";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import {
@@ -14,7 +14,7 @@ import {
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import UserStat from "@components/UserStat";
+import UserStat from "@components/userStat";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";

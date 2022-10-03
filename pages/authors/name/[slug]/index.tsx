@@ -1,25 +1,13 @@
-import useUser from "@libs/client/useUser";
 import type {
   GetStaticPaths,
   GetStaticProps,
   GetStaticPropsContext,
   NextPage,
 } from "next";
-import Link from "next/link";
-import useSWR from "swr";
 import client from "@libs/server/client";
-import {
-  Fiction,
-  FictionStat,
-  Keyword,
-  UserFictionStat,
-  UserRationOnFiction,
-  KeywordsOnFictions,
-  Author,
-} from "@prisma/client";
-import Image from "next/image";
+import { Fiction, Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 
 interface AuthorWithFictions extends Author {
   fictions: Fiction[];
@@ -29,13 +17,13 @@ interface AuthorResponse {
   author: AuthorWithFictions;
 }
 
-type Props = {
-  authors: Author[];
-};
+// type Props = {
+//   authors: Author[];
+// };
 
-interface Params extends ParsedUrlQuery {
-  slug: string;
-}
+// interface Params extends ParsedUrlQuery {
+//   slug: string;
+// }
 
 interface IParams extends ParsedUrlQuery {
   slug: string;

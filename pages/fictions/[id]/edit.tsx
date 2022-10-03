@@ -1,5 +1,5 @@
 import Button from "@components/button";
-import FictionRadarChart from "@components/FictionRadarChart";
+import FictionRadarChart from "@components/fictionRadarChart";
 import Input from "@components/input";
 import Textarea from "@components/textarea";
 import useMutation from "@libs/client/useMutation";

@@ -5,13 +5,12 @@ import {
   KeywordsOnFictions,
   UserFictionStat,
   Author,
-  Category,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import useSWR from "swr";
 import client from "@libs/server/client";
 import React, { useEffect, useRef, useState } from "react";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { pageAtom } from "pages/atoms";

@@ -1,4 +1,3 @@
-import useUser from "@libs/client/useUser";
 import {
   Fiction,
   Keyword,

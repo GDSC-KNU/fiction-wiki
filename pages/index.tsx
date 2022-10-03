@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { Author, Fiction, UserFictionStat } from "@prisma/client";
+import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
-import Search from "@components/Search";
-import FictionList from "@components/FictionList";
+import Search from "@components/search";
+import FictionList from "@components/fictionList";
 
 export interface UserFictionStatWithMore extends UserFictionStat {
   total: number;

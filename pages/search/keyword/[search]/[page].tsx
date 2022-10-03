@@ -7,7 +7,7 @@ import type {
 import client from "@libs/server/client";
 import { Fiction } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/FictionList";
+import FictionList from "@components/fictionList";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { pageAtom } from "pages/atoms";
