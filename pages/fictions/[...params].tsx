@@ -13,7 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { pageAtom } from "pages/atoms";
+import { pageAtom } from "../../atoms";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {

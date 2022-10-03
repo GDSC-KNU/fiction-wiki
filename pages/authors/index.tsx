@@ -3,7 +3,7 @@ import type { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import client from "@libs/server/client";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { authorPageAtom } from "pages/atoms";
+import { authorPageAtom } from "../../atoms";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";

@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { authorPageAtom } from "pages/atoms";
+import { authorPageAtom } from "../../atoms";
 import { useRouter } from "next/router";
 
 // interface AuthorWithFictions extends Author {

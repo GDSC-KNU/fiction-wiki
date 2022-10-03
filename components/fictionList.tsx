@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { pageAtom, authorPageAtom, searchPageAtom } from "../pages/atoms";
+import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
 import Pagination from "react-js-pagination";
 
 interface UserFictionStatWithMore extends UserFictionStat {

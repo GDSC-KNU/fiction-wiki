@@ -25,10 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/fictions/[id]": [
+    "/authors/[page]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/fictions/[id].js"
+      "static/chunks/pages/authors/[page].js"
+    ],
+    "/fictions/[...params]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/fictions/[...params].js"
     ]
   },
   "ampFirstPages": []
