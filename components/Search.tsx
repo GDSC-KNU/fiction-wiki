@@ -1,6 +1,5 @@
 import React from "react";
-// import Input from "@components/Input";
-import Input from "@components/Input";
+import Input from "@components/input";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
