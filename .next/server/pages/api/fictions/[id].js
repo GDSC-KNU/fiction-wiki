@@ -1,95 +1,354 @@
 "use strict";
-/*
- * ATTENTION: An "eval-source-map" devtool has been used.
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 (() => {
 var exports = {};
-exports.id = "pages/api/fictions/[id]";
-exports.ids = ["pages/api/fictions/[id]"];
+exports.id = 634;
+exports.ids = [634];
 exports.modules = {
 
-/***/ "@prisma/client":
-/*!*********************************!*\
-  !*** external "@prisma/client" ***!
-  \*********************************/
+/***/ 3524:
 /***/ ((module) => {
 
 module.exports = require("@prisma/client");
 
 /***/ }),
 
-/***/ "next-auth/react":
-/*!**********************************!*\
-  !*** external "next-auth/react" ***!
-  \**********************************/
+/***/ 1649:
 /***/ ((module) => {
 
 module.exports = require("next-auth/react");
 
 /***/ }),
 
-/***/ "iron-session":
-/*!*******************************!*\
-  !*** external "iron-session" ***!
-  \*******************************/
+/***/ 1454:
 /***/ ((module) => {
 
 module.exports = import("iron-session");;
 
 /***/ }),
 
-/***/ "(api)/./libs/server/client.ts":
-/*!*******************************!*\
-  !*** ./libs/server/client.ts ***!
-  \*******************************/
+/***/ 5132:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @prisma/client */ \"@prisma/client\");\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_0__);\n\nconst client = global.client || new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient();\nif (true) global.client = client;\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient());\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWJzL3NlcnZlci9jbGllbnQudHMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQThDO0FBTTlDLE1BQU1DLE1BQU0sR0FBR0MsTUFBTSxDQUFDRCxNQUFNLElBQUksSUFBSUQsd0RBQVksRUFBRTtBQUVsRCxJQUFJRyxJQUFzQyxFQUFFRCxNQUFNLENBQUNELE1BQU0sR0FBR0EsTUFBTSxDQUFDO0FBRW5FLGlFQUFlLElBQUlELHdEQUFZLEVBQUUsRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL2NhcnJvdC1tYXJrZXQvLi9saWJzL3NlcnZlci9jbGllbnQudHM/MmIxNSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBQcmlzbWFDbGllbnQgfSBmcm9tIFwiQHByaXNtYS9jbGllbnRcIjtcclxuXHJcbmRlY2xhcmUgZ2xvYmFsIHtcclxuICB2YXIgY2xpZW50OiBQcmlzbWFDbGllbnQgfCB1bmRlZmluZWQ7XHJcbn1cclxuXHJcbmNvbnN0IGNsaWVudCA9IGdsb2JhbC5jbGllbnQgfHwgbmV3IFByaXNtYUNsaWVudCgpO1xyXG5cclxuaWYgKHByb2Nlc3MuZW52Lk5PREVfRU5WID09PSBcImRldmVsb3BtZW50XCIpIGdsb2JhbC5jbGllbnQgPSBjbGllbnQ7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBuZXcgUHJpc21hQ2xpZW50KCk7XHJcbiJdLCJuYW1lcyI6WyJQcmlzbWFDbGllbnQiLCJjbGllbnQiLCJnbG9iYWwiLCJwcm9jZXNzIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./libs/server/client.ts\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3524);
+/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_0__);
+
+const client = global.client || new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient();
+if (false) {}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient());
+
 
 /***/ }),
 
-/***/ "(api)/./libs/server/withHandler.ts":
-/*!************************************!*\
-  !*** ./libs/server/withHandler.ts ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ withHandler)\n/* harmony export */ });\nfunction withHandler({ methods , isPrivate =false , handler  }) {\n    return async function(req, res) {\n        // if (!req.session.user) {\n        //   console.log(\"not logged in\");\n        //   return res.status(200).json({ ok: false, error: \"Plase Log in\" });\n        // }\n        console.log(req.method);\n        if (req.method && !methods.includes(req.method)) {\n            return res.status(405).end();\n        }\n        if (isPrivate && !req.session.user) {\n            return res.status(401).json({\n                ok: false,\n                error: \"Plase Log in\"\n            });\n        }\n        try {\n            await handler(req, res);\n        } catch (error) {\n            console.log(error);\n            return res.status(500).json({\n                error\n            });\n        }\n    };\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWJzL3NlcnZlci93aXRoSGFuZGxlci50cy5qcyIsIm1hcHBpbmdzIjoiOzs7O0FBZWUsU0FBU0EsV0FBVyxDQUFDLEVBQ2xDQyxPQUFPLEdBQ1BDLFNBQVMsRUFBRyxLQUFLLEdBQ2pCQyxPQUFPLEdBQ0ksRUFBRTtJQUNiLE9BQU8sZUFDTEMsR0FBbUIsRUFDbkJDLEdBQW9CLEVBQ047UUFDZCwyQkFBMkI7UUFDM0Isa0NBQWtDO1FBQ2xDLHVFQUF1RTtRQUN2RSxJQUFJO1FBQ0pDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDSCxHQUFHLENBQUNJLE1BQU0sQ0FBQyxDQUFDO1FBQ3hCLElBQUlKLEdBQUcsQ0FBQ0ksTUFBTSxJQUFJLENBQUNQLE9BQU8sQ0FBQ1EsUUFBUSxDQUFDTCxHQUFHLENBQUNJLE1BQU0sQ0FBUSxFQUFFO1lBQ3RELE9BQU9ILEdBQUcsQ0FBQ0ssTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDQyxHQUFHLEVBQUUsQ0FBQztRQUMvQixDQUFDO1FBQ0QsSUFBSVQsU0FBUyxJQUFJLENBQUNFLEdBQUcsQ0FBQ1EsT0FBTyxDQUFDQyxJQUFJLEVBQUU7WUFDbEMsT0FBT1IsR0FBRyxDQUFDSyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUNJLElBQUksQ0FBQztnQkFBRUMsRUFBRSxFQUFFLEtBQUs7Z0JBQUVDLEtBQUssRUFBRSxjQUFjO2FBQUUsQ0FBQyxDQUFDO1FBQ3BFLENBQUM7UUFDRCxJQUFJO1lBQ0YsTUFBTWIsT0FBTyxDQUFDQyxHQUFHLEVBQUVDLEdBQUcsQ0FBQyxDQUFDO1FBQzFCLEVBQUUsT0FBT1csS0FBSyxFQUFFO1lBQ2RWLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDUyxLQUFLLENBQUMsQ0FBQztZQUNuQixPQUFPWCxHQUFHLENBQUNLLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQ0ksSUFBSSxDQUFDO2dCQUFFRSxLQUFLO2FBQUUsQ0FBQyxDQUFDO1FBQ3pDLENBQUM7SUFDSCxDQUFDLENBQUM7QUFDSixDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vY2Fycm90LW1hcmtldC8uL2xpYnMvc2VydmVyL3dpdGhIYW5kbGVyLnRzPzhlZjUiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTmV4dEFwaVJlcXVlc3QsIE5leHRBcGlSZXNwb25zZSB9IGZyb20gXCJuZXh0XCI7XHJcblxyXG5leHBvcnQgaW50ZXJmYWNlIFJlc3BvbnNlVHlwZSB7XHJcbiAgb2s6IGJvb2xlYW47XHJcbiAgW2tleTogc3RyaW5nXTogYW55O1xyXG59XHJcblxyXG50eXBlIG1ldGhvZCA9IFwiR0VUXCIgfCBcIlBPU1RcIiB8IFwiREVMRVRFXCIgfCBcIlBVVFwiO1xyXG5cclxuaW50ZXJmYWNlIENvbmZpZ1R5cGUge1xyXG4gIG1ldGhvZHM6IG1ldGhvZFtdO1xyXG4gIGhhbmRsZXI6IChyZXE6IE5leHRBcGlSZXF1ZXN0LCByZXM6IE5leHRBcGlSZXNwb25zZSkgPT4gdm9pZDtcclxuICBpc1ByaXZhdGU/OiBib29sZWFuO1xyXG59XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiB3aXRoSGFuZGxlcih7XHJcbiAgbWV0aG9kcyxcclxuICBpc1ByaXZhdGUgPSBmYWxzZSxcclxuICBoYW5kbGVyLFxyXG59OiBDb25maWdUeXBlKSB7XHJcbiAgcmV0dXJuIGFzeW5jIGZ1bmN0aW9uIChcclxuICAgIHJlcTogTmV4dEFwaVJlcXVlc3QsXHJcbiAgICByZXM6IE5leHRBcGlSZXNwb25zZVxyXG4gICk6IFByb21pc2U8YW55PiB7XHJcbiAgICAvLyBpZiAoIXJlcS5zZXNzaW9uLnVzZXIpIHtcclxuICAgIC8vICAgY29uc29sZS5sb2coXCJub3QgbG9nZ2VkIGluXCIpO1xyXG4gICAgLy8gICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oeyBvazogZmFsc2UsIGVycm9yOiBcIlBsYXNlIExvZyBpblwiIH0pO1xyXG4gICAgLy8gfVxyXG4gICAgY29uc29sZS5sb2cocmVxLm1ldGhvZCk7XHJcbiAgICBpZiAocmVxLm1ldGhvZCAmJiAhbWV0aG9kcy5pbmNsdWRlcyhyZXEubWV0aG9kIGFzIGFueSkpIHtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5lbmQoKTtcclxuICAgIH1cclxuICAgIGlmIChpc1ByaXZhdGUgJiYgIXJlcS5zZXNzaW9uLnVzZXIpIHtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAxKS5qc29uKHsgb2s6IGZhbHNlLCBlcnJvcjogXCJQbGFzZSBMb2cgaW5cIiB9KTtcclxuICAgIH1cclxuICAgIHRyeSB7XHJcbiAgICAgIGF3YWl0IGhhbmRsZXIocmVxLCByZXMpO1xyXG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcclxuICAgICAgY29uc29sZS5sb2coZXJyb3IpO1xyXG4gICAgICByZXR1cm4gcmVzLnN0YXR1cyg1MDApLmpzb24oeyBlcnJvciB9KTtcclxuICAgIH1cclxuICB9O1xyXG59XHJcbiJdLCJuYW1lcyI6WyJ3aXRoSGFuZGxlciIsIm1ldGhvZHMiLCJpc1ByaXZhdGUiLCJoYW5kbGVyIiwicmVxIiwicmVzIiwiY29uc29sZSIsImxvZyIsIm1ldGhvZCIsImluY2x1ZGVzIiwic3RhdHVzIiwiZW5kIiwic2Vzc2lvbiIsInVzZXIiLCJqc29uIiwib2siLCJlcnJvciJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./libs/server/withHandler.ts\n");
-
-/***/ }),
-
-/***/ "(api)/./libs/server/withSession.ts":
-/*!************************************!*\
-  !*** ./libs/server/withSession.ts ***!
-  \************************************/
+/***/ 7468:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"withApiSession\": () => (/* binding */ withApiSession)\n/* harmony export */ });\n/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session/next */ \"(api)/./node_modules/iron-session/next/dist/index.mjs\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_0__]);\niron_session_next__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\nconst cookieOptions = {\n    cookieName: \"fdbssession\",\n    password: process.env.COOKIE_PASSWORD\n};\nfunction withApiSession(fn) {\n    return (0,iron_session_next__WEBPACK_IMPORTED_MODULE_0__.withIronSessionApiRoute)(fn, cookieOptions);\n}\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWJzL3NlcnZlci93aXRoU2Vzc2lvbi50cy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUE0RDtBQVU1RCxNQUFNQyxhQUFhLEdBQUc7SUFDcEJDLFVBQVUsRUFBRSxhQUFhO0lBQ3pCQyxRQUFRLEVBQUVDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDQyxlQUFlO0NBQ3RDO0FBRU0sU0FBU0MsY0FBYyxDQUFDQyxFQUFPLEVBQUU7SUFDdEMsT0FBT1IsMEVBQXVCLENBQUNRLEVBQUUsRUFBRVAsYUFBYSxDQUFDLENBQUM7QUFDcEQsQ0FBQyIsInNvdXJjZXMiOlsid2VicGFjazovL2NhcnJvdC1tYXJrZXQvLi9saWJzL3NlcnZlci93aXRoU2Vzc2lvbi50cz9hZTdmIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHdpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlIH0gZnJvbSBcImlyb24tc2Vzc2lvbi9uZXh0XCI7XHJcblxyXG5kZWNsYXJlIG1vZHVsZSBcImlyb24tc2Vzc2lvblwiIHtcclxuICBpbnRlcmZhY2UgSXJvblNlc3Npb25EYXRhIHtcclxuICAgIHVzZXI/OiB7XHJcbiAgICAgIGlkOiBzdHJpbmc7XHJcbiAgICB9O1xyXG4gIH1cclxufVxyXG5cclxuY29uc3QgY29va2llT3B0aW9ucyA9IHtcclxuICBjb29raWVOYW1lOiBcImZkYnNzZXNzaW9uXCIsXHJcbiAgcGFzc3dvcmQ6IHByb2Nlc3MuZW52LkNPT0tJRV9QQVNTV09SRCEsXHJcbn07XHJcblxyXG5leHBvcnQgZnVuY3Rpb24gd2l0aEFwaVNlc3Npb24oZm46IGFueSkge1xyXG4gIHJldHVybiB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZShmbiwgY29va2llT3B0aW9ucyk7XHJcbn1cclxuIl0sIm5hbWVzIjpbIndpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlIiwiY29va2llT3B0aW9ucyIsImNvb2tpZU5hbWUiLCJwYXNzd29yZCIsInByb2Nlc3MiLCJlbnYiLCJDT09LSUVfUEFTU1dPUkQiLCJ3aXRoQXBpU2Vzc2lvbiIsImZuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./libs/server/withSession.ts\n");
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _libs_server_withHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9142);
+/* harmony import */ var _libs_server_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5132);
+/* harmony import */ var _libs_server_withSession__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2879);
+/* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1649);
+/* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_auth_react__WEBPACK_IMPORTED_MODULE_2__);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_libs_server_withSession__WEBPACK_IMPORTED_MODULE_1__]);
+_libs_server_withSession__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
 
-/***/ }),
 
-/***/ "(api)/./pages/api/fictions/[id]/index.ts":
-/*!******************************************!*\
-  !*** ./pages/api/fictions/[id]/index.ts ***!
-  \******************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _libs_server_withHandler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @libs/server/withHandler */ \"(api)/./libs/server/withHandler.ts\");\n/* harmony import */ var _libs_server_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @libs/server/client */ \"(api)/./libs/server/client.ts\");\n/* harmony import */ var _libs_server_withSession__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @libs/server/withSession */ \"(api)/./libs/server/withSession.ts\");\n/* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next-auth/react */ \"next-auth/react\");\n/* harmony import */ var next_auth_react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_auth_react__WEBPACK_IMPORTED_MODULE_3__);\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_libs_server_withSession__WEBPACK_IMPORTED_MODULE_2__]);\n_libs_server_withSession__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\n\n\n\nasync function handler(req, res) {\n    let { query: { id  } , session: { user  } ,  } = req;\n    const session = await (0,next_auth_react__WEBPACK_IMPORTED_MODULE_3__.getSession)({\n        req\n    });\n    const prevFiction = await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].fiction.findUnique({\n        where: {\n            id: +id.toString()\n        },\n        include: {\n            fictionStat: true,\n            userFictionStat: {\n                include: {\n                    _count: {\n                        select: {\n                            users: true\n                        }\n                    }\n                }\n            },\n            keywords: {\n                include: {\n                    keyword: {\n                        select: {\n                            name: true,\n                            isOfHeroine: true,\n                            isOfMC: true,\n                            isOfCons: true\n                        }\n                    }\n                }\n            },\n            categories: {\n                include: {\n                    category: true\n                }\n            },\n            author: {\n                select: {\n                    name: true,\n                    relatedName: true\n                }\n            }\n        }\n    });\n    // console.log(prevFiction);\n    // console.log(prevFiction?.categories[0].category.name);\n    if (req.method === \"GET\") {\n        const arr = [];\n        prevFiction?.keywords.map((item)=>arr.push(item.keyword?.name));\n        const keywordSame = arr.map((word)=>({\n                keywords: {\n                    some: {\n                        keyword: {\n                            name: {\n                                equals: word\n                            }\n                        }\n                    }\n                }\n            }));\n        const arr2 = [];\n        const similarFictions = await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].fiction.findMany({\n            where: {\n                OR: keywordSame,\n                AND: {\n                    id: {\n                        not: prevFiction?.id\n                    }\n                }\n            }\n        });\n        similarFictions.map((item)=>arr2.push([\n                item.id,\n                item.title\n            ]));\n        const isLiked = Boolean(await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].fav.findFirst({\n            where: {\n                fictionId: prevFiction?.id,\n                userId: session?.user?.id\n            },\n            select: {\n                id: true\n            }\n        }));\n        // userfictionstat\n        const ration = await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].userFictionStat.findFirst({\n            where: {\n                fictionId: prevFiction?.id\n            },\n            select: {\n                originality: true,\n                writing: true,\n                character: true,\n                verisimilitude: true,\n                synopsisComposition: true,\n                value: true\n            }\n        });\n        // userRationOnFiction\n        const userRation = await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].userRationOnFiction.findFirst({\n            where: {\n                userId: session?.user?.id\n            }\n        });\n        res.json({\n            ok: true,\n            prevFiction,\n            isLiked,\n            ration,\n            userRation,\n            similarFictions\n        });\n    }\n    if (req.method === \"PUT\") {\n        let { query: { id: id1  } , body: { title , relatedTitle , author , relatedAuthor , nationality , genre , date , currentState , status: [originality, writing, character, verisimilitude, synopsisComposition, value, ] , synopsis , characters , keywords , mcKeywords , subKeywords , consKeywords , original , platforms , thumbId , volume , type , mediaMix , isTranslated , setup ,  } , session: { user: user1  } ,  } = req;\n        console.log(setup);\n        genre = genre.split(\" \").join(\"\").split(\",\").filter((item)=>item !== \"\");\n        const genreMany = genre.map((item)=>({\n                category: {\n                    connectOrCreate: {\n                        where: {\n                            name: item\n                        },\n                        create: {\n                            name: item\n                        }\n                    }\n                }\n            }));\n        keywords = keywords.filter((item)=>item !== \"\");\n        const KeywordMany = keywords.map((item)=>({\n                keyword: {\n                    connectOrCreate: {\n                        where: {\n                            name: item\n                        },\n                        create: {\n                            name: item\n                        }\n                    }\n                }\n            }));\n        mcKeywords = mcKeywords.filter((item)=>item !== \"\");\n        const mcKeywordMany = mcKeywords.map((item)=>({\n                keyword: {\n                    connectOrCreate: {\n                        where: {\n                            name: item\n                        },\n                        create: {\n                            name: item,\n                            isOfMC: true\n                        }\n                    }\n                }\n            }));\n        subKeywords = subKeywords.filter((item)=>item !== \"\");\n        const subKeywordMany = subKeywords.map((item)=>({\n                keyword: {\n                    connectOrCreate: {\n                        where: {\n                            name: item\n                        },\n                        create: {\n                            name: item,\n                            isOfHeroine: true\n                        }\n                    }\n                }\n            }));\n        consKeywords = consKeywords.filter((item)=>item !== \"\");\n        const consKeywordMany = consKeywords.map((item)=>({\n                keyword: {\n                    connectOrCreate: {\n                        where: {\n                            name: item\n                        },\n                        create: {\n                            name: item,\n                            isOfCons: true\n                        }\n                    }\n                }\n            }));\n        // const categoryMany = prevFiction?.categories.map((item) => ({\n        //   category: {\n        //     upsert: {\n        //       name: item?.category!.name,\n        //     },\n        //   },\n        // }));\n        const fiction = await _libs_server_client__WEBPACK_IMPORTED_MODULE_1__[\"default\"].fiction.update({\n            where: {\n                id: +id1.toString()\n            },\n            data: {\n                title,\n                relatedTitle,\n                author: {\n                    connectOrCreate: {\n                        where: {\n                            name: author\n                        },\n                        create: {\n                            name: author\n                        }\n                    }\n                },\n                relatedAuthor,\n                nationality,\n                startDate: new Date(date[0]),\n                endDate: new Date(date[1]),\n                original,\n                platforms: platforms[0],\n                image: thumbId,\n                synopsis,\n                characters,\n                currentState,\n                volume: +volume?.toString(),\n                type,\n                isTranslated,\n                mediaMix,\n                setup,\n                // categories: {\n                //   deleteMany: {\n                //     fictionId: +id!.toString(),\n                //   },\n                //   create: {\n                //     category: {\n                //       connectOrCreate: {\n                //         where: {\n                //           name: genre,\n                //         },\n                //         create: {\n                //           name: genre,\n                //         },\n                //       },\n                //     },\n                //   },\n                // },\n                categories: {\n                    deleteMany: {\n                        fictionId: +id1.toString()\n                    },\n                    create: [\n                        ...genreMany\n                    ]\n                },\n                keywords: {\n                    deleteMany: {\n                        fictionId: +id1.toString()\n                    },\n                    create: [\n                        ...subKeywordMany,\n                        ...mcKeywordMany,\n                        ...KeywordMany,\n                        ...consKeywordMany, \n                    ]\n                },\n                fictionStat: {\n                    update: {\n                        originality: +originality,\n                        writing: +writing,\n                        character: +character,\n                        verisimilitude: +verisimilitude,\n                        synopsisComposition: +synopsisComposition,\n                        value: +value\n                    }\n                }\n            }\n        });\n        res.json({\n            ok: true,\n            fiction\n        });\n    }\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_libs_server_withSession__WEBPACK_IMPORTED_MODULE_2__.withApiSession)((0,_libs_server_withHandler__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n    methods: [\n        \"GET\",\n        \"PUT\"\n    ],\n    handler\n})));\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvZmljdGlvbnMvW2lkXS9pbmRleC50cy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFDcUU7QUFDNUI7QUFDaUI7QUFDYjtBQUU3QyxlQUFlSSxPQUFPLENBQ3BCQyxHQUFtQixFQUNuQkMsR0FBa0MsRUFDbEM7SUFDQSxJQUFJLEVBQ0ZDLEtBQUssRUFBRSxFQUFFQyxFQUFFLEdBQUUsR0FDYkMsT0FBTyxFQUFFLEVBQUVDLElBQUksR0FBRSxLQUNsQixHQUFHTCxHQUFHO0lBRVAsTUFBTUksT0FBTyxHQUFHLE1BQU1OLDJEQUFVLENBQUM7UUFBRUUsR0FBRztLQUFFLENBQUM7SUFFekMsTUFBTU0sV0FBVyxHQUFHLE1BQU1WLDhFQUF5QixDQUFDO1FBQ2xEYSxLQUFLLEVBQUU7WUFDTE4sRUFBRSxFQUFFLENBQUNBLEVBQUUsQ0FBRU8sUUFBUSxFQUFFO1NBQ3BCO1FBQ0RDLE9BQU8sRUFBRTtZQUNQQyxXQUFXLEVBQUUsSUFBSTtZQUNqQkMsZUFBZSxFQUFFO2dCQUNmRixPQUFPLEVBQUU7b0JBQ1BHLE1BQU0sRUFBRTt3QkFDTkMsTUFBTSxFQUFFOzRCQUNOQyxLQUFLLEVBQUUsSUFBSTt5QkFDWjtxQkFDRjtpQkFDRjthQUNGO1lBQ0RDLFFBQVEsRUFBRTtnQkFDUk4sT0FBTyxFQUFFO29CQUNQTyxPQUFPLEVBQUU7d0JBQ1BILE1BQU0sRUFBRTs0QkFDTkksSUFBSSxFQUFFLElBQUk7NEJBQ1ZDLFdBQVcsRUFBRSxJQUFJOzRCQUNqQkMsTUFBTSxFQUFFLElBQUk7NEJBQ1pDLFFBQVEsRUFBRSxJQUFJO3lCQUNmO3FCQUNGO2lCQUNGO2FBQ0Y7WUFDREMsVUFBVSxFQUFFO2dCQUNWWixPQUFPLEVBQUU7b0JBQ1BhLFFBQVEsRUFBRSxJQUFJO2lCQUNmO2FBQ0Y7WUFDREMsTUFBTSxFQUFFO2dCQUNOVixNQUFNLEVBQUU7b0JBQ05JLElBQUksRUFBRSxJQUFJO29CQUNWTyxXQUFXLEVBQUUsSUFBSTtpQkFDbEI7YUFD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RyxPQUFPO0NBQ1IsQ0FBQyxDQUNILEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9jYXJyb3QtbWFya2V0Ly4vcGFnZXMvYXBpL2ZpY3Rpb25zL1tpZF0vaW5kZXgudHM/MWQ0ZSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBOZXh0QXBpUmVxdWVzdCwgTmV4dEFwaVJlc3BvbnNlIH0gZnJvbSBcIm5leHRcIjtcclxuaW1wb3J0IHdpdGhIYW5kbGVyLCB7IFJlc3BvbnNlVHlwZSB9IGZyb20gXCJAbGlicy9zZXJ2ZXIvd2l0aEhhbmRsZXJcIjtcclxuaW1wb3J0IGNsaWVudCBmcm9tIFwiQGxpYnMvc2VydmVyL2NsaWVudFwiO1xyXG5pbXBvcnQgeyB3aXRoQXBpU2Vzc2lvbiB9IGZyb20gXCJAbGlicy9zZXJ2ZXIvd2l0aFNlc3Npb25cIjtcclxuaW1wb3J0IHsgZ2V0U2Vzc2lvbiB9IGZyb20gXCJuZXh0LWF1dGgvcmVhY3RcIjtcclxuXHJcbmFzeW5jIGZ1bmN0aW9uIGhhbmRsZXIoXHJcbiAgcmVxOiBOZXh0QXBpUmVxdWVzdCxcclxuICByZXM6IE5leHRBcGlSZXNwb25zZTxSZXNwb25zZVR5cGU+XHJcbikge1xyXG4gIGxldCB7XHJcbiAgICBxdWVyeTogeyBpZCB9LFxyXG4gICAgc2Vzc2lvbjogeyB1c2VyIH0sXHJcbiAgfSA9IHJlcTtcclxuXHJcbiAgY29uc3Qgc2Vzc2lvbiA9IGF3YWl0IGdldFNlc3Npb24oeyByZXEgfSk7XHJcblxyXG4gIGNvbnN0IHByZXZGaWN0aW9uID0gYXdhaXQgY2xpZW50LmZpY3Rpb24uZmluZFVuaXF1ZSh7XHJcbiAgICB3aGVyZToge1xyXG4gICAgICBpZDogK2lkIS50b1N0cmluZygpLFxyXG4gICAgfSxcclxuICAgIGluY2x1ZGU6IHtcclxuICAgICAgZmljdGlvblN0YXQ6IHRydWUsXHJcbiAgICAgIHVzZXJGaWN0aW9uU3RhdDoge1xyXG4gICAgICAgIGluY2x1ZGU6IHtcclxuICAgICAgICAgIF9jb3VudDoge1xyXG4gICAgICAgICAgICBzZWxlY3Q6IHtcclxuICAgICAgICAgICAgICB1c2VyczogdHJ1ZSxcclxuICAgICAgICAgICAgfSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgfSxcclxuICAgICAgfSxcclxuICAgICAga2V5d29yZHM6IHtcclxuICAgICAgICBpbmNsdWRlOiB7XHJcbiAgICAgICAgICBrZXl3b3JkOiB7XHJcbiAgICAgICAgICAgIHNlbGVjdDoge1xyXG4gICAgICAgICAgICAgIG5hbWU6IHRydWUsXHJcbiAgICAgICAgICAgICAgaXNPZkhlcm9pbmU6IHRydWUsXHJcbiAgICAgICAgICAgICAgaXNPZk1DOiB0cnVlLFxyXG4gICAgICAgICAgICAgIGlzT2ZDb25zOiB0cnVlLFxyXG4gICAgICAgICAgICB9LFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICB9LFxyXG4gICAgICB9LFxyXG4gICAgICBjYXRlZ29yaWVzOiB7XHJcbiAgICAgICAgaW5jbHVkZToge1xyXG4gICAgICAgICAgY2F0ZWdvcnk6IHRydWUsXHJcbiAgICAgICAgfSxcclxuICAgICAgfSxcclxuICAgICAgYXV0aG9yOiB7XHJcbiAgICAgICAgc2VsZWN0OiB7XHJcbiAgICAgICAgICBuYW1lOiB0cnVlLFxyXG4gICAgICAgICAgcmVsYXRlZE5hbWU6IHRydWUsXHJcbiAgICAgICAgfSxcclxuICAgICAgfSxcclxuICAgIH0sXHJcbiAgfSk7XHJcblxyXG4gIC8vIGNvbnNvbGUubG9nKHByZXZGaWN0aW9uKTtcclxuICAvLyBjb25zb2xlLmxvZyhwcmV2RmljdGlvbj8uY2F0ZWdvcmllc1swXS5jYXRlZ29yeS5uYW1lKTtcclxuXHJcbiAgaWYgKHJlcS5tZXRob2QgPT09IFwiR0VUXCIpIHtcclxuICAgIGNvbnN0IGFycjogYW55W10gPSBbXTtcclxuICAgIHByZXZGaWN0aW9uPy5rZXl3b3Jkcy5tYXAoKGl0ZW0pID0+IGFyci5wdXNoKGl0ZW0ua2V5d29yZD8ubmFtZSkpO1xyXG4gICAgY29uc3Qga2V5d29yZFNhbWUgPSBhcnIubWFwKCh3b3JkKSA9PiAoe1xyXG4gICAgICBrZXl3b3Jkczoge1xyXG4gICAgICAgIHNvbWU6IHtcclxuICAgICAgICAgIGtleXdvcmQ6IHtcclxuICAgICAgICAgICAgbmFtZToge1xyXG4gICAgICAgICAgICAgIGVxdWFsczogd29yZCxcclxuICAgICAgICAgICAgfSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgfSxcclxuICAgICAgfSxcclxuICAgIH0pKTtcclxuXHJcbiAgICBjb25zdCBhcnIyOiBhbnlbXSA9IFtdO1xyXG4gICAgY29uc3Qgc2ltaWxhckZpY3Rpb25zID0gYXdhaXQgY2xpZW50LmZpY3Rpb24uZmluZE1hbnkoe1xyXG4gICAgICB3aGVyZToge1xyXG4gICAgICAgIE9SOiBrZXl3b3JkU2FtZSxcclxuICAgICAgICBBTkQ6IHtcclxuICAgICAgICAgIGlkOiB7XHJcbiAgICAgICAgICAgIG5vdDogcHJldkZpY3Rpb24/LmlkLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICB9LFxyXG4gICAgICB9LFxyXG4gICAgfSk7XHJcblxyXG4gICAgc2ltaWxhckZpY3Rpb25zLm1hcCgoaXRlbSkgPT4gYXJyMi5wdXNoKFtpdGVtLmlkLCBpdGVtLnRpdGxlXSkpO1xyXG5cclxuICAgIGNvbnN0IGlzTGlrZWQgPSBCb29sZWFuKFxyXG4gICAgICBhd2FpdCBjbGllbnQuZmF2LmZpbmRGaXJzdCh7XHJcbiAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAgIGZpY3Rpb25JZDogcHJldkZpY3Rpb24/LmlkLFxyXG4gICAgICAgICAgdXNlcklkOiBzZXNzaW9uPy51c2VyPy5pZCxcclxuICAgICAgICB9LFxyXG4gICAgICAgIHNlbGVjdDoge1xyXG4gICAgICAgICAgaWQ6IHRydWUsXHJcbiAgICAgICAgfSxcclxuICAgICAgfSlcclxuICAgICk7XHJcblxyXG4gICAgLy8gdXNlcmZpY3Rpb25zdGF0XHJcbiAgICBjb25zdCByYXRpb24gPSBhd2FpdCBjbGllbnQudXNlckZpY3Rpb25TdGF0LmZpbmRGaXJzdCh7XHJcbiAgICAgIHdoZXJlOiB7XHJcbiAgICAgICAgZmljdGlvbklkOiBwcmV2RmljdGlvbj8uaWQsXHJcbiAgICAgIH0sXHJcbiAgICAgIHNlbGVjdDoge1xyXG4gICAgICAgIG9yaWdpbmFsaXR5OiB0cnVlLFxyXG4gICAgICAgIHdyaXRpbmc6IHRydWUsXHJcbiAgICAgICAgY2hhcmFjdGVyOiB0cnVlLFxyXG4gICAgICAgIHZlcmlzaW1pbGl0dWRlOiB0cnVlLFxyXG4gICAgICAgIHN5bm9wc2lzQ29tcG9zaXRpb246IHRydWUsXHJcbiAgICAgICAgdmFsdWU6IHRydWUsXHJcbiAgICAgIH0sXHJcbiAgICB9KTtcclxuXHJcbiAgICAvLyB1c2VyUmF0aW9uT25GaWN0aW9uXHJcbiAgICBjb25zdCB1c2VyUmF0aW9uID0gYXdhaXQgY2xpZW50LnVzZXJSYXRpb25PbkZpY3Rpb24uZmluZEZpcnN0KHtcclxuICAgICAgd2hlcmU6IHtcclxuICAgICAgICB1c2VySWQ6IHNlc3Npb24/LnVzZXI/LmlkLFxyXG4gICAgICB9LFxyXG4gICAgfSk7XHJcblxyXG4gICAgcmVzLmpzb24oe1xyXG4gICAgICBvazogdHJ1ZSxcclxuICAgICAgcHJldkZpY3Rpb24sXHJcbiAgICAgIGlzTGlrZWQsXHJcbiAgICAgIHJhdGlvbixcclxuICAgICAgdXNlclJhdGlvbixcclxuICAgICAgc2ltaWxhckZpY3Rpb25zLFxyXG4gICAgfSk7XHJcbiAgfVxyXG4gIGlmIChyZXEubWV0aG9kID09PSBcIlBVVFwiKSB7XHJcbiAgICBsZXQge1xyXG4gICAgICBxdWVyeTogeyBpZCB9LFxyXG4gICAgICBib2R5OiB7XHJcbiAgICAgICAgdGl0bGUsXHJcbiAgICAgICAgcmVsYXRlZFRpdGxlLFxyXG4gICAgICAgIGF1dGhvcixcclxuICAgICAgICByZWxhdGVkQXV0aG9yLFxyXG4gICAgICAgIG5hdGlvbmFsaXR5LFxyXG4gICAgICAgIGdlbnJlLFxyXG4gICAgICAgIGRhdGUsXHJcbiAgICAgICAgY3VycmVudFN0YXRlLFxyXG4gICAgICAgIHN0YXR1czogW1xyXG4gICAgICAgICAgb3JpZ2luYWxpdHksXHJcbiAgICAgICAgICB3cml0aW5nLFxyXG4gICAgICAgICAgY2hhcmFjdGVyLFxyXG4gICAgICAgICAgdmVyaXNpbWlsaXR1ZGUsXHJcbiAgICAgICAgICBzeW5vcHNpc0NvbXBvc2l0aW9uLFxyXG4gICAgICAgICAgdmFsdWUsXHJcbiAgICAgICAgXSxcclxuICAgICAgICBzeW5vcHNpcyxcclxuICAgICAgICBjaGFyYWN0ZXJzLFxyXG4gICAgICAgIGtleXdvcmRzLFxyXG4gICAgICAgIG1jS2V5d29yZHMsXHJcbiAgICAgICAgc3ViS2V5d29yZHMsXHJcbiAgICAgICAgY29uc0tleXdvcmRzLFxyXG4gICAgICAgIG9yaWdpbmFsLFxyXG4gICAgICAgIHBsYXRmb3JtcyxcclxuICAgICAgICB0aHVtYklkLFxyXG4gICAgICAgIHZvbHVtZSxcclxuICAgICAgICB0eXBlLFxyXG4gICAgICAgIG1lZGlhTWl4LFxyXG4gICAgICAgIGlzVHJhbnNsYXRlZCxcclxuICAgICAgICBzZXR1cCxcclxuICAgICAgfSxcclxuICAgICAgc2Vzc2lvbjogeyB1c2VyIH0sXHJcbiAgICB9ID0gcmVxO1xyXG5cclxuICAgIGNvbnNvbGUubG9nKHNldHVwKTtcclxuXHJcbiAgICBnZW5yZSA9IGdlbnJlXHJcbiAgICAgIC5zcGxpdChcIiBcIilcclxuICAgICAgLmpvaW4oXCJcIilcclxuICAgICAgLnNwbGl0KFwiLFwiKVxyXG4gICAgICAuZmlsdGVyKChpdGVtOiBhbnkpID0+IGl0ZW0gIT09IFwiXCIpO1xyXG4gICAgY29uc3QgZ2VucmVNYW55ID0gZ2VucmUubWFwKChpdGVtOiBzdHJpbmcpID0+ICh7XHJcbiAgICAgIGNhdGVnb3J5OiB7XHJcbiAgICAgICAgY29ubmVjdE9yQ3JlYXRlOiB7XHJcbiAgICAgICAgICB3aGVyZToge1xyXG4gICAgICAgICAgICBuYW1lOiBpdGVtLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICAgIGNyZWF0ZToge1xyXG4gICAgICAgICAgICBuYW1lOiBpdGVtLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICB9LFxyXG4gICAgICB9LFxyXG4gICAgfSkpO1xyXG5cclxuICAgIGtleXdvcmRzID0ga2V5d29yZHMuZmlsdGVyKChpdGVtOiBhbnkpID0+IGl0ZW0gIT09IFwiXCIpO1xyXG4gICAgY29uc3QgS2V5d29yZE1hbnkgPSBrZXl3b3Jkcy5tYXAoKGl0ZW06IHN0cmluZykgPT4gKHtcclxuICAgICAga2V5d29yZDoge1xyXG4gICAgICAgIGNvbm5lY3RPckNyZWF0ZToge1xyXG4gICAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgICBjcmVhdGU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgfSxcclxuICAgICAgfSxcclxuICAgIH0pKTtcclxuXHJcbiAgICBtY0tleXdvcmRzID0gbWNLZXl3b3Jkcy5maWx0ZXIoKGl0ZW06IGFueSkgPT4gaXRlbSAhPT0gXCJcIik7XHJcbiAgICBjb25zdCBtY0tleXdvcmRNYW55ID0gbWNLZXl3b3Jkcy5tYXAoKGl0ZW06IHN0cmluZykgPT4gKHtcclxuICAgICAga2V5d29yZDoge1xyXG4gICAgICAgIGNvbm5lY3RPckNyZWF0ZToge1xyXG4gICAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgICBjcmVhdGU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgICAgaXNPZk1DOiB0cnVlLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICB9LFxyXG4gICAgICB9LFxyXG4gICAgfSkpO1xyXG5cclxuICAgIHN1YktleXdvcmRzID0gc3ViS2V5d29yZHMuZmlsdGVyKChpdGVtOiBhbnkpID0+IGl0ZW0gIT09IFwiXCIpO1xyXG4gICAgY29uc3Qgc3ViS2V5d29yZE1hbnkgPSBzdWJLZXl3b3Jkcy5tYXAoKGl0ZW06IHN0cmluZykgPT4gKHtcclxuICAgICAga2V5d29yZDoge1xyXG4gICAgICAgIGNvbm5lY3RPckNyZWF0ZToge1xyXG4gICAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgICBjcmVhdGU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgICAgaXNPZkhlcm9pbmU6IHRydWUsXHJcbiAgICAgICAgICB9LFxyXG4gICAgICAgIH0sXHJcbiAgICAgIH0sXHJcbiAgICB9KSk7XHJcblxyXG4gICAgY29uc0tleXdvcmRzID0gY29uc0tleXdvcmRzLmZpbHRlcigoaXRlbTogYW55KSA9PiBpdGVtICE9PSBcIlwiKTtcclxuICAgIGNvbnN0IGNvbnNLZXl3b3JkTWFueSA9IGNvbnNLZXl3b3Jkcy5tYXAoKGl0ZW06IHN0cmluZykgPT4gKHtcclxuICAgICAga2V5d29yZDoge1xyXG4gICAgICAgIGNvbm5lY3RPckNyZWF0ZToge1xyXG4gICAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgIH0sXHJcbiAgICAgICAgICBjcmVhdGU6IHtcclxuICAgICAgICAgICAgbmFtZTogaXRlbSxcclxuICAgICAgICAgICAgaXNPZkNvbnM6IHRydWUsXHJcbiAgICAgICAgICB9LFxyXG4gICAgICAgIH0sXHJcbiAgICAgIH0sXHJcbiAgICB9KSk7XHJcblxyXG4gICAgLy8gY29uc3QgY2F0ZWdvcnlNYW55ID0gcHJldkZpY3Rpb24/LmNhdGVnb3JpZXMubWFwKChpdGVtKSA9PiAoe1xyXG4gICAgLy8gICBjYXRlZ29yeToge1xyXG4gICAgLy8gICAgIHVwc2VydDoge1xyXG4gICAgLy8gICAgICAgbmFtZTogaXRlbT8uY2F0ZWdvcnkhLm5hbWUsXHJcbiAgICAvLyAgICAgfSxcclxuICAgIC8vICAgfSxcclxuICAgIC8vIH0pKTtcclxuXHJcbiAgICBjb25zdCBmaWN0aW9uID0gYXdhaXQgY2xpZW50LmZpY3Rpb24udXBkYXRlKHtcclxuICAgICAgd2hlcmU6IHtcclxuICAgICAgICBpZDogK2lkIS50b1N0cmluZygpLFxyXG4gICAgICB9LFxyXG4gICAgICBkYXRhOiB7XHJcbiAgICAgICAgdGl0bGUsXHJcbiAgICAgICAgcmVsYXRlZFRpdGxlLFxyXG4gICAgICAgIGF1dGhvcjoge1xyXG4gICAgICAgICAgY29ubmVjdE9yQ3JlYXRlOiB7XHJcbiAgICAgICAgICAgIHdoZXJlOiB7XHJcbiAgICAgICAgICAgICAgbmFtZTogYXV0aG9yLFxyXG4gICAgICAgICAgICB9LFxyXG4gICAgICAgICAgICBjcmVhdGU6IHtcclxuICAgICAgICAgICAgICBuYW1lOiBhdXRob3IsXHJcbiAgICAgICAgICAgIH0sXHJcbiAgICAgICAgICB9LFxyXG4gICAgICAgIH0sXHJcbiAgICAgICAgcmVsYXRlZEF1dGhvcixcclxuICAgICAgICBuYXRpb25hbGl0eSxcclxuICAgICAgICBzdGFydERhdGU6IG5ldyBEYXRlKGRhdGVbMF0pLFxyXG4gICAgICAgIGVuZERhdGU6IG5ldyBEYXRlKGRhdGVbMV0pLFxyXG4gICAgICAgIG9yaWdpbmFsLFxyXG4gICAgICAgIHBsYXRmb3JtczogcGxhdGZvcm1zWzBdLFxyXG4gICAgICAgIGltYWdlOiB0aHVtYklkLFxyXG4gICAgICAgIHN5bm9wc2lzLFxyXG4gICAgICAgIGNoYXJhY3RlcnMsXHJcbiAgICAgICAgY3VycmVudFN0YXRlLFxyXG4gICAgICAgIHZvbHVtZTogK3ZvbHVtZT8udG9TdHJpbmcoKSxcclxuICAgICAgICB0eXBlLFxyXG4gICAgICAgIGlzVHJhbnNsYXRlZCxcclxuICAgICAgICBtZWRpYU1peCxcclxuICAgICAgICBzZXR1cCxcclxuICAgICAgICAvLyBjYXRlZ29yaWVzOiB7XHJcbiAgICAgICAgLy8gICBkZWxldGVNYW55OiB7XHJcbiAgICAgICAgLy8gICAgIGZpY3Rpb25JZDogK2lkIS50b1N0cmluZygpLFxyXG4gICAgICAgIC8vICAgfSxcclxuICAgICAgICAvLyAgIGNyZWF0ZToge1xyXG4gICAgICAgIC8vICAgICBjYXRlZ29yeToge1xyXG4gICAgICAgIC8vICAgICAgIGNvbm5lY3RPckNyZWF0ZToge1xyXG4gICAgICAgIC8vICAgICAgICAgd2hlcmU6IHtcclxuICAgICAgICAvLyAgICAgICAgICAgbmFtZTogZ2VucmUsXHJcbiAgICAgICAgLy8gICAgICAgICB9LFxyXG4gICAgICAgIC8vICAgICAgICAgY3JlYXRlOiB7XHJcbiAgICAgICAgLy8gICAgICAgICAgIG5hbWU6IGdlbnJlLFxyXG4gICAgICAgIC8vICAgICAgICAgfSxcclxuICAgICAgICAvLyAgICAgICB9LFxyXG4gICAgICAgIC8vICAgICB9LFxyXG4gICAgICAgIC8vICAgfSxcclxuICAgICAgICAvLyB9LFxyXG4gICAgICAgIGNhdGVnb3JpZXM6IHtcclxuICAgICAgICAgIGRlbGV0ZU1hbnk6IHtcclxuICAgICAgICAgICAgZmljdGlvbklkOiAraWQhLnRvU3RyaW5nKCksXHJcbiAgICAgICAgICB9LFxyXG4gICAgICAgICAgY3JlYXRlOiBbLi4uZ2VucmVNYW55XSxcclxuICAgICAgICB9LFxyXG4gICAgICAgIGtleXdvcmRzOiB7XHJcbiAgICAgICAgICBkZWxldGVNYW55OiB7XHJcbiAgICAgICAgICAgIGZpY3Rpb25JZDogK2lkIS50b1N0cmluZygpLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICAgIGNyZWF0ZTogW1xyXG4gICAgICAgICAgICAuLi5zdWJLZXl3b3JkTWFueSxcclxuICAgICAgICAgICAgLi4ubWNLZXl3b3JkTWFueSxcclxuICAgICAgICAgICAgLi4uS2V5d29yZE1hbnksXHJcbiAgICAgICAgICAgIC4uLmNvbnNLZXl3b3JkTWFueSxcclxuICAgICAgICAgIF0sXHJcbiAgICAgICAgfSxcclxuICAgICAgICBmaWN0aW9uU3RhdDoge1xyXG4gICAgICAgICAgdXBkYXRlOiB7XHJcbiAgICAgICAgICAgIG9yaWdpbmFsaXR5OiArb3JpZ2luYWxpdHksXHJcbiAgICAgICAgICAgIHdyaXRpbmc6ICt3cml0aW5nLFxyXG4gICAgICAgICAgICBjaGFyYWN0ZXI6ICtjaGFyYWN0ZXIsXHJcbiAgICAgICAgICAgIHZlcmlzaW1pbGl0dWRlOiArdmVyaXNpbWlsaXR1ZGUsXHJcbiAgICAgICAgICAgIHN5bm9wc2lzQ29tcG9zaXRpb246ICtzeW5vcHNpc0NvbXBvc2l0aW9uLFxyXG4gICAgICAgICAgICB2YWx1ZTogK3ZhbHVlLFxyXG4gICAgICAgICAgfSxcclxuICAgICAgICB9LFxyXG4gICAgICB9LFxyXG4gICAgfSk7XHJcblxyXG4gICAgcmVzLmpzb24oeyBvazogdHJ1ZSwgZmljdGlvbiB9KTtcclxuICB9XHJcbn1cclxuXHJcbmV4cG9ydCBkZWZhdWx0IHdpdGhBcGlTZXNzaW9uKFxyXG4gIHdpdGhIYW5kbGVyKHtcclxuICAgIG1ldGhvZHM6IFtcIkdFVFwiLCBcIlBVVFwiXSxcclxuICAgIGhhbmRsZXIsXHJcbiAgfSlcclxuKTtcclxuIl0sIm5hbWVzIjpbIndpdGhIYW5kbGVyIiwiY2xpZW50Iiwid2l0aEFwaVNlc3Npb24iLCJnZXRTZXNzaW9uIiwiaGFuZGxlciIsInJlcSIsInJlcyIsInF1ZXJ5IiwiaWQiLCJzZXNzaW9uIiwidXNlciIsInByZXZGaWN0aW9uIiwiZmljdGlvbiIsImZpbmRVbmlxdWUiLCJ3aGVyZSIsInRvU3RyaW5nIiwiaW5jbHVkZSIsImZpY3Rpb25TdGF0IiwidXNlckZpY3Rpb25TdGF0IiwiX2NvdW50Iiwic2VsZWN0IiwidXNlcnMiLCJrZXl3b3JkcyIsImtleXdvcmQiLCJuYW1lIiwiaXNPZkhlcm9pbmUiLCJpc09mTUMiLCJpc09mQ29ucyIsImNhdGVnb3JpZXMiLCJjYXRlZ29yeSIsImF1dGhvciIsInJlbGF0ZWROYW1lIiwibWV0aG9kIiwiYXJyIiwibWFwIiwiaXRlbSIsInB1c2giLCJrZXl3b3JkU2FtZSIsIndvcmQiLCJzb21lIiwiZXF1YWxzIiwiYXJyMiIsInNpbWlsYXJGaWN0aW9ucyIsImZpbmRNYW55IiwiT1IiLCJBTkQiLCJub3QiLCJ0aXRsZSIsImlzTGlrZWQiLCJCb29sZWFuIiwiZmF2IiwiZmluZEZpcnN0IiwiZmljdGlvbklkIiwidXNlcklkIiwicmF0aW9uIiwib3JpZ2luYWxpdHkiLCJ3cml0aW5nIiwiY2hhcmFjdGVyIiwidmVyaXNpbWlsaXR1ZGUiLCJzeW5vcHNpc0NvbXBvc2l0aW9uIiwidmFsdWUiLCJ1c2VyUmF0aW9uIiwidXNlclJhdGlvbk9uRmljdGlvbiIsImpzb24iLCJvayIsImJvZHkiLCJyZWxhdGVkVGl0bGUiLCJyZWxhdGVkQXV0aG9yIiwibmF0aW9uYWxpdHkiLCJnZW5yZSIsImRhdGUiLCJjdXJyZW50U3RhdGUiLCJzdGF0dXMiLCJzeW5vcHNpcyIsImNoYXJhY3RlcnMiLCJtY0tleXdvcmRzIiwic3ViS2V5d29yZHMiLCJjb25zS2V5d29yZHMiLCJvcmlnaW5hbCIsInBsYXRmb3JtcyIsInRodW1iSWQiLCJ2b2x1bWUiLCJ0eXBlIiwibWVkaWFNaXgiLCJpc1RyYW5zbGF0ZWQiLCJzZXR1cCIsImNvbnNvbGUiLCJsb2ciLCJzcGxpdCIsImpvaW4iLCJmaWx0ZXIiLCJnZW5yZU1hbnkiLCJjb25uZWN0T3JDcmVhdGUiLCJjcmVhdGUiLCJLZXl3b3JkTWFueSIsIm1jS2V5d29yZE1hbnkiLCJzdWJLZXl3b3JkTWFueSIsImNvbnNLZXl3b3JkTWFueSIsInVwZGF0ZSIsImRhdGEiLCJzdGFydERhdGUiLCJEYXRlIiwiZW5kRGF0ZSIsImltYWdlIiwiZGVsZXRlTWFueSIsIm1ldGhvZHMiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./pages/api/fictions/[id]/index.ts\n");
 
-/***/ }),
+async function handler(req, res) {
+    let { query: { id  } , session: { user  } ,  } = req;
+    const session = await (0,next_auth_react__WEBPACK_IMPORTED_MODULE_2__.getSession)({
+        req
+    });
+    const prevFiction = await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].fiction.findUnique */ .Z.fiction.findUnique({
+        where: {
+            id: +id.toString()
+        },
+        include: {
+            fictionStat: true,
+            userFictionStat: {
+                include: {
+                    _count: {
+                        select: {
+                            users: true
+                        }
+                    }
+                }
+            },
+            keywords: {
+                include: {
+                    keyword: {
+                        select: {
+                            name: true,
+                            isOfHeroine: true,
+                            isOfMC: true,
+                            isOfCons: true
+                        }
+                    }
+                }
+            },
+            categories: {
+                include: {
+                    category: true
+                }
+            },
+            author: {
+                select: {
+                    name: true,
+                    relatedName: true
+                }
+            }
+        }
+    });
+    // console.log(prevFiction);
+    // console.log(prevFiction?.categories[0].category.name);
+    if (req.method === "GET") {
+        const arr = [];
+        prevFiction?.keywords.map((item)=>arr.push(item.keyword?.name));
+        const keywordSame = arr.map((word)=>({
+                keywords: {
+                    some: {
+                        keyword: {
+                            name: {
+                                equals: word
+                            }
+                        }
+                    }
+                }
+            }));
+        const arr2 = [];
+        const similarFictions = await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].fiction.findMany */ .Z.fiction.findMany({
+            where: {
+                OR: keywordSame,
+                AND: {
+                    id: {
+                        not: prevFiction?.id
+                    }
+                }
+            }
+        });
+        similarFictions.map((item)=>arr2.push([
+                item.id,
+                item.title
+            ]));
+        const isLiked = Boolean(await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].fav.findFirst */ .Z.fav.findFirst({
+            where: {
+                fictionId: prevFiction?.id,
+                userId: session?.user?.id
+            },
+            select: {
+                id: true
+            }
+        }));
+        // userfictionstat
+        const ration = await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].userFictionStat.findFirst */ .Z.userFictionStat.findFirst({
+            where: {
+                fictionId: prevFiction?.id
+            },
+            select: {
+                originality: true,
+                writing: true,
+                character: true,
+                verisimilitude: true,
+                synopsisComposition: true,
+                value: true
+            }
+        });
+        // userRationOnFiction
+        const userRation = await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].userRationOnFiction.findFirst */ .Z.userRationOnFiction.findFirst({
+            where: {
+                userId: session?.user?.id
+            }
+        });
+        res.json({
+            ok: true,
+            prevFiction,
+            isLiked,
+            ration,
+            userRation,
+            similarFictions
+        });
+    }
+    if (req.method === "PUT") {
+        let { query: { id: id1  } , body: { title , relatedTitle , author , relatedAuthor , nationality , genre , date , currentState , status: [originality, writing, character, verisimilitude, synopsisComposition, value, ] , synopsis , characters , keywords , mcKeywords , subKeywords , consKeywords , original , platforms , thumbId , volume , type , mediaMix , isTranslated , setup ,  } , session: { user: user1  } ,  } = req;
+        console.log(setup);
+        genre = genre.split(" ").join("").split(",").filter((item)=>item !== "");
+        const genreMany = genre.map((item)=>({
+                category: {
+                    connectOrCreate: {
+                        where: {
+                            name: item
+                        },
+                        create: {
+                            name: item
+                        }
+                    }
+                }
+            }));
+        keywords = keywords.filter((item)=>item !== "");
+        const KeywordMany = keywords.map((item)=>({
+                keyword: {
+                    connectOrCreate: {
+                        where: {
+                            name: item
+                        },
+                        create: {
+                            name: item
+                        }
+                    }
+                }
+            }));
+        mcKeywords = mcKeywords.filter((item)=>item !== "");
+        const mcKeywordMany = mcKeywords.map((item)=>({
+                keyword: {
+                    connectOrCreate: {
+                        where: {
+                            name: item
+                        },
+                        create: {
+                            name: item,
+                            isOfMC: true
+                        }
+                    }
+                }
+            }));
+        subKeywords = subKeywords.filter((item)=>item !== "");
+        const subKeywordMany = subKeywords.map((item)=>({
+                keyword: {
+                    connectOrCreate: {
+                        where: {
+                            name: item
+                        },
+                        create: {
+                            name: item,
+                            isOfHeroine: true
+                        }
+                    }
+                }
+            }));
+        consKeywords = consKeywords.filter((item)=>item !== "");
+        const consKeywordMany = consKeywords.map((item)=>({
+                keyword: {
+                    connectOrCreate: {
+                        where: {
+                            name: item
+                        },
+                        create: {
+                            name: item,
+                            isOfCons: true
+                        }
+                    }
+                }
+            }));
+        // const categoryMany = prevFiction?.categories.map((item) => ({
+        //   category: {
+        //     upsert: {
+        //       name: item?.category!.name,
+        //     },
+        //   },
+        // }));
+        const fiction = await _libs_server_client__WEBPACK_IMPORTED_MODULE_0__/* ["default"].fiction.update */ .Z.fiction.update({
+            where: {
+                id: +id1.toString()
+            },
+            data: {
+                title,
+                relatedTitle,
+                author: {
+                    connectOrCreate: {
+                        where: {
+                            name: author
+                        },
+                        create: {
+                            name: author
+                        }
+                    }
+                },
+                relatedAuthor,
+                nationality,
+                startDate: new Date(date[0]),
+                endDate: new Date(date[1]),
+                original,
+                platforms: platforms[0],
+                image: thumbId,
+                synopsis,
+                characters,
+                currentState,
+                volume: +volume?.toString(),
+                type,
+                isTranslated,
+                mediaMix,
+                setup,
+                // categories: {
+                //   deleteMany: {
+                //     fictionId: +id!.toString(),
+                //   },
+                //   create: {
+                //     category: {
+                //       connectOrCreate: {
+                //         where: {
+                //           name: genre,
+                //         },
+                //         create: {
+                //           name: genre,
+                //         },
+                //       },
+                //     },
+                //   },
+                // },
+                categories: {
+                    deleteMany: {
+                        fictionId: +id1.toString()
+                    },
+                    create: [
+                        ...genreMany
+                    ]
+                },
+                keywords: {
+                    deleteMany: {
+                        fictionId: +id1.toString()
+                    },
+                    create: [
+                        ...subKeywordMany,
+                        ...mcKeywordMany,
+                        ...KeywordMany,
+                        ...consKeywordMany, 
+                    ]
+                },
+                fictionStat: {
+                    update: {
+                        originality: +originality,
+                        writing: +writing,
+                        character: +character,
+                        verisimilitude: +verisimilitude,
+                        synopsisComposition: +synopsisComposition,
+                        value: +value
+                    }
+                }
+            }
+        });
+        res.json({
+            ok: true,
+            fiction
+        });
+    }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_libs_server_withSession__WEBPACK_IMPORTED_MODULE_1__/* .withApiSession */ .u)((0,_libs_server_withHandler__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)({
+    methods: [
+        "GET",
+        "PUT"
+    ],
+    handler
+})));
 
-/***/ "(api)/./node_modules/iron-session/next/dist/index.mjs":
-/*!*******************************************************!*\
-  !*** ./node_modules/iron-session/next/dist/index.mjs ***!
-  \*******************************************************/
-/***/ ((__webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"withIronSessionApiRoute\": () => (/* binding */ withIronSessionApiRoute),\n/* harmony export */   \"withIronSessionSsr\": () => (/* binding */ withIronSessionSsr)\n/* harmony export */ });\n/* harmony import */ var iron_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session */ \"iron-session\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session__WEBPACK_IMPORTED_MODULE_0__]);\niron_session__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n// next/index.ts\n\n\n// src/getPropertyDescriptorForReqSession.ts\nfunction getPropertyDescriptorForReqSession(session) {\n  return {\n    enumerable: true,\n    get() {\n      return session;\n    },\n    set(value) {\n      const keys = Object.keys(value);\n      const currentKeys = Object.keys(session);\n      currentKeys.forEach((key) => {\n        if (!keys.includes(key)) {\n          delete session[key];\n        }\n      });\n      keys.forEach((key) => {\n        session[key] = value[key];\n      });\n    }\n  };\n}\n\n// next/index.ts\nfunction withIronSessionApiRoute(handler, options) {\n  return async function nextApiHandlerWrappedWithIronSession(req, res) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(req, res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(req, res, sessionOptions);\n    Object.defineProperty(\n      req,\n      \"session\",\n      getPropertyDescriptorForReqSession(session)\n    );\n    return handler(req, res);\n  };\n}\nfunction withIronSessionSsr(handler, options) {\n  return async function nextGetServerSidePropsHandlerWrappedWithIronSession(context) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(context.req, context.res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(\n      context.req,\n      context.res,\n      sessionOptions\n    );\n    Object.defineProperty(\n      context.req,\n      \"session\",\n      getPropertyDescriptorForReqSession(session)\n    );\n    return handler(context);\n  };\n}\n\n//# sourceMappingURL=index.mjs.map\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUE7QUFDOEM7O0FBRTlDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUDtBQUNBO0FBQ0EsT0FBTztBQUNQO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0EsMEJBQTBCLDREQUFjO0FBQ3hDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUlFO0FBQ0Ysa0MiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9jYXJyb3QtbWFya2V0Ly4vbm9kZV9tb2R1bGVzL2lyb24tc2Vzc2lvbi9uZXh0L2Rpc3QvaW5kZXgubWpzPzdhZmEiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gbmV4dC9pbmRleC50c1xuaW1wb3J0IHsgZ2V0SXJvblNlc3Npb24gfSBmcm9tIFwiaXJvbi1zZXNzaW9uXCI7XG5cbi8vIHNyYy9nZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uLnRzXG5mdW5jdGlvbiBnZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uKHNlc3Npb24pIHtcbiAgcmV0dXJuIHtcbiAgICBlbnVtZXJhYmxlOiB0cnVlLFxuICAgIGdldCgpIHtcbiAgICAgIHJldHVybiBzZXNzaW9uO1xuICAgIH0sXG4gICAgc2V0KHZhbHVlKSB7XG4gICAgICBjb25zdCBrZXlzID0gT2JqZWN0LmtleXModmFsdWUpO1xuICAgICAgY29uc3QgY3VycmVudEtleXMgPSBPYmplY3Qua2V5cyhzZXNzaW9uKTtcbiAgICAgIGN1cnJlbnRLZXlzLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICBpZiAoIWtleXMuaW5jbHVkZXMoa2V5KSkge1xuICAgICAgICAgIGRlbGV0ZSBzZXNzaW9uW2tleV07XG4gICAgICAgIH1cbiAgICAgIH0pO1xuICAgICAga2V5cy5mb3JFYWNoKChrZXkpID0+IHtcbiAgICAgICAgc2Vzc2lvbltrZXldID0gdmFsdWVba2V5XTtcbiAgICAgIH0pO1xuICAgIH1cbiAgfTtcbn1cblxuLy8gbmV4dC9pbmRleC50c1xuZnVuY3Rpb24gd2l0aElyb25TZXNzaW9uQXBpUm91dGUoaGFuZGxlciwgb3B0aW9ucykge1xuICByZXR1cm4gYXN5bmMgZnVuY3Rpb24gbmV4dEFwaUhhbmRsZXJXcmFwcGVkV2l0aElyb25TZXNzaW9uKHJlcSwgcmVzKSB7XG4gICAgbGV0IHNlc3Npb25PcHRpb25zO1xuICAgIGlmIChvcHRpb25zIGluc3RhbmNlb2YgRnVuY3Rpb24pIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gYXdhaXQgb3B0aW9ucyhyZXEsIHJlcyk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gb3B0aW9ucztcbiAgICB9XG4gICAgY29uc3Qgc2Vzc2lvbiA9IGF3YWl0IGdldElyb25TZXNzaW9uKHJlcSwgcmVzLCBzZXNzaW9uT3B0aW9ucyk7XG4gICAgT2JqZWN0LmRlZmluZVByb3BlcnR5KFxuICAgICAgcmVxLFxuICAgICAgXCJzZXNzaW9uXCIsXG4gICAgICBnZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uKHNlc3Npb24pXG4gICAgKTtcbiAgICByZXR1cm4gaGFuZGxlcihyZXEsIHJlcyk7XG4gIH07XG59XG5mdW5jdGlvbiB3aXRoSXJvblNlc3Npb25Tc3IoaGFuZGxlciwgb3B0aW9ucykge1xuICByZXR1cm4gYXN5bmMgZnVuY3Rpb24gbmV4dEdldFNlcnZlclNpZGVQcm9wc0hhbmRsZXJXcmFwcGVkV2l0aElyb25TZXNzaW9uKGNvbnRleHQpIHtcbiAgICBsZXQgc2Vzc2lvbk9wdGlvbnM7XG4gICAgaWYgKG9wdGlvbnMgaW5zdGFuY2VvZiBGdW5jdGlvbikge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBhd2FpdCBvcHRpb25zKGNvbnRleHQucmVxLCBjb250ZXh0LnJlcyk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gb3B0aW9ucztcbiAgICB9XG4gICAgY29uc3Qgc2Vzc2lvbiA9IGF3YWl0IGdldElyb25TZXNzaW9uKFxuICAgICAgY29udGV4dC5yZXEsXG4gICAgICBjb250ZXh0LnJlcyxcbiAgICAgIHNlc3Npb25PcHRpb25zXG4gICAgKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkoXG4gICAgICBjb250ZXh0LnJlcSxcbiAgICAgIFwic2Vzc2lvblwiLFxuICAgICAgZ2V0UHJvcGVydHlEZXNjcmlwdG9yRm9yUmVxU2Vzc2lvbihzZXNzaW9uKVxuICAgICk7XG4gICAgcmV0dXJuIGhhbmRsZXIoY29udGV4dCk7XG4gIH07XG59XG5leHBvcnQge1xuICB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZSxcbiAgd2l0aElyb25TZXNzaW9uU3NyXG59O1xuLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXgubWpzLm1hcCJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./node_modules/iron-session/next/dist/index.mjs\n");
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
 
 /***/ })
 
@@ -100,7 +359,7 @@ eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_de
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/fictions/[id]/index.ts"));
+var __webpack_exports__ = __webpack_require__.X(0, [534,17], () => (__webpack_exec__(7468)));
 module.exports = __webpack_exports__;
 
 })();

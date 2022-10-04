@@ -233,7 +233,7 @@ export default function FictionList(props: any) {
                         .map((keyword, i) => (
                           <Link
                             key={i}
-                            href={`/search/keyword/${keyword.keyword.name}`}
+                            href={`/search/keyword/${keyword.keyword.name}/1`}
                             passHref
                           >
                             <a
