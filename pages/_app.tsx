@@ -7,16 +7,14 @@ import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
 import { Session } from "next-auth";
 
-// const { data: session } = useSession();
-
 function MyApp({
   Component,
-  pageProps,
+  pageProps: { session, ...pageProps },
 }: AppProps<{
   session: Session;
 }>) {
   return (
-    <SessionProvider session={pageProps?.session}>
+    <SessionProvider session={session}>
       <SWRConfig
         value={{
           fetcher: (url: string) =>
