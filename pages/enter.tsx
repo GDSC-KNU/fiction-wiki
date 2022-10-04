@@ -176,7 +176,7 @@ const Enter: NextPage = () => {
             ) : (
               <button
                 className=" flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                onClick={() => signIn()}
+                onClick={() => signIn("google")}
               >
                 Google Sign in
               </button>
@@ -188,20 +188,3 @@ const Enter: NextPage = () => {
   );
 };
 export default Enter;
-
-{
-  /* {session ? (
-            <li className=" flex mr-5">
-              <div className=" mr-5 font-bold">{session.user?.email}</div>
-              <button className=" font-bold" onClick={() => signOut()}>
-                Sign out
-              </button>
-            </li>
-          ) : (
-            <li className=" flex mr-5">
-              <button className=" font-bold" onClick={() => signIn()}>
-                Sign in
-              </button>
-            </li>
-          )} */
-}

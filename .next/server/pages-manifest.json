@@ -3,7 +3,5 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/api/users/me": "pages/api/users/me.js",
-  "/fictions/[...params]": "pages/fictions/[...params].js",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/authors/[page]": "pages/authors/[page].js"
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js"
 }

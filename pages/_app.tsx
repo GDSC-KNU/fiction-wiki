@@ -16,7 +16,7 @@ function MyApp({
   session: Session;
 }>) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={pageProps?.session}>
       <SWRConfig
         value={{
           fetcher: (url: string) =>
