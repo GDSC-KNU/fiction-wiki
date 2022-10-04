@@ -22,6 +22,7 @@ async function handler(
     },
   });
   if (req.method === "GET") {
+    // console.log("faved");
     if (alreadyExists) isLiked = true;
     else isLiked = false;
   } else if (req.method === "POST") {

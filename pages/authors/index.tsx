@@ -6,7 +6,6 @@ import { useRecoilState } from "recoil";
 import { authorPageAtom } from "../../atoms";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
 
 interface AuthorResponse {
   authors: Author[];

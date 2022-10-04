@@ -327,6 +327,13 @@ const Create: NextPage = (props) => {
                     type="text_detail"
                   />
                   <Input
+                    register={register("mediaMix", { required: false })}
+                    required
+                    label="MediaMix"
+                    name="mediaMix"
+                    type="text_detail"
+                  />
+                  <Input
                     register={register("isTranslated", { required: false })}
                     required
                     label="IsTranslated"

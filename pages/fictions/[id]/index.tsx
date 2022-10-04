@@ -1,5 +1,5 @@
+import { useState } from "react";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import FictionRadarChart from "@components/fictionRadarChart";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import {
@@ -20,9 +20,9 @@ import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
 import Pagination from "react-js-pagination";
-import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import FictionRadarChart from "@components/fictionRadarChart";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -78,13 +78,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
   const onFavClick = () => {
-    toggleFav({}, "GET");
+    toggleFav({}, "POST");
     if (!data) return;
 
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
   };
 
-  if (router.isFallback) {
+  if (router?.isFallback) {
     return (
       <div title="Loaidng for youuuuuuu">
         <span>I love you</span>
@@ -124,10 +124,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         <div className="  sm:max-w-[380px] object-cover h-fit bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
           <div className="  w-full h-[467px] relative">
             <Image
-              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction.image}/fiction`}
+              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
               layout="fill"
               objectFit="contain"
-              alt={fiction.title}
+              alt={fiction?.title}
             />
           </div>
           <div className=" px-4">
@@ -211,11 +211,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">연재기간</div>
-                <div className=" col-span-6">{`${fiction.startDate.getFullYear()}. ${
-                  fiction.startDate.getMonth() + 1
-                }. ${fiction.startDate.getDate()} ~ ${fiction.endDate.getFullYear()}. ${
-                  fiction.endDate.getMonth() + 1
-                }. ${fiction.endDate.getDate()}`}</div>
+                <div className=" col-span-6">{`${fiction?.startDate.getFullYear()}. ${
+                  fiction?.startDate.getMonth() + 1
+                }. ${fiction?.startDate.getDate()} ~ ${fiction?.endDate.getFullYear()}. ${
+                  fiction?.endDate.getMonth() + 1
+                }. ${fiction?.endDate.getDate()}`}</div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px] ">
                 <div className=" col-span-4 font-bold font-sans ">원본</div>
@@ -276,13 +276,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 </div>
                 <div className=" col-span-6">{fiction?.mediaMix || "X"}</div>
               </div>
-              {fiction.isTranslated ? (
+              {fiction?.isTranslated ? (
                 <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                   <div className=" col-span-4 font-bold font-sans">
                     번역상태
                   </div>
                   <div className=" col-span-6">
-                    {fiction.isTranslated ? "O" : ""}
+                    {fiction?.isTranslated ? "O" : ""}
                   </div>
                 </div>
               ) : null}
@@ -312,23 +312,23 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   {fiction?.keywords
                     ?.filter(
                       (item) =>
-                        item.keyword.isOfHeroine === false &&
-                        item.keyword.isOfMC === false &&
-                        item.keyword.isOfCons === false
+                        item?.keyword?.isOfHeroine === false &&
+                        item?.keyword?.isOfMC === false &&
+                        item?.keyword?.isOfCons === false
                     )
                     .map((item: any, index: any) => (
                       <li
                         key={index}
                         className={
-                          item.keyword.isOfMC
+                          item?.keyword?.isOfMC
                             ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                            : item.keyword.isOfHeroine
+                            : item?.keyword?.isOfHeroine
                             ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
                             : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
                         }
                       >
                         <Link
-                          href={`/search/keyword/${item.keyword.name}`}
+                          href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
                           <a>#{item?.keyword?.name}</a>
@@ -341,14 +341,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
                   {fiction.keywords
-                    .filter((item) => item.keyword.isOfMC === true)
+                    .filter((item) => item?.keyword?.isOfMC === true)
                     .map((item: any, index: any) => (
                       <li
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                       >
                         <Link
-                          href={`/search/keyword/${item.keyword.name}`}
+                          href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
                           <a>#{item?.keyword?.name}</a>
@@ -360,15 +360,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   히로인 태그
                 </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction.keywords
-                    .filter((item) => item.keyword.isOfHeroine === true)
+                  {fiction?.keywords
+                    .filter((item) => item?.keyword?.isOfHeroine === true)
                     .map((item: any, index: any) => (
                       <li
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                       >
                         <Link
-                          href={`/search/keyword/${item.keyword.name}`}
+                          href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
                           <a>#{item?.keyword?.name}</a>
@@ -380,15 +380,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   호불호 키워드
                 </h2>
                 <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction.keywords
-                    .filter((item) => item.keyword.isOfCons === true)
+                  {fiction?.keywords
+                    .filter((item) => item?.keyword?.isOfCons === true)
                     .map((item: any, index: any) => (
                       <li
                         key={index}
                         className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
                       >
                         <Link
-                          href={`/search/keyword/${item.keyword.name}`}
+                          href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
                           <a>#{item?.keyword?.name}</a>
@@ -430,10 +430,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
                       >
                         <li className=" mt-2 text-sm overflow-hidden mr-16">
-                          {comment.comment}
+                          {comment?.comment}
                         </li>
                         <li className=" mt-2 text-sm absolute right-24">
-                          {`${comment.createdById.slice(0, 5)}...`}
+                          {`${comment?.createdById.slice(0, 5)}...`}
                         </li>
                         <li className=" mt-2 ml-5 text-sm min-w-[78px]">
                           👍 👎 (+3)
@@ -550,7 +550,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   });
 
   const arr: any[] = [];
-  fiction?.keywords.map((item) => arr.push(item.keyword?.name));
+  fiction?.keywords.map((item) => arr.push(item?.keyword?.name));
   const keywordSame = arr.map((word) => ({
     keywords: {
       some: {

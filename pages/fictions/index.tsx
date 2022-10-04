@@ -42,8 +42,6 @@ interface FictionsResponse {
 }
 
 const Fictions: NextPage<FictionsResponse> = ({
-  fictions,
-  fictionsCount,
   keywords,
   categories,
   nationalities,
@@ -78,7 +76,7 @@ const Fictions: NextPage<FictionsResponse> = ({
     }
     // console.log(queryString);
     // console.log(data);
-    const genresMany = { genres: Array.from(checkedGenres).join(",") } || {};
+    // const genresMany = { genres: Array.from(checkedGenres).join(",") } || {};
 
     // console.log(genresMany);
 
@@ -293,21 +291,21 @@ const Fictions: NextPage<FictionsResponse> = ({
                     <th className=" min-w-[50px]">키워드</th>
                     <td className=" leading-[1.8rem] flex flex-wrap">
                       {keywords
-                        .filter((keyword) => keyword.isOfCons !== true)
+                        .filter((keyword) => keyword?.isOfCons !== true)
                         .map((keyword) => (
-                          <label key={keyword.id} className="  flex ">
+                          <label key={keyword?.id} className="  flex ">
                             <input
                               onClick={(e) => checkHandler(e)}
                               type="checkbox"
                               id="keyword"
                               className=" hidden peer"
-                              value={keyword.name}
+                              value={keyword?.name}
                             />
                             <div className=" cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mx-[0.35rem] rounded-3xl border-[#BBBBBB] p-1  ">
                               {/* {
                               " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                             } */}
-                              #{keyword.name}
+                              #{keyword?.name}
                             </div>
                           </label>
                         ))}
@@ -397,7 +395,7 @@ export async function getStaticProps() {
 
   // nationality 중복제거 (fiction.nationality -> nationality)
   let nationalities: Array<any> = [];
-  fictions.map((fiction: any) => nationalities.push(fiction.nationality));
+  fictions.map((fiction: any) => nationalities.push(fiction?.nationality));
   nationalities = [...new Set(nationalities)].filter((item) => item !== "");
   // console.log(nationalities);
 

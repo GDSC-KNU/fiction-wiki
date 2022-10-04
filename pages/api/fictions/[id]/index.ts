@@ -47,12 +47,7 @@ async function handler(
           category: true,
         },
       },
-      author: {
-        select: {
-          name: true,
-          relatedName: true,
-        },
-      },
+      author: true,
     },
   });
 
@@ -101,34 +96,34 @@ async function handler(
     );
 
     // userfictionstat
-    const ration = await client.userFictionStat.findFirst({
-      where: {
-        fictionId: prevFiction?.id,
-      },
-      select: {
-        originality: true,
-        writing: true,
-        character: true,
-        verisimilitude: true,
-        synopsisComposition: true,
-        value: true,
-      },
-    });
+    // const ration = await client.userFictionStat.findFirst({
+    //   where: {
+    //     fictionId: prevFiction?.id,
+    //   },
+    //   select: {
+    //     originality: true,
+    //     writing: true,
+    //     character: true,
+    //     verisimilitude: true,
+    //     synopsisComposition: true,
+    //     value: true,
+    //   },
+    // });
 
     // userRationOnFiction
-    const userRation = await client.userRationOnFiction.findFirst({
-      where: {
-        userId: session?.user?.id,
-      },
-    });
+    // const userRation = await client.userRationOnFiction.findFirst({
+    //   where: {
+    //     userId: session?.user?.id,
+    //   },
+    // });
 
     res.json({
       ok: true,
       prevFiction,
       isLiked,
-      ration,
-      userRation,
-      similarFictions,
+      // ration,
+      // userRation,
+      // similarFictions,
     });
   }
   if (req.method === "PUT") {

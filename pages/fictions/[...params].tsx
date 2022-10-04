@@ -295,18 +295,18 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     <th className=" min-w-[50px]">키워드</th>
                     <td className=" leading-[1.8rem] flex flex-wrap">
                       {keywords
-                        .filter((keyword) => keyword.isOfCons !== true)
+                        .filter((keyword) => keyword?.isOfCons !== true)
                         .map((keyword) => (
-                          <label key={keyword.id} className="  flex ">
+                          <label key={keyword?.id} className="  flex ">
                             <input
                               onClick={(e) => checkHandler(e)}
                               type="checkbox"
                               id="keyword"
                               className=" hidden peer"
-                              value={keyword.name}
+                              value={keyword?.name}
                             />
                             <div className=" cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mx-[0.35rem] rounded-3xl border-[#BBBBBB] p-1  ">
-                              #{keyword.name}
+                              #{keyword?.name}
                             </div>
                           </label>
                         ))}
