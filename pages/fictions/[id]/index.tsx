@@ -98,10 +98,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
-  // console.log(
-  //   fiction?.categories.reduce((acc, cur) => [...acc, cur?.category?.name], [])
-  // );
-  // console.log(fiction?.categories);
 
   return (
     <div className=" max-w-[1100px]">
@@ -183,9 +179,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">작가</div>
-                <Link passHref href={`/authors/${fiction?.author?.name}`}>
+                <Link passHref href={`/authors/name/${fiction?.author?.name}`}>
                   <a
-                    title={`${fiction?.author?.name}`}
+                    title={fiction?.author?.name}
                     className=" col-span-6 hover:cursor-pointer text-blue-500"
                   >
                     {fiction?.author?.name}

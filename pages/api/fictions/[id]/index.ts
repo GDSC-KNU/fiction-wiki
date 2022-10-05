@@ -164,7 +164,7 @@ async function handler(
       session: { user },
     } = req;
 
-    console.log(setup);
+    // console.log(setup);
 
     genre = genre
       .split(" ")

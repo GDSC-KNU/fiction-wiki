@@ -29,11 +29,11 @@ const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
 
   return (
     <div className=" mt-12">
-      <FictionList
+      {/* <FictionList
         data={authors}
         type={"authors_list"}
         authorsCount={authorsCount}
-      />
+      /> */}
     </div>
   );
 };
@@ -53,19 +53,19 @@ export const getStaticProps: GetStaticProps = async (
   // }
   // console.log(page);
 
-  const authors = await client.author.findMany({
-    take: 18,
-    skip: 0,
-    include: {
-      fictions: true,
-    },
-  });
+  // const authors = await client.author.findMany({
+  //   take: 18,
+  //   skip: 0,
+  //   include: {
+  //     fictions: true,
+  //   },
+  // });
 
   const authorsCount = await client.author.count({});
 
   return {
     props: {
-      authors: JSON.parse(JSON.stringify(authors)),
+      // authors: JSON.parse(JSON.stringify(authors)),
       authorsCount: JSON.parse(JSON.stringify(authorsCount)),
     },
   };
