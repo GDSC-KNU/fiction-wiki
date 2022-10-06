@@ -4,6 +4,11 @@ const removeImports = require("next-remove-imports")();
 
 const nextConfig = {
   reactStrictMode: true,
+  // experimental: {
+  //   reactRoot: true,
+  //   /*  runtime: "nodejs",
+  //   serverComponents: true, */
+  // },
   images: {
     domains: [
       "lh3.googleusercontent.com",

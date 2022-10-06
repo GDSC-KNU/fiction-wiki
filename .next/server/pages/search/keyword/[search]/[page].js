@@ -59,9 +59,7 @@ const SearchKeywordPage = (data)=>{
     (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
         router.push(`/search/keyword/${search}/${pageIndex}`);
     }, [
-        router,
-        pageIndex,
-        search
+        pageIndex
     ]);
     return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("section", {
         className: " w-[100vw] max-w-[1300px] min-h-[213px] ",

@@ -1,7 +1,7 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest, ev: NextFetchEvent) {
+export function middleware(req: NextRequest, ev: NextFetchEvent) {
   const requestForNextAuth = {
     headers: {
       cookie: req.headers.get("cookie"),

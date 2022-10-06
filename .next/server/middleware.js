@@ -43,7 +43,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(301);
 /* harmony import */ var next_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_server__WEBPACK_IMPORTED_MODULE_0__);
 
-async function middleware(req, ev) {
+function middleware(req, ev) {
     const requestForNextAuth = {
         headers: {
             cookie: req.headers.get("cookie")
