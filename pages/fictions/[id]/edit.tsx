@@ -101,14 +101,8 @@ const EditFiction: NextPage = () => {
   const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
     `/api/fictions/${router.query.id}`
   );
-  const {
-    register,
-    handleSubmit,
-    resetField,
-    watch,
-    formState: { errors },
-    setValue,
-  } = useForm<EditFictionForm>({ mode: "onBlur" });
+  const { register, handleSubmit, resetField, watch, setValue } =
+    useForm<EditFictionForm>({ mode: "onBlur" });
 
   //날짜변환 function
   function formatDate(date: any) {
@@ -226,8 +220,9 @@ const EditFiction: NextPage = () => {
     }
   }, [thumb]);
 
-  const onInvalid = (erros: FieldErrors) => {
+  const onInvalid = (errors: FieldErrors) => {
     if (loading) return;
+    if (errors) return;
   };
 
   /// watch state (react-hook-form)
@@ -320,6 +315,7 @@ const EditFiction: NextPage = () => {
                         className=" object-cover"
                         src={thumbPreview || "/"}
                         layout="fill"
+                        alt="thumbnail"
                       />
                       <input
                         {...register("thumb")}

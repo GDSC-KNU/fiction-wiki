@@ -285,7 +285,7 @@ async function handler(
 
     // console.log(Ration);
 
-    res.json({ ok: true });
+    res.json({ ok: true, Ration });
   }
 }
 

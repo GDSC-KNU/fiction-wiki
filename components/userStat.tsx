@@ -4,7 +4,7 @@ import { Fiction } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Input from "@components/input";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 // import { validateRequest } from "twilio/lib/webhooks/webhooks";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
@@ -22,13 +22,13 @@ export default function UserStat() {
     useMutation<RateUserStatMutation>(
       `/api/fictions/${router.query.id}/userRate`
     );
-  const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
-    router.query.id
-      ? typeof window === "undefined"
-        ? null
-        : `/api/fictions/${router.query.id}`
-      : null
-  );
+  // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
+  //   router.query.id
+  //     ? typeof window === "undefined"
+  //       ? null
+  //       : `/api/fictions/${router.query.id}`
+  //     : null
+  // );
 
   interface RateUserStatMutation {
     ok: boolean;
@@ -36,15 +36,9 @@ export default function UserStat() {
   }
 
   // Useform
-  const {
-    register,
-    handleSubmit,
-    reset,
-    resetField,
-    watch,
-    formState: { errors },
-    setValue,
-  } = useForm<RateUserStatForm>({ mode: "onBlur" });
+  const { register, handleSubmit, watch } = useForm<RateUserStatForm>({
+    mode: "onBlur",
+  });
 
   const [
     curOriginality,
@@ -55,7 +49,7 @@ export default function UserStat() {
     curValue,
   ] = watch()?.UserFictionStat || [0, 0, 0, 0, 0, 0];
 
-  const userCount = UserStatData?.prevFiction?.userFictionStat?._count?.users;
+  // const userCount = UserStatData?.prevFiction?.userFictionStat?._count?.users;
 
   function btnOnOff() {
     const target = document.getElementById(
@@ -65,10 +59,10 @@ export default function UserStat() {
   }
 
   //소수점 둘째자리 숫자로 변환
-  const fixFloat = function (n: number) {
-    const m = Number((Math.abs(n) * 100).toPrecision(15));
-    return Math.round(m) / (100 * Math.sign(n));
-  };
+  // const fixFloat = function (n: number) {
+  //   const m = Number((Math.abs(n) * 100).toPrecision(15));
+  //   return Math.round(m) / (100 * Math.sign(n));
+  // };
 
   const buttonFlag = useRef(true);
   const onRateClick = (data: RateUserStatForm) => {
