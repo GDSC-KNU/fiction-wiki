@@ -29,7 +29,11 @@ export default function FictionRadarChart(props: any) {
   const router = useRouter();
 
   const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
-    router.query.id ? `/api/fictions/${router.query.id}` : null
+    router.query.id
+      ? typeof window === "undefined"
+        ? null
+        : `/api/fictions/${router.query.id}`
+      : null
   );
 
   let data = {

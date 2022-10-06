@@ -22,7 +22,11 @@ export default function UserStat() {
       `/api/fictions/${router.query.id}/userRate`
     );
   const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
-    router.query.id ? `/api/fictions/${router.query.id}` : null
+    router.query.id
+      ? typeof window === "undefined"
+        ? null
+        : `/api/fictions/${router.query.id}`
+      : null
   );
 
   interface RateUserStatMutation {

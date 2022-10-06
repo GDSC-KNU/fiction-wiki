@@ -11,7 +11,9 @@ const TitleSearch: NextPage = () => {
 
   const { data, error, mutate } = useSWR(
     router?.query?.search
-      ? `/api/search/title/${router?.query?.search}?page=${pageIndex}`
+      ? typeof window === "undefined"
+        ? null
+        : `/api/search/title/${router?.query?.search}?page=${pageIndex}`
       : null
   );
 

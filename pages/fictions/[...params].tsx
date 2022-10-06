@@ -61,7 +61,9 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     }${"&page=" + pageIndex}`;
   }
 
-  let { data, error } = useSWR<FictionsResponse>(queryString);
+  let { data, error } = useSWR<FictionsResponse>(
+    typeof window === "undefined" ? null : queryString
+  );
 
   // pageIndex 변경될때마다 router.push
   useEffect(() => {

@@ -92,7 +92,11 @@ const EditFiction: NextPage = () => {
   // const { user, isLoading } = useUser();
   const router = useRouter();
   const { data: fiction } = useSWR<FictionDetailResponse>(
-    router.query.id ? `/api/fictions/${router.query.id}` : null
+    router.query.id
+      ? typeof window === "undefined"
+        ? null
+        : `/api/fictions/${router.query.id}`
+      : null
   );
   const [editFiction, { loading, data, error }] =
     useMutation<EditFictionMutation>(`/api/fictions/${router.query.id}`);

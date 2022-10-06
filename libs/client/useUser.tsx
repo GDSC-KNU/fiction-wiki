@@ -3,7 +3,9 @@ import { useEffect } from "react";
 import useSWR from "swr";
 
 export default function useUser() {
-  const { data, error } = useSWR("/api/users/me");
+  const { data, error } = useSWR(
+    typeof window === "undefined" ? null : "/api/users/me"
+  );
   // const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
