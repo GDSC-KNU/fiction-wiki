@@ -44,9 +44,11 @@ export default function Gnb() {
               <a>작가</a>
             </Link>
           </li>
-          <Link href="/ranking">
-            <li className="mr-3">Ranking</li>
-          </Link>
+          <li className="mr-3">
+            <Link href="/ranking" passHref>
+              <a>Ranking</a>
+            </Link>
+          </li>
           {user ? (
             <li className="mr-3">
               <Link href="/fictions/create">

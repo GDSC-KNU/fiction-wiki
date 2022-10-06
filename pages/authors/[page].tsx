@@ -49,7 +49,7 @@ const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: "blocking",

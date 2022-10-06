@@ -353,7 +353,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: "blocking",
