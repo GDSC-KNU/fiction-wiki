@@ -1,10 +1,11 @@
+import React from "react";
 import useMutation from "@libs/client/useMutation";
-import { Fiction, UserRationOnFiction } from "@prisma/client";
+import { Fiction } from "@prisma/client";
 import { useRouter } from "next/router";
-import { FieldErrors, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "@components/input";
 import useSWR, { useSWRConfig } from "swr";
-import { validateRequest } from "twilio/lib/webhooks/webhooks";
+// import { validateRequest } from "twilio/lib/webhooks/webhooks";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
 
@@ -45,7 +46,7 @@ export default function UserStat() {
     setValue,
   } = useForm<RateUserStatForm>({ mode: "onBlur" });
 
-  let [
+  const [
     curOriginality,
     curWriting,
     curCharacter,
@@ -54,7 +55,7 @@ export default function UserStat() {
     curValue,
   ] = watch()?.UserFictionStat || [0, 0, 0, 0, 0, 0];
 
-  let userCount = UserStatData?.prevFiction?.userFictionStat?._count?.users;
+  const userCount = UserStatData?.prevFiction?.userFictionStat?._count?.users;
 
   function btnOnOff() {
     const target = document.getElementById(
@@ -65,7 +66,7 @@ export default function UserStat() {
 
   //소수점 둘째자리 숫자로 변환
   const fixFloat = function (n: number) {
-    let m = Number((Math.abs(n) * 100).toPrecision(15));
+    const m = Number((Math.abs(n) * 100).toPrecision(15));
     return Math.round(m) / (100 * Math.sign(n));
   };
 

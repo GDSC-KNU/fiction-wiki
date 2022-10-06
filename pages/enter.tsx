@@ -1,3 +1,4 @@
+import React from "react";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -23,7 +24,7 @@ interface MutationResult {
 
 const Enter: NextPage = () => {
   const { data: session } = useSession();
-  const [enter, { loading, data, error }] =
+  const [enter, { loading, data }] =
     useMutation<MutationResult>("/api/users/enter");
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");

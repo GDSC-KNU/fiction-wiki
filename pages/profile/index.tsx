@@ -1,3 +1,4 @@
+import React from "react";
 import { Fiction, User, Comment, UserFictionStat } from "@prisma/client";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";

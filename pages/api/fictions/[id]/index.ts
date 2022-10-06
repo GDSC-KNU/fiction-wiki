@@ -10,7 +10,7 @@ async function handler(
 ) {
   let {
     query: { id },
-    session: { user },
+    // session: { user },
   } = req;
 
   const session = await getSession({ req });
@@ -161,7 +161,7 @@ async function handler(
         isTranslated,
         setup,
       },
-      session: { user },
+      // session: { user },
     } = req;
 
     // console.log(setup);

@@ -8,10 +8,10 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const {
-    session: { user },
-    url,
-  } = req;
+  // const {
+  //   session: { user },
+  //   url,
+  // } = req;
   // console.log(url);
   const session = await getSession({ req });
   // console.log(session);

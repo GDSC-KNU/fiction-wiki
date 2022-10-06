@@ -47,7 +47,7 @@ const Fictions: NextPage<FictionsResponse> = ({
   nationalities,
 }) => {
   const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
-  let router = useRouter();
+  const router = useRouter();
   // console.log(router.query?.keywords);
 
   let queryString = `/api/fictions?${
@@ -60,7 +60,7 @@ const Fictions: NextPage<FictionsResponse> = ({
   }${"&page=" + pageIndex}`;
   // console.log(queryString);
 
-  let { data, error } = useSWR<FictionsResponse>(
+  const { data, error } = useSWR<FictionsResponse>(
     typeof window === "undefined" ? null : queryString
   );
 

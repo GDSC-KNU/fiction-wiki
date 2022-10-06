@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -9,7 +10,7 @@ import {
 } from "chart.js";
 import { useRouter } from "next/router";
 import { Radar } from "react-chartjs-2";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 ChartJS.register(
   RadialLinearScale,
@@ -20,15 +21,15 @@ ChartJS.register(
   Legend
 );
 
-interface RateUserStatForm {
-  UserFictionStat: number[];
-}
+// interface RateUserStatForm {
+//   UserFictionStat: number[];
+// }
 
 export default function FictionRadarChart(props: any) {
   // console.log(props)
   const router = useRouter();
 
-  const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
+  const { data: UserStatData } = useSWR<any>(
     router.query.id
       ? typeof window === "undefined"
         ? null
@@ -36,7 +37,7 @@ export default function FictionRadarChart(props: any) {
       : null
   );
 
-  let data = {
+  const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [
       {

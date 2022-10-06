@@ -1,7 +1,7 @@
 import { Author } from "@prisma/client";
-import type { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import client from "@libs/server/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { authorPageAtom } from "../../atoms";
 import FictionList from "@components/fictionList";
@@ -16,11 +16,11 @@ interface AuthorResponse {
 //   page: string;
 // }
 
-const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
+const Authors: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   let router = useRouter();
-  // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  console.log(authorPageIndex);
+
+  // console.log(authorPageIndex);
 
   useEffect(() => {
     setAuthorPageIndex(authorPageIndex);
@@ -38,34 +38,34 @@ const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (
-  ctx: GetStaticPropsContext
-) => {
-  // const { page } = ctx.params as IParams;
-  // if (!page) {
-  //   return {
-  //     props: {},
-  //   };
-  // }
-  // console.log(page);
+export const getStaticProps: GetStaticProps = async () =>
+  // ctx: GetStaticPropsContext
+  {
+    // const { page } = ctx.params as IParams;
+    // if (!page) {
+    //   return {
+    //     props: {},
+    //   };
+    // }
+    // console.log(page);
 
-  const authors = await client.author.findMany({
-    take: 18,
-    skip: 0,
-    include: {
-      fictions: true,
-    },
-  });
+    const authors = await client.author.findMany({
+      take: 18,
+      skip: 0,
+      include: {
+        fictions: true,
+      },
+    });
 
-  const authorsCount = await client.author.count({});
+    const authorsCount = await client.author.count({});
 
-  return {
-    props: {
-      authors: JSON.parse(JSON.stringify(authors)),
-      authorsCount: JSON.parse(JSON.stringify(authorsCount)),
-    },
+    return {
+      props: {
+        authors: JSON.parse(JSON.stringify(authors)),
+        authorsCount: JSON.parse(JSON.stringify(authorsCount)),
+      },
+    };
   };
-};
 
 // export async function getStaticProps() {
 //     const authors = await client.author.findUnique({
@@ -76,4 +76,4 @@ export const getStaticProps: GetStaticProps = async (
 //   });
 // }
 
-export default Author;
+export default Authors;

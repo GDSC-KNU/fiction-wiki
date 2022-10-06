@@ -17,14 +17,13 @@ async function handler(
   const {
     query: { id },
     // session: { user },
-    body: { UserFictionStat, comment },
+    body: { UserFictionStat },
   } = req;
   const session = await getSession({ req });
   if (!session) {
     res.json({ ok: false });
     return;
   } else {
-    let commentation;
     let Ration;
     // console.log(session?.user?.email);
     const alreadyExists = await client.userFictionStat.findFirst({
@@ -100,21 +99,21 @@ async function handler(
         },
       });
 
-      commentation = await client.comment.create({
-        data: {
-          comment: comment,
-          createdBy: {
-            connect: {
-              id: session?.user?.id,
-            },
-          },
-          fiction: {
-            connect: {
-              id: +id!.toString(),
-            },
-          },
-        },
-      });
+      // commentation = await client.comment.create({
+      //   data: {
+      //     comment: comment,
+      //     createdBy: {
+      //       connect: {
+      //         id: session?.user?.id,
+      //       },
+      //     },
+      //     fiction: {
+      //       connect: {
+      //         id: +id!.toString(),
+      //       },
+      //     },
+      //   },
+      // });
     } else {
       //유저의 id로 userRationOnFiction entity 탐색.
       const userRated = await client.userRationOnFiction.findFirst({
@@ -210,21 +209,21 @@ async function handler(
           },
         });
 
-        commentation = await client.comment.create({
-          data: {
-            comment: comment,
-            createdBy: {
-              connect: {
-                id: session?.user?.id,
-              },
-            },
-            fiction: {
-              connect: {
-                id: +id!.toString(),
-              },
-            },
-          },
-        });
+        // commentation = await client.comment.create({
+        //   data: {
+        //     comment: comment,
+        //     createdBy: {
+        //       connect: {
+        //         id: session?.user?.id,
+        //       },
+        //     },
+        //     fiction: {
+        //       connect: {
+        //         id: +id!.toString(),
+        //       },
+        //     },
+        //   },
+        // });
       }
       // 유저가 중복 제출하는 경우
       else {

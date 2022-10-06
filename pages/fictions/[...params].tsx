@@ -9,7 +9,7 @@ import {
 import type { GetStaticPaths, NextPage } from "next";
 import useSWR from "swr";
 import client from "@libs/server/client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -46,8 +46,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   categories,
   nationalities,
 }) => {
-  let [pageIndex, setPageIndex] = useRecoilState(pageAtom);
-  let router = useRouter();
+  const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
+  const router = useRouter();
   // console.log(router.query);
   let queryString = "";
   if (router.query.params) {
@@ -61,7 +61,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     }${"&page=" + pageIndex}`;
   }
 
-  let { data, error } = useSWR<FictionsResponse>(
+  const { data, error } = useSWR<FictionsResponse>(
     typeof window === "undefined" ? null : queryString
   );
 

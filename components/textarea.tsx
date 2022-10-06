@@ -1,3 +1,4 @@
+import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface TextAreaProps {

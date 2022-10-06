@@ -23,7 +23,7 @@ interface dataResponse {
 }
 
 const SearchKeywordPage: NextPage<dataResponse> = (data) => {
-  let router = useRouter();
+  const router = useRouter();
   const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
 
   const { search } = router.query;

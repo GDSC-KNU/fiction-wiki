@@ -9,7 +9,7 @@ async function handler(
 ) {
   const {
     query: { id, page },
-    session: { user },
+    // session: { user },
   } = req;
   //   const session = await getSession({ req });
 

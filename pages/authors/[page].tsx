@@ -5,10 +5,10 @@ import type {
   NextPage,
 } from "next";
 import client from "@libs/server/client";
-import { Fiction, Author } from "@prisma/client";
+import { Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { authorPageAtom } from "../../atoms";
 import { useRouter } from "next/router";
@@ -22,10 +22,6 @@ interface AuthorResponse {
   authorsCount: number;
 }
 
-type Props = {
-  authors: Author[];
-};
-
 // interface Params extends ParsedUrlQuery {
 //   page: string;
 // }
@@ -36,7 +32,7 @@ interface IParams extends ParsedUrlQuery {
 
 const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   const [pageIndex, setPageIndex] = useRecoilState(authorPageAtom);
-  let router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     router.push(`/authors/${pageIndex}`);

@@ -1,3 +1,4 @@
+import React from "react";
 import FictionList from "@components/fictionList";
 import { NextPage } from "next";
 import { useRouter } from "next/router";

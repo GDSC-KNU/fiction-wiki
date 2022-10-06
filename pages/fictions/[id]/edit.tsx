@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "@components/button";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Input from "@components/input";
@@ -13,7 +14,6 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import useSWR from "swr";
@@ -98,12 +98,12 @@ const EditFiction: NextPage = () => {
         : `/api/fictions/${router.query.id}`
       : null
   );
-  const [editFiction, { loading, data, error }] =
-    useMutation<EditFictionMutation>(`/api/fictions/${router.query.id}`);
+  const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
+    `/api/fictions/${router.query.id}`
+  );
   const {
     register,
     handleSubmit,
-    reset,
     resetField,
     watch,
     formState: { errors },

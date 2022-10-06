@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import useUser from "@libs/client/useUser";
@@ -62,10 +63,10 @@ export default function Gnb() {
                 <a className=" flex items-center">
                   <Image
                     className=" rounded-full"
-                    src={nextSession.user!.image ?? ""}
+                    src={nextSession?.user?.image ?? ""}
                     width={26}
                     height={26}
-                    alt={nextSession.user!.id ?? ""}
+                    alt={nextSession?.user?.id ?? ""}
                   ></Image>
                 </a>
               </Link>

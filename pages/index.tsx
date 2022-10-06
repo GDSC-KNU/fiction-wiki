@@ -1,3 +1,4 @@
+import React from "react";
 import type { NextPage } from "next";
 import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
