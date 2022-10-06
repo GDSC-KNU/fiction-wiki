@@ -67,7 +67,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   const { user, isLoading } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-    router.query.id ? `/api/fictions/${router.query.id}/fav` : null
+    router.query.id
+      ? typeof window === "undefined"
+        ? null
+        : `/api/fictions/${router.query.id}/fav`
+      : null
   );
 
   const { data: commentsResponse } = useSWR<CommentResponse>(

@@ -123,7 +123,7 @@ export default function Carousel() {
 
   return (
     <div className=" h-[45vh] overflow-hidden w-[100vw] max-h-[250px] min-h-[213px] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
-      <div
+      {/* <div
         className=" "
         id="img_container"
         // onTouchStart={touchStart}
@@ -185,7 +185,7 @@ export default function Carousel() {
           onClick={(e) => changeSlide(2)}
           className=" bg-black rounded-xl w-4 h-4 hover:bg-white transition-all "
         ></button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -42,7 +42,7 @@ async function handler(
       to: process.env.MY_PHONE!,
       body: `Your login token is ${payload}`,
     });
-    console.log(message);
+    // console.log(message);
   } else if (email) {
     const email = await mail.send({
       from: { email: "mk44879@naver.com" },
@@ -51,7 +51,7 @@ async function handler(
       text: `Your token is ${payload}`,
       html: `<strong>Your token is ${payload}</strong>`,
     });
-    console.log(email);
+    // console.log(email);
   }
 
   return res.json({

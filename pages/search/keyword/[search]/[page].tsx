@@ -30,7 +30,7 @@ const SearchKeywordPage: NextPage<dataResponse> = (data) => {
 
   useEffect(() => {
     router.push(`/search/keyword/${search}/${pageIndex}`);
-  }, [pageIndex]);
+  }, [router, pageIndex, search]);
 
   return (
     <section className="  w-[100vw] max-w-[1300px] min-h-[213px] ">

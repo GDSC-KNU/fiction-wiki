@@ -28,6 +28,7 @@ export default function Gnb() {
                   src={logo}
                   width={26}
                   height={26}
+                  alt="FictionDbs"
                 ></Image>
               </a>
             </Link>

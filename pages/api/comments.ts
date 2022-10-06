@@ -12,9 +12,9 @@ async function handler(
     session: { user },
     url,
   } = req;
-  console.log(url);
+  // console.log(url);
   const session = await getSession({ req });
-  console.log(session);
+  // console.log(session);
 
   // interface SessionWithId extends Session {
   //   id : string;

@@ -38,8 +38,6 @@ const Author: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   );
 };
 
-
-
 export const getStaticProps: GetStaticProps = async (
   ctx: GetStaticPropsContext
 ) => {

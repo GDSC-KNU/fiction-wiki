@@ -1,3 +1,6 @@
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
 import Button from "@components/button";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Input from "@components/input";
@@ -9,9 +12,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
 
 interface CreateFictionForm {
   title: string;
@@ -537,14 +537,7 @@ const Create: NextPage = (props) => {
                 label="Characters"
                 required
               />
-              {/* <Textarea
-                register={register("setup", { required: false })}
-                name="setup"
-                label="Setup"
-                required
-              /> */}
               <div>
-                {/* <MdEditor /> */}
                 <MDEditor value={md} onChange={handleChange} />
               </div>
             </div>

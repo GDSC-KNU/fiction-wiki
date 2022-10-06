@@ -1,7 +1,6 @@
 import { Fiction, User, Comment, UserFictionStat } from "@prisma/client";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-
 import useSWR from "swr";
 import Image from "next/image";
 
@@ -23,7 +22,9 @@ interface CommentsResponse {
 const Profile: NextPage = () => {
   // const { user, isLoading } = useUser();
   // const { data: user, error } = useSWR("/api/users/me");
-  const { data } = useSWR<CommentsResponse>("/api/comments");
+  const { data } = useSWR<CommentsResponse>(
+    typeof window === "undefined" ? null : "/api/comments"
+  );
   const { data: session, status } = useSession();
 
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
