@@ -1,7 +1,5 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
-// import { withAuth } from "next-auth/middleware";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const requestForNextAuth = {
@@ -13,7 +11,6 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   // console.log(requestForNextAuth.headers.cookie);
   // console.log(req.cookies.get("next-auth.csrf-token"));
   // console.log("hi");
-  //@ts-ignore
   // const session = await getSession({ req: requestForNextAuth });
   // const ua = userAgent(req);
   // if (ua?.isBot) {
