@@ -5,8 +5,9 @@ import Image from "next/image";
 import logo from "../public/fdb_logo.png";
 
 export default function Gnb() {
-  const { data: nextSession } = useSession();
-  const { user, isLoading } = useUser();
+  // const { data: nextSession } = useSession();
+  // const { user, isLoading } = useUser();
+
   // const { data: CredentailSession } = useSWR("/api/users/me");
   // console.log(user);
   // console.log(nextSession);
@@ -45,15 +46,15 @@ export default function Gnb() {
           <Link href="/ranking">
             <li className="mr-3">Ranking</li>
           </Link>
-          {user ? (
+          {/* {user ? (
             <li className="mr-3">
               <Link href="/fictions/create">
                 <a>Create</a>
               </Link>
             </li>
-          ) : null}
+          ) : null} */}
         </ul>
-        <ul className=" flex font-bold items-center">
+        {/* <ul className=" flex font-bold items-center">
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
             <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">
@@ -81,7 +82,7 @@ export default function Gnb() {
               </Link>
             </li>
           )}
-        </ul>
+        </ul> */}
       </nav>
     </header>
   );
