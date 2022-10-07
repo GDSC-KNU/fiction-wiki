@@ -50,7 +50,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   const router = useRouter();
   // console.log(router.query);
   let queryString = "";
-  if (router.query.params) {
+  if (router?.query?.params) {
     queryString = `/api/fictions?${
       "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
     }${
@@ -61,21 +61,11 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     }${"&page=" + pageIndex}`;
   }
 
-  const { data, error } = useSWR<FictionsResponse>(
-    typeof window === "undefined" ? null : queryString
-  );
+  const { data, error } = useSWR<FictionsResponse>(queryString || null);
 
   // pageIndex 변경될때마다 router.push
   useEffect(() => {
-    router.push(
-      `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-        Array.from(checkedGenres).join(",") || "all"
-      }/${
-        Array.from(checkedSortings || "총점").join(",") || "all"
-      }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
-    );
-
-    if (router.query.params) {
+    if (router?.query?.params) {
       queryString = `/api/fictions?${
         "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
       }${
@@ -84,6 +74,14 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
         "&sorting=" + (router?.query?.params[2] || "")
       }${"&page=" + pageIndex}`;
+      router.push(queryString);
+    } else {
+      queryString = `/fictions/${
+        Array.from(checkedNationalities).join(",") || "all"
+      }/${Array.from(checkedGenres).join(",") || "all"}/${
+        Array.from(checkedSortings || "총점").join(",") || "all"
+      }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
+      router.push(queryString);
     }
   }, [pageIndex]);
 
@@ -181,7 +179,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     setTimeout(() => {
       buttonFlag.current = !buttonFlag.current;
     }, 5000);
-    // setPageIndex(1);
     // router.push({
     //   pathname: "/fictions",
     //   query: {

@@ -107,15 +107,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     <div className=" max-w-[1100px]">
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
-          <Link href={`/fictions/${fiction?.id}/edit`}>
-            <div className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 mx-1">
+          <Link passHref href={`/fictions/${fiction?.id}/edit`}>
+            <a className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 mx-1">
               EDIT
-            </div>
+            </a>
           </Link>
-          <Link href={`/fictions/${fiction?.id}/delete`}>
-            <div className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 ml-1">
+          <Link passHref href={`/fictions/${fiction?.id}/delete`}>
+            <a className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 ml-1">
               DELETE
-            </div>
+            </a>
           </Link>
         </div>
       ) : null}

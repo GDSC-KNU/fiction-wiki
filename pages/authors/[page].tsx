@@ -31,12 +31,12 @@ interface IParams extends ParsedUrlQuery {
 }
 
 const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
-  const [pageIndex, setPageIndex] = useRecoilState(authorPageAtom);
+  const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   const router = useRouter();
 
   useEffect(() => {
-    router.push(`/authors/${pageIndex}`);
-  }, [pageIndex]);
+    router.push(`/authors/${authorPageIndex}`);
+  }, [authorPageIndex]);
 
   return (
     <div className=" mt-12">
@@ -49,10 +49,10 @@ const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: "blocking",
+    fallback: true,
   };
 };
 

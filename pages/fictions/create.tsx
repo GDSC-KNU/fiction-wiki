@@ -114,7 +114,7 @@ const Create: NextPage = (props) => {
   let wKeywords2: string[] = watch().mcKeywords;
   let wKeywords3: string[] = watch().subKeywords;
   let wKeywords4: string[] = watch().consKeywords;
-  let wStatus: number[] = watch().status;
+  const wStatus: number[] = watch().status;
   // console.log(watch());
 
   const onKeyDown: any = (e: any) => {
