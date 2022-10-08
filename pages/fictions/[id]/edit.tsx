@@ -89,7 +89,6 @@ const EditFiction: NextPage = () => {
     setMd(md);
   }, []);
 
-  // const { user, isLoading } = useUser();
   const router = useRouter();
   const { data: fiction } = useSWR<FictionDetailResponse>(
     router.query.id
@@ -485,7 +484,6 @@ const EditFiction: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -514,7 +512,6 @@ const EditFiction: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("mcKeywords", wKeywords2);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -543,7 +540,6 @@ const EditFiction: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("subKeywords", wKeywords3);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -572,7 +568,6 @@ const EditFiction: NextPage = () => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("consKeywords", wKeywords4);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -654,12 +649,6 @@ const EditFiction: NextPage = () => {
                 label="Characters"
                 required
               />
-              {/* <Textarea
-                register={register("setup")}
-                name="setup"
-                label="Setup"
-                required
-              /> */}
               <MDEditor value={md} onChange={handleChange} />
             </div>
           </div>

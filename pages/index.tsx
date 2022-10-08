@@ -51,12 +51,6 @@ export async function getServerSideProps() {
     include: {
       userFictionStat: {
         select: {
-          // originality: true,
-          // writing: true,
-          // character: true,
-          // verisimilitude: true,
-          // synopsisComposition: true,
-          // value: true,
           total: true,
           _count: true,
         },
@@ -83,7 +77,7 @@ export async function getServerSideProps() {
       },
     },
   });
-  // console.log(fictions);
+
   return {
     props: {
       fictions: JSON.parse(JSON.stringify(fictions)),

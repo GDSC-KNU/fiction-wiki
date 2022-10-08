@@ -14,7 +14,7 @@ const MdEditor = () => {
   //   console.log(md);
   // }, []);
 
-  return <>{/* <MDEditor value={md} onChange={handleChange} /> */}</>;
+  return <></>;
 };
 
 export default MdEditor;

@@ -26,7 +26,6 @@ ChartJS.register(
 // }
 
 export default function FictionRadarChart(props: any) {
-  // console.log(props)
   const router = useRouter();
 
   const { data: UserStatData } = useSWR<any>(
@@ -86,9 +85,6 @@ export default function FictionRadarChart(props: any) {
         borderColor: "rgba(187, 187, 187, 1)",
         borderWidth: 1,
       },
-      // {
-      //   data: [0, 0, 0, 0, 0, 0],
-      // },
     ],
   };
 
@@ -97,8 +93,6 @@ export default function FictionRadarChart(props: any) {
     maintainAspectRatio: true,
     scales: {
       r: {
-        // suggestedMin: 0,
-        // suggestedMax: 5,
         min: 0,
         max: 5,
         ticks: {
@@ -116,7 +110,6 @@ export default function FictionRadarChart(props: any) {
     plugins: {
       legend: {
         labels: {
-          // This more specific font property overrides the global property
           font: {
             size: 13,
           },
@@ -124,7 +117,6 @@ export default function FictionRadarChart(props: any) {
       },
     },
   };
-  // console.log(UserStatData);
 
   return (
     <div className=" mx-2">

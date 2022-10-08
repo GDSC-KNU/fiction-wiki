@@ -172,7 +172,6 @@ const Enter: NextPage = () => {
                 onClick={() => signOut()}
               >
                 Google Sign out
-                {/* <span>{session.user?.email}</span> */}
               </button>
             ) : (
               <button

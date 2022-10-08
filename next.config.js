@@ -18,12 +18,4 @@ const nextConfig = {
   },
 };
 
-// module.exports = nextConfig;
-
 module.exports = removeImports(nextConfig);
-
-// module.exports = (phase, { nextConfig }) => {
-//   return removeImports({
-//     ...nextConfig,
-//   });
-// };

@@ -74,7 +74,6 @@ const Create: NextPage = (props) => {
   } = useForm<CreateFictionForm>({ mode: "onBlur" });
 
   const onValid = async (data: CreateFictionForm) => {
-    // if (data) console.log(data);
     if (loading) return;
     if (data.thumb && data.thumb.length > 0) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
@@ -196,6 +195,7 @@ const Create: NextPage = (props) => {
                         className=" object-cover"
                         src={thumbPreview || "/"}
                         layout="fill"
+                        alt="thumbnail"
                       />
                       <input
                         {...register("thumb")}
@@ -365,7 +365,6 @@ const Create: NextPage = (props) => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -394,7 +393,6 @@ const Create: NextPage = (props) => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("keywords", wKeywords2);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -423,7 +421,6 @@ const Create: NextPage = (props) => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("subKeywords", wKeywords3);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -452,7 +449,6 @@ const Create: NextPage = (props) => {
                                 (item) => item !== e.currentTarget.innerHTML
                               );
                               setValue("consKeywords", wKeywords4);
-                              // console.log(e.currentTarget.innerHTML);
                             }}
                           >
                             {item}
@@ -518,10 +514,6 @@ const Create: NextPage = (props) => {
                     </div>
                   </div>
                 </div>
-                {/* <div className=" h-fit w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
-                  <h2 className=" font-bold pt-1 px-2"> Comments</h2>
-                  <ul></ul>
-                </div> */}
               </div>
             </div>
             <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">

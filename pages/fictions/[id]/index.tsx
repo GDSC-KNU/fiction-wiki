@@ -477,7 +477,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
             세계관 및 설정
           </h2>
-          {/* <a className=" ">{fiction?.setup || ""}</a> */}
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {fiction.setup || ""}
           </ReactMarkdown>
@@ -578,20 +577,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   similarFictions.map((item) => arr2.push([item.id, item.title]));
 
   const isLiked = false;
-
-  // const ration = await client.userFictionStat.findFirst({
-  //   where: {
-  //     fictionId: fiction?.id,
-  //   },
-  //   select: {
-  //     originality: true,
-  //     writing: true,
-  //     character: true,
-  //     verisimilitude: true,
-  //     synopsisComposition: true,
-  //     value: true,
-  //   },
-  // });
 
   return {
     props: {

@@ -66,22 +66,34 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // pageIndex 변경될때마다 router.push
   useEffect(() => {
     if (router?.query?.params) {
-      queryString = `/api/fictions?${
-        "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
-      }${
-        "&nationalities=" +
-        (router?.query?.params[0]?.toString().split(",") || "")
-      }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
-        "&sorting=" + (router?.query?.params[2] || "")
-      }${"&page=" + pageIndex}`;
-      router.push(queryString);
+      // queryString = `/fictions?${
+      //   "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
+      // }${
+      //   "&nationalities=" +
+      //   (router?.query?.params[0]?.toString().split(",") || "")
+      // }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
+      //   "&sorting=" + (router?.query?.params[2] || "")
+      // }${"&page=" + pageIndex}`;
+      router.push(
+        `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
+          Array.from(checkedGenres).join(",") || "all"
+        }/${
+          Array.from(checkedSortings || "총점").join(",") || "all"
+        }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
+      );
     } else {
-      queryString = `/fictions/${
-        Array.from(checkedNationalities).join(",") || "all"
-      }/${Array.from(checkedGenres).join(",") || "all"}/${
-        Array.from(checkedSortings || "총점").join(",") || "all"
-      }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
-      router.push(queryString);
+      // queryString = `/fictions/${
+      //   Array.from(checkedNationalities).join(",") || "all"
+      // }/${Array.from(checkedGenres).join(",") || "all"}/${
+      //   Array.from(checkedSortings || "총점").join(",") || "all"
+      // }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
+      router.push(
+        `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
+          Array.from(checkedGenres).join(",") || "all"
+        }/${
+          Array.from(checkedSortings || "총점").join(",") || "all"
+        }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
+      );
     }
   }, [pageIndex]);
 
@@ -260,7 +272,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                         className=" bg-white  cursor-pointer flex "
                       >
                         <input
-                          // defaultChecked
                           onClick={(e) => checkHandler(e)}
                           type="radio"
                           className=" hidden peer"
@@ -391,7 +402,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      // fictions: JSON.parse(JSON.stringify(fictions)),
       fictionsCount: JSON.parse(JSON.stringify(fictionsCount)),
       keywords: JSON.parse(JSON.stringify(keywords)),
       nationalities: JSON.parse(JSON.stringify(nationalities)),

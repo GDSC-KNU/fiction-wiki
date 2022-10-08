@@ -40,8 +40,6 @@ const authorDetail: NextPage<AuthorResponse> = ({ author }) => {
       <div className=" bg-slate-400 mb-7 pl-6 py-4">
         <h5 className=" font-bold">작가 정보</h5>
         <div className=" ">
-          {/* <img src={session?.user?.image}></img> */}
-          {/* <Image src={session?.user?.image || "/"} width={64} height={64} /> */}
           <p>{`작가 - ` + author?.name}</p>
           <p>{author?.relatedName}</p>
           <p>{`국적 - ` + author?.nationality}</p>

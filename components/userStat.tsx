@@ -66,7 +66,6 @@ export default function UserStat() {
 
   const buttonFlag = useRef(true);
   const onRateClick = (data: RateUserStatForm) => {
-    // console.log(buttonFlag.current);
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
       return;
@@ -74,7 +73,6 @@ export default function UserStat() {
     buttonFlag.current = !buttonFlag.current;
     setTimeout(() => {
       buttonFlag.current = !buttonFlag.current;
-      // console.log("해제완료");
     }, 5000);
     btnOnOff();
     if (!session) {
@@ -161,13 +159,6 @@ export default function UserStat() {
     );
     btnOnOff();
   };
-
-  // console.log(data ? data : null);
-  // console.log("Hi");
-  // console.log(watch());
-  // console.log(UserStatData?.UserFictionStat);
-
-  // console.log(userCount);
 
   return (
     <form className=" w-full" onSubmit={handleSubmit(onRateClick)}>

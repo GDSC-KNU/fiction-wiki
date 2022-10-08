@@ -29,13 +29,12 @@ const Profile: NextPage = () => {
   const { data: session, status } = useSession();
 
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  // console.log(session);
+
   return (
     <div className="   w-[100vw] max-w-[1300px] min-h-[213px] ">
       <div className=" bg-slate-400 mb-7 pl-6 py-4">
         <h5 className=" font-bold">계정 정보</h5>
         <div className=" ">
-          {/* <img src={session?.user?.image}></img> */}
           <Image
             src={session?.user?.image || "/"}
             width={64}
@@ -59,19 +58,6 @@ const Profile: NextPage = () => {
               </div>
               <div>{comment.comment}</div>
               <div className=" relative right-0">{}</div>
-
-              {/* <li
-                  key={index}
-                  className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
-                >
-                  <div className=" mt-2 text-sm overflow-hidden mr-16">
-                    {dummyComment[item]}
-                  </div>
-                  <div className=" mt-2 text-sm absolute right-24">{item}</div>
-                  <div className=" mt-2 ml-5 text-sm min-w-[78px]">
-                    👍 👎 (+3)
-                  </div>
-                </> */}
             </li>
           ))}
         </ul>

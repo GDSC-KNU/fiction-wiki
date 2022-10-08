@@ -28,23 +28,8 @@ const Search: NextPage = () => {
     <>
       <br></br>
       랭킹 페이지는 업데이트 예정입니다.
-      {/* <form>
-          <input value={text} onChange={(e) => updateText(e.target.value)} />
-          <button className=" bg-blue-200" onSubmit={handleSubmit}>
-            asd
-          </button>
-        </form> */}
     </>
   );
-  // return (
-  //   <div>
-  //     <div className=" flex justify-center">
-  //       <ul className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-1 py-2 ">
-  //         Ranking 입니다.
-  //       </ul>
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default Search;

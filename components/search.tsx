@@ -35,19 +35,12 @@ export default function Search() {
     setValue,
   } = useForm<SearchForm>({ mode: "onBlur" });
 
-  // console.log(errors);
-
   return (
     <div className=" ">
       <form
         className=" max-w-[581px] mx-auto"
         onSubmit={handleSubmit(onValid, onInvalid)}
       >
-        {/* <input
-        value={input}
-        onChange={handleInputChange}
-        placeholder="검색어를 입력하세요"
-      /> */}
         <Input
           register={register("title", {
             pattern: {

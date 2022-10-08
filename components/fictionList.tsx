@@ -203,7 +203,7 @@ export default function FictionList(props: any) {
                       {category.category.name}
                     </span>
                   ))}
-                  {/* <p className=" text-xs text-gray-400">{fiction.genre}</p> */}
+
                   <h3>
                     <Link href={`/fictions/${fiction.id}`}>
                       <a
