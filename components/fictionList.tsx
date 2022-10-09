@@ -11,10 +11,11 @@ import {
 } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-// import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
-import Pagination from "react-js-pagination";
+import Pagination from "@components/pagination";
+import { useRouter } from "next/router";
+// import Pagination from "react-js-pagination";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -43,7 +44,7 @@ interface authorWithMore extends Author {
 }
 
 export default function FictionList(props: any) {
-  // const router = useRouter();
+  const router = useRouter();
   const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
   const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
@@ -56,6 +57,7 @@ export default function FictionList(props: any) {
   // console.log(props);
   // console.log(posts);
   // console.log(props?.data);
+  console.log(pageIndex, authorPageIndex, searchPageIndex);
   return (
     <div className=" flex justify-center">
       {props.type === "fictions_list" ? (
@@ -275,7 +277,7 @@ export default function FictionList(props: any) {
             ))}
           </ul>
           <div className=" ">
-            {props.isMain === true ? null : (
+            {/* {props.isMain === true ? null : (
               <Pagination
                 activePage={pageIndex}
                 itemsCountPerPage={18}
@@ -289,7 +291,19 @@ export default function FictionList(props: any) {
                 linkClass=" w-full flex justify-center mt-[0.8px]"
                 activeClass=" text-blue-400"
               />
-            )}
+            )} */}
+            <Pagination
+              activePage={pageIndex}
+              itemsCountPerPage={18}
+              totalItemsCount={props?.data?.fictionsCount || 1}
+              totalPagesCount={Math.ceil(
+                (props?.data?.fictionsCount || 1) / 18
+              )}
+              pageRangeDisplayed={5}
+              pageGroup={
+                Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
+              }
+            />
           </div>
         </div>
       ) : props.type === "authors_list" ? (
@@ -319,7 +333,7 @@ export default function FictionList(props: any) {
             ))}
           </div>
           <div className=" ">
-            <Pagination
+            {/* <Pagination
               activePage={authorPageIndex}
               itemsCountPerPage={18}
               totalItemsCount={props?.authorsCount || 1}
@@ -331,7 +345,7 @@ export default function FictionList(props: any) {
               itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
               linkClass=" w-full flex justify-center mt-[0.8px]"
               activeClass=" text-blue-400"
-            />
+            /> */}
           </div>
         </div>
       ) : null}

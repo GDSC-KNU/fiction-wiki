@@ -14,7 +14,7 @@ const TitleSearch: NextPage = () => {
     router?.query?.search
       ? typeof window === "undefined"
         ? null
-        : `/api/search/title/${router?.query?.search}?page=${pageIndex}`
+        : `/api/search/title/${router?.query?.search}?page=${router?.query?.page}`
       : null
   );
 

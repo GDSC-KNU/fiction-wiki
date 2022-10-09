@@ -58,8 +58,6 @@ const Create: NextPage = (props) => {
   const handleChange = (md: any) => {
     setMd(md);
   };
-  ///////////
-  // console.log("redered");
   const router = useRouter();
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");

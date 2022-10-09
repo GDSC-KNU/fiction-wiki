@@ -15,7 +15,7 @@ export default function Search() {
 
   const onValid = async (data: SearchForm) => {
     if (!data.title) return;
-    router.push(`/search/title/${data.title}`);
+    router.push(`/search/title/${data.title}?page=1`);
   };
 
   //   const { result } = useSearch(search);
@@ -38,22 +38,38 @@ export default function Search() {
   return (
     <div className=" ">
       <form
-        className=" max-w-[581px] mx-auto"
+        className=" max-w-[581px] mx-auto flex"
         onSubmit={handleSubmit(onValid, onInvalid)}
       >
-        <Input
-          register={register("title", {
-            pattern: {
-              value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
-              message: "한글,영어, 숫자만 입력할 수 있습니다.",
-            },
-          })}
-          required
-          label=""
-          name="title"
-          type="text"
-          kind="search"
-        />
+        <div className=" w-full">
+          <Input
+            register={register("title", {
+              pattern: {
+                value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
+                message: "한글,영어, 숫자만 입력할 수 있습니다.",
+              },
+            })}
+            required
+            label=""
+            name="title"
+            type="text"
+            kind="search"
+          />
+        </div>
+        <svg
+          className=" mt-[4.8rem] mb-6 relative right-8 hover:cursor-pointer"
+          onClick={handleSubmit(onValid, onInvalid)}
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+            fill="black"
+          ></path>
+        </svg>
       </form>
     </div>
   );

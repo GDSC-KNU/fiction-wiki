@@ -19,7 +19,7 @@ import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
-import Pagination from "react-js-pagination";
+// import Pagination from "react-js-pagination";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import FictionRadarChart from "@components/fictionRadarChart";
@@ -443,7 +443,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   )}
                 </ul>
                 <div className=" mb-2 mt-7">
-                  <Pagination
+                  {/* <Pagination
                     activePage={commentIndex}
                     itemsCountPerPage={7}
                     totalItemsCount={commentsResponse?.commentsCount || 1}
@@ -455,7 +455,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
                     linkClass=" w-full flex justify-center mt-[0.8px]"
                     activeClass=" text-blue-400"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

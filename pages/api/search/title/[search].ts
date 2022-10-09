@@ -11,7 +11,7 @@ async function handler(
     query: { search: title, page },
   } = req;
 
-  // console.log(title, page);
+  console.log(title, page);
 
   const fictions = await client.fiction.findMany({
     take: 18,
