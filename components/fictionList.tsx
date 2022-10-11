@@ -292,18 +292,20 @@ export default function FictionList(props: any) {
                 activeClass=" text-blue-400"
               />
             )} */}
-            <Pagination
-              activePage={pageIndex}
-              itemsCountPerPage={18}
-              totalItemsCount={props?.data?.fictionsCount || 1}
-              totalPagesCount={Math.ceil(
-                (props?.data?.fictionsCount || 1) / 18
-              )}
-              pageRangeDisplayed={5}
-              pageGroup={
-                Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
-              }
-            />
+            {props.isMain === true ? null : (
+              <Pagination
+                activePage={pageIndex}
+                itemsCountPerPage={18}
+                totalItemsCount={props?.data?.fictionsCount || 1}
+                totalPagesCount={Math.ceil(
+                  (props?.data?.fictionsCount || 1) / 18
+                )}
+                pageRangeDisplayed={5}
+                pageGroup={
+                  Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
+                }
+              />
+            )}
           </div>
         </div>
       ) : props.type === "authors_list" ? (

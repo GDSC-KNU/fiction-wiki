@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
 
@@ -25,7 +25,9 @@ export default function Pagination({
   //   const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   //   const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
   const router = useRouter();
-  //   console.log(pageIndex, authorPageIndex, searchPageIndex);
+
+  const [pagingSetupState, setPaginSetupState] = useState();
+
   let lastNumber =
     pageRangeDisplayed * pageGroup > totalPagesCount
       ? totalPagesCount
@@ -33,14 +35,14 @@ export default function Pagination({
   // pageGroup * pageCount > totalPage ? totalPage : pageGroup * pageCount;
   // //pageGroup 내 첫번째 페이지 숫자
   let firstNumber = lastNumber - (pageRangeDisplayed - 1);
-  console.log({
-    activePage,
-    itemsCountPerPage,
-    totalItemsCount,
-    totalPagesCount,
-    pageRangeDisplayed,
-    pageGroup,
-  });
+  //   console.log({
+  //     activePage,
+  //     itemsCountPerPage,
+  //     totalItemsCount,
+  //     totalPagesCount,
+  //     pageRangeDisplayed,
+  //     pageGroup,
+  //   });
 
   //   useEffect(() => {
   //     // console.log(router.query);
@@ -56,6 +58,45 @@ export default function Pagination({
     router.push(`${router?.query?.search}?page=${e?.target?.innerHTML || 1}`);
   };
 
+  let pagingSetup = () => {
+    // console.log(pageGroup);
+    pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
+    let lastNumber =
+      pageGroup * pageRangeDisplayed > totalPagesCount
+        ? totalPagesCount
+        : pageGroup * pageRangeDisplayed;
+
+    let firstNumber =
+      lastNumber - (pageRangeDisplayed - 1) < 1
+        ? 1
+        : lastNumber - (pageRangeDisplayed - 1);
+    let arr = [];
+    for (let i = firstNumber; i <= lastNumber; i++) {
+      arr.push(i);
+    }
+    // console.log(arr);
+    return arr;
+  };
+
+  const pageGroupChange = (e: any) => {
+    // console.log(e.currentTarget.id === "next");
+    if (e.currentTarget.id === "next") {
+      if (+(router?.query?.page || 1) < totalPagesCount) {
+        pageGroup++;
+        router.push(
+          `${router?.query?.search}?page=${+(router?.query?.page || 1) + 1}`
+        );
+      }
+    } else {
+      if (+(router?.query?.page || 1) > 1) {
+        pageGroup--;
+        router.push(
+          `${router?.query?.search}?page=${+(router?.query?.page || 1) - 1}`
+        );
+      }
+    }
+  };
+  //   console.log(pageGroup);
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
@@ -75,12 +116,18 @@ export default function Pagination({
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing
-            <span className="font-medium">1</span>
+            {/* Showing */}
+            {/* <span className="font-medium">
+              {(+(router?.query?.page || 0).toString() - 1) *
+                itemsCountPerPage +
+                1}
+            </span>
             to
-            <span className="font-medium">10</span>
-            of
-            <span className="font-medium">97</span>
+            <span className="font-medium">
+              {+(router?.query?.page || 0).toString() * itemsCountPerPage + 1}
+            </span>
+            of */}
+            <span className="font-medium">{totalItemsCount} </span>
             results
           </p>
         </div>
@@ -90,10 +137,11 @@ export default function Pagination({
             aria-label="Pagination"
           >
             <a
-              href="/1"
+              id="prev"
+              onClick={pageGroupChange}
               className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
             >
-              <span className="sr-only">Previous</span>
+              <span className="sr-only">Prev</span>
 
               <svg
                 className="h-5 w-5"
@@ -109,25 +157,21 @@ export default function Pagination({
                 />
               </svg>
             </a>
-            {Array.from({
-              length:
-                Math.ceil(totalItemsCount / itemsCountPerPage) <= 5
-                  ? Math.ceil(totalItemsCount / itemsCountPerPage)
-                  : 5,
-            }).map((item, i) => (
+            {pagingSetup().map((item, i) => (
               <a
                 onClick={handleChange}
                 key={i}
                 aria-current="page"
                 className="relative z-10 inline-flex items-center border border-indigo-500 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20"
               >
-                {i + 1 + pageRangeDisplayed * (pageGroup - 1)}
+                {item}
               </a>
             ))}
 
             <a
-              href="#"
-              className="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              id="next"
+              onClick={pageGroupChange}
+              className="relative inline-flex itecems-nter rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
             >
               <span className="sr-only">Next</span>
 
