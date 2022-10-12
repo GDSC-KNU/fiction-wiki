@@ -96,9 +96,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     );
   }
 
-  const handlePageChange = (PI: number) => {
-    setCommentIndex(PI);
-  };
+  // const handlePageChange = (PI: number) => {
+  //   setCommentIndex(PI);
+  // };
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);

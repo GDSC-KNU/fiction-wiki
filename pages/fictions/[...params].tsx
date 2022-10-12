@@ -12,8 +12,8 @@ import client from "@libs/server/client";
 import React, { useEffect, useRef, useState } from "react";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { pageAtom } from "../../atoms";
+// import { useRecoilState } from "recoil";
+// import { pageAtom } from "../../atoms";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -46,10 +46,11 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   categories,
   nationalities,
 }) => {
-  const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
+  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
   const router = useRouter();
-  // console.log(router.query);
+
   let queryString = "";
+  // const ["keywords", "nationalities", "genres","page","sorting"] = router.query
   if (router?.query?.params) {
     queryString = `/api/fictions?${
       "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
@@ -58,44 +59,45 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       (router?.query?.params[0]?.toString().split(",") || "")
     }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
       "&sorting=" + (router?.query?.params[2] || "")
-    }${"&page=" + pageIndex}`;
+    }${"&page=" + (router?.query?.params[3] || 1)}`;
   }
-
+  // console.log(router?.query);
+  // console.log(queryString);
   const { data, error } = useSWR<FictionsResponse>(queryString || null);
 
   // pageIndex 변경될때마다 router.push
-  useEffect(() => {
-    if (router?.query?.params) {
-      // queryString = `/fictions?${
-      //   "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
-      // }${
-      //   "&nationalities=" +
-      //   (router?.query?.params[0]?.toString().split(",") || "")
-      // }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
-      //   "&sorting=" + (router?.query?.params[2] || "")
-      // }${"&page=" + pageIndex}`;
-      router.push(
-        `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-          Array.from(checkedGenres).join(",") || "all"
-        }/${
-          Array.from(checkedSortings || "총점").join(",") || "all"
-        }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
-      );
-    } else {
-      // queryString = `/fictions/${
-      //   Array.from(checkedNationalities).join(",") || "all"
-      // }/${Array.from(checkedGenres).join(",") || "all"}/${
-      //   Array.from(checkedSortings || "총점").join(",") || "all"
-      // }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
-      router.push(
-        `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-          Array.from(checkedGenres).join(",") || "all"
-        }/${
-          Array.from(checkedSortings || "총점").join(",") || "all"
-        }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
-      );
-    }
-  }, [pageIndex]);
+  // useEffect(() => {
+  //   if (router?.query?.params) {
+  //     // queryString = `/fictions?${
+  //     //   "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
+  //     // }${
+  //     //   "&nationalities=" +
+  //     //   (router?.query?.params[0]?.toString().split(",") || "")
+  //     // }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
+  //     //   "&sorting=" + (router?.query?.params[2] || "")
+  //     // }${"&page=" + pageIndex}`;
+  //     router.push(
+  //       `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
+  //         Array.from(checkedGenres).join(",") || "all"
+  //       }/${
+  //         Array.from(checkedSortings || "총점").join(",") || "all"
+  //       }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
+  //     );
+  //   } else {
+  //     // queryString = `/fictions/${
+  //     //   Array.from(checkedNationalities).join(",") || "all"
+  //     // }/${Array.from(checkedGenres).join(",") || "all"}/${
+  //     //   Array.from(checkedSortings || "총점").join(",") || "all"
+  //     // }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
+  //     router.push(
+  //       `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
+  //         Array.from(checkedGenres).join(",") || "all"
+  //       }/${
+  //         Array.from(checkedSortings || "총점").join(",") || "all"
+  //       }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
+  //     );
+  //   }
+  // }, [router]);
 
   //세부 필터링
   const [isChecked, setIsChecked] = useState(false);
@@ -181,7 +183,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   const buttonFlag = useRef(true);
   const rerenderList = () => {
-    setPageIndex(1);
+    // setPageIndex(1);
 
     if (!buttonFlag.current) {
       alert("새로고침은 5초마다 한번씩 가능합니다.");
@@ -204,9 +206,9 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     router.push(
       `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
         Array.from(checkedGenres).join(",") || "all"
-      }/${
-        Array.from(checkedSortings || "총점").join(",") || "all"
-      }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
+      }/${Array.from(checkedSortings || "총점").join(",") || "all"}/${
+        router?.query?.page || 1
+      }/${Array.from(checkedItems).join(",") || "all"}`
     );
   };
 

@@ -1,17 +1,13 @@
+import client from "@libs/server/client";
+import { Author } from "@prisma/client";
+import { ParsedUrlQuery } from "querystring";
+import FictionList from "@components/fictionList";
 import type {
   GetStaticPaths,
   GetStaticProps,
   GetStaticPropsContext,
   NextPage,
 } from "next";
-import client from "@libs/server/client";
-import { Author } from "@prisma/client";
-import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/fictionList";
-import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { authorPageAtom } from "../../atoms";
-import { useRouter } from "next/router";
 
 // interface AuthorWithFictions extends Author {
 //   fictions: Fiction[];
@@ -31,12 +27,12 @@ interface IParams extends ParsedUrlQuery {
 }
 
 const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
-  const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
-  const router = useRouter();
+  // const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
+  // const router = useRouter();
 
-  useEffect(() => {
-    router.push(`/authors/${authorPageIndex}`);
-  }, [authorPageIndex]);
+  // useEffect(() => {
+  //   router.push(`/authors/${authorPageIndex}`);
+  // }, [authorPageIndex]);
 
   return (
     <div className=" mt-12">

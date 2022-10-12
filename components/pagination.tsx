@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
+// import { useEffect, useState } from "react";
+// import { useRecoilState } from "recoil";
+// import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
 
 interface PaginationProps {
   activePage: number;
@@ -26,7 +25,7 @@ export default function Pagination({
   //   const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
   const router = useRouter();
 
-  const [pagingSetupState, setPaginSetupState] = useState();
+  // const [pagingSetupState, setPaginSetupState] = useState();
 
   let lastNumber =
     pageRangeDisplayed * pageGroup > totalPagesCount
@@ -55,7 +54,18 @@ export default function Pagination({
     // setPageIndex(e?.target?.innerHTML);
     // console.log(router.pathname);
     // window.history.pushState("", pageTitle, `${router.pathname}?page=${pageIndex}`)
-    router.push(`${router?.query?.search}?page=${e?.target?.innerHTML || 1}`);
+
+    if (router?.pathname.includes("/authors/")) {
+      router.push(`${+e?.target?.innerHTML || 1}`);
+    } else if (router?.pathname.includes("/search/keyword")) {
+      router.push(
+        `/search/keyword/${router?.query?.search}/${+e?.target?.innerHTML || 1}`
+      );
+    } else {
+      router.push(`${router?.query?.search}?page=${e?.target?.innerHTML || 1}`);
+    }
+    // console.log(router?.query, router?.query?.search);
+    // console.log();
   };
 
   let pagingSetup = () => {

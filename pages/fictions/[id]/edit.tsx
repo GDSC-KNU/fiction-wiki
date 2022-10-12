@@ -184,7 +184,7 @@ const EditFiction: NextPage = () => {
         .map((item, i) => setValue(`consKeywords.${i}`, item.keyword.name));
       // setValue("keywords.0", "asd");
     }
-  }, [fiction, setValue]);
+  }, [fiction, setValue, md]);
   // console.log(fiction);
   // console.log(fiction?.prevFiction.genre);
 

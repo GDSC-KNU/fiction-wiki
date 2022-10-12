@@ -24,13 +24,13 @@ interface dataResponse {
 
 const SearchKeywordPage: NextPage<dataResponse> = (data) => {
   const router = useRouter();
-  const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
+  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
 
-  const { search } = router.query;
+  // const { search } = router.query;
 
-  useEffect(() => {
-    router.push(`/search/keyword/${search}/${pageIndex}`);
-  }, [pageIndex]);
+  // useEffect(() => {
+  //   router.push(`/search/keyword/${search}/${pageIndex}`);
+  // }, [pageIndex]);
 
   return (
     <section className="  w-[100vw] max-w-[1300px] min-h-[213px] ">

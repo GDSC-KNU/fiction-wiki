@@ -26,7 +26,7 @@ export default function withHandler({
     //   console.log("not logged in");
     //   return res.status(200).json({ ok: false, error: "Plase Log in" });
     // }
-    console.log(req.method);
+    // console.log(req.method);
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
@@ -36,7 +36,7 @@ export default function withHandler({
     try {
       await handler(req, res);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(500).json({ error });
     }
   };

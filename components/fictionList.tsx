@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Author,
   CategoriesOnFictions,
@@ -45,19 +44,19 @@ interface authorWithMore extends Author {
 
 export default function FictionList(props: any) {
   const router = useRouter();
-  const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
-  const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
-  const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
+  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
+  // const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
+  // const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
 
-  const handlePageChange = (PI: number) => {
-    setPageIndex(PI);
-    setAuthorPageIndex(PI);
-    setSearchPageIndex(PI);
-  };
+  // const handlePageChange = (PI: number) => {
+  //   setPageIndex(PI);
+  //   setAuthorPageIndex(PI);
+  //   setSearchPageIndex(PI);
+  // };
   // console.log(props);
   // console.log(posts);
   // console.log(props?.data);
-  console.log(pageIndex, authorPageIndex, searchPageIndex);
+
   return (
     <div className=" flex justify-center">
       {props.type === "fictions_list" ? (
@@ -294,7 +293,7 @@ export default function FictionList(props: any) {
             )} */}
             {props.isMain === true ? null : (
               <Pagination
-                activePage={pageIndex}
+                activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
                 totalItemsCount={props?.data?.fictionsCount || 1}
                 totalPagesCount={Math.ceil(
@@ -348,6 +347,18 @@ export default function FictionList(props: any) {
               linkClass=" w-full flex justify-center mt-[0.8px]"
               activeClass=" text-blue-400"
             /> */}
+            {props.isMain === true ? null : (
+              <Pagination
+                activePage={+(router?.query?.page || 1)?.toString()}
+                itemsCountPerPage={18}
+                totalItemsCount={props?.authorsCount || 1}
+                totalPagesCount={Math.ceil((props?.authorsCount || 1) / 18)}
+                pageRangeDisplayed={5}
+                pageGroup={
+                  Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
+                }
+              />
+            )}
           </div>
         </div>
       ) : null}
