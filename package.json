@@ -1,5 +1,5 @@
 {
-  "name": "carrot-market",
+  "name": "fdbs-proto",
   "private": true,
   "scripts": {
     "dev": "next dev",
