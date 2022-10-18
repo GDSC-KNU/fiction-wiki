@@ -235,8 +235,8 @@ const Create: NextPage = (props) => {
                     type="text_detail"
                   />
                   <Input
-                    register={register("relatedTitle", { required: true })}
-                    required
+                    register={register("relatedTitle", { required: false })}
+                    required={false}
                     label="RelatedTitle"
                     name="relatedTitle"
                     type="text_detail"
@@ -249,8 +249,8 @@ const Create: NextPage = (props) => {
                     type="text_detail"
                   />
                   <Input
-                    register={register("relatedAuthor", { required: true })}
-                    required
+                    register={register("relatedAuthor", { required: false })}
+                    required={false}
                     label="RelatedAuthor"
                     name="relatedAuthor"
                     type="text_detail"
@@ -289,7 +289,7 @@ const Create: NextPage = (props) => {
                     <div className=" w-[48%]">
                       <Input
                         register={register("date.1")}
-                        required
+                        required={false}
                         label="EndDate"
                         name="endDate"
                         type="date"
@@ -326,14 +326,14 @@ const Create: NextPage = (props) => {
                   />
                   <Input
                     register={register("mediaMix", { required: false })}
-                    required
+                    required={false}
                     label="MediaMix"
                     name="mediaMix"
                     type="text_detail"
                   />
                   <Input
                     register={register("isTranslated", { required: false })}
-                    required
+                    required={false}
                     label="IsTranslated"
                     name="isTranslated"
                     type="text_detail"

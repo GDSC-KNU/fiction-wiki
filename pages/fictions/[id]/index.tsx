@@ -102,6 +102,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
+  // if(fiction.endDate === new Date(0)) fiction.endDate = null
+  // console.log(JSON.stringify(fiction.endDate) === JSON.stringify(new Date(0)));
 
   return (
     <div className=" max-w-[1100px]">
@@ -213,9 +215,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans">연재기간</div>
                 <div className=" col-span-6">{`${fiction?.startDate.getFullYear()}. ${
                   fiction?.startDate.getMonth() + 1
-                }. ${fiction?.startDate.getDate()} ~ ${fiction?.endDate.getFullYear()}. ${
-                  fiction?.endDate.getMonth() + 1
-                }. ${fiction?.endDate.getDate()}`}</div>
+                }. ${fiction?.startDate.getDate()} ~ ${
+                  JSON.stringify(fiction.endDate) ===
+                  JSON.stringify(new Date(0))
+                    ? ""
+                    : `${fiction?.endDate.getFullYear()}. ${
+                        fiction?.endDate.getMonth() + 1
+                      }. ${fiction?.endDate.getDate()}`
+                }`}</div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px] ">
                 <div className=" col-span-4 font-bold font-sans ">원본</div>

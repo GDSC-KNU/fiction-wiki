@@ -303,6 +303,7 @@ export default function FictionList(props: any) {
                 pageGroup={
                   Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
                 }
+                checkedParams={props?.checkedParams}
               />
             )}
           </div>
@@ -357,6 +358,7 @@ export default function FictionList(props: any) {
                 pageGroup={
                   Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
                 }
+                checkedParams={props?.checkedParams}
               />
             )}
           </div>

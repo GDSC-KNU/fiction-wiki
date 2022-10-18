@@ -12,9 +12,9 @@ declare module "iron-session" {
 const cookieConfig: IronSessionOptions = {
   cookieName: "fdbssession",
   password: process.env.COOKIE_PASSWORD!,
-  cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-  },
+  // cookieOptions: {
+  //   secure: process.env.NODE_ENV === "production",
+  // },
 };
 
 export function withApiSession(fn: any) {

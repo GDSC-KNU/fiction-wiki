@@ -358,6 +358,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
         data={data}
         type={"fictions_list"}
         count={data?.fictions?.length}
+        checkedParams={{
+          checkedItems,
+          checkedNationalities,
+          checkedGenres,
+          checkedSortings,
+        }}
       />
     </div>
   );

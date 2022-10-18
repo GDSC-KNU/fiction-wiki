@@ -11,7 +11,7 @@ async function handler(
     let {
       query: { keywords, genres, nationalities, sorting, page },
     } = req;
-
+    console.log(req.query);
     if (nationalities === "all") nationalities = "";
     if (genres === "all") genres = "";
     if (keywords === "all") keywords = "";
@@ -191,6 +191,7 @@ async function handler(
       session: { user },
     } = req;
 
+    console.log(date);
     // console.log(genre);
     genre = genre
       .split(" ")
@@ -273,7 +274,7 @@ async function handler(
     const fiction = await client.fiction.create({
       data: {
         title,
-        relatedTitle,
+        relatedTitle: relatedTitle || "",
         author: {
           connectOrCreate: {
             where: {
@@ -284,11 +285,11 @@ async function handler(
             },
           },
         },
-        relatedAuthor,
+        relatedAuthor: relatedAuthor || "",
         nationality,
         genre: "",
         startDate: new Date(date[0]),
-        endDate: new Date(date[1]),
+        endDate: date[1] ? new Date(date[1]) : new Date(0),
         original,
         platforms: platforms[0],
         image: thumbId,
@@ -298,8 +299,8 @@ async function handler(
         volume: +volume?.toString(),
         isTranslated,
         type,
-        mediaMix,
-        setup,
+        mediaMix: mediaMix || "",
+        setup: setup || "",
         categories: {
           // create: { category: { create: { name: genre } } },
           create:
@@ -341,7 +342,7 @@ async function handler(
       },
     });
     // console.log(fiction);
-    await res.revalidate("/fictions");
+    // await res.revalidate("/fictions");
 
     res.json({ ok: true, fiction });
   }
