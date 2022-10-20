@@ -29,7 +29,6 @@ export default function Pagination({
   pageGroup,
   checkedParams,
 }: PaginationProps) {
-  console.log(checkedParams);
   const router = useRouter();
 
   let lastNumber =
@@ -206,7 +205,6 @@ export default function Pagination({
     const isLastGroup =
       pageGroup * pageRangeDisplayed >= totalPagesCount ? true : false;
     if (isLastGroup) {
-      console.log(pageGroup, router?.query);
       alert("마지막 페이지입니다.");
       e.preventDefault();
       return;

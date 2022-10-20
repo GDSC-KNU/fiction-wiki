@@ -496,7 +496,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             <div key={fiction?.id}>
               <div className="h-56 w-full mb-4 bg-slate-300"></div>
               <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
-              <span>description</span>
+              {/* <span>description</span> */}
             </div>
           ))}
         </div>
