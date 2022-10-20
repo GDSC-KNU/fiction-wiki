@@ -11,6 +11,7 @@
     "@next-auth/prisma-adapter": "^1.0.1",
     "@prisma/client": "^4.2.1",
     "@sendgrid/mail": "^7.6.2",
+    "@types/react-js-pagination": "^3.0.4",
     "@uiw/react-md-editor": "^3.6.0",
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",

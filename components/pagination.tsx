@@ -35,38 +35,14 @@ export default function Pagination({
     pageRangeDisplayed * pageGroup > totalPagesCount
       ? totalPagesCount
       : pageGroup * pageRangeDisplayed;
-  // pageGroup * pageCount > totalPage ? totalPage : pageGroup * pageCount;
+
   // //pageGroup 내 첫번째 페이지 숫자
   let firstNumber = lastNumber - (pageRangeDisplayed - 1);
 
-  // console.log(router.query, router.pathname);
   let [nationalities, genres, sorting, page, keywords] =
     router?.query?.params || [];
-  // console.log(router.query?.sorting);
-  // console.log(router.query);
-  // const handleChange = (e: any) => {
-  //   // setPageIndex(e?.target?.innerHTML);
-  //   // console.log(router.pathname);
-  //   // window.history.pushState("", pageTitle, `${router.pathname}?page=${currentPage}`)
 
-  //   console.log(sorting);
-  //   if (router?.pathname.includes("/authors/")) {
-  //     router.push(`${+e?.target?.innerHTML || 1}`);
-  //   } else if (router?.pathname.includes("/search/keyword")) {
-  //     router.push(
-  //       `/search/keyword/${router?.query?.search}/${+e?.target?.innerHTML || 1}`
-  //     );
-  //   } else if (router?.pathname.includes("/search/title")) {
-  //     router.push(`${router?.query?.search}?page=${e?.target?.innerHTML || 1}`);
-  //   } else {
-  //     router.push(
-  //       `${nationalities}/${genres}/${sorting}/${
-  //         e?.target?.innerHTML || 1
-  //       }/${keywords}`
-  //     );
-  //   }
-  // };
-
+  // PageSetup function
   let pagingSetup = () => {
     pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
     let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
@@ -89,24 +65,6 @@ export default function Pagination({
     }
     return arr;
   };
-
-  // const pageGroupChange = (e: any) => {
-  //   // console.log(e.currentTarget.id === "next");
-
-  //   if (e.currentTarget.id === "next") {
-
-  //   } else {
-
-  //   }
-  // };
-
-  // if (router?.pathname.includes("/authors/")) {
-  //   router.push(`${+e?.target?.innerHTML || 1}`);
-  // } else if (router?.pathname.includes("/search/keyword")) {
-  //   router.push(
-  //     `/search/keyword/${router?.query?.search}/${+e?.target?.innerHTML || 1}`
-  //   );
-  // }
 
   const pageHrefObject = (i: any) => {
     if (router?.pathname.includes("/fictions/")) {
@@ -145,61 +103,6 @@ export default function Pagination({
       };
     }
   };
-
-  // const nextHrefObject = (i: number | string) => {
-  //   pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
-  //   let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
-
-  //   let lastNumber =
-  //     lastIndexOfPageGroup > totalPagesCount
-  //       ? totalPagesCount
-  //       : lastIndexOfPageGroup;
-
-  //   let firstNumber =
-  //     lastNumber - (pageRangeDisplayed - 1) < 1
-  //       ? 1
-  //       : lastNumber - (pageRangeDisplayed - 2);
-  //   return {
-  //     pathname: `/fictions/[nationality]/[genres]/[sorting]/[page]/[keywords]`,
-  //     query: {
-  //       nationality: nationalities,
-  //       genres: genres,
-  //       sorting: sorting,
-  //       keywords: keywords,
-  //       page: i + 1,
-  //     },
-  //   };
-  // };
-
-  // const isNextOrPrev = (i: number | string) => {
-  //   pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
-
-  //   let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
-
-  //   let lastNumber =
-  //     lastIndexOfPageGroup > totalPagesCount
-  //       ? totalPagesCount
-  //       : lastIndexOfPageGroup;
-
-  //   let firstNumber =
-  //     lastNumber - (pageRangeDisplayed - 1) < 1
-  //       ? 1
-  //       : lastNumber - (pageRangeDisplayed - 2);
-  //   // console.log(router?.query.pathname);
-
-  //   console.log(router?.query?.page, pageGroup, firstNumber, lastNumber);
-  //   if (lastNumber < totalPagesCount && i === "next") {
-  //     return lastNumber + 1;
-  //   } else if (firstNumber >= 5 && i === "prev") {
-  //     return firstNumber - 5;
-  //   } else if (typeof i == "string") {
-  //     console.log("b");
-  //     return router?.query?.page;
-  //   } else {
-  //     console.log("c");
-  //     return i;
-  //   }
-  // };
 
   const nextHandler = (e: any) => {
     const isLastGroup =
@@ -255,13 +158,6 @@ export default function Pagination({
   };
 
   const prevHandler = (e: any) => {
-    // const isFirstPage = +(router?.query?.page || 1) <= 1;
-    // if (!isFirstPage) {
-    //   // pageGroup--;
-    //   router.push(
-    //     `${router?.query?.search}?page=${+(router?.query?.page || 1) - 1}`
-    //   );
-    // }
     const isFirstGruop = pageGroup === 1 ? true : false;
     if (isFirstGruop) {
       console.log(pageGroup, router?.query);
@@ -315,22 +211,8 @@ export default function Pagination({
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Previous
-        </a>
-        <a
-          href="#"
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Next
-        </a>
-      </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3">
+      <div className="flex flex-1 items-center justify-between pr-1">
         <div>
           <p className="text-sm text-gray-700">
             {/* Showing */}

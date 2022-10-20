@@ -369,13 +369,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
-
 export async function getStaticProps() {
   const fictions = await client.fiction.findMany({
     select: {
@@ -406,7 +399,9 @@ export async function getStaticProps() {
 
   let nationalities: Array<any> = [];
   fictions.map((fiction: any) => nationalities.push(fiction.nationality));
-  nationalities = [...new Set(nationalities)].filter((item) => item !== "");
+  nationalities = await [...new Set(nationalities)].filter(
+    (item) => item !== ""
+  );
 
   return {
     props: {
@@ -415,8 +410,15 @@ export async function getStaticProps() {
       nationalities: JSON.parse(JSON.stringify(nationalities)),
       categories: JSON.parse(JSON.stringify(categories)),
     },
-    revalidate: 5,
+    revalidate: 300,
   };
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
 
 export default FictionsWithParams;

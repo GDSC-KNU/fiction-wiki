@@ -9,7 +9,6 @@ import {
   UserRationOnFiction,
   KeywordsOnFictions,
   Author,
-  Comment,
   Category,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
@@ -23,6 +22,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import FictionRadarChart from "@components/fictionRadarChart";
+import Comments from "@components/comment";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -43,16 +43,6 @@ interface FictionWithMore extends Fiction {
   categories: [Category];
 }
 
-// interface CommentWithMore extends Comment {
-//   ok: boolean;
-// }
-
-interface CommentResponse {
-  comments: Comment[];
-  commentsCount: number;
-  ok: boolean;
-}
-
 const FictionDetail: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
@@ -63,7 +53,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
-  const [commentIndex, setCommentIndex] = useState(1);
+
   const { user, isLoading } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
@@ -71,12 +61,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       ? typeof window === "undefined"
         ? null
         : `/api/fictions/${router.query.id}/fav`
-      : null
-  );
-
-  const { data: commentsResponse } = useSWR<CommentResponse>(
-    router.query.id
-      ? `/api/fictions/${router.query.id}/comment?page=${commentIndex}`
       : null
   );
 
@@ -95,10 +79,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       </div>
     );
   }
-
-  // const handlePageChange = (PI: number) => {
-  //   setCommentIndex(PI);
-  // };
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
@@ -426,46 +406,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             </div>
           </div>
           <div className=" row-span-3 mt-2">
-            <div className=" sm:pl-5 ">
-              <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-fit">
-                <h2 className=" font-bold pt-1 px-2 "></h2>
-                <ul className=" ">
-                  {commentsResponse?.comments?.map(
-                    (comment: Comment, index: number) => (
-                      <ul
-                        key={index}
-                        className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
-                      >
-                        <li className=" mt-2 text-sm overflow-hidden mr-16">
-                          {comment?.comment}
-                        </li>
-                        <li className=" mt-2 text-sm absolute right-24">
-                          {`${comment?.createdById.slice(0, 5)}...`}
-                        </li>
-                        <li className=" mt-2 ml-5 text-sm min-w-[78px]">
-                          👍 👎 (+3)
-                        </li>
-                      </ul>
-                    )
-                  )}
-                </ul>
-                <div className=" mb-2 mt-7">
-                  {/* <Pagination
-                    activePage={commentIndex}
-                    itemsCountPerPage={7}
-                    totalItemsCount={commentsResponse?.commentsCount || 1}
-                    pageRangeDisplayed={5}
-                    prevPageText={"‹"}
-                    nextPageText={"›"}
-                    onChange={handlePageChange}
-                    innerClass=" flex justify-center mt-[15px]"
-                    itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
-                    linkClass=" w-full flex justify-center mt-[0.8px]"
-                    activeClass=" text-blue-400"
-                  /> */}
-                </div>
-              </div>
-            </div>
+            <Comments />
           </div>
         </div>
       </div>
