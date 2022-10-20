@@ -415,6 +415,7 @@ export async function getStaticProps() {
       nationalities: JSON.parse(JSON.stringify(nationalities)),
       categories: JSON.parse(JSON.stringify(categories)),
     },
+    revalidate: 5,
   };
 }
 
