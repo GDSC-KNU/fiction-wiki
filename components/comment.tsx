@@ -89,7 +89,7 @@ export default function Comments() {
                 )
               )}
         </ul>
-        <div className=" flex mb-2 mt-7 justify-center">
+        <div className=" flex mb-2 mt-5 justify-center">
           <a
             onClick={prevHandler}
             id="prev"

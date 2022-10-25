@@ -17,7 +17,7 @@ async function handler(
   const {
     query: { id },
     // session: { user },
-    body: { UserFictionStat },
+    body: { UserFictionStat, comment },
   } = req;
   const session = await getSession({ req });
   if (!session) {
@@ -25,6 +25,7 @@ async function handler(
     return;
   } else {
     let Ration;
+    let commentation;
     // console.log(session?.user?.email);
     const alreadyExists = await client.userFictionStat.findFirst({
       include: {
@@ -44,9 +45,6 @@ async function handler(
         fictionId: +id!.toString(),
       },
     });
-
-    // console.log(alreadyExists);
-    // console.log(UserFictionStat);
 
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
     if (!alreadyExists) {
@@ -99,21 +97,22 @@ async function handler(
         },
       });
 
-      // commentation = await client.comment.create({
-      //   data: {
-      //     comment: comment,
-      //     createdBy: {
-      //       connect: {
-      //         id: session?.user?.id,
-      //       },
-      //     },
-      //     fiction: {
-      //       connect: {
-      //         id: +id!.toString(),
-      //       },
-      //     },
-      //   },
-      // });
+      //comment 생성
+      commentation = await client.comment.create({
+        data: {
+          comment: comment,
+          createdBy: {
+            connect: {
+              id: session?.user?.id,
+            },
+          },
+          fiction: {
+            connect: {
+              id: +id!.toString(),
+            },
+          },
+        },
+      });
     } else {
       //유저의 id로 userRationOnFiction entity 탐색.
       const userRated = await client.userRationOnFiction.findFirst({
@@ -209,21 +208,21 @@ async function handler(
           },
         });
 
-        // commentation = await client.comment.create({
-        //   data: {
-        //     comment: comment,
-        //     createdBy: {
-        //       connect: {
-        //         id: session?.user?.id,
-        //       },
-        //     },
-        //     fiction: {
-        //       connect: {
-        //         id: +id!.toString(),
-        //       },
-        //     },
-        //   },
-        // });
+        commentation = await client.comment.create({
+          data: {
+            comment: comment,
+            createdBy: {
+              connect: {
+                id: session?.user?.id,
+              },
+            },
+            fiction: {
+              connect: {
+                id: +id!.toString(),
+              },
+            },
+          },
+        });
       }
       // 유저가 중복 제출하는 경우
       else {
@@ -285,7 +284,7 @@ async function handler(
 
     // console.log(Ration);
 
-    res.json({ ok: true, Ration });
+    res.json({ ok: true, Ration, commentation });
   }
 }
 

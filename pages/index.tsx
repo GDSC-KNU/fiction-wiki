@@ -4,6 +4,7 @@ import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
 import Search from "@components/search";
 import FictionList from "@components/fictionList";
+import HeadMeta from "@components/headMeata";
 
 export interface UserFictionStatWithMore extends UserFictionStat {
   total: number;
@@ -28,6 +29,11 @@ interface FictionsResponse {
 const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
   return (
     <div>
+      <HeadMeta
+        title={"FDBS"}
+        description={"웹소설 DB제공 서비스"}
+        url={"https://fdbs-proto.vercel.app/"}
+      />
       <div>
         <Search />
       </div>
