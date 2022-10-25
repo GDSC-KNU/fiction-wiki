@@ -110,6 +110,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               layout="fill"
               objectFit="contain"
               alt={fiction?.title}
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
             />
           </div>
           <div className=" px-4">

@@ -216,7 +216,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     <div className=" mt-10 max-w-[1300px]">
       <div className=" w-full justify-center">
         <form>
-          <div className="  bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
+          <div className=" w-full bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
             <table className=" leading-7">
               <thead>
                 <tr>
@@ -227,7 +227,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               </thead>
               <tbody>
                 <tr>
-                  <th>국가</th>
+                  <th className=" min-w-[35px]">국가</th>
                   <td className=" leading-[1.8rem] flex flex-wrap">
                     {nationalities.map((nationality, i) => (
                       <label key={i} className=" cursor-pointer flex">
@@ -266,7 +266,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 </tr>
 
                 <tr>
-                  <th>정렬</th>
+                  <th className=" ">정렬</th>
                   <td className=" leading-[1.8rem] flex flex-wrap">
                     {sortingList.map((sorting, i) => (
                       <label
