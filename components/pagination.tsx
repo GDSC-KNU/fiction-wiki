@@ -101,6 +101,22 @@ export default function Pagination({
           page: i,
         },
       };
+    } else if (router?.pathname.includes("/search/genre")) {
+      return {
+        pathname: `/search/genre/[genre]/[page]`,
+        query: {
+          genre: router?.query?.search || "?",
+          page: i,
+        },
+      };
+    } else if (router?.pathname.includes("/search/type")) {
+      return {
+        pathname: `/search/type/[type]/[page]`,
+        query: {
+          type: router?.query?.search || "?",
+          page: i,
+        },
+      };
     }
   };
 
@@ -154,6 +170,22 @@ export default function Pagination({
           page: firstPageOfNextPageGroup,
         },
       });
+    } else if (router?.pathname.includes("/search/genre")) {
+      router.push({
+        pathname: `/search/genre/[genre]/[page]`,
+        query: {
+          genre: router?.query?.search || "?",
+          page: firstPageOfNextPageGroup,
+        },
+      });
+    } else if (router?.pathname.includes("/search/type")) {
+      router.push({
+        pathname: `/search/type/[type]/[page]`,
+        query: {
+          type: router?.query?.search || "?",
+          page: firstPageOfNextPageGroup,
+        },
+      });
     }
   };
 
@@ -204,6 +236,22 @@ export default function Pagination({
         pathname: `/search/keyword/[keyword]/[page]`,
         query: {
           keyword: router?.query?.search || "?",
+          page: firstPageOfPrevPageGroup,
+        },
+      });
+    } else if (router?.pathname.includes("/search/genre")) {
+      router.push({
+        pathname: `/search/genre/[genre]/[page]`,
+        query: {
+          genre: router?.query?.search || "?",
+          page: firstPageOfPrevPageGroup,
+        },
+      });
+    } else if (router?.pathname.includes("/search/type")) {
+      router.push({
+        pathname: `/search/type/[type]/[page]`,
+        query: {
+          type: router?.query?.search || "?",
           page: firstPageOfPrevPageGroup,
         },
       });

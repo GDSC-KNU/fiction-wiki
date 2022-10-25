@@ -201,17 +201,28 @@ export default function FictionList(props: any) {
                     ) : null}
                   </div>
                   <div className=" flex-col px-2 pb-2">
-                    {(fiction?.categories || Array.from({ length: 1 })).map(
-                      (category, i) => (
-                        <span
-                          key={i}
-                          className=" text-xs text-gray-400 mr-[0.35rem]"
-                        >
-                          {category?.category?.name || "genre"}
-                        </span>
-                      )
-                    )}
-
+                    <p className=" text-xs text-gray-400 mr-[0.35rem] flex ">
+                      <span className=" hover:underline mr-2">
+                        <Link href={`/search/type/${fiction?.type}/1`}>
+                          <a>{fiction?.type || "type?"}</a>
+                        </Link>
+                      </span>
+                      |
+                      <span className=" ml-2">
+                        {(fiction?.categories || Array.from({ length: 1 })).map(
+                          (category, i) => (
+                            <Link
+                              key={i}
+                              href={`/search/genre/${category?.category?.name}/1`}
+                            >
+                              <a className=" text-xs text-gray-400 mr-[0.35rem] hover:underline">
+                                {category?.category?.name || "genre"}
+                              </a>
+                            </Link>
+                          )
+                        )}
+                      </span>
+                    </p>
                     <h3>
                       <Link href={`/fictions/${fiction?.id}`}>
                         <a

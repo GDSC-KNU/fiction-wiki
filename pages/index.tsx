@@ -51,7 +51,7 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const fictions = await client.fiction.findMany({
     take: 9,
     include: {
