@@ -286,7 +286,7 @@ export default function Pagination({
             <a
               onClick={prevHandler}
               id="prev"
-              className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              className=" hover:cursor-pointer relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
             >
               <span className="sr-only">Prev</span>
 
@@ -329,7 +329,7 @@ export default function Pagination({
             <a
               onClick={nextHandler}
               id="next"
-              className="relative inline-flex itecems-nter rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              className=" hover:cursor-pointer relative inline-flex itecems-nter rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
             >
               <span className="sr-only">Next</span>
 

@@ -74,7 +74,7 @@ export default function FictionList(props: any) {
                           src={
                             fiction?.image
                               ? `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
-                              : fdbLogo
+                              : "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
                           }
                           layout="fill"
                           alt={fiction?.title}
@@ -389,9 +389,7 @@ export default function FictionList(props: any) {
             )}
           </div>
         </div>
-      ) : (
-        <div>Loading</div>
-      )}
+      ) : null}
     </div>
   );
 }

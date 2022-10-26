@@ -12,6 +12,7 @@ import client from "@libs/server/client";
 import React, { useEffect, useRef, useState } from "react";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
+import FadeLoader from "react-spinners/FadeLoader";
 // import { useRecoilState } from "recoil";
 // import { pageAtom } from "../../atoms";
 
@@ -360,20 +361,27 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
         </button>
       </div>
       {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <FictionList
-          data={data}
-          type={"fictions_list"}
-          count={data?.fictions?.length}
-          checkedParams={{
-            checkedItems,
-            checkedNationalities,
-            checkedGenres,
-            checkedSortings,
-          }}
+        <FadeLoader
+          className=" mx-auto"
+          color="black"
+          height={15}
+          width={5}
+          radius={2}
+          margin={2}
         />
-      )}
+      ) : null}
+
+      <FictionList
+        data={data}
+        type={"fictions_list"}
+        count={data?.fictions?.length}
+        checkedParams={{
+          checkedItems,
+          checkedNationalities,
+          checkedGenres,
+          checkedSortings,
+        }}
+      />
     </div>
   );
 };
