@@ -63,8 +63,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   }
   // console.log(router?.query);
   // console.log(queryString);
-  const { data, error } = useSWR<FictionsResponse>(queryString || null);
+  const { data, isValidating, error } = useSWR<FictionsResponse>(
+    queryString || null,
+    { revalidateOnFocus: false }
+  );
 
+  const isLoading = (!data && !error) || isValidating;
+  // console.log(isValidating, isLoading);
   // pageIndex 변경될때마다 router.push
   // useEffect(() => {
   //   if (router?.query?.params) {
@@ -354,17 +359,21 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           새로고침
         </button>
       </div>
-      <FictionList
-        data={data}
-        type={"fictions_list"}
-        count={data?.fictions?.length}
-        checkedParams={{
-          checkedItems,
-          checkedNationalities,
-          checkedGenres,
-          checkedSortings,
-        }}
-      />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <FictionList
+          data={data}
+          type={"fictions_list"}
+          count={data?.fictions?.length}
+          checkedParams={{
+            checkedItems,
+            checkedNationalities,
+            checkedGenres,
+            checkedSortings,
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -410,7 +419,7 @@ export async function getStaticProps() {
       nationalities: JSON.parse(JSON.stringify(nationalities)),
       categories: JSON.parse(JSON.stringify(categories)),
     },
-    revalidate: 10,
+    revalidate: 3600,
   };
 }
 
