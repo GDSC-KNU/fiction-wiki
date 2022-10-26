@@ -370,7 +370,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           margin={2}
         />
       ) : null}
-
+      <div>{data?.fictions?.length}</div>
       <FictionList
         data={data}
         type={"fictions_list"}

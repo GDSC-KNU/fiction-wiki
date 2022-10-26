@@ -60,7 +60,7 @@ export default function FictionList(props: any) {
       {props?.type === "fictions_list" ? (
         <div className="">
           <ul className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-2">
-            {props?.data?.fictions?.map(
+            {(props?.data?.fictions || Array.from({ length: 3 })).map(
               (fiction: FictionWithMore, i: number) => (
                 <li
                   key={fiction?.id || i}
@@ -248,7 +248,7 @@ export default function FictionList(props: any) {
                       {(
                         fiction?.keywords?.filter(
                           (keyword) => keyword?.keyword.isOfCons === false
-                        ) || Array.from({ length: 6 })
+                        ) || Array.from({ length: 3 })
                       ).map((keyword, i) => (
                         <Link
                           key={i}
@@ -334,7 +334,7 @@ export default function FictionList(props: any) {
             )}
           </div>
         </div>
-      ) : props.type === "authors_list" ? (
+      ) : props?.type === "authors_list" ? (
         <div>
           <div className=" grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 px-1 py-2 ">
             {props?.data?.map((author: authorWithMore) => (
@@ -389,7 +389,11 @@ export default function FictionList(props: any) {
             )}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div>
+          <ul className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-2"></ul>
+        </div>
+      )}
     </div>
   );
 }
