@@ -220,9 +220,9 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   return (
     <div className=" mt-10 max-w-[1300px]">
-      <div className=" w-full justify-center">
-        <form>
-          <div className=" w-full bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
+      <div className="  justify-center">
+        <form className=" ">
+          <div className=" mx-auto  bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
             <table className=" leading-7">
               <thead>
                 <tr>

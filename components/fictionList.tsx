@@ -60,7 +60,7 @@ export default function FictionList(props: any) {
       {props?.type === "fictions_list" ? (
         <div className="">
           <ul className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-2">
-            {(props?.data?.fictions || Array.from({ length: 3 })).map(
+            {props?.data?.fictions?.map(
               (fiction: FictionWithMore, i: number) => (
                 <li
                   key={fiction?.id || i}
