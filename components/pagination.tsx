@@ -306,23 +306,23 @@ export default function Pagination({
             </a>
 
             {pagingSetup().map((item, i) => (
-              <Link key={item} href={pageHrefObject(+item) || "/"}>
-                <a
-                  aria-current="page"
-                  className={
-                    (router?.query?.page || router?.query?.params?.[3]) ===
-                    `${item}`
-                      ? cls(
-                          "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
-                        )
-                      : cls(
-                          "relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20 cursor-pointer"
-                        )
-                  }
-                >
-                  {item}
-                  {/* border-indigo-500 bg-indigo-50 text-indigo-600 */}
-                </a>
+              <Link
+                aria-current="page"
+                className={
+                  (router?.query?.page || router?.query?.params?.[3]) ===
+                  `${item}`
+                    ? cls(
+                        "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
+                      )
+                    : cls(
+                        "relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20 cursor-pointer"
+                      )
+                }
+                key={item}
+                href={pageHrefObject(+item) || "/"}
+              >
+                {item}
+                {/* border-indigo-500 bg-indigo-50 text-indigo-600 */}
               </Link>
             ))}
 

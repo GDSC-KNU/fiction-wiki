@@ -22,38 +22,31 @@ export default function Gnb() {
       <nav className="flex w-full justify-between items-center">
         <ul className="flex uppercase font-bold ">
           <li className=" ml-3 mr-3 cursor-pointer">
-            <Link className=" " href="/" passHref>
-              <a className=" flex items-center ">
-                <Image
-                  className=" rounded-xl border-blue-800 border-4 border-solid"
-                  src={logo}
-                  width={26}
-                  height={26}
-                  alt="FictionDbs"
-                ></Image>
-              </a>
+            <Link
+              className=" first-letter:flex items-center "
+              href="/"
+              passHref
+            >
+              <Image
+                className=" rounded-xl border-blue-800 border-solid h-full"
+                src={logo}
+                width={26}
+                height={26}
+                alt="FictionDbs"
+              ></Image>
             </Link>
           </li>
           <li className="mr-3">
-            <Link href="/fictions/all/all/all/1/all">
-              <a>작품</a>
-            </Link>
+            <Link href="/fictions/all/all/all/1/all">작품</Link>
           </li>
           <li className="mr-3">
             <Link href="/authors/1" passHref>
-              <a>작가</a>
+              작가
             </Link>
           </li>
-          {/* <li className="mr-3">
-            <Link href="/ranking" passHref>
-              <a>Ranking</a>
-            </Link>
-          </li> */}
           {user ? (
             <li className="mr-3">
-              <Link href="/fictions/create">
-                <a>Create</a>
-              </Link>
+              <Link href="/fictions/create">Create</Link>
             </li>
           ) : null}
         </ul>
@@ -61,16 +54,18 @@ export default function Gnb() {
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
             <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">
-              <Link className=" rounded-full" href="/profile" passHref>
-                <a className=" flex items-center">
-                  <Image
-                    className=" rounded-full"
-                    src={nextSession?.user?.image ?? ""}
-                    width={26}
-                    height={26}
-                    alt={nextSession?.user?.id ?? ""}
-                  ></Image>
-                </a>
+              <Link
+                className=" flex items-center rounded-full"
+                href="/profile"
+                passHref
+              >
+                <Image
+                  className=" rounded-full"
+                  src={nextSession?.user?.image ?? ""}
+                  width={26}
+                  height={26}
+                  alt={nextSession?.user?.id ?? ""}
+                ></Image>
               </Link>
             </li>
           ) : null}
@@ -80,8 +75,8 @@ export default function Gnb() {
             </button>
           ) : (
             <li>
-              <Link href="/enter">
-                <a className=" mr-5 hover:cursor-pointer">Enter</a>
+              <Link className=" mr-5 hover:cursor-pointer" href="/enter">
+                Enter
               </Link>
             </li>
           )}

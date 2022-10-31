@@ -13,6 +13,8 @@ import Link from "next/link";
 import Pagination from "@components/pagination";
 import { useRouter } from "next/router";
 import fdbLogo from "/public/fdb_logo.png";
+import React, { Suspense } from "react";
+import FadeLoader from "react-spinners/FadeLoader";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -66,23 +68,23 @@ export default function FictionList(props: any) {
                   key={fiction?.id || i}
                   className=" flex my-3 bg-white border-[#BBBBBB] rounded-md"
                 >
-                  <Link href={`/fictions/${fiction?.id}`} passHref>
-                    {
-                      <a className=" relative w-[108px] h-[166px] min-w-[108px]">
-                        <Image
-                          className=" cursor-pointer"
-                          src={
-                            fiction?.image
-                              ? `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
-                              : "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-                          }
-                          layout="fill"
-                          alt={fiction?.title}
-                          placeholder="blur"
-                          blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-                        />
-                      </a>
-                    }
+                  <Link
+                    href={`/fictions/${fiction?.id}`}
+                    passHref
+                    className=" relative w-[108px] h-[166px] min-w-[108px]"
+                  >
+                    <Image
+                      className=" cursor-pointer"
+                      src={
+                        fiction?.image
+                          ? `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
+                          : "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                      }
+                      fill
+                      alt={fiction?.title}
+                      placeholder="blur"
+                      blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                    />
                   </Link>
                   <div className=" ml-1 absolute z-10">
                     {fiction?.nationality === "중국" ? (
@@ -204,7 +206,7 @@ export default function FictionList(props: any) {
                     <p className=" text-xs text-gray-400 mr-[0.35rem] flex ">
                       <span className=" hover:underline mr-2">
                         <Link href={`/search/type/${fiction?.type}/1`}>
-                          <a>{fiction?.type || "type?"}</a>
+                          {fiction?.type || "type?"}
                         </Link>
                       </span>
                       |
@@ -214,34 +216,31 @@ export default function FictionList(props: any) {
                             <Link
                               key={i}
                               href={`/search/genre/${category?.category?.name}/1`}
+                              className=" text-xs text-gray-400 mr-[0.35rem] hover:underline"
                             >
-                              <a className=" text-xs text-gray-400 mr-[0.35rem] hover:underline">
-                                {category?.category?.name || "genre"}
-                              </a>
+                              {category?.category?.name || "genre"}
                             </Link>
                           )
                         )}
                       </span>
                     </p>
                     <h3>
-                      <Link href={`/fictions/${fiction?.id}`}>
-                        <a
-                          title={`${fiction?.title}`}
-                          className=" cursor-pointer hover:underline font-bold "
-                        >
-                          {fiction?.title || "Loading"}
-                        </a>
+                      <Link
+                        title={`${fiction?.title}`}
+                        className=" cursor-pointer hover:underline font-bold "
+                        href={`/fictions/${fiction?.id}`}
+                      >
+                        {fiction?.title || "Loading"}
                       </Link>
                     </h3>
                     <p className=" text-xs text-gray-400">
                       {"by "}
-                      <Link href={`/authors/name/${fiction?.author?.name}`}>
-                        <a
-                          title={`${fiction?.author?.name}`}
-                          className=" cursor-pointer hover:underline"
-                        >
-                          {fiction?.author?.name || "작자 미상"}
-                        </a>
+                      <Link
+                        title={`${fiction?.author?.name}`}
+                        className=" cursor-pointer hover:underline"
+                        href={`/authors/name/${fiction?.author?.name}`}
+                      >
+                        {fiction?.author?.name || "작자 미상"}
                       </Link>
                     </p>
                     <p className=" h-[24px] overflow-hidden mt-1">
@@ -254,13 +253,10 @@ export default function FictionList(props: any) {
                           key={i}
                           href={`/search/keyword/${keyword?.keyword.name}/1`}
                           passHref
+                          title={`${keyword?.keyword.name}`}
+                          className=" hover:underline cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mr-[0.35rem] rounded-3xl border-[#BBBBBB] p-[0.2rem]"
                         >
-                          <a
-                            title={`${keyword?.keyword.name}`}
-                            className=" hover:underline cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mr-[0.35rem] rounded-3xl border-[#BBBBBB] p-[0.2rem]"
-                          >
-                            #{keyword?.keyword.name || "loading"}
-                          </a>
+                          #{keyword?.keyword.name || "loading"}
                         </Link>
                       ))}
                     </p>
@@ -342,21 +338,20 @@ export default function FictionList(props: any) {
                 key={author.id}
                 href={`/authors/name/${author.name}`}
                 passHref
+                className=" relative flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden"
               >
-                <a className=" relative flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                  <Image
-                    className=" "
-                    src="/anoynymous_user.png"
-                    width={142}
-                    height={160}
-                    alt={author.name}
-                  />
-                  <div className=" ml-1 absolute bottom-[17.2rem] z-10"></div>
-                  <div className=" flex-col px-2 pb-2">
-                    <div className=" flex justify-between"></div>
-                    <div className=" text-center">{author.name}</div>
-                  </div>
-                </a>
+                <Image
+                  className=" "
+                  src="/anoynymous_user.png"
+                  width={142}
+                  height={160}
+                  alt={author.name}
+                />
+                <div className=" ml-1 absolute bottom-[17.2rem] z-10"></div>
+                <div className=" flex-col px-2 pb-2">
+                  <div className=" flex justify-between"></div>
+                  <div className=" text-center">{author.name}</div>
+                </div>
               </Link>
             ))}
           </div>

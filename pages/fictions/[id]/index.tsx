@@ -89,15 +89,19 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     <div className=" max-w-[1100px]">
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
-          <Link passHref href={`/fictions/${fiction?.id}/edit`}>
-            <a className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 mx-1">
-              EDIT
-            </a>
+          <Link
+            className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 mx-1"
+            passHref
+            href={`/fictions/${fiction?.id}/edit`}
+          >
+            EDIT
           </Link>
-          <Link passHref href={`/fictions/${fiction?.id}/delete`}>
-            <a className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 ml-1">
-              DELETE
-            </a>
+          <Link
+            className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 ml-1"
+            passHref
+            href={`/fictions/${fiction?.id}/delete`}
+          >
+            DELETE
           </Link>
         </div>
       ) : null}
@@ -107,8 +111,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <div className="  w-full h-[467px] relative">
             <Image
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
-              layout="fill"
-              objectFit="contain"
+              fill
               alt={fiction?.title}
               placeholder="blur"
               blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
@@ -167,13 +170,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">작가</div>
-                <Link passHref href={`/authors/name/${fiction?.author?.name}`}>
-                  <a
-                    title={fiction?.author?.name}
-                    className=" col-span-6 hover:cursor-pointer text-blue-500"
-                  >
-                    {fiction?.author?.name}
-                  </a>
+                <Link
+                  title={fiction?.author?.name}
+                  className=" col-span-6 hover:cursor-pointer text-blue-500"
+                  passHref
+                  href={`/authors/name/${fiction?.author?.name}`}
+                >
+                  {fiction?.author?.name}
                 </Link>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
@@ -320,7 +323,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
-                          <a>#{item?.keyword?.name}</a>
+                          #{item?.keyword?.name}
                         </Link>
                       </li>
                     ))}
@@ -340,7 +343,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
-                          <a>#{item?.keyword?.name}</a>
+                          #{item?.keyword?.name}
                         </Link>
                       </li>
                     ))}
@@ -360,7 +363,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
-                          <a>#{item?.keyword?.name}</a>
+                          #{item?.keyword?.name}
                         </Link>
                       </li>
                     ))}
@@ -380,7 +383,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           href={`/search/keyword/${item?.keyword?.name}/1`}
                           passHref
                         >
-                          <a>#{item?.keyword?.name}</a>
+                          #{item?.keyword?.name}
                         </Link>
                       </li>
                     ))}

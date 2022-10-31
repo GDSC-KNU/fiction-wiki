@@ -39,7 +39,7 @@ const Profile: NextPage = () => {
             src={session?.user?.image || "/"}
             width={64}
             height={64}
-            alt={session?.user?.id}
+            alt={session?.user?.id || ""}
           />
           <div>{`사용자 - ` + session?.user?.name}</div>
         </div>

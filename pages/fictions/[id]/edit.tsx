@@ -313,7 +313,7 @@ const EditFiction: NextPage = () => {
                       <Image
                         className=" object-cover"
                         src={thumbPreview || "/"}
-                        layout="fill"
+                        fill
                         alt="thumbnail"
                       />
                       <input

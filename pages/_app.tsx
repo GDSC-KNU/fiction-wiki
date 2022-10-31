@@ -25,7 +25,7 @@ function MyApp({
         >
           <div className=" min-w-[300px]  max-h-fit flex flex-col items-center min-h-[100vh] relative">
             <Top />
-            <section className=" mt-10 mx-3 flex-column items-center pb-[60px]">
+            <section className=" mt-10 mx-3 flex-column items-center pb-[60px] w-full max-w-[1300px] px-3">
               <Component {...pageProps} />
             </section>
             <Footer />

@@ -8,6 +8,7 @@ const nextConfig = {
   //   reactRoot: true,
   //   /*  runtime: "nodejs",
   //   serverComponents: true, */
+  //   reactMode: "concurrent",
   // },
   images: {
     domains: [

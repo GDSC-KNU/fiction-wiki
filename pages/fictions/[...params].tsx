@@ -13,6 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 import FadeLoader from "react-spinners/FadeLoader";
+// import dynamic from "next/dynamic";
 // import { useRecoilState } from "recoil";
 // import { pageAtom } from "../../atoms";
 
@@ -66,44 +67,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // console.log(queryString);
   const { data, isValidating, error } = useSWR<FictionsResponse>(
     queryString || null,
-    { revalidateOnFocus: false }
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   const isLoading = (!data && !error) || isValidating;
-  // console.log(isValidating, isLoading);
-  // pageIndex 변경될때마다 router.push
-  // useEffect(() => {
-  //   if (router?.query?.params) {
-  //     // queryString = `/fictions?${
-  //     //   "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
-  //     // }${
-  //     //   "&nationalities=" +
-  //     //   (router?.query?.params[0]?.toString().split(",") || "")
-  //     // }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
-  //     //   "&sorting=" + (router?.query?.params[2] || "")
-  //     // }${"&page=" + pageIndex}`;
-  //     router.push(
-  //       `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-  //         Array.from(checkedGenres).join(",") || "all"
-  //       }/${
-  //         Array.from(checkedSortings || "총점").join(",") || "all"
-  //       }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
-  //     );
-  //   } else {
-  //     // queryString = `/fictions/${
-  //     //   Array.from(checkedNationalities).join(",") || "all"
-  //     // }/${Array.from(checkedGenres).join(",") || "all"}/${
-  //     //   Array.from(checkedSortings || "총점").join(",") || "all"
-  //     // }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`;
-  //     router.push(
-  //       `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-  //         Array.from(checkedGenres).join(",") || "all"
-  //       }/${
-  //         Array.from(checkedSortings || "총점").join(",") || "all"
-  //       }/${pageIndex}/${Array.from(checkedItems).join(",") || "all"}`
-  //     );
-  //   }
-  // }, [router]);
 
   //세부 필터링
   const [isChecked, setIsChecked] = useState(false);
@@ -218,11 +187,15 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     );
   };
 
+  // const FictionListWrapper = dynamic(() => import(`@components/fictionList`), {
+  //   suspense: true,
+  // });
+
   return (
-    <div className=" mt-10 max-w-[1300px]">
-      <div className="  justify-center">
+    <div className=" mt-10 ">
+      <div className=" justify-center">
         <form className=" ">
-          <div className=" mx-auto  bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
+          <div className=" bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
             <table className=" leading-7">
               <thead>
                 <tr>
@@ -362,7 +335,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       </div>
       {isLoading ? (
         <FadeLoader
-          className=" mx-auto"
+          className=" mx-auto absolute z-50"
           color="black"
           height={15}
           width={5}
