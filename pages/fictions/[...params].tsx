@@ -16,6 +16,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 // import dynamic from "next/dynamic";
 // import { useRecoilState } from "recoil";
 // import { pageAtom } from "../../atoms";
+// reset suspense
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
