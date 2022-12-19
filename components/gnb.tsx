@@ -37,7 +37,7 @@ export default function Gnb() {
             </Link>
           </li>
           <li className="mr-3">
-            <Link href="/fictions/all/all/all/1/all">작품</Link>
+            <Link href="/fictions">작품</Link>
           </li>
           <li className="mr-3">
             <Link href="/authors/1" passHref>

@@ -6,17 +6,14 @@ import {
   UserFictionStat,
   Author,
 } from "@prisma/client";
-import type { GetStaticPaths, NextPage } from "next";
-import useSWR from "swr";
+import type { NextPage } from "next";
 import client from "@libs/server/client";
-import React, { useEffect, useRef, useState } from "react";
-import FictionList from "@components/fictionList";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import FadeLoader from "react-spinners/FadeLoader";
-// import dynamic from "next/dynamic";
-// import { useRecoilState } from "recoil";
-// import { pageAtom } from "../../atoms";
-
+import { pageAtom } from "../../atoms";
+import dynamic from "next/dynamic";
+import { useRecoilState } from "recoil";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -44,6 +41,13 @@ interface FictionsResponse {
   nationalities: string[];
 }
 
+const DynamicFictionListWrapper = dynamic(
+  () => import(`@components/fictionListWrapper`),
+  {
+    suspense: true,
+  }
+);
+
 const FictionsWithParams: NextPage<FictionsResponse> = ({
   keywords,
   categories,
@@ -51,29 +55,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 }) => {
   // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
   const router = useRouter();
-
+  const [page, setPage] = useRecoilState(pageAtom);
   let queryString = "";
-  // const ["keywords", "nationalities", "genres","page","sorting"] = router.query
-  if (router?.query?.params) {
-    queryString = `/api/fictions?${
-      "keywords=" + (router?.query?.params[4]?.toString().split(",") || "")
-    }${
-      "&nationalities=" +
-      (router?.query?.params[0]?.toString().split(",") || "")
-    }${"&genres=" + (router?.query?.params[1]?.toString().split(",") || "")}${
-      "&sorting=" + (router?.query?.params[2] || "")
-    }${"&page=" + (router?.query?.params[3] || 1)}`;
-  }
-  // console.log(router?.query);
-  // console.log(queryString);
-  const { data, isValidating, error } = useSWR<FictionsResponse>(
-    queryString || null,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-
-  const isLoading = (!data && !error) || isValidating;
 
   //세부 필터링
   const [isChecked, setIsChecked] = useState(false);
@@ -168,7 +151,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     buttonFlag.current = !buttonFlag.current;
     setTimeout(() => {
       buttonFlag.current = !buttonFlag.current;
-    }, 5000);
+    }, 1000);
     // router.push({
     //   pathname: "/fictions",
     //   query: {
@@ -179,18 +162,30 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     //     page: pageIndex,
     //   },
     // });
-    router.push(
-      `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-        Array.from(checkedGenres).join(",") || "all"
-      }/${Array.from(checkedSortings || "총점").join(",") || "all"}/${
-        router?.query?.page || 1
-      }/${Array.from(checkedItems).join(",") || "all"}`
-    );
+
+    // router.push(
+    //   `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
+    //     Array.from(checkedGenres).join(",") || "all"
+    //   }/${Array.from(checkedSortings || "총점").join(",") || "all"}/${
+    //     router?.query?.page || 1
+    //   }/${Array.from(checkedItems).join(",") || "all"}`
+    // );
   };
 
-  // const FictionListWrapper = dynamic(() => import(`@components/fictionList`), {
-  //   suspense: true,
-  // });
+  useEffect(() => {
+    const path = {
+      pathname: "/fictions",
+      query: {
+        keywords: Array.from(checkedItems).join(",") || "all",
+        nationalities: Array.from(checkedNationalities).join(",") || "all",
+        genres: Array.from(checkedGenres).join(",") || "all",
+        sorting: Array.from(checkedSortings).join(",") || "all",
+        page: router?.query?.page || 1,
+      },
+    };
+    // console.log(page);
+    router.replace(path, undefined, { shallow: true });
+  }, [isChecked]);
 
   return (
     <div className=" mt-10 ">
@@ -326,35 +321,26 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           </details>
         </form>
       </div>
-      <div className=" w-full flex justify-center">
-        <button
-          onClick={rerenderList}
-          className=" hover:border-gray-400 hover:bg-gray-200 bg-white border-[0.5px] border-[#BBBBBB] rounded-md mt-2 p-1 w-80"
-        >
-          새로고침
-        </button>
-      </div>
-      {isLoading ? (
-        <FadeLoader
-          className=" mx-auto absolute z-50"
-          color="black"
-          height={15}
-          width={5}
-          radius={2}
-          margin={2}
+      <Suspense
+        fallback={
+          <FadeLoader
+            className=" mx-auto"
+            height={15}
+            width={5}
+            radius={2}
+            margin={2}
+            color={"#000000"}
+          />
+        }
+      >
+        <DynamicFictionListWrapper
+          checkedItems={checkedItems}
+          checkedNationalities={checkedNationalities}
+          checkedGenres={checkedGenres}
+          checkedSortings={checkedSortings}
+          isChecked={isChecked}
         />
-      ) : null}
-      <FictionList
-        data={data}
-        type={"fictions_list"}
-        count={data?.fictions?.length}
-        checkedParams={{
-          checkedItems,
-          checkedNationalities,
-          checkedGenres,
-          checkedSortings,
-        }}
-      />
+      </Suspense>
     </div>
   );
 };
@@ -404,11 +390,11 @@ export async function getStaticProps() {
   };
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   return {
+//     paths: [],
+//     fallback: "blocking",
+//   };
+// };
 
 export default FictionsWithParams;
