@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 // import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
 import { cls } from "@libs/client/utils";
 import Link from "next/link";
+import { useRecoilState } from "recoil";
+import { pageAtom } from "../atoms";
 
 interface PaginationProps {
   activePage: number;
@@ -12,7 +14,7 @@ interface PaginationProps {
   pageRangeDisplayed: number;
   totalPagesCount: number;
   pageGroup: number;
-  checkedParams: {
+  checkedParams?: {
     checkedItems: any;
     checkedNationalities: any;
     checkedGenres: any;
@@ -27,20 +29,21 @@ export default function Pagination({
   totalPagesCount,
   pageRangeDisplayed,
   pageGroup,
-  checkedParams,
-}: PaginationProps) {
+}: // checkedParams,
+PaginationProps) {
   const router = useRouter();
+  const [page, setPage] = useRecoilState(pageAtom);
 
-  let lastNumber =
-    pageRangeDisplayed * pageGroup > totalPagesCount
-      ? totalPagesCount
-      : pageGroup * pageRangeDisplayed;
+  // let lastNumber =
+  //   pageRangeDisplayed * pageGroup > totalPagesCount
+  //     ? totalPagesCount
+  //     : pageGroup * pageRangeDisplayed;
 
   // //pageGroup 내 첫번째 페이지 숫자
-  let firstNumber = lastNumber - (pageRangeDisplayed - 1);
+  // let firstNumber = lastNumber - (pageRangeDisplayed - 1);
 
-  let [nationalities, genres, sorting, page, keywords] =
-    router?.query?.params || [];
+  let { nationalities, genres, sorting, keywords } = router?.query || {};
+  console.log(router?.query);
 
   // PageSetup function
   let pagingSetup = () => {
@@ -67,14 +70,14 @@ export default function Pagination({
   };
 
   const pageHrefObject = (i: any) => {
-    if (router?.pathname.includes("/fictions/")) {
+    if (router?.pathname.includes("/fictions")) {
       return {
-        pathname: `/fictions/[nationality]/[genres]/[sorting]/[page]/[keywords]`,
+        pathname: `/fictions`,
         query: {
-          nationality: nationalities,
-          genres: genres,
-          sorting: sorting,
-          keywords: keywords,
+          nationality: nationalities || "all",
+          genres: genres || "all",
+          sorting: sorting || "all",
+          keywords: keywords || "all",
           page: i,
         },
       };
@@ -124,7 +127,7 @@ export default function Pagination({
     const isLastGroup =
       pageGroup * pageRangeDisplayed >= totalPagesCount ? true : false;
     if (isLastGroup) {
-      alert("마지막 페이지입니다.");
+      alert("마지막 페이지목록입니다.");
       e.preventDefault();
       return;
     }
@@ -134,11 +137,15 @@ export default function Pagination({
       1
     );
     pageGroup = Math.ceil(currentPage / 5);
-    const firstPageOfNextPageGroup = (pageGroup + 1) * 5 - 4;
+    let firstPageOfNextPageGroup = (pageGroup + 1) * 5 - 4;
 
-    if (router?.pathname.includes("/fictions/")) {
+    if (router?.pathname.includes("/fictions?")) {
+      pageGroup = Math.ceil(page / 5);
+      firstPageOfNextPageGroup = (pageGroup + 1) * 5 - 4;
+      // setPage(firstPageOfNextPageGroup);
+
       router.push({
-        pathname: `/fictions/[nationality]/[genres]/[sorting]/[page]/[keywords]`,
+        pathname: `/fictions`,
         query: {
           nationality: nationalities,
           genres: genres,
@@ -203,7 +210,7 @@ export default function Pagination({
       1
     );
     pageGroup = Math.ceil(currentPage / 5);
-    const firstPageOfPrevPageGroup = (pageGroup - 1) * 5 - 4;
+    let firstPageOfPrevPageGroup = (pageGroup - 1) * 5 - 4;
 
     if (router?.pathname.includes("/fictions/")) {
       router.push({
@@ -216,6 +223,10 @@ export default function Pagination({
           page: firstPageOfPrevPageGroup,
         },
       });
+      pageGroup = Math.ceil(page / 5);
+      firstPageOfPrevPageGroup = (pageGroup + 1) * 5 - 4;
+      // console.log(page, firstPageOfPrevPageGroup);
+      setPage(firstPageOfPrevPageGroup);
     } else if (router?.pathname.includes("/authors/")) {
       router.push({
         pathname: `/authors/[page]`,
@@ -266,7 +277,7 @@ export default function Pagination({
             {/* Showing */}
             {/* <span className="font-medium">
               {(+(router?.query?.page || 0).toString() - 1) *
-                itemsCountPerPage +
+                itemsCountPerPage +k 
                 1}
             </span>
             to
@@ -310,7 +321,8 @@ export default function Pagination({
                 aria-current="page"
                 className={
                   (router?.query?.page || router?.query?.params?.[3]) ===
-                  `${item}`
+                    `${item}` ||
+                  (!router?.query?.page && item === 1)
                     ? cls(
                         "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
                       )
@@ -320,6 +332,11 @@ export default function Pagination({
                 }
                 key={item}
                 href={pageHrefObject(+item) || "/"}
+                // shallow={
+                //   (router?.query?.pathname || "").includes("/fictions")
+                //     ? true
+                //     : false
+                // }
               >
                 {item}
                 {/* border-indigo-500 bg-indigo-50 text-indigo-600 */}

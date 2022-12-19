@@ -47,11 +47,16 @@ const FictionListWrapper = ({
   checkedSortings,
 }: any) => {
   const router = useRouter();
+  console.log(process.env.NODE_ENV);
+  //http://localhost:3000/api/fictions
+  //  process.env.NODE_ENV === "development"
+  // ? "http://localhost:3000/api/fictions"
+  // : "https://fdbs-proto.vercel.app/api/fictions?"
 
   let queryString = `${
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000/api/fictions"
-      : "https://fdbs-proto.vercel.app/api/fictions?"
+    process.env.NODE_ENV === "production"
+      ? "https://fdbs-proto.vercel.app/api/fictions?"
+      : "http://localhost:3000/api/fictions"
   }?${"keywords=" + (Array.from(checkedItems).join(",") || "all")}${
     "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
   }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
