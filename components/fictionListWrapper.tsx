@@ -45,9 +45,10 @@ const FictionListWrapper = ({
   checkedGenres,
   checkedNationalities,
   checkedSortings,
+  checkedDateYear,
 }: any) => {
   const router = useRouter();
-  console.log(process.env.NODE_ENV);
+  // console.log(process.env.NODE_ENV);
   //http://localhost:3000/api/fictions
   //  process.env.NODE_ENV === "development"
   // ? "http://localhost:3000/api/fictions"
@@ -61,7 +62,9 @@ const FictionListWrapper = ({
     "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
   }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
     "&sorting=" + (Array.from(checkedSortings).join(",") || "all")
-  }${"&page=" + (router?.query?.page || 1)}
+  }${"&dateYear=" + (router?.query?.dateYear || "all")}${
+    "&page=" + (router?.query?.page || 1)
+  }
   `;
 
   const [ready, setReady] = useState(false);

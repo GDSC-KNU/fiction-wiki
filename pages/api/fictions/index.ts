@@ -9,15 +9,15 @@ async function handler(
 ) {
   if (req.method === "GET") {
     let {
-      query: { keywords, genres, nationalities, sorting, page },
+      query: { keywords, genres, nationalities, sorting, page, dateYear },
     } = req;
-    console.log(req.query);
+    // console.log(req.query);
     if (nationalities === "all") nationalities = "";
     if (genres === "all") genres = "";
     if (keywords === "all") keywords = "";
+    if (dateYear === "all") dateYear = "";
     // if (sorting === "all") keywords = "";
 
-    // console.log(sorting);
     const keywordMany =
       keywords
         ?.toString()
@@ -84,6 +84,19 @@ async function handler(
       }
     };
 
+    const ReleaseDateFilter = function () {
+      if (dateYear) {
+        return {
+          startDate: {
+            gte: new Date(`${dateYear}-01-01`),
+            lte: new Date(`${dateYear}-12-31`),
+          },
+        };
+      } else {
+        return {};
+      }
+    };
+
     const fictions = await client.fiction.findMany({
       take: 18,
       skip: (+page!.toString() - 1 || 0) * 18,
@@ -96,6 +109,7 @@ async function handler(
           {
             AND: [...keywordMany],
           },
+          ReleaseDateFilter(),
         ],
       },
       include: {
@@ -138,15 +152,10 @@ async function handler(
           {
             AND: [...keywordMany],
           },
+          ReleaseDateFilter(),
         ],
       },
     });
-
-    // console.log(fictionsCount);
-
-    // console.log(sorting);
-    // console.log(fictions);
-    // const fictionsCount = await client.fiction.count({});
 
     res.json({
       ok: true,
@@ -191,7 +200,6 @@ async function handler(
       session: { user },
     } = req;
 
-    console.log(date);
     // console.log(genre);
     genre = genre
       .split(" ")

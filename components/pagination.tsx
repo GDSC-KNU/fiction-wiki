@@ -34,16 +34,9 @@ PaginationProps) {
   const router = useRouter();
   const [page, setPage] = useRecoilState(pageAtom);
 
-  // let lastNumber =
-  //   pageRangeDisplayed * pageGroup > totalPagesCount
-  //     ? totalPagesCount
-  //     : pageGroup * pageRangeDisplayed;
-
-  // //pageGroup 내 첫번째 페이지 숫자
-  // let firstNumber = lastNumber - (pageRangeDisplayed - 1);
 
   let { nationalities, genres, sorting, keywords } = router?.query || {};
-  console.log(router?.query);
+  // console.log(router?.query);
 
   // PageSetup function
   let pagingSetup = () => {
@@ -199,7 +192,7 @@ PaginationProps) {
   const prevHandler = (e: any) => {
     const isFirstGruop = pageGroup === 1 ? true : false;
     if (isFirstGruop) {
-      console.log(pageGroup, router?.query);
+      // console.log(pageGroup, router?.query);
       alert("첫 페이지목록 입니다.");
       e.preventDefault();
       return;

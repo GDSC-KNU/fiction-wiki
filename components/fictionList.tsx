@@ -56,7 +56,7 @@ export default function FictionList(props: any) {
   // console.log(props);
   // console.log(posts);
   // console.log(props?.data);
-
+  // console.log(props.data);
   return (
     <div className=" flex justify-center">
       {props?.type === "fictions_list" ? (
@@ -81,6 +81,7 @@ export default function FictionList(props: any) {
                           : "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
                       }
                       fill
+                      sizes="108px, 165.99px"
                       alt={fiction?.title}
                       placeholder="blur"
                       blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
