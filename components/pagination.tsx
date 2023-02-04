@@ -34,7 +34,6 @@ PaginationProps) {
   const router = useRouter();
   const [page, setPage] = useRecoilState(pageAtom);
 
-
   let { nationalities, genres, sorting, keywords } = router?.query || {};
   // console.log(router?.query);
 
@@ -278,7 +277,7 @@ PaginationProps) {
               {+(router?.query?.page || 0).toString() * itemsCountPerPage + 1}
             </span>
             of */}
-            <span className="font-medium">{totalItemsCount} </span>
+            <span className="font-medium">{totalItemsCount || 0} </span>
             results
           </p>
         </div>

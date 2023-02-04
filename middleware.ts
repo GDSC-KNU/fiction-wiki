@@ -8,6 +8,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
     },
   };
 
+  // console.log(req.cookies.get("next-auth.csrf-token"));
   // console.log(requestForNextAuth.headers.cookie);
   // console.log(req.cookies.get("next-auth.csrf-token"));
   // console.log("hi");

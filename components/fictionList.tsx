@@ -318,7 +318,7 @@ export default function FictionList(props: any) {
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
-                totalItemsCount={props?.data?.fictionsCount || 1}
+                totalItemsCount={props?.data?.fictionsCount || 0}
                 totalPagesCount={Math.ceil(
                   (props?.data?.fictionsCount || 1) / 18
                 )}
@@ -374,7 +374,7 @@ export default function FictionList(props: any) {
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
-                totalItemsCount={props?.authorsCount || 1}
+                totalItemsCount={props?.authorsCount || 0}
                 totalPagesCount={Math.ceil((props?.authorsCount || 1) / 18)}
                 pageRangeDisplayed={5}
                 pageGroup={

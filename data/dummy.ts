@@ -1,0 +1,23 @@
+export const dummy = [
+  {
+    id: 1000,
+    title: "dummy_title1",
+    categories: "",
+    keywords: "",
+    mediaMix: "",
+    type: "웹소설",
+    volume: "100",
+    startDate: "",
+    endDate: "",
+    currentState: "",
+    original: "",
+    platforms: "",
+    image: "",
+    synopsis: "",
+    characters: "",
+    user: "",
+    isAdult: "",
+    author: "",
+    isTranslated: "",
+  },
+];

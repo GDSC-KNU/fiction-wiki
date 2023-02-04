@@ -56,7 +56,7 @@ const FictionListWrapper = ({
 
   let queryString = `${
     process.env.NODE_ENV === "production"
-      ? "https://fdbs-proto.vercel.app/api/fictions?"
+      ? "https://fdbs-proto.vercel.app/api/fictions"
       : "http://localhost:3000/api/fictions"
   }?${"keywords=" + (Array.from(checkedItems).join(",") || "all")}${
     "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
