@@ -11,16 +11,14 @@ async function handler(
   let isLiked;
   const {
     query: { id },
-    // session: { user },
+    session: { user },
   } = req;
-
   const session = await getSession({ req });
-  // console.log(session);
 
   const alreadyExists = await client.fav.findFirst({
     where: {
       fictionId: +id!.toString(),
-      userId: session?.user?.id || "",
+      userId: session?.user?.id,
     },
   });
   if (req.method === "GET") {
@@ -42,7 +40,7 @@ async function handler(
         data: {
           user: {
             connect: {
-              id: session?.user?.id || "",
+              id: session?.user?.id,
             },
           },
           fiction: {
@@ -59,7 +57,9 @@ async function handler(
   res.json({ isLiked, ok: true });
 }
 
-export default withHandler({
-  methods: ["GET", "POST"],
-  handler,
-});
+export default withApiSession(
+  withHandler({
+    methods: ["GET", "POST"],
+    handler,
+  })
+);

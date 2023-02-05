@@ -127,7 +127,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <h1 className=" font-semibold text-2xl mb-2 pt-2 ml-">
                 {fiction?.title}
               </h1>
-              <button
+              {/* <button
                 onClick={onFavClick}
                 className={cls(
                   "px-3 py-2 rounded-md flex items-center hover:bg-gray-100 justify-center",
@@ -166,7 +166,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     />
                   </svg>
                 )}
-              </button>
+              </button> */}
             </div>
             <div className=" grid grid-cols-10 text-xs overflow-hidden">
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] ">
