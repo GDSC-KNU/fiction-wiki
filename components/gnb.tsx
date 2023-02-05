@@ -8,14 +8,11 @@ import logo from "../public/fdb_logo.png";
 export default function Gnb() {
   const { data: nextSession } = useSession();
   const { user, isLoading } = useUser();
+
   // const { data: CredentailSession } = useSWR("/api/users/me");
   // console.log(user);
   // console.log(nextSession);
-  // useEffect(() => {
-  //   if (data && !data.ok) {
-  //     router.replace("/enter");
-  //   }
-  // }, [data, router]);
+
   // console.log(data);
   return (
     <header className="flex bg-blue-200 fixed top-0 w-full py-2 z-20">

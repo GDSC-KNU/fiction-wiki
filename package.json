@@ -17,7 +17,7 @@
     "chart.js": "^3.9.1",
     "iron-session": "^6.3.1",
     "next": "^13.0.0",
-    "next-auth": "^4.15.0",
+    "next-auth": "^4.19.2",
     "next-remove-imports": "^1.0.8",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",

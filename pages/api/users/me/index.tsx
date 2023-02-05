@@ -11,6 +11,7 @@ async function handler(
   //   console.log("not logged in");
   //   return res.status(200).json({ ok: false, error: "Plase Log in" });
   // }
+
   let profile = await client.user.findUnique({
     where: { id: req.session.user?.id || "" },
   });
