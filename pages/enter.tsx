@@ -60,7 +60,9 @@ const Enter: NextPage = () => {
 
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-3xl font-bold text-center">Enter to FDBS</h3>
+      <h3 className="text-3xl font-bold text-center">
+        Enter to FDBS(현재 구글 로그인만 가능)
+      </h3>
       <div className="mt-12">
         {data?.ok ? (
           <form
