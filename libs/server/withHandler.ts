@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 export interface ResponseType {
   ok: boolean;
@@ -27,10 +29,14 @@ export default function withHandler({
     //   return res.status(200).json({ ok: false, error: "Plase Log in" });
     // }
     // console.log(req.method);
+    // console.log(req.session);
+    const nextAuthsession = await getServerSession(req, res, authOptions);
+    // console.log(nextAuthsession);
+
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
-    if (isPrivate && !req.session.user) {
+    if (isPrivate && !(req.session?.user || nextAuthsession)) {
       return res.status(401).json({ ok: false, error: "Plase Log in" });
     }
     try {

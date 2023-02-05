@@ -23,6 +23,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
+import { useSession } from "next-auth/react";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -53,7 +54,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
-
+  const { data: nextAuthSession, status } = useSession();
   const { user, isLoading } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
@@ -66,6 +67,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
   const onFavClick = () => {
+    if (!nextAuthSession) {
+      alert("선호작 기능은 로그인 이후 사용할 수 있습니다.");
+      return;
+    }
     toggleFav({}, "POST");
     if (!data) return;
 
