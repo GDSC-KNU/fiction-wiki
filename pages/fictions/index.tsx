@@ -8,12 +8,10 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import client from "@libs/server/client";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import FadeLoader from "react-spinners/FadeLoader";
-import { pageAtom } from "../../atoms";
-import dynamic from "next/dynamic";
-import { useRecoilState } from "recoil";
+import FictionList from "@components/fictionList";
+import useSWR from "swr";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -41,22 +39,12 @@ interface FictionsResponse {
   nationalities: string[];
 }
 
-const DynamicFictionListWrapper = dynamic(
-  () => import(`@components/fictionListWrapper`),
-  {
-    suspense: true,
-  }
-);
-
 const FictionsWithParams: NextPage<FictionsResponse> = ({
   keywords,
   categories,
   nationalities,
 }) => {
-  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
   const router = useRouter();
-  // const [page, setPage] = useRecoilState(pageAtom);
-  let queryString = "";
 
   //세부 필터링
   const [isChecked, setIsChecked] = useState(false);
@@ -78,6 +66,21 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     "필력",
     "화수",
   ];
+
+  let queryString = `${
+    process.env.NODE_ENV !== "production"
+      ? "http://localhost:3000/api/fictions"
+      : "https://fdbs-proto.vercel.app/api/fictions"
+  }?${"keywords=" + (Array.from(checkedItems).join(",") || "all")}${
+    "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
+  }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
+    "&sorting=" + (Array.from(checkedSortings).join(",") || "all")
+  }${"&dateYear=" + (router?.query?.dateYear || "all")}${
+    "&page=" + (router?.query?.page || 1)
+  }
+  `;
+
+  const { data } = useSWR<FictionsResponse>(queryString || null, {});
 
   const checkHandler = ({
     currentTarget,
@@ -214,10 +217,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       },
     };
 
-    // if(checkedReleaseTimeFilter.has('전체')){
-
-    // }
-
     router.replace(path, undefined, { shallow: true });
   }, [isChecked]);
 
@@ -229,7 +228,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     thisYear - 2,
     thisYear - 3,
     thisYear - 4,
-    thisYear - 5
+    thisYear - 5,
   ];
 
   return (
@@ -412,27 +411,11 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           </details>
         </form>
       </div>
-      <Suspense
-        fallback={
-          <FadeLoader
-            className=" mx-auto"
-            height={15}
-            width={5}
-            radius={2}
-            margin={2}
-            color={"#000000"}
-          />
-        }
-      >
-        <DynamicFictionListWrapper
-          checkedItems={checkedItems}
-          checkedNationalities={checkedNationalities}
-          checkedGenres={checkedGenres}
-          checkedSortings={checkedSortings}
-          isChecked={isChecked}
-          checkedDateYear={checkedDateYear}
-        />
-      </Suspense>
+      <FictionList
+        data={data}
+        type={"fictions_list"}
+        count={data?.fictions?.length}
+      />
     </div>
   );
 };
@@ -481,12 +464,5 @@ export async function getStaticProps() {
     revalidate: 3600,
   };
 }
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   return {
-//     paths: [],
-//     fallback: "blocking",
-//   };
-// };
 
 export default FictionsWithParams;

@@ -89,7 +89,7 @@ export default function UserStat() {
       !curSynopsisCompositon ||
       !curValue
     ) {
-      alert("Please fill in the blanks");
+      alert("코멘트와 평점을 입력해 주세요");
       btnOnOff();
       return;
     }

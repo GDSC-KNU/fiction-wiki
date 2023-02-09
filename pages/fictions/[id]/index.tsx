@@ -19,11 +19,27 @@ import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
 // import Pagination from "react-js-pagination";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+// import ReactMarkdown from "react-markdown";
+// import remarkGfm from "remark-gfm";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
+
+const EditerMarkdown = dynamic(
+  () =>
+    import("@uiw/react-md-editor").then((mod) => {
+      return mod.default.Markdown;
+    }),
+  { ssr: false }
+);
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -279,7 +295,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     번역상태
                   </div>
                   <div className=" col-span-6">
-                    {fiction?.isTranslated ? "O" : ""}
+                    {fiction?.isTranslated === "번역"
+                      ? "O"
+                      : fiction?.isTranslated === "미번"
+                      ? "X"
+                      : ""}
                   </div>
                 </div>
               ) : null}
@@ -431,14 +451,12 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </h2>
           {fiction?.characters}
         </div>
-        <div className=" ">
+        {/* <div>
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
             세계관 및 설정
           </h2>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {fiction.setup || ""}
-          </ReactMarkdown>
-        </div>
+          <EditerMarkdown source={fiction.setup || ""}></EditerMarkdown>
+        </div> */}
       </div>
       <div className=" mt-3 sm:mt-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
         <h3 className=" font-bold text-xl">비슷한 소설</h3>
