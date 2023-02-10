@@ -10,6 +10,7 @@ const nextConfig = {
   //   serverComponents: true, */
   //   reactMode: "concurrent",
   // },
+
   images: {
     domains: [
       "lh3.googleusercontent.com",

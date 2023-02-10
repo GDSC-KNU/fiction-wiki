@@ -67,10 +67,14 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     "화수",
   ];
 
+  // console.log(process.env.HOST);
+  // console.log(process.env.NEXT_PUBLIC_HOST);
+
   let queryString = `${
-    process.env.NODE_ENV !== "production"
-      ? "http://localhost:3000/api/fictions"
-      : "https://fdbs-proto.vercel.app/api/fictions"
+    // process.env.NODE_ENV === "development"
+    //   ? "http://localhost:3000/api/fictions"
+    //   : "https://fdbs-proto.vercel.app/api/fictions"
+    process.env.NEXT_PUBLIC_HOST + "/api/fictions"
   }?${"keywords=" + (Array.from(checkedItems).join(",") || "all")}${
     "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
   }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
@@ -79,6 +83,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     "&page=" + (router?.query?.page || 1)
   }
   `;
+
+  // console.log(queryString);
 
   const { data } = useSWR<FictionsResponse>(queryString || null, {});
 

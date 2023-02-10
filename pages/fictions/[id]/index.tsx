@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -24,22 +24,9 @@ import Link from "next/link";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-});
-
-const EditerMarkdown = dynamic(
-  () =>
-    import("@uiw/react-md-editor").then((mod) => {
-      return mod.default.Markdown;
-    }),
-  { ssr: false }
-);
 
 interface FictionDetailResponse {
   ok: boolean;
