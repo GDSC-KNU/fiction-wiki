@@ -70,12 +70,9 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // console.log(process.env.HOST);
   // console.log(process.env.NEXT_PUBLIC_HOST);
 
-  let queryString = `${
-    // process.env.NODE_ENV === "development"
-    //   ? "http://localhost:3000/api/fictions"
-    //   : "https://fdbs-proto.vercel.app/api/fictions"
-    process.env.NEXT_PUBLIC_HOST + "/api/fictions"
-  }?${"keywords=" + (Array.from(checkedItems).join(",") || "all")}${
+  let queryString = `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${
+    "keywords=" + (Array.from(checkedItems).join(",") || "all")
+  }${
     "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
   }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
     "&sorting=" + (Array.from(checkedSortings).join(",") || "all")

@@ -12,9 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Pagination from "@components/pagination";
 import { useRouter } from "next/router";
-import fdbLogo from "/public/fdb_logo.png";
-import React, { Suspense } from "react";
-import FadeLoader from "react-spinners/FadeLoader";
+import React from "react";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -44,19 +42,7 @@ interface authorWithMore extends Author {
 
 export default function FictionList(props: any) {
   const router = useRouter();
-  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
-  // const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
-  // const [searchPageIndex, setSearchPageIndex] = useRecoilState(searchPageAtom);
 
-  // const handlePageChange = (PI: number) => {
-  //   setPageIndex(PI);
-  //   setAuthorPageIndex(PI);
-  //   setSearchPageIndex(PI);
-  // };
-  // console.log(props);
-  // console.log(posts);
-  // console.log(props?.data);
-  // console.log(props.data);
   return (
     <div className=" flex justify-center">
       {props?.type === "fictions_list" ? (
@@ -299,21 +285,6 @@ export default function FictionList(props: any) {
             )}
           </ul>
           <div className=" ">
-            {/* {props.isMain === true ? null : (
-              <Pagination
-                activePage={pageIndex}
-                itemsCountPerPage={18}
-                totalItemsCount={props?.data?.fictionsCount || 1}
-                pageRangeDisplayed={5}
-                prevPageText={"‹"}
-                nextPageText={"›"}
-                onChange={handlePageChange}
-                innerClass=" flex justify-center mt-[15px]"
-                itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
-                linkClass=" w-full flex justify-center mt-[0.8px]"
-                activeClass=" text-blue-400"
-              />
-            )} */}
             {props.isMain === true ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
@@ -357,19 +328,6 @@ export default function FictionList(props: any) {
             ))}
           </div>
           <div className=" ">
-            {/* <Pagination
-              activePage={authorPageIndex}
-              itemsCountPerPage={18}
-              totalItemsCount={props?.authorsCount || 1}
-              pageRangeDisplayed={5}
-              prevPageText={"‹"}
-              nextPageText={"›"}
-              onChange={handlePageChange}
-              innerClass=" flex justify-center mt-[15px]"
-              itemClass=" hover:text-blue-400 flex border-[1px] divide-solid border-[#e2e2e2] inline-block w-[30px] h-[30px] justify-center align-center"
-              linkClass=" w-full flex justify-center mt-[0.8px]"
-              activeClass=" text-blue-400"
-            /> */}
             {props.isMain === true ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
