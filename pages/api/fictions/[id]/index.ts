@@ -159,6 +159,7 @@ async function handler(
         type,
         mediaMix,
         isTranslated,
+        introduction,
         setup,
       },
       // session: { user },
@@ -281,6 +282,7 @@ async function handler(
         volume: +volume?.toString(),
         type,
         isTranslated,
+        introduction,
         mediaMix,
         setup,
         // categories: {

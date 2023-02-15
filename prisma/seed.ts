@@ -1,5 +1,5 @@
-import { prisma, PrismaClient } from "@prisma/client";
-import { raw } from "@prisma/client/runtime";
+import { PrismaClient } from "@prisma/client";
+
 import { dummy } from "../data/dummy";
 
 const client = new PrismaClient();

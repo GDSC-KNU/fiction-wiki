@@ -26,6 +26,7 @@ import { useSession } from "next-auth/react";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import HeadMeta from "@components/headMeata";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -57,7 +58,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
   const { data: nextAuthSession } = useSession();
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id
@@ -68,32 +69,37 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   );
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
-  const onFavClick = () => {
-    if (!nextAuthSession) {
-      alert("선호작 기능은 로그인 이후 사용할 수 있습니다.");
-      return;
-    }
-    toggleFav({}, "POST");
-    if (!data) return;
 
-    boundMutate({ ...data, isLiked: !data.isLiked }, false);
-  };
+  // 좋아요
+  // const onFavClick = () => {
+  //   if (!nextAuthSession) {
+  //     alert("선호작 기능은 로그인 이후 사용할 수 있습니다.");
+  //     return;
+  //   }
+  //   toggleFav({}, "POST");
+  //   if (!data) return;
 
-  if (router?.isFallback) {
-    return (
-      <div title="Loaidng for youuuuuuu">
-        <span>I love you</span>
-      </div>
-    );
-  }
+  //   boundMutate({ ...data, isLiked: !data.isLiked }, false);
+  // };
+
+  // if (router?.isFallback) {
+  //   return (
+  //     <div title="Loaidng for youuuuuuu">
+  //       <span>I love you</span>
+  //     </div>
+  //   );
+  // }
 
   fiction.startDate = new Date(fiction?.startDate);
   fiction.endDate = new Date(fiction?.endDate);
-  // if(fiction.endDate === new Date(0)) fiction.endDate = null
-  // console.log(JSON.stringify(fiction.endDate) === JSON.stringify(new Date(0)));
 
   return (
     <div className=" max-w-[1100px]">
+      <HeadMeta
+        title={fiction?.title}
+        description={fiction?.synopsis}
+        url={`https://fictiondbs.com/fictions/${fiction?.id}`}
+      />
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
           <Link
@@ -199,7 +205,16 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         (acc: any, cur: any) => [...acc, cur?.category?.name],
                         []
                       )
-                      .join(", ")}
+                      .map((item, index) => (
+                        // <a key={index}>{item}</a>
+                        <Link
+                          className=" col-span-6 hover:cursor-pointer text-blue-500"
+                          key={index}
+                          href={`/search/genre/${item}/1`}
+                        >
+                          {item}
+                        </Link>
+                      ))}
                   </span>
                 </div>
               </div>
@@ -242,7 +257,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 sm:col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">플랫폼</div>
                 <div className=" col-span-6 text-blue-500">
-                  <a
+                  <span
                     className=" flex"
                     // href={fiction?.platforms}
                     title={fiction?.platforms}
@@ -259,7 +274,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
                     </svg>
                     {fiction?.platforms}
-                  </a>
+                  </span>
                 </div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
@@ -430,6 +445,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         <div className=" ">
           <h2 className=" font-bold text-xl border-b-[1px] py-2">줄거리</h2>
           <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
+        </div>
+        <div className=" mt-3">
+          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">개요</h2>
+          {fiction?.introduction}
         </div>
         <div className=" mt-3">
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">

@@ -134,7 +134,6 @@ PaginationProps) {
     if (router?.pathname.includes("/fictions?")) {
       pageGroup = Math.ceil(page / 5);
       firstPageOfNextPageGroup = (pageGroup + 1) * 5 - 4;
-      // setPage(firstPageOfNextPageGroup);
 
       router.push({
         pathname: `/fictions`,

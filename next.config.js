@@ -10,13 +10,16 @@ const nextConfig = {
   //   serverComponents: true, */
   //   reactMode: "concurrent",
   // },
-
   images: {
     domains: [
       "lh3.googleusercontent.com",
       "avatars.githubusercontent.com",
       "imagedelivery.net",
     ],
+  },
+  i18n: {
+    locales: ["ko"],
+    defaultLocale: "ko",
   },
 };
 

@@ -29,11 +29,7 @@ interface FictionsResponse {
 const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
   return (
     <div>
-      <HeadMeta
-        title={"FDBS"}
-        description={"웹소설 DB제공 서비스"}
-        url={"https://fdbs-proto.vercel.app/"}
-      />
+      <HeadMeta />
       <div>
         <Search />
       </div>

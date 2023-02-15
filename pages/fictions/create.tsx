@@ -37,6 +37,7 @@ interface CreateFictionForm {
   type?: string;
   mediaMix?: string;
   setup?: string;
+  introduction?: string;
 }
 
 interface CreateFictionMutation {
@@ -519,6 +520,12 @@ const Create: NextPage = (props) => {
                 register={register("synopsis")}
                 name="synopsis"
                 label="Synopsis"
+                required
+              />
+              <Textarea
+                register={register("introduction")}
+                name="introduction"
+                label="Introduction"
                 required
               />
               <Textarea
