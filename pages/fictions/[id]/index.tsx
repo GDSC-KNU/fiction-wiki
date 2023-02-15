@@ -12,7 +12,6 @@ import {
   Category,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
-import { cls } from "@libs/client/utils";
 import UserStat from "@components/userStat";
 import client from "@libs/server/client";
 import Image from "next/image";
@@ -57,7 +56,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
-  const { data: nextAuthSession, status } = useSession();
+  const { data: nextAuthSession } = useSession();
   const { user, isLoading } = useUser();
 
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(

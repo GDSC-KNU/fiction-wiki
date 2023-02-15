@@ -8,7 +8,7 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import client from "@libs/server/client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
@@ -91,8 +91,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   }${"&page=" + (router?.query?.page || 1)}
   `;
 
-  // console.log(queryString);
-
   const { data } = useSWR<FictionsResponse>(queryString || null, {});
 
   const checkHandler = ({
@@ -116,8 +114,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     id: any,
     target: any
   ) => {
-    // console.log(name);
-
     // 키워드
     if (isChecked && id === "keyword") {
       checkedItems.add(name);
@@ -180,38 +176,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       setCheckedDateYear(checkedDateYear);
     }
   };
-
-  const buttonFlag = useRef(true);
-  // const rerenderList = () => {
-  //   // setPageIndex(1);
-
-  //   if (!buttonFlag.current) {
-  //     alert("새로고침은 5초마다 한번씩 가능합니다.");
-  //     return;
-  //   }
-  //   buttonFlag.current = !buttonFlag.current;
-  //   setTimeout(() => {
-  //     buttonFlag.current = !buttonFlag.current;
-  //   }, 1000);
-  //   // router.push({
-  //   //   pathname: "/fictions",
-  //   //   query: {
-  //   //     keywords: Array.from(checkedItems).join(","),
-  //   //     nationalities: Array.from(checkedNationalities).join(","),
-  //   //     genres: Array.from(checkedGenres).join(","),
-  //   //     sorting: Array.from(checkedSortings).join(","),
-  //   //     page: pageIndex,
-  //   //   },
-  //   // });
-
-  //   // router.push(
-  //   //   `/fictions/${Array.from(checkedNationalities).join(",") || "all"}/${
-  //   //     Array.from(checkedGenres).join(",") || "all"
-  //   //   }/${Array.from(checkedSortings || "총점").join(",") || "all"}/${
-  //   //     router?.query?.page || 1
-  //   //   }/${Array.from(checkedItems).join(",") || "all"}`
-  //   // );
-  // };
 
   useEffect(() => {
     const path = {
@@ -479,9 +443,9 @@ export async function getStaticProps() {
     },
   });
 
-  const fictionsCount = await client.fiction.count({
-    where: {},
-  });
+  // const fictionsCount = await client.fiction.count({
+  //   where: {},
+  // });
 
   let keywords = await client.keyword.findMany();
 
@@ -496,7 +460,7 @@ export async function getStaticProps() {
   return {
     props: {
       // fictions: JSON.parse(JSON.stringify(fictions)),
-      fictionsCount: JSON.parse(JSON.stringify(fictionsCount)),
+      // fictionsCount: JSON.parse(JSON.stringify(fictionsCount)),
       keywords: JSON.parse(JSON.stringify(keywords)),
       nationalities: JSON.parse(JSON.stringify(nationalities)),
       categories: JSON.parse(JSON.stringify(categories)),
