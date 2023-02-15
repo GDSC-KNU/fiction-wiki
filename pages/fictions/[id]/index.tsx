@@ -99,6 +99,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         title={fiction?.title}
         description={fiction?.synopsis}
         url={`https://fictiondbs.com/fictions/${fiction?.id}`}
+        img={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
       />
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
@@ -120,7 +121,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       ) : null}
 
       <div className=" grid grid-cols-1 sm:grid-cols-10 h-fit">
-        <div className="  sm:max-w-[380px] object-cover h-fit bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
+        <div className="  sm:max-w-[380px]  overflow-hidden object-cover h-fit bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
           <div className="  w-full h-[467px] relative">
             <Image
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
@@ -206,9 +207,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         []
                       )
                       .map((item, index) => (
-                        // <a key={index}>{item}</a>
                         <Link
-                          className=" col-span-6 hover:cursor-pointer text-blue-500"
+                          className=" col-span-6 hover:cursor -pointer text-blue-500 mr-2"
                           key={index}
                           href={`/search/genre/${item}/1`}
                         >

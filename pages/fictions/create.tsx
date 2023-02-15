@@ -127,13 +127,11 @@ const Create: NextPage = (props) => {
         wKeywords.filter((item) => item !== " ");
         setValue("keywords", [wKeywords[0], ...wKeywords]);
       }
-      // console.log(wKeywords);
       resetField("keywords.0");
     }
   };
   const onKeyDown2: any = (e: any) => {
     const { key } = e;
-    // console.log(key);
 
     if (key === "," && wKeywords2[0].trim() !== "") {
       e.preventDefault();
@@ -143,13 +141,12 @@ const Create: NextPage = (props) => {
         wKeywords2.filter((item) => item !== " ");
         setValue("mcKeywords", [wKeywords2[0], ...wKeywords2]);
       }
-      // console.log(wKeywords2);
+
       resetField("mcKeywords.0");
     }
   };
   const onKeyDown3: any = (e: any) => {
     const { key } = e;
-    // console.log(key);
 
     if (key === "," && wKeywords3[0].trim() !== "") {
       e.preventDefault();

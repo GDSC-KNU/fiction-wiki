@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const HeadMeta = ({ title, description, url }: any) => {
+const HeadMeta = ({ title, description, url, img }: any) => {
   return (
     <Head>
       <title>{title ? title + " - FDBS" : "FDBS: 웹소설 랭킹, 검색"}</title>
@@ -22,7 +22,7 @@ const HeadMeta = ({ title, description, url }: any) => {
         }
       />
       <meta property="og:url" content={url || "https://fictiondbs.com"} />
-      <meta property="og:image" content={`%public%/fdb_logo.png`} />
+      <meta property="og:image" content={img || `%public%/fdb_logo.png`} />
       {/* <meta property="og:article:author" content="article.author" /> */}
     </Head>
   );
