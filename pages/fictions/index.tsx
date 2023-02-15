@@ -44,6 +44,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   categories,
   nationalities,
 }) => {
+  // console.log(fictions);
   const router = useRouter();
 
   //세부 필터링
@@ -71,14 +72,23 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // console.log(process.env.NEXT_PUBLIC_HOST);
 
   let queryString = `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${
-    "keywords=" + (Array.from(checkedItems).join(",") || "all")
+    "keywords=" +
+    (Array.from(checkedItems)
+      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
+      .join(",") || "all")
   }${
-    "&nationalities=" + (Array.from(checkedNationalities).join(",") || "all")
-  }${"&genres=" + (Array.from(checkedGenres).join(",") || "all")}${
-    "&sorting=" + (Array.from(checkedSortings).join(",") || "all")
-  }${"&dateYear=" + (router?.query?.dateYear || "all")}${
-    "&page=" + (router?.query?.page || 1)
-  }
+    "&nationalities=" +
+    (Array.from(checkedNationalities)
+      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
+      .join(",") || "all")
+  }${
+    "&genres=" +
+    (Array.from(checkedGenres)
+      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
+      .join(",") || "all")
+  }${"&sorting=" + (Array.from(checkedSortings).join(",") || "all")}${
+    "&dateYear=" + (router?.query?.dateYear || "all")
+  }${"&page=" + (router?.query?.page || 1)}
   `;
 
   // console.log(queryString);
@@ -426,20 +436,46 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 export async function getStaticProps() {
   const fictions = await client.fiction.findMany({
     select: {
-      keywords: {
-        include: {
-          keyword: true,
-        },
-      },
-      type: true,
-      currentState: true,
+      // title: true,
+      // author: {
+      //   select: {
+      //     name: true,
+      //   },
+      // },
+      // userFictionStat: {
+      //   select: {
+      //     originality: true,
+      //     verisimilitude: true,
+      //     synopsisComposition: true,
+      //     character: true,
+      //     writing: true,
+      //     value: true,
+      //   },
+      // },
+      // keywords: {
+      //   select: {
+      //     keyword: {
+      //       select: {
+      //         name: true,
+      //       },
+      //     },
+      //   },
+      // },
+      // type: true,
+      // currentState: true,
       nationality: true,
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-      isTranslated: true,
+      // categories: {
+      //   include: {
+      //     category: {
+      //       select: {
+      //         name: true,
+      //       },
+      //     },
+      //   },
+      // },
+      // startDate: true,
+
+      // isTranslated: true,
     },
   });
 
@@ -459,12 +495,13 @@ export async function getStaticProps() {
 
   return {
     props: {
+      // fictions: JSON.parse(JSON.stringify(fictions)),
       fictionsCount: JSON.parse(JSON.stringify(fictionsCount)),
       keywords: JSON.parse(JSON.stringify(keywords)),
       nationalities: JSON.parse(JSON.stringify(nationalities)),
       categories: JSON.parse(JSON.stringify(categories)),
     },
-    revalidate: 3600,
+    revalidate: 10000,
   };
 }
 

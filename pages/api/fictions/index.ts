@@ -18,6 +18,12 @@ async function handler(
     if (dateYear === "all") dateYear = "";
     // if (sorting === "all") keywords = "";
 
+    // console.log(
+    //   keywords
+    //     ?.toString()
+    //     .split(",")
+
+    // );
     const keywordMany =
       keywords
         ?.toString()
