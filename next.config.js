@@ -2,6 +2,10 @@
 
 const removeImports = require("next-remove-imports")();
 
+// const withBundleAnalyzer = require('@next/bundle-analyzer')({
+//   enabled: process.env.ANALYZE === 'true',
+// })
+
 const nextConfig = {
   reactStrictMode: true,
   // experimental: {

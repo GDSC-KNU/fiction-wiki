@@ -1,8 +1,6 @@
-import React from "react";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import useSWR from "swr";
 import { useRouter } from "next/router";
-import {
+import type {
   Fiction,
   FictionStat,
   Keyword,
@@ -17,12 +15,8 @@ import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
-// import Pagination from "react-js-pagination";
-// import ReactMarkdown from "react-markdown";
-// import remarkGfm from "remark-gfm";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
-import { useSession } from "next-auth/react";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -57,16 +51,16 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id ? `/api/fictions/${router.query.id}` : null
   // );
-  const { data: nextAuthSession } = useSession();
+  // const { data: nextAuthSession } = useSession();
   const { user } = useUser();
 
-  const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-    router.query.id
-      ? typeof window === "undefined"
-        ? null
-        : `/api/fictions/${router.query.id}/fav`
-      : null
-  );
+  // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
+  //   router.query.id
+  //     ? typeof window === "undefined"
+  //       ? null
+  //       : `/api/fictions/${router.query.id}/fav`
+  //     : null
+  // );
 
   const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
 
@@ -552,6 +546,10 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
           not: fiction?.id,
         },
       },
+    },
+    select: {
+      id: true,
+      title: true,
     },
   });
 

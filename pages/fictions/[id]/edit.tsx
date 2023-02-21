@@ -49,6 +49,7 @@ interface EditFictionForm {
   type?: string;
   mediaMix?: string;
   setup?: string;
+  introduction?: string;
 }
 
 interface EditFictionMutation {
@@ -157,6 +158,7 @@ const EditFiction: NextPage = () => {
       setValue("status.4", fiction.prevFiction.fictionStat.synopsisComposition);
       setValue("status.5", fiction.prevFiction.fictionStat.value);
       setValue("volume", fiction?.prevFiction.volume || 0);
+      setValue("introduction", fiction?.prevFiction.introduction || "");
       setValue("mediaMix", fiction.prevFiction.mediaMix || "");
       setValue("isTranslated", fiction.prevFiction.isTranslated || "");
       if (md === "") {
@@ -233,8 +235,6 @@ const EditFiction: NextPage = () => {
 
   const onKeyDown: any = (e: any) => {
     const { key } = e;
-    // console.log(key);
-    // console.log(wKeywords);
 
     if (key === "," && wKeywords[0].trim() !== "") {
       e.preventDefault();
@@ -244,14 +244,12 @@ const EditFiction: NextPage = () => {
         wKeywords.filter((item) => item !== " ");
         setValue("keywords", [wKeywords[0], ...wKeywords]);
       }
-      // console.log(wKeywords);
       resetField("keywords.0");
     }
   };
 
   const onKeyDown2: any = (e: any) => {
     const { key } = e;
-    // console.log(key);
 
     if (key === "," && wKeywords2[0].trim() !== "") {
       e.preventDefault();
@@ -261,7 +259,7 @@ const EditFiction: NextPage = () => {
         wKeywords2.filter((item) => item !== " ");
         setValue("mcKeywords", [wKeywords2[0], ...wKeywords2]);
       }
-      // console.log(wKeywords2);
+
       resetField("mcKeywords.0");
     }
   };
@@ -641,6 +639,12 @@ const EditFiction: NextPage = () => {
                 register={register("synopsis")}
                 name="synopsis"
                 label="Synopsis"
+                required
+              />
+              <Textarea
+                register={register("introduction")}
+                name="introduction"
+                label="Introduction"
                 required
               />
               <Textarea
