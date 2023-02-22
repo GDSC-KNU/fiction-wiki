@@ -22,6 +22,7 @@ export default function UserStat() {
     useMutation<RateUserStatMutation>(
       `/api/fictions/${router.query.id}/userRate`
     );
+  const { mutate } = useSWRConfig();
   // const { data: UserStatData, mutate: boundMutate } = useSWR<any>(
   //   router.query.id
   //     ? typeof window === "undefined"
@@ -65,7 +66,7 @@ export default function UserStat() {
   // };
 
   const buttonFlag = useRef(true);
-  const onRateClick = (data: RateUserStatForm) => {
+  const onRateClick = async (data: RateUserStatForm) => {
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
       return;
@@ -102,7 +103,12 @@ export default function UserStat() {
 
     // console.log(data);
 
-    rateUserStat(data, "POST");
+    await rateUserStat(data, "POST");
+
+    setTimeout(() => {
+      mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
+    }, 2000);
+
     unboundMutate(
       `/api/fictions/${router.query.id}`,
       (prev: any) => ({

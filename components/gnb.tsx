@@ -14,7 +14,7 @@ export default function Gnb() {
 
   // console.log(data);
   return (
-    <header className="flex bg-[#4c5160] fixed top-0 w-full py-2 z-20 border-b-[1px] h-12 text-white">
+    <header className="flex bg-[#4c5160] fixed top-0 w-full py-2 z-20  h-12 text-white">
       <nav className="flex w-full justify-between items-center">
         <ul className="flex uppercase space-x-2 ml-2 whitespace-nowrap items-center">
           <li className=" cursor-pointer ">
@@ -46,7 +46,7 @@ export default function Gnb() {
             </li>
           ) : null}
         </ul>
-        <ul className=" flex items-center">
+        <ul className=" flex items-center whitespace-nowrap">
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
             <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">

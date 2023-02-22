@@ -40,7 +40,7 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
         <FictionList
           data={data}
           type={"fictions_list"}
-          isMain={true}
+          isHidden={true}
         ></FictionList>
       </section>
     </div>

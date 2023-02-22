@@ -1,4 +1,3 @@
-import React from "react";
 import type {
   GetStaticPaths,
   GetStaticProps,
@@ -6,9 +5,11 @@ import type {
   NextPage,
 } from "next";
 import client from "@libs/server/client";
-import { Fiction, Author } from "@prisma/client";
+import type { Fiction, Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
+import HeadMeta from "@components/headMeata";
+import Image from "next/image";
 
 interface AuthorWithFictions extends Author {
   fictions: Fiction[];
@@ -30,31 +31,51 @@ interface IParams extends ParsedUrlQuery {
   slug: string;
 }
 
-const authorDetail: NextPage<AuthorResponse> = ({ author }) => {
+const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // const { user, isLoading } = useUser();
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   // console.log(author);
 
   return (
-    <section className="  w-[100vw] max-w-[1300px] min-h-[213px]">
-      <div className=" bg-slate-400 mb-7 pl-6 py-4">
-        <h5 className=" font-bold">작가 정보</h5>
-        <div className=" ">
-          <p>{`작가 - ` + author?.name}</p>
-          <p>{author?.relatedName}</p>
-          <p>{`국적 - ` + author?.nationality}</p>
-          <p>{`SNS - ` + (author?.sns || "없음")}</p>
+    <div className="  max-w-[1000px] min-h-[213px] mx-auto mt-20">
+      <HeadMeta
+        title={author?.name}
+        description={author?.description}
+        url={`https://fictiondbs.com/authors/name/${author?.name}`}
+      />
+      <div className=" bg-white mb-4">
+        <div className=" py-4 flex">
+          <Image
+            src="/anoynymous_user.png"
+            width={142}
+            height={160}
+            alt={author.name}
+          />
+          <div className=" flex flex-col justify-center">
+            <h5 className=" font-bold">{author?.name}</h5>
+            <p>{author?.relatedName}</p>
+            <p>{`국적 - ` + author?.nationality}</p>
+            <p>{`SNS - ` + (author?.sns || "업데이트 예정")}</p>
+          </div>
         </div>
+        <div className=" ml-4 pb-2 text-sm"> {author?.description}</div>
       </div>
-      <div className=" grid grid-cols-12">
+      <div className=" bg-white  grid grid-cols-12  pl-3 mb-4">
         <div className=" col-span-0 lg:col-span-1 "></div>
         <div className=" col-span-12 lg:col-span-10">
-          <div className="mt-5 font-bold text-xl">작품 List</div>
-          <FictionList data={author} type={"fictions_list"} />
+          <div className="mt-5 font-bold text-xl">작품 목록</div>
+          <FictionList data={author} type={"fictions_list"} isHidden={true} />
         </div>
         <div className=" col-span-0 lg:col-span-1 "></div>
       </div>
-    </section>
+      <div className=" bg-white  grid grid-cols-12 pl-3 mb-4">
+        <div className=" col-span-0 lg:col-span-1 "></div>
+        <div className=" col-span-12 lg:col-span-10">
+          <div className="mt-5 font-bold text-xl">SNS</div>
+        </div>
+        <div className=" col-span-0 lg:col-span-1 "> </div>
+      </div>
+    </div>
   );
 };
 
@@ -115,4 +136,4 @@ export const getStaticProps: GetStaticProps = async (
   };
 };
 
-export default authorDetail;
+export default AuthorDetail;

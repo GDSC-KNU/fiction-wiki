@@ -261,7 +261,7 @@ PaginationProps) {
   };
 
   return (
-    <div className="flex items-center justify-between  bg-white px-4 py-3">
+    <div className="flex items-center justify-between  bg-white px-4 py-3 rounded-md m-2">
       <div className="flex flex-1 items-center justify-between pr-1">
         <div>
           <p className="text-sm text-gray-700">

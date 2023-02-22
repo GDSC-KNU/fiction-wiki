@@ -22,7 +22,7 @@ function MyApp({
               fetch(url).then((response) => response.json()),
           }}
         >
-          <div className="   max-h-fit flex flex-col items-center min-h-[100vh] relative">
+          <div className=" bg-[#f4f4f4]  max-h-fit flex flex-col items-center min-h-[100vh] relative">
             <Top />
             <section className=" mt-10 mx-3 flex-column items-center pb-[60px] w-full max-w-[1300px] px-3">
               <Component {...pageProps} />

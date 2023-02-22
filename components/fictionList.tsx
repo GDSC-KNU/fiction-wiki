@@ -47,12 +47,12 @@ export default function FictionList(props: any) {
     <div className=" flex justify-center">
       {props?.type === "fictions_list" ? (
         <div className="">
-          <ul className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-2">
+          <ul className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-2 ">
             {props?.data?.fictions?.map(
               (fiction: FictionWithMore, i: number) => (
                 <li
                   key={fiction?.id || i}
-                  className=" flex my-3 bg-white border-[#BBBBBB] rounded-md"
+                  className=" flex my-2 bg-white border-[#BBBBBB]  mx-2"
                 >
                   <Link
                     href={`/fictions/${fiction?.id}`}
@@ -190,7 +190,7 @@ export default function FictionList(props: any) {
                     ) : null}
                   </div>
                   <div className=" flex-col px-2 pb-2">
-                    <p className=" text-xs text-gray-400 mr-[0.35rem] flex ">
+                    <p className=" text-xs text-gray-400 mr-[0.35rem] flex mt-[2.5px]">
                       <span className=" hover:underline mr-2">
                         <Link href={`/search/type/${fiction?.type}/1`}>
                           {fiction?.type || "type?"}
@@ -285,7 +285,7 @@ export default function FictionList(props: any) {
             )}
           </ul>
           <div className=" ">
-            {props.isMain === true ? null : (
+            {props.isHidden === true ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
@@ -304,13 +304,13 @@ export default function FictionList(props: any) {
         </div>
       ) : props?.type === "authors_list" ? (
         <div>
-          <div className=" grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 px-1 py-2 ">
+          <div className=" grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6  px-1 py-2 ">
             {props?.data?.map((author: authorWithMore) => (
               <Link
                 key={author.id}
                 href={`/authors/name/${author.name}`}
                 passHref
-                className=" relative flex-col w-[144px] h-[190] my-3 mx-1 cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden"
+                className=" relative flex-col w-[90px] h-[150] my-1 mx-1 cursor-pointer bg-white  overflow-hidden"
               >
                 <Image
                   className=" "
@@ -322,13 +322,13 @@ export default function FictionList(props: any) {
                 <div className=" ml-1 absolute bottom-[17.2rem] z-10"></div>
                 <div className=" flex-col px-2 pb-2">
                   <div className=" flex justify-between"></div>
-                  <div className=" text-center">{author.name}</div>
+                  <div className=" text-center text-sm">{author.name}</div>
                 </div>
               </Link>
             ))}
           </div>
           <div className=" ">
-            {props.isMain === true ? null : (
+            {props.isHidden === true ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}

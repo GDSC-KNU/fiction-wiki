@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -91,7 +92,10 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   }${"&page=" + (router?.query?.page || 1)}
   `;
 
-  const { data } = useSWR<FictionsResponse>(queryString || null, {});
+  const { data, isValidating } = useSWR<FictionsResponse>(
+    queryString || null,
+    {}
+  );
 
   const checkHandler = ({
     currentTarget,
@@ -210,7 +214,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   return (
     <div className=" mt-10 ">
-      <div className=" justify-center">
+      <div className=" justify-center bg-white rounded m-2 p-2">
         <form className=" ">
           <div>
             <h5 className=" text-sm border-b-2 text-gray-400">
@@ -311,10 +315,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                   <th className=" ">정렬</th>
                   <td className=" leading-[1.8rem] flex flex-wrap">
                     {sortingList.map((sorting, i) => (
-                      <label
-                        key={i}
-                        className=" bg-white  cursor-pointer flex "
-                      >
+                      <label key={i} className="  cursor-pointer flex ">
                         <input
                           onClick={(e) => checkHandler(e)}
                           type="radio"
@@ -388,6 +389,15 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           </details>
         </form>
       </div>
+      {isValidating && !data ? (
+        <div className=" flex justify-center">
+          <ClipLoader
+            size={100}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : null}
       <FictionList
         data={data}
         type={"fictions_list"}
