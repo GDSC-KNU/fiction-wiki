@@ -38,7 +38,7 @@ const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
     <div className=" mt-12">
       <FictionList
         data={authors}
-        type={"authors_list"}
+        type="authors_list"
         authorsCount={authorsCount}
       />
     </div>

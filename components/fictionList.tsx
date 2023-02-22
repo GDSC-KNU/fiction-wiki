@@ -304,13 +304,13 @@ export default function FictionList(props: any) {
         </div>
       ) : props?.type === "authors_list" ? (
         <div>
-          <div className=" grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6  px-1 py-2 ">
+          <div className=" grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8  px-1 py-2 ">
             {props?.data?.map((author: authorWithMore) => (
               <Link
                 key={author.id}
                 href={`/authors/name/${author.name}`}
                 passHref
-                className=" relative flex-col w-[90px] h-[150] my-1 mx-1 cursor-pointer bg-white  overflow-hidden"
+                className=" relative flex-col min-w-[104px] h-[150] my-1 mx-1 cursor-pointer bg-white  overflow-hidden"
               >
                 <Image
                   className=" "
