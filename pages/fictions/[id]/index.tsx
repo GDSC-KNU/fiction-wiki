@@ -411,7 +411,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
             </div>
             <div className=" col-span-10 sm:pl-5 lg:px-0 lg:col-span-5 pb-3">
-              <div className=" bg-white mb-5 w-full border-[0.5px] border-[#BBBBBB] rounded-md col-span-6 h-full">
+              <div className=" bg-white mb-3 w-full border-[0.5px] border-[#BBBBBB] rounded-md col-span-6 h-full">
                 <h2 className=" font-bold pt-1 px-2"></h2>
 
                 <FictionRadarChart props={fiction?.fictionStat} />
@@ -430,12 +430,12 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
             </div>
           </div>
-          <div className=" row-span-3 mt-2">
+          <div className=" row-span-3 mt-1 lg:mt-[25px]">
             <Comments />
           </div>
         </div>
       </div>
-      <div className=" mt-3 sm:mt-7  px-3 py-3 bg-white">
+      <div className=" mt-3 sm:mt-7  px-3 py-3 bg-white  border-[0.5px] border-[#BBBBBB] rounded-md">
         <div className=" ">
           <h2 className=" font-bold text-xl border-b-[1px] py-2">줄거리</h2>
           <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
@@ -449,15 +449,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             등장인물
           </h2>
           <p className=" whitespace-pre-wrap mt-2"> {fiction?.characters}</p>
-          <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {similarFictions?.slice(0, 4).map((fiction) => (
               <div key={fiction?.id}>
                 <div className="h-56 w-full mb-4 bg-slate-300"></div>
                 <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
-                {/* <span>description</span> */}
+      
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
         {/* <div>
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
