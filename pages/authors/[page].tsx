@@ -56,7 +56,6 @@ export const getStaticProps: GetStaticProps = async (
   ctx: GetStaticPropsContext
 ) => {
   const { page } = ctx.params as IParams;
-  console.log(page);
   if (!page) {
     return {
       props: {},

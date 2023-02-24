@@ -266,6 +266,7 @@ async function handler(
             },
             create: {
               name: author,
+              relatedName: relatedAuthor,
             },
           },
         },

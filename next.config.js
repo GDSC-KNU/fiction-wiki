@@ -21,10 +21,10 @@ const nextConfig = {
       "imagedelivery.net",
     ],
   },
-  i18n: {
-    locales: ["ko"],
-    defaultLocale: "ko",
-  },
+  // i18n: {
+  //   locales: ["ko"],
+  //   defaultLocale: "ko",
+  // },
 };
 
 module.exports = removeImports(nextConfig);

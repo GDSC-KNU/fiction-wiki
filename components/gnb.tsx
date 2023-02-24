@@ -67,7 +67,7 @@ export default function Gnb() {
           ) : null}
           {nextSession ? (
             <button className=" mr-5 font-bold" onClick={() => signOut()}>
-              Sign out
+              로그아웃
             </button>
           ) : (
             <li>

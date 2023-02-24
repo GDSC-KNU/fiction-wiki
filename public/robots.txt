@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Disallow: /fictions/create
+Disallow: /profile/edit
+Disallow: /search
+Disallow: /ranking
+
+# Host
+Host: https://fictiondbs.com
+
+# Sitemaps
+Sitemap: https://fictiondbs.com/sitemap.xml
+Sitemap: https://fictiondbs.com/server-sitemap.xml

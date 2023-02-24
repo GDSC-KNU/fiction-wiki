@@ -435,20 +435,29 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
         </div>
       </div>
-      <div className=" mt-3 sm:mt-7  px-3 py-3 ">
+      <div className=" mt-3 sm:mt-7  px-3 py-3 bg-white">
         <div className=" ">
           <h2 className=" font-bold text-xl border-b-[1px] py-2">줄거리</h2>
           <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
         </div>
         <div className=" mt-3">
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">개요</h2>
-          {fiction?.introduction}
+          <p className=" whitespace-pre-wrap mt-2">{fiction?.introduction}</p>
         </div>
         <div className=" mt-3">
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
             등장인물
           </h2>
-          {fiction?.characters}
+          <p className=" whitespace-pre-wrap mt-2"> {fiction?.characters}</p>
+          <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {similarFictions?.slice(0, 4).map((fiction) => (
+              <div key={fiction?.id}>
+                <div className="h-56 w-full mb-4 bg-slate-300"></div>
+                <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
+                {/* <span>description</span> */}
+              </div>
+            ))}
+          </div>
         </div>
         {/* <div>
           <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">

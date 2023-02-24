@@ -42,7 +42,8 @@ model Fiction {
   author        Author?              @relation(fields: [authorId], references: [id])
   authorId      Int?                 
   isTranslated  String?             @default("")
-  introduction  String?             @default("")
+  introduction  String?             @default("") @db.MediumText
+  chacracterImages Json?            @default("[]")
 
   @@index([userId])
   @@index([authorId])
