@@ -14,6 +14,7 @@
     "@next/bundle-analyzer": "^13.1.6",
     "@prisma/client": "^4.10.1",
     "@sendgrid/mail": "^7.7.0",
+    "@smastrom/react-rating": "^1.2.2",
     "@types/react-js-pagination": "^3.0.4",
     "@uiw/react-md-editor": "^3.19.3",
     "axios": "^1.1.3",

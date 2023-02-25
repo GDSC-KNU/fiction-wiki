@@ -17,10 +17,10 @@ import useUser from "@libs/client/useUser";
 import Link from "next/link";
 import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
-
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
+// import "@uiw/react-md-editor/markdown-editor.css";
+// import "@uiw/react-markdown-preview/markdown.css";
 import HeadMeta from "@components/headMeata";
+import StarRating from "@components/starRating";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -36,7 +36,10 @@ interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
 interface FictionWithMore extends Fiction {
   keywords: [KeywordsOnFictionsWithMore];
   fictionStat: [FictionStat];
-  userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
+  userFictionStat: {
+    userRationOnFictions: [UserRationOnFiction];
+    total: number;
+  };
   author: Author;
   categories: [Category];
 }
@@ -317,97 +320,113 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         </div>
         <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-5">
           <div className=" grid grid-cols-10 row-span-3">
-            <div className=" col-span-10 lg:col-span-5 sm:pl-5 lg:px-5 h-full pb-3">
-              <div className=" mb-5 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
-                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">메인 태그</h2>
-                <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction?.keywords
-                    ?.filter(
-                      (item) =>
-                        item?.keyword?.isOfHeroine === false &&
-                        item?.keyword?.isOfMC === false &&
-                        item?.keyword?.isOfCons === false
-                    )
-                    .map((item: any, index: any) => (
-                      <li
-                        key={index}
-                        className={
-                          item?.keyword?.isOfMC
-                            ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                            : item?.keyword?.isOfHeroine
-                            ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                            : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
-                        }
-                      >
-                        <Link
-                          href={`/search/keyword/${item?.keyword?.name}/1`}
-                          passHref
+            <div className=" col-span-10 lg:col-span-5 sm:pl-5 lg:px-5 h-full pb-3 ">
+              <div className=" flex flex-col h-full">
+                <div className=" mb-3 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
+                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md flex items-center">
+                    평점
+                    <p className="ml-2 text-sm font-bold text-gray-500 ">
+                      {fiction?.userFictionStat?.total} / 5 (
+                      {fiction?.userFictionStat?.userRationOnFictions?.length ||
+                        0}
+                      )
+                    </p>
+                  </h2>
+                  <StarRating data={+fiction.userFictionStat.total} />
+                </div>
+                <div className=" px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
+                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                    메인 태그
+                  </h2>
+                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                    {fiction?.keywords
+                      ?.filter(
+                        (item) =>
+                          item?.keyword?.isOfHeroine === false &&
+                          item?.keyword?.isOfMC === false &&
+                          item?.keyword?.isOfCons === false
+                      )
+                      .map((item: any, index: any) => (
+                        <li
+                          key={index}
+                          className={
+                            item?.keyword?.isOfMC
+                              ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                              : item?.keyword?.isOfHeroine
+                              ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                              : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
+                          }
                         >
-                          #{item?.keyword?.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                  주인공 태그
-                </h2>
-                <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction.keywords
-                    .filter((item) => item?.keyword?.isOfMC === true)
-                    .map((item: any, index: any) => (
-                      <li
-                        key={index}
-                        className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
-                      >
-                        <Link
-                          href={`/search/keyword/${item?.keyword?.name}/1`}
-                          passHref
+                          <Link
+                            href={`/search/keyword/${item?.keyword?.name}/1`}
+                            passHref
+                          >
+                            #{item?.keyword?.name}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                    주인공 태그
+                  </h2>
+                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                    {fiction.keywords
+                      .filter((item) => item?.keyword?.isOfMC === true)
+                      .map((item: any, index: any) => (
+                        <li
+                          key={index}
+                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                         >
-                          #{item?.keyword?.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                  히로인 태그
-                </h2>
-                <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction?.keywords
-                    .filter((item) => item?.keyword?.isOfHeroine === true)
-                    .map((item: any, index: any) => (
-                      <li
-                        key={index}
-                        className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
-                      >
-                        <Link
-                          href={`/search/keyword/${item?.keyword?.name}/1`}
-                          passHref
+                          <Link
+                            href={`/search/keyword/${item?.keyword?.name}/1`}
+                            passHref
+                          >
+                            #{item?.keyword?.name}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                    히로인 태그
+                  </h2>
+                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                    {fiction?.keywords
+                      .filter((item) => item?.keyword?.isOfHeroine === true)
+                      .map((item: any, index: any) => (
+                        <li
+                          key={index}
+                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
                         >
-                          #{item?.keyword?.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-                <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                  호불호 키워드
-                </h2>
-                <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                  {fiction?.keywords
-                    .filter((item) => item?.keyword?.isOfCons === true)
-                    .map((item: any, index: any) => (
-                      <li
-                        key={index}
-                        className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
-                      >
-                        <Link
-                          href={`/search/keyword/${item?.keyword?.name}/1`}
-                          passHref
+                          <Link
+                            href={`/search/keyword/${item?.keyword?.name}/1`}
+                            passHref
+                          >
+                            #{item?.keyword?.name}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
+                    호불호 키워드
+                  </h2>
+                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                    {fiction?.keywords
+                      .filter((item) => item?.keyword?.isOfCons === true)
+                      .map((item: any, index: any) => (
+                        <li
+                          key={index}
+                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
                         >
-                          #{item?.keyword?.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
+                          <Link
+                            href={`/search/keyword/${item?.keyword?.name}/1`}
+                            passHref
+                          >
+                            #{item?.keyword?.name}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
               </div>
             </div>
             <div className=" col-span-10 sm:pl-5 lg:px-0 lg:col-span-5 pb-3">
@@ -430,14 +449,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               </div>
             </div>
           </div>
-          <div className=" row-span-3 mt-1 lg:mt-[25px]">
+          <div className=" row-span-3 flex flex-col">
             <Comments />
           </div>
         </div>
       </div>
       <div className=" mt-3 sm:mt-7  px-3 py-3 bg-white  border-[0.5px] border-[#BBBBBB] rounded-md">
         <div className=" ">
-          <h2 className=" font-bold text-xl border-b-[1px] py-2">줄거리</h2>
+          <h2 className=" font-bold text-xl border-b-[1px]">줄거리</h2>
           <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
         </div>
         <div className=" mt-3">

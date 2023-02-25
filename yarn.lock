@@ -496,6 +496,11 @@
     "@sendgrid/client" "^7.7.0"
     "@sendgrid/helpers" "^7.7.0"
 
+"@smastrom/react-rating@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@smastrom/react-rating/-/react-rating-1.2.2.tgz#8a4561fb740413f03fc8d35726747571774e6e9b"
+  integrity sha512-B+UvhUsLf/Qj17wNNllbw/Jd6sWZnxenYOiJ1zk7u3lEO3yaj9H+Sn791T2SMQn85Lu1pfjq/qRbK+bGGc5AuA==
+
 "@swc/helpers@0.4.14":
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"
