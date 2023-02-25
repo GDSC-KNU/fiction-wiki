@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const removeImports = require("next-remove-imports")();
+// const removeImports = require("next-remove-imports")();
 
 // const withBundleAnalyzer = require('@next/bundle-analyzer')({
 //   enabled: process.env.ANALYZE === 'true',
@@ -27,4 +27,4 @@ const nextConfig = {
   // },
 };
 
-module.exports = removeImports(nextConfig);
+module.exports = nextConfig;

@@ -1,5 +1,5 @@
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
+// import "@uiw/react-md-editor/markdown-editor.css";
+// import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import Button from "@components/button";
 import FictionRadarChart from "@components/fictionRadarChart";
@@ -45,20 +45,16 @@ interface CreateFictionMutation {
   fiction: Fiction;
 }
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-});
+// const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+//   ssr: false,
+// });
 
 const Create: NextPage = (props) => {
-  const [md, setMd] = useState<string | undefined>("# Hello World");
+  // const [md, setMd] = useState<string | undefined>("# Hello World");
 
-  // const handleChange = useCallback((md) => {
+  // const handleChange = (md: any) => {
   //   setMd(md);
-  // }, []);
-
-  const handleChange = (md: any) => {
-    setMd(md);
-  };
+  // };
   const router = useRouter();
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");
@@ -81,9 +77,9 @@ const Create: NextPage = (props) => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      createFiction({ ...data, thumbId: id, setup: md }, "POST");
+      createFiction({ ...data, thumbId: id, setup: "" }, "POST");
     } else {
-      createFiction({ ...data, setup: md }, "POST");
+      createFiction({ ...data, setup: "" }, "POST");
     }
     return;
   };
@@ -531,9 +527,9 @@ const Create: NextPage = (props) => {
                 label="Characters"
                 required
               />
-              <div>
+              {/* <div>
                 <MDEditor value={md} onChange={handleChange} />
-              </div>
+              </div> */}
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

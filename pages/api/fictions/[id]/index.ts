@@ -15,7 +15,7 @@ async function handler(
 
   const session = await getSession({ req });
 
-  const prevFiction = await client.fiction.findUnique({
+  const fiction = await client.fiction.findUnique({
     where: {
       id: +id!.toString(),
     },
@@ -51,12 +51,12 @@ async function handler(
     },
   });
 
-  // console.log(prevFiction);
-  // console.log(prevFiction?.categories[0].category.name);
+  // console.log(Fiction);
+  // console.log(Fiction?.categories[0].category.name);
 
   if (req.method === "GET") {
     const arr: any[] = [];
-    prevFiction?.keywords.map((item) => arr.push(item.keyword?.name));
+    fiction?.keywords.map((item) => arr.push(item.keyword?.name));
     const keywordSame = arr.map((word) => ({
       keywords: {
         some: {
@@ -75,7 +75,7 @@ async function handler(
         OR: keywordSame,
         AND: {
           id: {
-            not: prevFiction?.id,
+            not: fiction?.id,
           },
         },
       },
@@ -86,7 +86,7 @@ async function handler(
     const isLiked = Boolean(
       await client.fav.findFirst({
         where: {
-          fictionId: prevFiction?.id,
+          fictionId: fiction?.id,
           userId: session?.user?.id,
         },
         select: {
@@ -98,7 +98,7 @@ async function handler(
     // userfictionstat
     // const ration = await client.userFictionStat.findFirst({
     //   where: {
-    //     fictionId: prevFiction?.id,
+    //     fictionId: Fiction?.id,
     //   },
     //   select: {
     //     originality: true,
@@ -119,7 +119,7 @@ async function handler(
 
     res.json({
       ok: true,
-      prevFiction,
+      fiction,
       isLiked,
       // ration,
       // userRation,
@@ -244,7 +244,7 @@ async function handler(
       },
     }));
 
-    // const categoryMany = prevFiction?.categories.map((item) => ({
+    // const categoryMany = Fiction?.categories.map((item) => ({
     //   category: {
     //     upsert: {
     //       name: item?.category!.name,

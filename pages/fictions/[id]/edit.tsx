@@ -117,7 +117,7 @@ const EditFiction: NextPage = () => {
     return [year, month, day].join("-");
   }
   // console.log(fiction?.prevFiction);
-  console.log(md);
+  // console.log(md);
   // console.log(
   //   fiction?.prevFiction?.categories.reduce(
   //     (prev, cur) =>
@@ -199,9 +199,9 @@ const EditFiction: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      editFiction({ ...data, thumbId: id, setup: md }, "PUT");
+      editFiction({ ...data, thumbId: id, setup: "" }, "PUT");
     } else {
-      editFiction({ ...data, setup: md }, "PUT");
+      editFiction({ ...data, setup: "" }, "PUT");
     }
     return;
   };
@@ -653,7 +653,7 @@ const EditFiction: NextPage = () => {
                 label="Characters"
                 required
               />
-              <MDEditor value={md} onChange={handleChange} />
+              {/* <MDEditor value={md} onChange={handleChange} /> */}
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

@@ -43,9 +43,9 @@ export default function Comments() {
   ///pagination
 
   return (
-    <div className=" sm:pl-5 ">
-      <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-fit">
-        <h2 className=" font-bold pt-1 px-2 "></h2>
+    <div className=" sm:pl-5 h-full">
+      <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full flex flex-col justify-between">
+        <div></div>
         <ul className=" ">
           {(commentsResponse?.comments || []).length < 7
             ? (commentsResponse?.comments || [])

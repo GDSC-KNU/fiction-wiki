@@ -28,13 +28,27 @@ ChartJS.register(
 export default function FictionRadarChart(props: any) {
   const router = useRouter();
 
-  const { data: UserStatData } = useSWR<any>(
+  const { data: { fiction: { userFictionStat = {} } = {} } = {} } = useSWR<any>(
     router.query.id
       ? typeof window === "undefined"
         ? null
         : `/api/fictions/${router.query.id}`
       : null
   );
+
+  // const {
+  //   fiction: {
+  //     userFictionStat: {
+  //       originality,
+  //       writing,
+  //       character,
+  //       verisimilitude,
+  //       synopsisComposition,
+  //       value,
+  //     },
+  //   },
+  // } = userFictionStatData;
+
 
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
@@ -54,32 +68,14 @@ export default function FictionRadarChart(props: any) {
         borderWidth: 1,
       },
       {
-        label: `유저 ${
-          +UserStatData?.prevFiction?.userFictionStat?._count?.users || 0
-        }명`,
+        label: `유저 ${0}명`,
         data: [
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(UserStatData?.prevFiction?.userFictionStat?.originality)
-            : 0,
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(UserStatData?.prevFiction?.userFictionStat?.writing)
-            : 0,
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(UserStatData?.prevFiction?.userFictionStat?.character)
-            : 0,
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(
-                UserStatData?.prevFiction?.userFictionStat?.verisimilitude
-              )
-            : 0,
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(
-                UserStatData?.prevFiction?.userFictionStat?.synopsisComposition
-              )
-            : 0,
-          UserStatData?.prevFiction?.userFictionStat
-            ? parseInt(UserStatData?.prevFiction?.userFictionStat?.value)
-            : 0,
+          userFictionStat?.originality,
+          userFictionStat?.writing,
+          userFictionStat?.character,
+          userFictionStat?.verisimilitude,
+          userFictionStat?.synopsisComposition,
+          userFictionStat?.value,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",
