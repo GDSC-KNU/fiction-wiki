@@ -37,7 +37,7 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // console.log(author);
 
   return (
-    <div className="  max-w-[1000px] min-h-[213px] mx-auto mt-20">
+    <div className="   min-h-[213px] mx-auto mt-20">
       <HeadMeta
         title={author?.name}
         description={author?.description}
@@ -61,19 +61,15 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
         <div className=" ml-4 pb-2 text-sm"> {author?.description}</div>
       </div>
       <div className=" bg-white  grid grid-cols-12  pl-3 mb-4">
-        <div className=" col-span-0 lg:col-span-1 "></div>
-        <div className=" col-span-12 lg:col-span-10">
+        <div className=" col-span-12 lg:col-span-12">
           <div className="mt-5 font-bold text-xl">작품 목록</div>
           <FictionList data={author} type={"fictions_list"} isHidden={true} />
         </div>
-        <div className=" col-span-0 lg:col-span-1 "></div>
       </div>
       <div className=" bg-white  grid grid-cols-12 pl-3 mb-4">
-        <div className=" col-span-0 lg:col-span-1 "></div>
-        <div className=" col-span-12 lg:col-span-10">
+        <div className=" col-span-12 lg:col-span-12">
           <div className="mt-5 font-bold text-xl">SNS</div>
         </div>
-        <div className=" col-span-0 lg:col-span-1 "> </div>
       </div>
     </div>
   );

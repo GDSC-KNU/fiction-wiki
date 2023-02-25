@@ -66,7 +66,7 @@ export default function UserStat() {
   // };
 
   const buttonFlag = useRef(true);
-  const onRateClick = async (data: RateUserStatForm) => {
+  const onRateClick = (data: RateUserStatForm) => {
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
       return;
@@ -103,66 +103,79 @@ export default function UserStat() {
 
     // console.log(data);
 
-    await rateUserStat(data, "POST");
+    // rateUserStat(data, "POST");
 
-    setTimeout(() => {
-      mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
-    }, 2000);
+    fetch(`/api/fictions/${router.query.id}/userRate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json().catch(() => {}))
+      .then(() => {
+        mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
+        mutate(`/api/fictions/${router.query.id}`);
+      });
 
-    unboundMutate(
-      `/api/fictions/${router.query.id}`,
-      (prev: any) => ({
-        ...prev,
-        prevFiction: {
-          ...prev?.prevFiction,
-          userFictionStat: {
-            originality:
-              ((+prev?.prevFiction?.userFictionStat?.originality || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curOriginality) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            writing:
-              ((+prev?.prevFiction?.userFictionStat?.writing || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curWriting) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            character:
-              ((+prev?.prevFiction?.userFictionStat?.character || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curCharacter) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            verisimilitude:
-              ((+prev?.prevFiction?.userFictionStat?.verisimilitude || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curVerisimilitude) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            synopsisComposition:
-              ((+prev?.prevFiction?.userFictionStat?.synopsisComposition || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curSynopsisCompositon) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            value:
-              ((+prev?.prevFiction?.userFictionStat?.value || 0) *
-                (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
-                +curValue) /
-              ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
-            _count: {
-              users:
-                +prev?.prevFiction?.userFictionStat?._count?.users + 1 || 1,
-            },
-          },
-        },
-        userRation: {
-          originality: +curOriginality,
-          writing: +curWriting,
-          character: +curOriginality,
-          verisimilitude: +curVerisimilitude,
-          synopsisComposition: +curSynopsisCompositon,
-          value: +curValue,
-        },
-      }),
-      false
-    );
+    // setTimeout(() => {
+    //   mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
+    // }, 2000);
+
+    // unboundMutate(
+    //   `/api/fictions/${router.query.id}`,
+    //   (prev: any) => ({
+    //     ...prev,
+    //     prevFiction: {
+    //       ...prev?.prevFiction,
+    //       userFictionStat: {
+    //         originality:
+    //           ((+prev?.prevFiction?.userFictionStat?.originality || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curOriginality) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         writing:
+    //           ((+prev?.prevFiction?.userFictionStat?.writing || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curWriting) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         character:
+    //           ((+prev?.prevFiction?.userFictionStat?.character || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curCharacter) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         verisimilitude:
+    //           ((+prev?.prevFiction?.userFictionStat?.verisimilitude || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curVerisimilitude) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         synopsisComposition:
+    //           ((+prev?.prevFiction?.userFictionStat?.synopsisComposition || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curSynopsisCompositon) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         value:
+    //           ((+prev?.prevFiction?.userFictionStat?.value || 0) *
+    //             (+prev?.prevFiction?.userFictionStat?._count?.users || 0) +
+    //             +curValue) /
+    //           ((+prev?.prevFiction?.userFictionStat?._count?.users || 0) + 1),
+    //         _count: {
+    //           users:
+    //             +prev?.prevFiction?.userFictionStat?._count?.users + 1 || 1,
+    //         },
+    //       },
+    //     },
+    //     userRation: {
+    //       originality: +curOriginality,
+    //       writing: +curWriting,
+    //       character: +curOriginality,
+    //       verisimilitude: +curVerisimilitude,
+    //       synopsisComposition: +curSynopsisCompositon,
+    //       value: +curValue,
+    //     },
+    //   }),
+    //   false
+    // );
     btnOnOff();
   };
 

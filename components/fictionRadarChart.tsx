@@ -28,7 +28,7 @@ ChartJS.register(
 export default function FictionRadarChart(props: any) {
   const router = useRouter();
 
-  const { data: { fiction: { userFictionStat = {} } = {} } = {} } = useSWR<any>(
+  const { data: { fiction } = {} } = useSWR<any>(
     router.query.id
       ? typeof window === "undefined"
         ? null
@@ -48,8 +48,8 @@ export default function FictionRadarChart(props: any) {
   //     },
   //   },
   // } = userFictionStatData;
-
-
+  // console.log(userFictionStat?._count);
+  // console.log(fiction?.userFictionStat?._count?.userRationOnFictions);
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [
@@ -68,14 +68,16 @@ export default function FictionRadarChart(props: any) {
         borderWidth: 1,
       },
       {
-        label: `유저 ${0}명`,
+        label: `유저 ${
+          fiction?.userFictionStat?._count?.userRationOnFictions || 0
+        }명`,
         data: [
-          userFictionStat?.originality,
-          userFictionStat?.writing,
-          userFictionStat?.character,
-          userFictionStat?.verisimilitude,
-          userFictionStat?.synopsisComposition,
-          userFictionStat?.value,
+          fiction?.userFictionStat?.originality,
+          fiction?.userFictionStat?.writing,
+          fiction?.userFictionStat?.character,
+          fiction?.userFictionStat?.verisimilitude,
+          fiction?.userFictionStat?.synopsisComposition,
+          fiction?.userFictionStat?.value,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",

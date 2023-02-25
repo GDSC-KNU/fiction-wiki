@@ -24,14 +24,14 @@ const Profile: NextPage = () => {
   // const { user, isLoading } = useUser();
   // const { data: user, error } = useSWR("/api/users/me");
   const { data } = useSWR<CommentsResponse>(
-    typeof window === "undefined" ? null : "/api/comments"
+    typeof window === "undefined" ? null : `/api/comments`
   );
   const { data: session, status } = useSession();
-
+  //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+  // console.log(data);
   return (
-    <div className="   w-[100vw] max-w-[1300px] min-h-[213px] ">
+    <div className="   max-w-[1300px] min-h-[213px] ">
       <div className=" bg-slate-400 mb-7 pl-6 py-4">
         <h5 className=" font-bold">계정 정보</h5>
         <div className=" ">
@@ -48,16 +48,12 @@ const Profile: NextPage = () => {
         <div className=" col-span-0 lg:col-span-1 "></div>
         <ul className=" col-span-12 lg:col-span-10">
           <h5 className=" font-bold ">내가 쓴 댓글</h5>
-          {data?.comments?.map((comment, i) => (
-            <li
-              key={i}
-              className=" flex place-content-between items-center mb-2"
-            >
+          {data?.comments?.map(({ comment, fiction, id }, i) => (
+            <li key={id} className=" flex justify-between items-center mb-2">
               <div className=" text-xs ring-black bg-black text-white p-1 rounded">
-                {comment?.userFictionStat?.fiction.title}
+                {fiction?.title}
               </div>
-              <div>{comment.comment}</div>
-              <div className=" relative right-0">{}</div>
+              <div>{comment}</div>
             </li>
           ))}
         </ul>
