@@ -17,13 +17,13 @@ import { useRouter } from "next/router";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import useSWR from "swr";
-import dynamic from "next/dynamic";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
+// import dynamic from "next/dynamic";
+// import "@uiw/react-md-editor/markdown-editor.css";
+// import "@uiw/react-markdown-preview/markdown.css";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-});
+// const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+//   ssr: false,
+// });
 
 interface EditFictionForm {
   title: string;
