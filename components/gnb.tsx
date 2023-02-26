@@ -40,11 +40,11 @@ export default function Gnb() {
               작가
             </Link>
           </li>
-          <li className="mr-3">
+          {/* <li className="mr-3">
             <Link href="/translation" passHref>
               번역
             </Link>
-          </li>
+          </li> */}
           {user ? (
             <li className="mr-3">
               <Link href="/fictions/create">Create</Link>
