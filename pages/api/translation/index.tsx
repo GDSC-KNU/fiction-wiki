@@ -5,8 +5,7 @@ const cheerio = require("cheerio");
 type ResponseData = {
   text: string;
   subTitle: string;
-  originalTextArray: any;
-  translatedTextArray: [string];
+  texts: [Array<any>, Array<any>];
 };
 
 interface GenerateNextApirequest extends NextApiRequest {
@@ -37,16 +36,6 @@ export default async function handler(
     const htmlString = await responseText.text();
     const $ = cheerio.load(htmlString);
 
-    // const paragraphs = $("#j_4631519").find("p").text().slice(0, 200);
-
-    // const paragraphs2 = $("#j_4631519").find("p");
-    // const textArray = paragraphs2
-    //   .map((item: any, i: any) => {
-    //     return $(item).text(); // return the text content of each <p> element
-    //   })
-    //   .get();
-    // console.log(subTitle);
-
     const clientId = process?.env.PAPAGO_CLIENT_ID;
     const clientSecret = process?.env.PAPAGO_CLIENT_SECRET;
     const customDict = process?.env.PAPAGO_CUSTOM_DICT;
@@ -76,73 +65,54 @@ export default async function handler(
       return temp;
     };
 
-    const pElements = $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
+    //////////////////
+    const pElements = await $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
 
-    const textArray = await Promise.all(
+    ////원문배열
+    let originalTextArray = await Promise.all(
       pElements
         .map(async (index: any, element: any) => {
-          let rawText = await $(element).text().trim();
-          let translated = await papagoTranslate(rawText);
-          return [rawText, translated]; // return the text content of each <p> element
+          let rawText = $(element).text().trim();
+          return rawText;
         })
         .get()
     );
+    // console.log(originalTextArray);
+
+    //번역배열
+    let translatedTextArray = await Promise.all(
+      originalTextArray.map(async (index: any, item: any) => {
+        let translated = papagoTranslate(index);
+        return translated;
+      })
+    );
+
+    // console.log(translatedTextArray);
+
+    // const textArray = await Promise.all(
+    //   pElements
+    //     .map(async (index: any, element: any) => {
+    //       let rawText = await $(element).text().trim();
+    //       return [rawText, await papagoTranslate(rawText)]; // return the text content of each <p> element
+    //     })
+    //     .get()
+    // );
 
     const subTitle = $("h3.j_chapterName:first-child").text();
-    // console.log(subTitle);
-    // console.log(textArray);
 
-    // Do something with the scraped data
-
-    // console.log(subTitle);
-    // console.log("yes");
-    // console.log(paragraphs);
-
-    // const aiResult = await openai.createCompletion({
-    //   model: "text-davinci-003",
-    //   prompt:
-    //     paragraphs +
-    //     `, translate this chinese texts to korean, with it's original text line by line`,
-    //   temperature: 0.7,
-    //   top_p: 1,
-    //   frequency_penalty: 0,
-    //   presence_penalty: 0,
-    //   max_tokens: 2048,
-    //   n: 1,
-    // });
-
-    // const papagoResponse = await fetch(apiUrl, {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     text: JSON.stringify(textArray.join(" ")),
-    //     source: "zh-CN",
-    //     target: "ko",
-    //     glossaryKey: customDict,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "X-NCP-APIGW-API-KEY-ID": clientId,
-    //     "X-NCP-APIGW-API-KEY": clientSecret,
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => data);
-
-    // const response = textArray;
+    ///////////
 
     res.status(200).json({
       text: "ok",
       subTitle: subTitle || "",
-      originalTextArray: textArray,
-      translatedTextArray: [""],
+      texts: [originalTextArray, translatedTextArray],
     });
   } catch (e) {
     // console.log("cheerio error");
   }
 }
 
-// const clientId = process?.env.PAPAGO_CLIENT_ID;
-// const clientSecret = process?.env.PAPAGO_CLIENT_SECRET;
-// const customDict = process?.env.PAPAGO_CUSTOM_DICT;
-// const apiUrl = process?.env.PAPAGO_API_URL;
-// console.log(clientId, clientSecret, customDict, apiUrl);
+// export const config = {
+//   runtime: "edge", // this is a pre-requisite
+//   regions: ["icn1"], // only execute this function on iad1
+// };

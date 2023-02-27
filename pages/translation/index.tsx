@@ -9,8 +9,7 @@ interface MessageProps {
   text: string;
   from: Creator;
   key: number;
-  OTA: any;
-  TTA: [string];
+  texts: [Array<any>, Array<any>];
 }
 
 interface InputProps {
@@ -76,8 +75,7 @@ const Translation = () => {
       text: input,
       from: Creator.Me,
       key: new Date().getTime(),
-      OTA: [""],
-      TTA: [""],
+      texts: [[""], [""]],
     };
 
     setMessages(myMessage);
@@ -97,8 +95,7 @@ const Translation = () => {
         text: response.text,
         from: Creator.Bot,
         key: new Date().getTime(),
-        OTA: response.originalTextArray,
-        TTA: response.translatedTextArray,
+        texts: response.texts,
       };
       setMessages(botMessage);
       //   console.log(botMessage);
@@ -106,7 +103,7 @@ const Translation = () => {
       //   console.log("erorr");
     }
   };
-  //   console.log(messages);
+//   console.log(messages);
 
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
@@ -116,10 +113,10 @@ const Translation = () => {
       <div className=" mt-10 px-4">
         <h2>{messages?.subTitle}</h2>
         {messages &&
-          (messages.OTA || [""]).map((item: any, i: any) => (
+          (messages?.texts[0] || [""]).map((item: any, i: any) => (
             <div className=" pt-6" key={i}>
-              <div>{item[0]}</div>
-              <div className=" ">{item[1]}</div>
+              <div>{item}</div>
+              <div className=" ">{messages?.texts?.[1]?.[i]}</div>
             </div>
           ))}
       </div>
