@@ -129,7 +129,7 @@ export default async function handler(
 
     // #chapter-21213126 > div > div.text-head > h3 > span.content-wrap
     // console.log(subTitle);
-    res.status(200).json({
+    return res.status(200).json({
       text: "ok",
       subTitle: subTitle || "",
       nextUrl: nextUrl,
