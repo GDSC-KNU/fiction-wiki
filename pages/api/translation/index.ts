@@ -56,6 +56,7 @@ export default async function handler(
     // const target = "The target language, e.g. ru";
 
     const translationClient = new TranslationServiceClient();
+    console.log("after making translation client");
     // {
     //   credentials: {
     //     type: process.env.GOOGLE_TYPE,
@@ -76,6 +77,7 @@ export default async function handler(
         targetLanguageCode: "ko",
       };
 
+      console.log("before fetching");
       // RESPONSE
       const [response] = await translationClient.translateText(request);
       console.log(response);
