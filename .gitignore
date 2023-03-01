@@ -1,9 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-fdbs-crt-93ec7b71e5e9.json
-fdbs-crt-93ec7b71e5e9
-/fdbs-crt-93ec7b71e5e9
-/fdbs-crt-93ec7b71e5e9.json
+
 
 # dependencies
 node_modules/
