@@ -119,7 +119,7 @@ export default async function handler(
       texts: [originalTextArray, translatedTextArray],
     });
   } catch (e) {
-    // console.log("cheerio error");
+    console.log(e);
     return res.status(500).json({
       text: "no ok",
       subTitle: "",
