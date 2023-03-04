@@ -55,7 +55,14 @@ export default async function handler(
     // const text = ["Hello world", "My name is Jeff", "Hello friend"];
     // const target = "The target language, e.g. ru";
 
-    const translationClient = new TranslationServiceClient();
+    const translationClient = new TranslationServiceClient({
+      credentials: {
+        type: "service_account",
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID_TRANSLATION,
+        private_key: JSON.parse(process.env.GOOGLE_PRIVATE_KEY || ""),
+      },
+    });
     // console.log("after making translation client");
 
     // {
