@@ -16,10 +16,10 @@ export default function Gnb() {
   return (
     <header className="flex bg-[#4c5160] fixed top-0 w-full py-2 z-20  h-12 text-white">
       <nav className="flex w-full justify-between items-center">
-        <ul className="flex uppercase space-x-2 ml-2 whitespace-nowrap items-center">
+        <ul className=" flex uppercase space-x-2 ml-2 whitespace-nowrap items-center">
           <li className=" cursor-pointer ">
             <Link
-              className=" first-letter:flex items-center "
+              className=" first-letter:flex items-center"
               href="/"
               passHref
             >

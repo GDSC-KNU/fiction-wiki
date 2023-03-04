@@ -56,7 +56,17 @@ export default async function handler(
     // const target = "The target language, e.g. ru";
 
     const translationClient = new TranslationServiceClient();
-    console.log("after making translation client");
+    // console.log("after making translation client");
+
+    // {
+    //   credentials: {
+    //     type: "service_account",
+    //     client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    //     client_id: process.env.GOOGLE_CLIENT_ID_TRANSLATION,
+    //     private_key: process.env.GOOGLE_PRIVATE_KEY,
+    //   },
+    // }
+
     // {
     //   credentials: {
     //     type: process.env.GOOGLE_TYPE,
@@ -77,10 +87,10 @@ export default async function handler(
         targetLanguageCode: "ko",
       };
 
-      console.log("before fetching");
+      // console.log("before fetching");
       // RESPONSE
       const [response] = await translationClient.translateText(request);
-      console.log(response);
+      // console.log(response);
       let result = [];
       if (response.translations) {
         for (const translation of response.translations) {
