@@ -18,11 +18,7 @@ export default function Gnb() {
       <nav className="flex w-full justify-between items-center">
         <ul className=" flex uppercase space-x-2 ml-2 whitespace-nowrap items-center">
           <li className=" cursor-pointer ">
-            <Link
-              className=" first-letter:flex items-center"
-              href="/"
-              passHref
-            >
+            <Link className=" first-letter:flex items-center" href="/" passHref>
               <Image
                 className=" rounded-xl border-blue-800 border-solid h-full  min-w-[26px] min-h-[26px]"
                 src={logo}
@@ -40,11 +36,11 @@ export default function Gnb() {
               작가
             </Link>
           </li>
-          {/* <li className="mr-3">
+          <li className="mr-3">
             <Link href="/translation" passHref>
               번역
             </Link>
-          </li> */}
+          </li>
           {user ? (
             <li className="mr-3">
               <Link href="/fictions/create">Create</Link>

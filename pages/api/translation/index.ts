@@ -7,7 +7,7 @@ import { TranslationServiceClient } from "@google-cloud/translate";
 type ResponseData = {
   text: string;
   subTitle: string;
-  nextUrl: string;
+  urls: string[];
   texts: [Array<any>, Array<any>];
 };
 
@@ -35,6 +35,7 @@ export default async function handler(
       ".text-wrap > div > div.text-head > h3 > span.content-wrap"
     ).text();
     const nextUrl = $("#j_chapterNext").attr("href");
+    const prevUrl = $("#j_chapterPrev").attr("href");
 
     //////////////////
     const pElements = $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
@@ -51,88 +52,58 @@ export default async function handler(
 
     originalTextArray.push(subTitle);
 
-    const location = "global";
-    // const text = ["Hello world", "My name is Jeff", "Hello friend"];
-    // const target = "The target language, e.g. ru";
+    const clientId = process?.env.PAPAGO_CLIENT_ID;
+    const clientSecret = process?.env.PAPAGO_CLIENT_SECRET;
+    const customDict = process?.env.PAPAGO_CUSTOM_DICT;
+    const apiUrl = process?.env.PAPAGO_API_URL;
 
-    const translationClient = new TranslationServiceClient({
-      credentials: {
-        type: "service_account",
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        client_id: process.env.GOOGLE_CLIENT_ID_TRANSLATION,
-        private_key: JSON.parse(process.env.GOOGLE_PRIVATE_KEY || ""),
-      },
-    });
-    // console.log("after making translation client");
+    const papagoTranslate = async (input: string) => {
+      let temp = "";
+      await fetch(apiUrl || "", {
+        method: "POST",
+        body: JSON.stringify({
+          text: JSON.stringify(input),
+          source: "zh-CN",
+          target: "ko",
+          glossaryKey: customDict,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-NCP-APIGW-API-KEY-ID": clientId || "",
+          "X-NCP-APIGW-API-KEY": clientSecret || "",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          temp = data?.message?.result?.translatedText;
+        });
 
-    // {
-    //   credentials: {
-    //     type: "service_account",
-    //     client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    //     client_id: process.env.GOOGLE_CLIENT_ID_TRANSLATION,
-    //     private_key: process.env.GOOGLE_PRIVATE_KEY,
-    //   },
-    // }
+      return temp;
+    };
 
-    // {
-    //   credentials: {
-    //     type: process.env.GOOGLE_TYPE,
-    //     private_key: process.env.GOOGLE_PRIVATE_KEY,
-    //     client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    //     client_id: process.env.GOOGLE_CLIENT_ID_TRANSLATION,
-    //   },
-    //   projectId_id: process.env.GOOGLE_PROJECT_ID,
-    // }
+    const translateArray = async () => {
+      let result: string[] = [];
+      // const translatedResult = await Promise.all(
+      //   originalTextArray.map(async (item) => {
+      //     const temp = await papagoTranslate(item)
+      //     result.push(temp);
+      //   })
+      // );
 
-    const googleTranslator = async () => {
-      // Construct request
-      const request = {
-        parent: `projects/${process?.env?.GOOGLE_PROJECT_ID}/locations/${location}`,
-        contents: originalTextArray,
-        mimeType: "text/plain", // mime types: text/plain, text/html
-        sourceLanguageCode: "zh-CN",
-        targetLanguageCode: "ko",
-      };
-
-      // console.log("before fetching");
-      // RESPONSE
-      const [response] = await translationClient.translateText(request);
-      // console.log(response);
-      let result = [];
-      if (response.translations) {
-        for (const translation of response.translations) {
-          result.push(translation.translatedText);
-        }
-      }
+      await originalTextArray.reduce(async (prev, next) => {
+        await prev;
+        const temp = await papagoTranslate(next);
+        result.push(temp);
+      }, Promise.resolve());
       return result;
     };
 
-    // [END translate_translate_text]
-
-    let translatedTextArray = await googleTranslator();
-    // console.log(translatedTextArray);
-    // googleTranslate(["Hello world", "My name is Jeff", "Hello friend"]);
-
-    // let gTranslatedTextArray = translate([
-    //   "안녕하세요",
-    //   "그런데요",
-    //   "안녕히가세요",
-    // ]);
-
-    //번역배열
-    // let translatedTextArray = await Promise.all(
-    //   originalTextArray.map(async (index: any, item: any) => {
-    //     let translated = papagoTranslate(index);
-    //     return translated;
-    //   })
-    // );
-
-    // #chapter-21213126 > div > div.text-head > h3 > span.content-wrap
-    // console.log(subTitle);
+    let translatedTextArray = await translateArray();
+    //  await translateTextWithGlossary();
     return res.status(200).json({
       text: "ok",
       subTitle: subTitle || "",
-      nextUrl: nextUrl || "",
+      urls: [nextUrl || "", prevUrl || ""],
       texts: [originalTextArray, translatedTextArray],
     });
   } catch (e) {
@@ -140,7 +111,7 @@ export default async function handler(
     return res.status(500).json({
       text: "no ok",
       subTitle: "",
-      nextUrl: "",
+      urls: [""],
       texts: [[""], [""]],
     });
   }

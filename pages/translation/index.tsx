@@ -11,7 +11,7 @@ interface MessageProps {
   from: Creator;
   key: number;
   texts: [Array<any>, Array<any>];
-  nextUrl: string;
+  urls: string[];
   subTitle: string;
   rawSubTitle: string;
 }
@@ -60,7 +60,7 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
         value={input}
         onChange={(ev: any) => setInput(ev.target.value)}
         type="text"
-        placeholder="URL을 입력하세요(현재 치디엔만 지원)"
+        placeholder="URL을 입력하세요(현재 치디엔만 지원, 데스크탑 URL만)"
         disabled={false}
         onKeyDown={(ev) => handleKeyDown(ev)}
       ></input>
@@ -83,7 +83,7 @@ const Translation = () => {
       from: Creator.Me,
       key: new Date().getTime(),
       texts: [[""], [""]],
-      nextUrl: "",
+      urls: [""],
       subTitle: "",
       rawSubTitle: "",
     };
@@ -110,7 +110,7 @@ const Translation = () => {
         texts: response?.texts,
         rawSubTitle: rawSubTitle,
         subTitle: subTitle,
-        nextUrl: response?.nextUrl,
+        urls: response?.urls,
       };
       setMessages(botMessage);
       //   console.log(botMessage);
@@ -122,7 +122,12 @@ const Translation = () => {
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
       <div className=" sticky top-0 w-full px-4">
-        <ChatInput onSend={(input) => callApi(input)} disabled={loading} />
+        <ChatInput
+          onSend={(input) => {
+            callApi(input);
+          }}
+          disabled={loading}
+        />
       </div>
       <div className=" mt-10 px-4">
         <h2 className=" font-semibold text-xl w-fit">{messages?.subTitle}</h2>
@@ -146,11 +151,31 @@ const Translation = () => {
           </div>
         ) : null}
       </div>
-      {messages && (
-        <div className=" flex justify-end">
+      {!loading && messages && (
+        <div className=" flex justify-between">
           <button
             className=" bg-white p-1 rounded-md"
-            onClick={() => callApi(messages?.nextUrl)}
+            onClick={() => {
+              const prevUrl = messages?.urls[1];
+              if (prevUrl === "") {
+                window.alert("첫 회차입니다.");
+                return;
+              }
+              callApi(prevUrl);
+            }}
+          >
+            이전화
+          </button>
+          <button
+            className=" bg-white p-1 rounded-md"
+            onClick={() => {
+              const nextUrl = messages?.urls[0];
+              if (nextUrl === "") {
+                window.alert("마지막 회차입니다.");
+                return;
+              }
+              callApi(nextUrl);
+            }}
           >
             다음화
           </button>
