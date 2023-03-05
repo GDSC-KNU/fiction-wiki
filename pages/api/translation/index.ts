@@ -59,20 +59,23 @@ export default async function handler(
 
     const papagoTranslate = async (input: string) => {
       let temp = "";
-      await fetch(apiUrl || "", {
-        method: "POST",
-        body: JSON.stringify({
-          text: JSON.stringify(input),
-          source: "zh-CN",
-          target: "ko",
-          glossaryKey: customDict,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-NCP-APIGW-API-KEY-ID": clientId || "",
-          "X-NCP-APIGW-API-KEY": clientSecret || "",
-        },
-      })
+      await fetch(
+        apiUrl || "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            text: JSON.stringify(input),
+            source: "zh-CN",
+            target: "ko",
+            glossaryKey: customDict,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-NCP-APIGW-API-KEY-ID": clientId || "",
+            "X-NCP-APIGW-API-KEY": clientSecret || "",
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           temp = data?.message?.result?.translatedText;
