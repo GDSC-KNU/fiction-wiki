@@ -1,6 +1,7 @@
 import useState from "react-usestateref";
 import ClipLoader from "react-spinners/ClipLoader";
 import useSWR, { mutate, useSWRConfig } from "swr";
+import { useSession } from "next-auth/react";
 
 interface MessageProps {
   subTitle: string;
@@ -47,6 +48,7 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
 };
 
 const Translation = () => {
+  const { data: session, status } = useSession();
   const [messages, setMessages, messagesRef] = useState<MessageProps>();
   let [queryString, setQueryString] = useState("");
   const customFetcher = async (url: any, queryString: string) => {
@@ -75,6 +77,10 @@ const Translation = () => {
   );
 
   const onSubmitHandler = async (input: string) => {
+    if (!session) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     const check = async () => {
       if (!input.startsWith("https://")) {
         input = "https://" + input;
