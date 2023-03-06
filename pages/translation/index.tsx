@@ -81,7 +81,10 @@ const Translation = () => {
       alert("로그인이 필요합니다.");
       return;
     }
-    if (!input.startsWith("https://read.qidian.com/chapter")) {
+    if (
+      !input.startsWith("https://read.qidian.com/chapter") &&
+      !input.startsWith("//read.qidian.com/chapter")
+    ) {
       alert("현재 치디엔만 번역 지원중입니다.");
       return;
     }
