@@ -1,18 +1,13 @@
 import useState from "react-usestateref";
 import ClipLoader from "react-spinners/ClipLoader";
-
-enum Creator {
-  Me = 0,
-  Bot = 1,
-}
+import useSWR, { mutate, useSWRConfig } from "swr";
 
 interface MessageProps {
-  text: string;
-  from: Creator;
-  key: number;
-  texts: [Array<any>, Array<any>];
-  urls: string[];
   subTitle: string;
+  nextUrl?: string;
+  prevUrl?: string;
+  originalTextArray: string[];
+  translatedTextArray: string[];
   rawSubTitle: string;
 }
 
@@ -20,23 +15,6 @@ interface InputProps {
   onSend: (input: string) => void;
   disabled: boolean;
 }
-
-const ChatMessage = ({ text, from }: MessageProps) => {
-  return (
-    <>
-      {from == Creator.Me && (
-        <div className=" bg-white">
-          <p>{text}</p>
-        </div>
-      )}
-      {from == Creator.Bot && (
-        <div className=" bg-black text-white">
-          <p>{text}</p>
-        </div>
-      )}
-    </>
-  );
-};
 
 const ChatInput = ({ onSend, disabled }: InputProps) => {
   const [input, setInput] = useState("");
@@ -69,79 +47,109 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
 };
 
 const Translation = () => {
-  const [messages, setMessages, messagesRef] = useState<any>();
-  const [loading, setLoading] = useState(false);
-
-  const callApi = async (input: string) => {
-    setLoading(true);
-    if (!input.startsWith("https://")) {
-      input = "https://" + input;
-    }
-
-    const myMessage: MessageProps = {
-      text: input,
-      from: Creator.Me,
-      key: new Date().getTime(),
-      texts: [[""], [""]],
-      urls: [""],
-      subTitle: "",
-      rawSubTitle: "",
-    };
-
-    setMessages(myMessage);
-    const response = await fetch("/api/translation", {
+  const [messages, setMessages, messagesRef] = useState<MessageProps>();
+  let [queryString, setQueryString] = useState("");
+  const customFetcher = async (url: any, queryString: string) => {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: input,
+        prompt: queryString,
       }),
-    }).then((response) => response.json());
-    setLoading(false);
-
-    const rawSubTitle = response?.texts?.[0]?.pop();
-    const subTitle = response?.texts?.[1]?.pop();
-    if (response?.text) {
-      const botMessage: MessageProps = {
-        text: response?.text,
-        from: Creator.Bot,
-        key: new Date().getTime(),
-        texts: response?.texts,
-        rawSubTitle: rawSubTitle,
-        subTitle: subTitle,
-        urls: response?.urls,
-      };
-      setMessages(botMessage);
-      //   console.log(botMessage);
-    } else {
-      //   console.log("erorr");
-    }
+    });
+    return response.json();
   };
+  let { data: response, isValidating } = useSWR<any>(
+    ["/api/translation", queryString],
+    customFetcher,
+    {
+      revalidateOnMount: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      refreshInterval: 0,
+    }
+  );
+
+  const onSubmitHandler = async (input: string) => {
+    const check = async () => {
+      if (!input.startsWith("https://")) {
+        input = "https://" + input;
+      }
+      setQueryString(input);
+    };
+
+    await check();
+    // console.log(response);
+    // const newData = await mutate(
+    //   ["/api/translation", queryString],
+    //   customFetcher("/api/translation", queryString)
+    // );
+    // console.log(newData);
+    // const myMessage: MessageProps = {
+    //   subTitle: "",
+    //   nextUrl: "",
+    //   prevUrl: "",
+    //   originalTextArray: [""],
+    //   translatedTextArray: [""],
+    //   rawSubTitle: "",
+    // };
+
+    // response = {
+    //   ...response,
+    //   rawSubTitle: response?.originalTextArray?.at(-1),
+    //   translatedsubTitle: response?.translatedTextArray?.at(-1)
+    // };
+
+    const rawSubTitle = await response?.originalTextArray?.at(-1);
+    const translatedsubTitle = await response?.translatedTextArray?.at(-1);
+
+    // let botMessage: MessageProps = {
+    //   subTitle: await translatedsubTitle,
+    //   nextUrl: await response?.nextUrl,
+    //   prevUrl: await response?.prevUrl,
+    //   originalTextArray: await response?.originalTextArray,
+    //   translatedTextArray: await response?.translatedTextArray,
+    //   rawSubTitle: (await rawSubTitle) || "",
+    // };
+    // setMessages(botMessage);
+  };
+
+  // const rawSubTitle = response?.originalTextArray?.at(-1);
+  // const translatedsubTitle = response?.translatedTextArray?.at(-1);
+  // const length = response?.originalTextArray.length;
 
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
       <div className=" sticky top-0 w-full px-4">
         <ChatInput
           onSend={(input) => {
-            callApi(input);
+            onSubmitHandler(input);
           }}
-          disabled={loading}
+          disabled={false}
         />
       </div>
       <div className=" mt-10 px-4">
-        <h2 className=" font-semibold text-xl w-fit">{messages?.subTitle}</h2>
+        <h2 className=" font-semibold text-xl w-fit">
+          {response?.originalTextArray.at(-1)}
+        </h2>
         <div className=" font-semibold text-xl w-fit">
-          {messages?.rawSubTitle}
+          {response?.translatedTextArray.at(-1)}
         </div>
-        {messages &&
-          (messages?.texts[0] || [""]).map((item: any, i: any) => (
-            <div className=" pt-6" key={i}>
-              <div>{item}</div>
-              <div className=" ">{messages?.texts?.[1]?.[i]}</div>
-            </div>
-          ))}
-        {loading ? (
+        {response &&
+          (response?.originalTextArray || [""]).map((item: any, i: any) => {
+            if (i === response?.originalTextArray.length - 1) return;
+            return (
+              <div className=" pt-6" key={i}>
+                <div>{item}</div>
+                <div className=" ">{response?.translatedTextArray?.[i]}</div>
+              </div>
+            );
+          })}
+        {isValidating ? (
           <div className=" flex justify-center">
             <ClipLoader
               size={100}
@@ -151,17 +159,17 @@ const Translation = () => {
           </div>
         ) : null}
       </div>
-      {!loading && messages && (
+      {!isValidating && response && (
         <div className=" flex justify-between">
           <button
             className=" bg-white p-1 rounded-md"
             onClick={() => {
-              const prevUrl = messages?.urls[1];
+              const prevUrl = response?.prevUrl || "";
               if (prevUrl === "") {
                 window.alert("첫 회차입니다.");
                 return;
               }
-              callApi(prevUrl);
+              onSubmitHandler(prevUrl);
             }}
           >
             이전화
@@ -169,12 +177,12 @@ const Translation = () => {
           <button
             className=" bg-white p-1 rounded-md"
             onClick={() => {
-              const nextUrl = messages?.urls[0];
+              const nextUrl = response?.nextUrl || "";
               if (nextUrl === "") {
                 window.alert("마지막 회차입니다.");
                 return;
               }
-              callApi(nextUrl);
+              onSubmitHandler(nextUrl);
             }}
           >
             다음화
