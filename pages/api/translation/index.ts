@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 // import { Configuration, OpenAIApi } from "openai";
 // const cheerio = require("cheerio");
 import cheerio from "cheerio";
-import { TranslationServiceClient } from "@google-cloud/translate";
+// import { TranslationServiceClient } from "@google-cloud/translate";
 import { Redis } from "@upstash/redis";
 
 type ResponseData = {
@@ -74,7 +74,7 @@ export default async function handler(
       const papagoTranslate = async (input: string) => {
         let temp = "";
         await fetch(
-          apiUrl || "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
+          "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
           {
             method: "POST",
             body: JSON.stringify({
