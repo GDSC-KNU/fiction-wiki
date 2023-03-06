@@ -72,30 +72,54 @@ export default async function handler(
       const apiUrl = process?.env.PAPAGO_API_URL;
 
       const papagoTranslate = async (input: string) => {
-        let temp = "";
-        await fetch(
-          "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
-          {
+        // let temp = "";
+        // await fetch(
+        //   "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
+        //   {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //       text: JSON.stringify(input),
+        //       source: "zh-CN",
+        //       target: "ko",
+        //       glossaryKey: customDict,
+        //     }),
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
+        //       "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
+        //     },
+        //   }
+        // )
+        //   .then((res) => res.json())
+        //   .then((data) => {
+        //     temp = data?.message?.result?.translatedText;
+        //   });
+
+        // return temp;
+
+        return new Promise<string>((resolve, reject) => {
+          fetch("https://naveropenapi.apigw.ntruss.com/nmt/v1/translation", {
             method: "POST",
             body: JSON.stringify({
-              text: JSON.stringify(input),
+              text: input,
               source: "zh-CN",
               target: "ko",
               glossaryKey: customDict,
             }),
             headers: {
               "Content-Type": "application/json",
-              "X-NCP-APIGW-API-KEY-ID": clientId || "",
-              "X-NCP-APIGW-API-KEY": clientSecret || "",
+              "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
+              "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
             },
-          }
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            temp = data?.message?.result?.translatedText;
-          });
-
-        return temp;
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              resolve(data?.message?.result?.translatedText || "");
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        });
       };
 
       // const translateArray = async () => {
