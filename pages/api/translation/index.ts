@@ -188,7 +188,7 @@ export default async function handler(
           originalTextArray,
           translatedTextArray,
         }),
-        { ex: 36000 }
+        { ex: 360000 }
       );
 
       return res.status(200).json({
