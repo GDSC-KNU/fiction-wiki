@@ -83,9 +83,10 @@ const Translation = () => {
     }
     if (
       !input.startsWith("https://read.qidian.com/chapter") &&
-      !input.startsWith("//read.qidian.com/chapter")
+      !input.startsWith("//read.qidian.com/chapter") &&
+      !input.startsWith("https://www.uukanshu.com/")
     ) {
-      alert("현재 치디엔만 번역 지원중입니다.");
+      alert("잘못된 입력입니다.");
       return;
     }
     const check = async () => {
@@ -137,6 +138,9 @@ const Translation = () => {
 
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
+      <div className=" mb-2 text-gray-500">
+        지원사이트 목록: qidian, uukanshu
+      </div>
       <div className=" sticky top-0 w-full px-4">
         <ChatInput
           onSend={(input) => {

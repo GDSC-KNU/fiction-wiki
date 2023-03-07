@@ -42,61 +42,89 @@ export default async function handler(
     }
 
     const terminator = async () => {
-      const responseText = await fetch(prompt);
-      const htmlString = await responseText.text();
-      const $ = cheerio.load(htmlString);
-      const subTitle = $(
-        ".text-wrap > div > div.text-head > h3 > span.content-wrap"
-      ).text();
-      const nextUrl = $("#j_chapterNext").attr("href");
-      const prevUrl = $("#j_chapterPrev").attr("href");
+      const extractor = async (url: string) => {
+        const responseText = await fetch(prompt);
 
-      //////////////////
-      const pElements = $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
+        let paragraphs;
+        let subTitle = "";
+        let nextUrl = "";
+        let prevUrl = "";
+
+        let originalTextArray = [""];
+        if (prompt.startsWith("https://read.qidian.com/chapter")) {
+          let htmlString = await responseText.text();
+          let $ = cheerio.load(htmlString);
+          subTitle = $(
+            ".text-wrap > div > div.text-head > h3 > span.content-wrap"
+          ).text();
+          nextUrl = $("#j_chapterNext").attr("href") || "";
+          prevUrl = $("#j_chapterPrev").attr("href") || "";
+
+          //////////////////
+          paragraphs = $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
+          originalTextArray = await Promise.all(
+            paragraphs
+              .map(async (index: any, element: any) => {
+                let rawText = $(element).text().trim();
+
+                return rawText || " ";
+              })
+              .get()
+          );
+        } else if (prompt.startsWith("https://www.uukanshu.com/")) {
+          const buffer = await responseText.arrayBuffer();
+          const decoder = new TextDecoder("gbk");
+          const htmlString = decoder.decode(buffer);
+          const $ = cheerio.load(htmlString);
+
+          paragraphs = $("#contentbox").find("p");
+
+          originalTextArray = await Promise.all(
+            paragraphs
+              .map(async (index: any, element: any) => {
+                let rawText = $(element).text().trim();
+
+                return rawText.toString() || " ";
+              })
+              .get()
+          );
+          subTitle = $(".h1title").text();
+          nextUrl = `https://www.uukanshu.com/` + $("#next").attr("href") || "";
+          prevUrl = `https://www.uukanshu.com/` + $("#prev").attr("href") || "";
+        } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
+          // const buffer = await responseText.arrayBuffer();
+          // const decoder = new TextDecoder("gbk");
+          // const htmlString = decoder.decode(buffer);
+          // const $ = cheerio.load(htmlString);
+          // paragraphs = $(".content").find("p");
+          // originalTextArray = await Promise.all(
+          //   paragraphs
+          //     .map(async (index: any, element: any) => {
+          //       let rawText = $(element).text().trim();
+          //       // console.log(rawText);
+          //       return rawText.toString() || " ";
+          //     })
+          //     .get()
+          // );
+          // subTitle = $(".h1title").text();
+          // nextUrl = $("#next").attr("href") || "";
+          // prevUrl = $("#prev").attr("href") || "";
+        } else {
+          // console.log("");
+        }
+
+        return { subTitle, nextUrl, prevUrl, originalTextArray };
+      };
+
+      const { subTitle, nextUrl, prevUrl, originalTextArray } = await extractor(
+        prompt
+      );
 
       //원문배열
-      let originalTextArray = await Promise.all(
-        pElements
-          .map(async (index: any, element: any) => {
-            let rawText = $(element).text().trim();
-            return rawText || " ";
-          })
-          .get()
-      );
 
       originalTextArray.push(subTitle);
 
-      const clientId = process?.env.PAPAGO_CLIENT_ID;
-      const clientSecret = process?.env.PAPAGO_CLIENT_SECRET;
-      const customDict = process?.env.PAPAGO_CUSTOM_DICT;
-      const apiUrl = process?.env.PAPAGO_API_URL;
-
       const papagoTranslate = async (input: string) => {
-        // let temp = "";
-        // await fetch(
-        //   "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation",
-        //   {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //       text: JSON.stringify(input),
-        //       source: "zh-CN",
-        //       target: "ko",
-        //       glossaryKey: customDict,
-        //     }),
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
-        //       "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
-        //     },
-        //   }
-        // )
-        //   .then((res) => res.json())
-        //   .then((data) => {
-        //     temp = data?.message?.result?.translatedText;
-        //   });
-
-        // return temp;
-
         return new Promise<string>((resolve, reject) => {
           fetch("https://naveropenapi.apigw.ntruss.com/nmt/v1/translation", {
             method: "POST",
@@ -104,7 +132,7 @@ export default async function handler(
               text: input,
               source: "zh-CN",
               target: "ko",
-              glossaryKey: customDict,
+              glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
             }),
             headers: {
               "Content-Type": "application/json",
@@ -152,6 +180,7 @@ export default async function handler(
     };
 
     let cache: any = await redis.get(prompt);
+    redis.del(prompt);
     // console.log(cache);
     if (cache) {
       let {
@@ -161,7 +190,7 @@ export default async function handler(
         originalTextArray,
         translatedTextArray,
       } = await cache;
-
+      // console.log("cached  ver");
       return res.status(200).json({
         subTitle,
         nextUrl,
