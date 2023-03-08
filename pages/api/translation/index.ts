@@ -49,8 +49,8 @@ export default async function handler(
         let subTitle = "";
         let nextUrl = "";
         let prevUrl = "";
-
         let originalTextArray = [""];
+
         if (prompt.startsWith("https://read.qidian.com/chapter")) {
           let htmlString = await responseText.text();
           let $ = cheerio.load(htmlString);
@@ -58,10 +58,16 @@ export default async function handler(
             ".text-wrap > div > div.text-head > h3 > span.content-wrap"
           ).text();
           nextUrl = $("#j_chapterNext").attr("href") || "";
+          nextUrl = nextUrl.includes("javascript:void(0)")
+            ? ""
+            : `https:` + nextUrl || "";
           prevUrl = $("#j_chapterPrev").attr("href") || "";
+          prevUrl = prevUrl.includes("javascript:void(0)")
+            ? ""
+            : `https:` + prevUrl || "";
 
           //////////////////
-          paragraphs = $("div.read-content.j_readContent").find("p"); // select all <p> elements inside the element with ID j_4631519
+          paragraphs = $("div.read-content.j_readContent").find("p");
           originalTextArray = await Promise.all(
             paragraphs
               .map(async (index: any, element: any) => {
@@ -89,8 +95,14 @@ export default async function handler(
               .get()
           );
           subTitle = $(".h1title").text();
-          nextUrl = `https://www.uukanshu.com/` + $("#next").attr("href") || "";
-          prevUrl = `https://www.uukanshu.com/` + $("#prev").attr("href") || "";
+          nextUrl = $("#next").attr("href") || "";
+          nextUrl = nextUrl.includes("undefined")
+            ? ""
+            : `https://www.uukanshu.com` + nextUrl;
+          prevUrl = $("#prev").attr("href") || "";
+          prevUrl = prevUrl.includes("undefined")
+            ? ""
+            : `https://www.uukanshu.com` + prevUrl;
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
           // const buffer = await responseText.arrayBuffer();
           // const decoder = new TextDecoder("gbk");

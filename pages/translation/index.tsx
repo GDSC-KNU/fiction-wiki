@@ -75,7 +75,7 @@ const Translation = () => {
       refreshInterval: 0,
     }
   );
-
+  console.log(response);
   const onSubmitHandler = async (input: string) => {
     if (!session) {
       alert("로그인이 필요합니다.");
@@ -83,13 +83,25 @@ const Translation = () => {
     }
     if (
       !input.startsWith("https://read.qidian.com/chapter") &&
-      !input.startsWith("//read.qidian.com/chapter") &&
-      !input.startsWith("https://www.uukanshu.com/")
+      !input.startsWith("https://www.uukanshu.com")
     ) {
       alert("잘못된 입력입니다.");
       return;
     }
+
     const check = async () => {
+      // if (input.startsWith("https://www.uukanshu.com")) {
+      //   if (input.includes("undefined")) {
+      //     alert("첫 페이지 혹은 마지막 페이지입니다.");
+      //     return;
+      //   }
+      // }
+      // if (input.startsWith("https://www.uukanshu.com")) {
+      //   if (input.includes("undefined")) {
+      //     alert("첫 페이지 혹은 마지막 페이지입니다.");
+      //     return;
+      //   }
+      // }
       if (!input.startsWith("https://")) {
         input = "https://" + input;
       }
