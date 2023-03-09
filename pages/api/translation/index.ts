@@ -111,11 +111,11 @@ export default async function handler(
 
           subTitle = $(".h1title").text();
           nextUrl = $("#next").attr("href") || "";
-          nextUrl = nextUrl.includes("undefined")
+          nextUrl = !nextUrl.startsWith("/b/")
             ? ""
             : `https://www.uukanshu.com` + nextUrl;
           prevUrl = $("#prev").attr("href") || "";
-          prevUrl = prevUrl.includes("undefined")
+          prevUrl = !prevUrl.startsWith("/b/")
             ? ""
             : `https://www.uukanshu.com` + prevUrl;
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {

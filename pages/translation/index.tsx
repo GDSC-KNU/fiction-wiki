@@ -194,11 +194,13 @@ const Translation = () => {
             className=" bg-white p-1 rounded-md"
             onClick={() => {
               const prevUrl = response?.prevUrl || "";
+              // console.log(prevUrl);
               if (prevUrl === "") {
                 window.alert("첫 회차입니다.");
                 return;
               }
               onSubmitHandler(prevUrl);
+              window.scrollTo(0, 0);
             }}
           >
             이전화
@@ -207,11 +209,13 @@ const Translation = () => {
             className=" bg-white p-1 rounded-md"
             onClick={() => {
               const nextUrl = response?.nextUrl || "";
+              // console.log(nextUrl);
               if (nextUrl === "") {
                 window.alert("마지막 회차입니다.");
                 return;
               }
               onSubmitHandler(nextUrl);
+              window.scrollTo(0, 0);
             }}
           >
             다음화
