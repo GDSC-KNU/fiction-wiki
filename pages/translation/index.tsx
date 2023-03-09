@@ -75,7 +75,7 @@ const Translation = () => {
       refreshInterval: 0,
     }
   );
-  console.log(response);
+  // console.log(response);
   const onSubmitHandler = async (input: string) => {
     if (!session) {
       alert("로그인이 필요합니다.");
