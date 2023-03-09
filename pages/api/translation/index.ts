@@ -119,23 +119,31 @@ export default async function handler(
             ? ""
             : `https://www.uukanshu.com` + prevUrl;
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
-          // const buffer = await responseText.arrayBuffer();
-          // const decoder = new TextDecoder("gbk");
-          // const htmlString = decoder.decode(buffer);
-          // const $ = cheerio.load(htmlString);
-          // paragraphs = $(".content").find("p");
-          // originalTextArray = await Promise.all(
-          //   paragraphs
-          //     .map(async (index: any, element: any) => {
-          //       let rawText = $(element).text().trim();
-          //       // console.log(rawText);
-          //       return rawText.toString() || " ";
-          //     })
-          //     .get()
-          // );
-          // subTitle = $(".h1title").text();
-          // nextUrl = $("#next").attr("href") || "";
-          // prevUrl = $("#prev").attr("href") || "";
+          let htmlString = await responseText.text();
+          let $ = cheerio.load(htmlString);
+          let curUrl = prompt;
+          const lastSlashIndex = curUrl.lastIndexOf("/");
+          let curUrlBase = curUrl.substring(0, lastSlashIndex);
+          subTitle = $("h1").text();
+          nextUrl = $("div.link a:nth-child(3)").attr("href") || "";
+          nextUrl = nextUrl.endsWith("/")
+            ? ""
+            : curUrlBase + "/" + (nextUrl || "");
+          prevUrl = $("div.link a:nth-child(1)").attr("href") || "";
+          prevUrl = prevUrl.endsWith("/")
+            ? ""
+            : curUrlBase + "/" + (prevUrl || "");
+
+          //////////////////
+          paragraphs = $(".content").find("p");
+          originalTextArray = await Promise.all(
+            paragraphs
+              .map(async (index: any, element: any) => {
+                let rawText = $(element).text().trim();
+                return rawText || " ";
+              })
+              .get()
+          );
         } else {
           // console.log("");
         }
@@ -176,22 +184,6 @@ export default async function handler(
             });
         });
       };
-
-      // const translateArray = async () => {
-      //   let result: string[] = [];
-      //   const translatedResult2 = await Promise.all(
-      //     originalTextArray.map((item,i) => papagoTranslate(item))
-      //   );
-
-      //   await originalTextArray.reduce(async (prev, next) => {
-      //     await prev;
-      //     const temp = await papagoTranslate(next);
-      //     result.push(temp);
-      //   }, Promise.resolve());
-      //   return result;
-      // };
-
-      // let translatedTextArray = await translateArray();
 
       const translatedTextArray = await Promise.all(
         originalTextArray.map((item) => papagoTranslate(item))
