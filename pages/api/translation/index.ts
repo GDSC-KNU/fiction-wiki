@@ -83,17 +83,32 @@ export default async function handler(
           const htmlString = decoder.decode(buffer);
           const $ = cheerio.load(htmlString);
 
-          paragraphs = $("#contentbox").find("p");
-
-          originalTextArray = await Promise.all(
-            paragraphs
-              .map(async (index: any, element: any) => {
-                let rawText = $(element).text().trim();
-
-                return rawText.toString() || " ";
+          const hasBr = $("#contentbox").find("br").length > 0;
+          if (hasBr) {
+            $(".ad_content").remove();
+            $("#contentbox > p").remove();
+            paragraphs = $("#contentbox").html();
+            paragraphs = paragraphs?.split("<br>");
+            originalTextArray = paragraphs
+              ?.map((element: string) => {
+                let rawText = element.replace(/&nbsp;/g, "").trim();
+                return rawText;
               })
-              .get()
-          );
+              .filter((str) => str !== "") || [""];
+            // console.log(originalTextArray);
+          } else {
+            paragraphs = $("#contentbox").find("p");
+            originalTextArray = await Promise.all(
+              paragraphs
+                .map(async (index: any, element: any) => {
+                  let rawText = $(element).text().trim();
+
+                  return rawText.toString() || " ";
+                })
+                .get()
+            );
+          }
+
           subTitle = $(".h1title").text();
           nextUrl = $("#next").attr("href") || "";
           nextUrl = nextUrl.includes("undefined")
@@ -192,7 +207,7 @@ export default async function handler(
     };
 
     let cache: any = await redis.get(prompt);
-    redis.del(prompt);
+    // redis.del(prompt);
     // console.log(cache);
     if (cache) {
       let {
