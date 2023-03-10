@@ -2,172 +2,197 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
-    let {
-      query: { keywords, genres, nationalities, sorting, page, dateYear },
-    } = req;
-    // console.log(req.query);
-    if (nationalities === "all") nationalities = "";
-    if (genres === "all") genres = "";
-    if (keywords === "all") keywords = "";
-    if (dateYear === "all") dateYear = "";
-    // if (sorting === "all") keywords = "";
+    let cache: any = await redis.get(JSON.stringify(req?.query));
+    redis.del(JSON.stringify(req?.query));
+    if (cache) {
+      // console.log("cached data");
+      return res.json(cache);
+    } else {
+      // console.log(req?.query);
+      let {
+        query: { keywords, genres, nationalities, sorting, page, dateYear },
+      } = req;
+      // let cache: any = await redis.get();
 
-    // console.log(
-    //   keywords
-    //     ?.toString()
-    //     .split(",")
+      // console.log(req.query);
+      if (nationalities === "all") nationalities = "";
+      if (genres === "all") genres = "";
+      if (keywords === "all") keywords = "";
+      if (dateYear === "all") dateYear = "";
+      // if (sorting === "all") keywords = "";
 
-    // );
-    const keywordMany =
-      keywords
-        ?.toString()
-        .split(",")
-        .map((item: string) => ({
-          keywords: { some: { keyword: { name: item || undefined } } },
-        })) || [];
+      // console.log(
+      //   keywords
+      //     ?.toString()
+      //     .split(",")
 
-    const genresMany =
-      genres
-        ?.toString()
-        .split(",")
-        .map((item: string) => ({
-          categories: { some: { category: { name: item || undefined } } },
-        })) || [];
+      // );
+      const keywordMany =
+        keywords
+          ?.toString()
+          .split(",")
+          .map((item: string) => ({
+            keywords: { some: { keyword: { name: item || undefined } } },
+          })) || [];
 
-    const nationalitiesMany =
-      nationalities
-        ?.toString()
-        .split(",")
-        .map((item: string) => ({
-          nationality: (item as string) || undefined,
-        })) || [];
+      const genresMany =
+        genres
+          ?.toString()
+          .split(",")
+          .map((item: string) => ({
+            categories: { some: { category: { name: item || undefined } } },
+          })) || [];
 
-    const sortingOne = function () {
-      if (sorting === "총점" || "") {
-        return {
-          orderBy: { userFictionStat: { total: "desc" } },
-        };
-      } else if (sorting === "캐릭터성") {
-        return {
-          orderBy: { userFictionStat: { character: "desc" } },
-        };
-      } else if (sorting === "오리지널리티") {
-        return {
-          orderBy: { userFictionStat: { originality: "desc" } },
-        };
-      } else if (sorting === "스토리") {
-        return {
-          orderBy: {
-            userFictionStat: { synopsisComposition: "desc" },
-          },
-        };
-      } else if (sorting === "작품성") {
-        return {
-          orderBy: { userFictionStat: { value: "desc" } },
-        };
-      } else if (sorting === "핍진성") {
-        return {
-          orderBy: {
-            userFictionStat: { verisimilitude: "desc" },
-          },
-        };
-      } else if (sorting === "필력") {
-        return {
-          orderBy: { userFictionStat: { writing: "desc" } },
-        };
-      } else if (sorting === "화수") {
-        return {
-          orderBy: { volume: "desc" },
-        };
-      } else {
-        return undefined;
-      }
-    };
+      const nationalitiesMany =
+        nationalities
+          ?.toString()
+          .split(",")
+          .map((item: string) => ({
+            nationality: (item as string) || undefined,
+          })) || [];
 
-    const ReleaseDateFilter = function () {
-      if (dateYear) {
-        return {
-          startDate: {
-            gte: new Date(`${dateYear}-01-01`),
-            lte: new Date(`${dateYear}-12-31`),
-          },
-        };
-      } else {
-        return {};
-      }
-    };
+      const sortingOne = function () {
+        if (sorting === "총점" || "") {
+          return {
+            orderBy: { userFictionStat: { total: "desc" } },
+          };
+        } else if (sorting === "캐릭터성") {
+          return {
+            orderBy: { userFictionStat: { character: "desc" } },
+          };
+        } else if (sorting === "오리지널리티") {
+          return {
+            orderBy: { userFictionStat: { originality: "desc" } },
+          };
+        } else if (sorting === "스토리") {
+          return {
+            orderBy: {
+              userFictionStat: { synopsisComposition: "desc" },
+            },
+          };
+        } else if (sorting === "작품성") {
+          return {
+            orderBy: { userFictionStat: { value: "desc" } },
+          };
+        } else if (sorting === "핍진성") {
+          return {
+            orderBy: {
+              userFictionStat: { verisimilitude: "desc" },
+            },
+          };
+        } else if (sorting === "필력") {
+          return {
+            orderBy: { userFictionStat: { writing: "desc" } },
+          };
+        } else if (sorting === "화수") {
+          return {
+            orderBy: { volume: "desc" },
+          };
+        } else {
+          return undefined;
+        }
+      };
 
-    const fictions = await client.fiction.findMany({
-      take: 18,
-      skip: (+page!.toString() - 1 || 0) * 18,
-      where: {
-        AND: [
-          { OR: [...genresMany] },
-          {
-            OR: [...nationalitiesMany],
-          },
-          {
-            AND: [...keywordMany],
-          },
-          ReleaseDateFilter(),
-        ],
-      },
-      include: {
-        _count: {
-          select: {
-            favs: true,
-          },
+      const ReleaseDateFilter = function () {
+        if (dateYear) {
+          return {
+            startDate: {
+              gte: new Date(`${dateYear}-01-01`),
+              lte: new Date(`${dateYear}-12-31`),
+            },
+          };
+        } else {
+          return {};
+        }
+      };
+
+      const fictions = await client.fiction.findMany({
+        take: 18,
+        skip: (+page!.toString() - 1 || 0) * 18,
+        where: {
+          AND: [
+            { OR: [...genresMany] },
+            {
+              OR: [...nationalitiesMany],
+            },
+            {
+              AND: [...keywordMany],
+            },
+            ReleaseDateFilter(),
+          ],
         },
-        author: true,
-        userFictionStat: {
-          include: {
-            _count: {
-              select: {
-                users: true,
+        include: {
+          _count: {
+            select: {
+              favs: true,
+            },
+          },
+          author: true,
+          userFictionStat: {
+            include: {
+              _count: {
+                select: {
+                  users: true,
+                },
               },
             },
           },
-        },
-        keywords: {
-          include: {
-            keyword: true,
+          keywords: {
+            include: {
+              keyword: true,
+            },
+          },
+          categories: {
+            include: {
+              category: true,
+            },
           },
         },
-        categories: {
-          include: {
-            category: true,
-          },
-        },
-      },
-      ...sortingOne(),
-    });
+        ...sortingOne(),
+      });
 
-    const fictionsCount = await client.fiction.count({
-      where: {
-        AND: [
-          { OR: [...genresMany] },
-          {
-            OR: [...nationalitiesMany],
-          },
-          {
-            AND: [...keywordMany],
-          },
-          ReleaseDateFilter(),
-        ],
-      },
-    });
+      const fictionsCount = await client.fiction.count({
+        where: {
+          AND: [
+            { OR: [...genresMany] },
+            {
+              OR: [...nationalitiesMany],
+            },
+            {
+              AND: [...keywordMany],
+            },
+            ReleaseDateFilter(),
+          ],
+        },
+      });
 
-    res.json({
-      ok: true,
-      fictions,
-      fictionsCount,
-    });
+      redis.set(
+        JSON.stringify(req?.query),
+        JSON.stringify({
+          ok: true,
+          fictions,
+          fictionsCount,
+        })
+      );
+
+      res.json({
+        ok: true,
+        fictions,
+        fictionsCount,
+      });
+    }
   }
   if (req.method === "POST") {
     let {

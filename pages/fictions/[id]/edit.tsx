@@ -59,7 +59,7 @@ interface EditFictionMutation {
 
 interface FictionDetailResponse {
   ok: boolean;
-  prevFiction: FictionWithMore;
+  fiction?: FictionWithMore;
   similarFictions: Fiction[];
   isLiked: boolean;
 }
@@ -116,26 +116,27 @@ const EditFiction: NextPage = () => {
 
     return [year, month, day].join("-");
   }
-  // console.log(fiction?.prevFiction);
+  // console.log(fiction?.fiction?);
   // console.log(md);
   // console.log(
-  //   fiction?.prevFiction?.categories.reduce(
+  //   fiction?.fiction??.categories.reduce(
   //     (prev, cur) =>
   //       (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
   //     ""
   //   )
   // );
+  console.log(fiction);
   useEffect(() => {
-    if (fiction) {
-      setValue("title", fiction.prevFiction.title);
-      setValue("relatedTitle", fiction.prevFiction.relatedTitle || "");
-      setValue("author", fiction.prevFiction.author?.name || "");
-      setValue("relatedAuthor", fiction.prevFiction.relatedAuthor || "");
-      setValue("nationality", fiction.prevFiction.nationality);
-      setValue("type", fiction.prevFiction.type || "");
+    if (fiction?.fiction) {
+      setValue("title", fiction.fiction?.title || "");
+      setValue("relatedTitle", fiction.fiction?.relatedTitle || "");
+      setValue("author", fiction.fiction?.author?.name || "");
+      setValue("relatedAuthor", fiction.fiction?.relatedAuthor || "");
+      setValue("nationality", fiction?.fiction?.nationality || "");
+      setValue("type", fiction.fiction?.type || "");
       setValue(
         "genre",
-        fiction?.prevFiction?.categories
+        fiction?.fiction?.categories
           .reduce(
             (prev: any, cur: any) =>
               (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
@@ -143,31 +144,31 @@ const EditFiction: NextPage = () => {
           )
           .trim()
       );
-      setValue("original", fiction.prevFiction.original);
-      setValue("platforms", [fiction.prevFiction.platforms]);
-      setValue("currentState", fiction.prevFiction.currentState);
-      setValue("synopsis", fiction.prevFiction.synopsis);
-      setValue("characters", fiction.prevFiction.characters);
-      setValue("date.0", formatDate(fiction.prevFiction.startDate) as any);
-      setValue("date.1", formatDate(fiction.prevFiction.endDate) as any);
-      setValue("currentState", fiction.prevFiction.currentState);
-      setValue("status.0", fiction.prevFiction.fictionStat.originality);
-      setValue("status.1", fiction.prevFiction.fictionStat.writing);
-      setValue("status.2", fiction.prevFiction.fictionStat.character);
-      setValue("status.3", fiction.prevFiction.fictionStat.verisimilitude);
-      setValue("status.4", fiction.prevFiction.fictionStat.synopsisComposition);
-      setValue("status.5", fiction.prevFiction.fictionStat.value);
-      setValue("volume", fiction?.prevFiction.volume || 0);
-      setValue("introduction", fiction?.prevFiction.introduction || "");
-      setValue("mediaMix", fiction.prevFiction.mediaMix || "");
-      setValue("isTranslated", fiction.prevFiction.isTranslated || "");
+      setValue("original", fiction?.fiction?.original);
+      setValue("platforms", [fiction.fiction?.platforms]);
+      setValue("currentState", fiction.fiction?.currentState);
+      setValue("synopsis", fiction.fiction?.synopsis);
+      setValue("characters", fiction.fiction?.characters);
+      setValue("date.0", formatDate(fiction.fiction?.startDate) as any);
+      setValue("date.1", formatDate(fiction.fiction?.endDate) as any);
+      setValue("currentState", fiction.fiction?.currentState);
+      setValue("status.0", fiction.fiction?.fictionStat.originality);
+      setValue("status.1", fiction.fiction?.fictionStat.writing);
+      setValue("status.2", fiction.fiction?.fictionStat.character);
+      setValue("status.3", fiction.fiction?.fictionStat.verisimilitude);
+      setValue("status.4", fiction.fiction?.fictionStat.synopsisComposition);
+      setValue("status.5", fiction.fiction?.fictionStat.value);
+      setValue("volume", fiction?.fiction?.volume || 0);
+      setValue("introduction", fiction?.fiction?.introduction || "");
+      setValue("mediaMix", fiction.fiction?.mediaMix || "");
+      setValue("isTranslated", fiction.fiction?.isTranslated || "");
       if (md === "") {
-        setMd(fiction.prevFiction.setup || "");
+        setMd(fiction.fiction?.setup || "");
       }
       // console.log(md);
-      // setValue("setup", fiction.prevFiction.setup || "");
+      // setValue("setup", fiction.fiction?.setup || "");
       // Keywords, mcKeywords, subKeywords
-      fiction.prevFiction.keywords
+      fiction.fiction?.keywords
         .filter(
           (item) =>
             item.keyword.isOfHeroine === false &&
@@ -175,20 +176,20 @@ const EditFiction: NextPage = () => {
             item.keyword.isOfCons === false
         )
         .map((item, i) => setValue(`keywords.${i}`, item.keyword.name));
-      fiction.prevFiction.keywords
+      fiction.fiction?.keywords
         .filter((item) => item.keyword.isOfMC === true)
         .map((item, i) => setValue(`mcKeywords.${i}`, item.keyword.name));
-      fiction.prevFiction.keywords
+      fiction.fiction?.keywords
         .filter((item) => item.keyword.isOfHeroine === true)
         .map((item, i) => setValue(`subKeywords.${i}`, item.keyword.name));
-      fiction.prevFiction.keywords
+      fiction.fiction?.keywords
         .filter((item) => item.keyword.isOfCons === true)
         .map((item, i) => setValue(`consKeywords.${i}`, item.keyword.name));
       // setValue("keywords.0", "asd");
     }
   }, [fiction, setValue, md]);
-  // console.log(fiction);
-  // console.log(fiction?.prevFiction.genre);
+  console.log(fiction);
+  console.log(fiction?.fiction?.genre);
 
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;

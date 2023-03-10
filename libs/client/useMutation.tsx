@@ -18,9 +18,9 @@ export default function useMutation<T = any>(
     data: undefined,
     error: undefined,
   });
-  function mutation(data: any, method: string) {
+  async function mutation(data: any, method: string) {
     setSate((prev) => ({ ...prev, loading: true }));
-    fetch(url, {
+    await fetch(url, {
       method: method?.toString() || "POST",
       headers: {
         "Content-Type": "application/json",

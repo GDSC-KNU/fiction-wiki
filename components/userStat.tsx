@@ -66,7 +66,7 @@ export default function UserStat() {
   // };
 
   const buttonFlag = useRef(true);
-  const onRateClick = (data: RateUserStatForm) => {
+  const onRateClick = async (data: RateUserStatForm) => {
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
       return;
@@ -103,20 +103,23 @@ export default function UserStat() {
 
     // console.log(data);
 
-    // rateUserStat(data, "POST");
+    await rateUserStat(data, "POST");
 
-    fetch(`/api/fictions/${router.query.id}/userRate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json().catch(() => {}))
-      .then(() => {
-        mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
-        mutate(`/api/fictions/${router.query.id}`);
-      });
+    mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
+    mutate(`/api/fictions/${router.query.id}`);
+
+    // fetch(`/api/fictions/${router.query.id}/userRate`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json().catch(() => {}))
+    //   .then(() => {
+    //     mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
+    //     mutate(`/api/fictions/${router.query.id}`);
+    //   });
 
     // setTimeout(() => {
     //   mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);

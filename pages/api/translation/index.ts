@@ -167,6 +167,12 @@ export default async function handler(
               text: input,
               source: "zh-CN",
               target: "ko",
+              // replaceInfo: {
+              //   infos: [
+              //     { begin: 0, length: 4 },
+              //     { begin: 5, length: 4, str: "test" },
+              //   ],
+              // },
               glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
             }),
             headers: {

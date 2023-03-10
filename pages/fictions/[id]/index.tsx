@@ -328,13 +328,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   <h2 className=" pt-1 border-b-[1px] mx-3 text-md flex items-center">
                     평점
                     <p className="ml-2 text-sm font-bold text-gray-500 ">
-                      {fiction?.userFictionStat?.total} / 5 (
+                      {+fiction?.userFictionStat?.total || 0} / 5 (
                       {fiction?.userFictionStat?.userRationOnFictions?.length ||
                         0}
                       )
                     </p>
                   </h2>
-                  <StarRating data={+fiction.userFictionStat.total} />
+                  <StarRating data={+fiction.userFictionStat?.total || 0} />
                 </div>
                 <div className=" px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
                   <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
