@@ -166,6 +166,38 @@ export default async function handler(
             const translatedTitle = await papagoTranslate(rawTitle);
             let translatedAuthor = await papagoTranslate(rawAuthor);
             // translatedAuthor = translatedAuthor?.split(":")?.[1].trim();
+
+            // img scraping and upload
+            let curUrl = prompt;
+            const lastSlashIndex = curUrl.lastIndexOf("/");
+            baseUrl = curUrl.substring(0, lastSlashIndex);
+
+            const responseText2 = await fetch(baseUrl);
+            const buffer2 = await responseText2.arrayBuffer();
+            const decoder2 = new TextDecoder("gbk");
+            const htmlString2 = decoder2.decode(buffer2);
+            const $main = cheerio.load(htmlString2);
+            let imgUrl = `https:` + $main(".bookImg > img").attr("src");
+
+            const imgResponse = await fetch(imgUrl);
+            const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
+            const formData = new FormData();
+            formData.append("file", new Blob([imgBuffer]), translatedTitle);
+            // console.log("before uploadURL");
+            const { uploadURL } = await (
+              await fetch(`${process.env.NEXTAUTH_URL}/api/files`, {
+                method: "GET",
+              })
+            ).json();
+            // console.log(uploadURL);
+            // const form = new FormData();
+            // form.append("file", imgUrl, translatedTitle);
+            const {
+              result: { id },
+            } = await (
+              await fetch(uploadURL, { method: "POST", body: formData })
+            ).json();
+
             const createFiction = async () => {
               await client.fiction.create({
                 data: {
@@ -190,7 +222,7 @@ export default async function handler(
                   endDate: new Date(0),
                   original: "",
                   platforms: "치디엔",
-                  image: "0ac8b5cf-235a-479d-815d-a89bb37d6400",
+                  image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
                   synopsis: " ",
                   characters: " ",
                   currentState: "미완",
@@ -248,7 +280,7 @@ export default async function handler(
               });
             };
             createFiction();
-            console.log("fiction created");
+            // console.log("fiction created");
           }
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
           let htmlString = await responseText.text();
@@ -358,6 +390,7 @@ export default async function handler(
 
     //  await translateTextWithGlossary();
   } catch (e) {
+    console.log(e);
     redis.del(prompt);
     return res.status(500).json({
       subTitle: "",
