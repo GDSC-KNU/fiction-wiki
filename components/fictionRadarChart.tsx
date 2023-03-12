@@ -50,6 +50,7 @@ export default function FictionRadarChart(props: any) {
   // } = userFictionStatData;
   // console.log(userFictionStat?._count);
   // console.log(fiction?.userFictionStat?._count?.userRationOnFictions);
+  // console.log(fiction?.userFictionStat);
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [

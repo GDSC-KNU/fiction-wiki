@@ -194,6 +194,10 @@ const EditFiction: NextPage = () => {
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;
     if (data.thumb && data.thumb.length > 0) {
+      await fetch(`/api/files`, {
+        method: "DELETE",
+        body: JSON.stringify({ imageId: fiction?.fiction?.image }),
+      });
       const { uploadURL } = await (await fetch(`/api/files`)).json();
       const form = new FormData();
       form.append("file", data.thumb[0], data.title);

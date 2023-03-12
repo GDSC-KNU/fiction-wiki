@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import cheerio from "cheerio";
 // import { TranslationServiceClient } from "@google-cloud/translate";
 import { Redis } from "@upstash/redis";
+import client from "@libs/server/client";
 
 type ResponseData = {
   subTitle: string;
@@ -12,12 +13,6 @@ type ResponseData = {
   originalTextArray: string[];
   translatedTextArray: string[];
 };
-
-// subTitle,
-// nextUrl,
-// prevUrl,
-// originalTextArray,
-// translatedTextArray,
 
 interface GenerateNextApirequest extends NextApiRequest {
   body: {
@@ -41,6 +36,40 @@ export default async function handler(
       return new Response("Plase send your prompt", { status: 400 });
     }
 
+    let baseUrl = "";
+
+    const papagoTranslate = async (input: string) => {
+      return new Promise<string>((resolve, reject) => {
+        fetch("https://naveropenapi.apigw.ntruss.com/nmt/v1/translation", {
+          method: "POST",
+          body: JSON.stringify({
+            text: input,
+            source: "zh-CN",
+            target: "ko",
+            // replaceInfo: {
+            //   infos: [
+            //     { begin: 0, length: 4 },
+            //     { begin: 5, length: 4, str: "test" },
+            //   ],
+            // },
+            glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
+            "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            resolve(data?.message?.result?.translatedText || "");
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    };
+
     const terminator = async () => {
       const extractor = async (url: string) => {
         const responseText = await fetch(prompt);
@@ -50,6 +79,8 @@ export default async function handler(
         let nextUrl = "";
         let prevUrl = "";
         let originalTextArray = [""];
+        // let rawTitle = ""
+        // let rawTitleTranslated = ""
 
         if (prompt.startsWith("https://read.qidian.com/chapter")) {
           let htmlString = await responseText.text();
@@ -83,7 +114,8 @@ export default async function handler(
           const htmlString = decoder.decode(buffer);
           const $ = cheerio.load(htmlString);
 
-          const hasBr = $("#contentbox").find("br").length > 0;
+          const hasBr = $("#contentbox").find("br").length > 2;
+          // console.log($("#contentbox").find("br").length);
           if (hasBr) {
             $(".ad_content").remove();
             $("#contentbox > p").remove();
@@ -109,6 +141,7 @@ export default async function handler(
             );
           }
 
+          ////
           subTitle = $(".h1title").text();
           nextUrl = $("#next").attr("href") || "";
           nextUrl = !nextUrl.startsWith("/b/")
@@ -118,21 +151,122 @@ export default async function handler(
           prevUrl = !prevUrl.startsWith("/b/")
             ? ""
             : `https://www.uukanshu.com` + prevUrl;
+
+          /// db initializer
+          const rawTitle = $(".shuming")?.text()?.split(":")?.[1]?.trim();
+          const exist = await client.fiction.findFirst({
+            where: {
+              relatedTitle: rawTitle,
+            },
+          });
+
+          if (!exist) {
+            //fetch index page of the fiction
+            // const responseText = await fetch(baseUrl);
+            // const buffer = await responseText.arrayBuffer();
+            // const decoder = new TextDecoder("gbk");
+            // const htmlString = decoder.decode(buffer);
+            // const $ = cheerio.load(htmlString);
+            const rawAuthor = $(".author").text();
+            const translatedAuthor = await papagoTranslate(rawAuthor);
+            const createFiction = async () => {
+              await client.fiction.create({
+                data: {
+                  title: await papagoTranslate(rawTitle),
+                  relatedTitle: rawTitle,
+                  author: {
+                    connectOrCreate: {
+                      where: {
+                        name: translatedAuthor,
+                      },
+                      create: {
+                        name: translatedAuthor,
+                        relatedName: rawAuthor,
+                      },
+                    },
+                  },
+                  relatedAuthor: translatedAuthor,
+                  nationality: "중국",
+                  genre: "",
+                  startDate: new Date(0),
+                  endDate: new Date(0),
+                  original: "",
+                  platforms: "치디엔",
+                  image: "",
+                  synopsis: " ",
+                  characters: " ",
+                  currentState: "미완",
+                  volume: 100,
+                  isTranslated: "미번",
+                  introduction: "",
+                  type: "웹소설",
+                  mediaMix: "",
+                  setup: "",
+                  categories: {
+                    create: {
+                      category: {
+                        connectOrCreate: {
+                          where: {
+                            name: "미정",
+                          },
+                          create: {
+                            name: "미정",
+                          },
+                        },
+                      },
+                    },
+                  },
+                  keywords: {
+                    create: {
+                      keyword: {
+                        connectOrCreate: {
+                          where: {
+                            name: "미정",
+                          },
+                          create: {
+                            name: "미정",
+                          },
+                        },
+                      },
+                    },
+                  },
+                  fictionStat: {
+                    create: {
+                      originality: 0,
+                      writing: 0,
+                      character: 0,
+                      verisimilitude: 0,
+                      synopsisComposition: 0,
+                      value: 0,
+                    },
+                  },
+                  user: {
+                    connect: {
+                      id: "cl5gg5htn0030q4uuoaryy8c1",
+                    },
+                  },
+                  // keywords: { some: { keyword: { name: "" || undefined } } }
+                },
+              });
+            };
+            createFiction();
+            console.log("fiction created");
+          }
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
           let htmlString = await responseText.text();
           let $ = cheerio.load(htmlString);
           let curUrl = prompt;
           const lastSlashIndex = curUrl.lastIndexOf("/");
-          let curUrlBase = curUrl.substring(0, lastSlashIndex);
+          baseUrl = curUrl.substring(0, lastSlashIndex);
           subTitle = $("h1").text();
           nextUrl = $("div.link a:nth-child(3)").attr("href") || "";
           nextUrl = nextUrl.endsWith("/")
             ? ""
-            : curUrlBase + "/" + (nextUrl || "");
+            : baseUrl + "/" + (nextUrl || "");
           prevUrl = $("div.link a:nth-child(1)").attr("href") || "";
           prevUrl = prevUrl.endsWith("/")
             ? ""
-            : curUrlBase + "/" + (prevUrl || "");
+            : baseUrl + "/" + (prevUrl || "");
 
           //////////////////
           paragraphs = $(".content").find("p");
@@ -158,38 +292,6 @@ export default async function handler(
       //원문배열
 
       originalTextArray.push(subTitle);
-
-      const papagoTranslate = async (input: string) => {
-        return new Promise<string>((resolve, reject) => {
-          fetch("https://naveropenapi.apigw.ntruss.com/nmt/v1/translation", {
-            method: "POST",
-            body: JSON.stringify({
-              text: input,
-              source: "zh-CN",
-              target: "ko",
-              // replaceInfo: {
-              //   infos: [
-              //     { begin: 0, length: 4 },
-              //     { begin: 5, length: 4, str: "test" },
-              //   ],
-              // },
-              glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
-              "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              resolve(data?.message?.result?.translatedText || "");
-            })
-            .catch((error) => {
-              reject(error);
-            });
-        });
-      };
 
       const translatedTextArray = await Promise.all(
         originalTextArray.map((item) => papagoTranslate(item))
@@ -233,17 +335,19 @@ export default async function handler(
         translatedTextArray,
       } = await terminator();
 
-      redis.set(
-        prompt,
-        JSON.stringify({
-          subTitle,
-          prevUrl,
-          nextUrl,
-          originalTextArray,
-          translatedTextArray,
-        }),
-        { ex: 360000 }
-      );
+      // redis.set(
+      //   prompt,
+      //   JSON.stringify({
+      //     subTitle,
+      //     prevUrl,
+      //     nextUrl,
+      //     originalTextArray,
+      //     translatedTextArray,
+      //   }),
+      //   { ex: 360000 }
+      // );
+
+      // const rawTitle = originalTextArray[0]
 
       return res.status(200).json({
         subTitle,
@@ -256,7 +360,7 @@ export default async function handler(
 
     //  await translateTextWithGlossary();
   } catch (e) {
-    console.log(e);
+    redis.del(prompt);
     return res.status(500).json({
       subTitle: "",
       nextUrl: "",
