@@ -38,6 +38,7 @@ interface CreateFictionForm {
   mediaMix?: string;
   setup?: string;
   introduction?: string;
+  originalTitle?: string;
 }
 
 interface CreateFictionMutation {
@@ -226,6 +227,13 @@ const Create: NextPage = (props) => {
                     required
                     label="Title"
                     name="title"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("originalTitle", { required: true })}
+                    required
+                    label="OriginalTitle"
+                    name="originalTitle"
                     type="text_detail"
                   />
                   <Input

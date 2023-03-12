@@ -131,6 +131,7 @@ async function handler(
       query: { id },
       body: {
         title,
+        originalTitle,
         relatedTitle,
         author,
         relatedAuthor,
@@ -258,6 +259,7 @@ async function handler(
       },
       data: {
         title,
+        originalTitle,
         relatedTitle,
         author: {
           connectOrCreate: {

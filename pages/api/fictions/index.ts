@@ -198,6 +198,7 @@ async function handler(
     let {
       body: {
         title,
+        originalTitle,
         relatedTitle,
         author,
         relatedAuthor,
@@ -314,6 +315,7 @@ async function handler(
     const fiction = await client.fiction.create({
       data: {
         title,
+        originalTitle: originalTitle,
         relatedTitle: relatedTitle || "",
         author: {
           connectOrCreate: {

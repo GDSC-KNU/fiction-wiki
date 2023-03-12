@@ -50,6 +50,7 @@ interface EditFictionForm {
   mediaMix?: string;
   setup?: string;
   introduction?: string;
+  originalTitle?: string;
 }
 
 interface EditFictionMutation {
@@ -129,6 +130,7 @@ const EditFiction: NextPage = () => {
   useEffect(() => {
     if (fiction?.fiction) {
       setValue("title", fiction.fiction?.title || "");
+      setValue("originalTitle", fiction.fiction?.originalTitle || "");
       setValue("relatedTitle", fiction.fiction?.relatedTitle || "");
       setValue("author", fiction.fiction?.author?.name || "");
       setValue("relatedAuthor", fiction.fiction?.relatedAuthor || "");
@@ -356,6 +358,13 @@ const EditFiction: NextPage = () => {
                     required
                     label="Title"
                     name="title"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("originalTitle", { required: true })}
+                    required
+                    label="OriginalTitle"
+                    name="originalTitle"
                     type="text_detail"
                   />
                   <Input

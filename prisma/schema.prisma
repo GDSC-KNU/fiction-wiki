@@ -44,6 +44,7 @@ model Fiction {
   isTranslated  String?             @default("")
   introduction  String?             @default("") @db.MediumText
   chacracterImages Json?            @default("[]")
+  originalTitle String?             @default("")
 
   @@index([userId])
   @@index([authorId])

@@ -153,26 +153,24 @@ export default async function handler(
             : `https://www.uukanshu.com` + prevUrl;
 
           /// db initializer
-          const rawTitle = $(".shuming")?.text()?.split(":")?.[1]?.trim();
+          let rawTitle = await $(".shuming")?.text()?.split("：")?.[1].trim();
           const exist = await client.fiction.findFirst({
             where: {
-              relatedTitle: rawTitle,
+              originalTitle: rawTitle,
             },
           });
-
+          // console.log(rawTitle);
+          // console.log(exist);
           if (!exist) {
-            //fetch index page of the fiction
-            // const responseText = await fetch(baseUrl);
-            // const buffer = await responseText.arrayBuffer();
-            // const decoder = new TextDecoder("gbk");
-            // const htmlString = decoder.decode(buffer);
-            // const $ = cheerio.load(htmlString);
-            const rawAuthor = $(".author").text();
-            const translatedAuthor = await papagoTranslate(rawAuthor);
+            let rawAuthor = $(".author").text()?.split("：")?.[1].trim();
+            const translatedTitle = await papagoTranslate(rawTitle);
+            let translatedAuthor = await papagoTranslate(rawAuthor);
+            // translatedAuthor = translatedAuthor?.split(":")?.[1].trim();
             const createFiction = async () => {
               await client.fiction.create({
                 data: {
-                  title: await papagoTranslate(rawTitle),
+                  title: translatedTitle,
+                  originalTitle: rawTitle,
                   relatedTitle: rawTitle,
                   author: {
                     connectOrCreate: {
@@ -185,23 +183,23 @@ export default async function handler(
                       },
                     },
                   },
-                  relatedAuthor: translatedAuthor,
+                  relatedAuthor: rawAuthor,
                   nationality: "중국",
                   genre: "",
                   startDate: new Date(0),
                   endDate: new Date(0),
                   original: "",
                   platforms: "치디엔",
-                  image: "",
+                  image: "0ac8b5cf-235a-479d-815d-a89bb37d6400",
                   synopsis: " ",
                   characters: " ",
                   currentState: "미완",
                   volume: 100,
                   isTranslated: "미번",
-                  introduction: "",
+                  introduction: " ",
                   type: "웹소설",
                   mediaMix: "",
-                  setup: "",
+                  setup: " ",
                   categories: {
                     create: {
                       category: {

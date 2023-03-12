@@ -87,8 +87,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   //   );
   // }
 
-  fiction.startDate = new Date(fiction?.startDate);
-  fiction.endDate = new Date(fiction?.endDate);
+  if (fiction) {
+    fiction.startDate = new Date(fiction?.startDate || 0);
+    fiction.endDate = new Date(fiction?.endDate || 0);
+  }
 
   return (
     <div className=" max-w-[1100px]">
