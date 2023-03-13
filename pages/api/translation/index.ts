@@ -178,6 +178,12 @@ export default async function handler(
             const htmlString2 = decoder2.decode(buffer2);
             const $main = cheerio.load(htmlString2);
             let imgUrl = `https:` + $main(".bookImg > img").attr("src");
+            let rawSynopsis = $main(".jieshao_content > h3")
+              .text()
+              .split("www.uukanshu.com")[1]
+              .replace("https://", "");
+
+            let translatedSynopsis = await papagoTranslate(rawSynopsis);
 
             const imgResponse = await fetch(imgUrl);
             const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
@@ -223,7 +229,7 @@ export default async function handler(
                   original: "",
                   platforms: "치디엔",
                   image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
-                  synopsis: " ",
+                  synopsis: translatedSynopsis,
                   characters: " ",
                   currentState: "미완",
                   volume: 100,
@@ -337,7 +343,7 @@ export default async function handler(
     };
 
     let cache: any = await redis.get(prompt);
-    // redis.del(prompt);
+    redis.del(prompt);
     // console.log(cache);
     if (cache) {
       let {

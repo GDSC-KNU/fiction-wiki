@@ -166,16 +166,17 @@ const Translation = () => {
 
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
-      <div className=" ml-5 mb-2 text-gray-500">
+      {/* <div className=" ml-5 mb-2 text-gray-500">
         지원사이트 목록: qidian, uukanshu, aixdzs
-      </div>
+      </div> */}
+      <div className=" ml-5 mb-2 text-gray-500">번역기능 일시중단</div>
       <div className=" sticky top-0 w-full px-4">
-        <ChatInput
+        {/* <ChatInput
           onSend={(input) => {
             onSubmitHandler(input);
           }}
           disabled={false}
-        />
+        /> */}
       </div>
       <div className=" mt-6 px-4">
         <h2 className=" font-semibold text-xl w-fit">
