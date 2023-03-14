@@ -324,6 +324,7 @@ export default async function handler(
       );
 
       //원문배열
+      //
 
       originalTextArray.push(subTitle);
 
