@@ -166,35 +166,47 @@ const Translation = () => {
 
   return (
     <main className=" relative max-w-2xl mx-auto mt-6">
-      {/* <div className=" ml-5 mb-2 text-gray-500">
+      <div className=" ml-5 mb-2 text-gray-500">
         지원사이트 목록: qidian, uukanshu, aixdzs
-      </div> */}
-      <div className=" ml-5 mb-2 text-gray-500">번역기능 일시중단</div>
+      </div>
+      {/* <div className=" invisible">新章</div> */}
       <div className=" sticky top-0 w-full px-4">
-        {/* <ChatInput
+        <ChatInput
           onSend={(input) => {
             onSubmitHandler(input);
           }}
           disabled={false}
-        /> */}
+        />
       </div>
-      <div className=" mt-6 px-4">
-        <h2 className=" font-semibold text-xl w-fit">
+      <div id="content" className=" mt-6 px-4">
+        <h2 translate="no" className=" font-semibold text-xl w-fit">
           {response?.originalTextArray.at(-1)}
         </h2>
         <div className=" font-semibold text-xl w-fit">
-          {response?.translatedTextArray.at(-1)}
+          {response?.originalTextArray.at(-1)}
         </div>
+        {/* {!isTranslated ? (
+        <div className=" font-semibold text-xl w-fit">
+          {response?.originalTextArray.at(-1)}
+        </div>
+      ) : null} */}
         {response &&
           (response?.originalTextArray || [""]).map((item: any, i: any) => {
             if (i === response?.originalTextArray.length - 1) return;
+
             return (
               <div className=" pt-5" key={i}>
-                <div>{item}</div>
-                <div className=" ">{response?.translatedTextArray?.[i]}</div>
+                <div translate="no" className="texts">
+                  {item}
+                </div>
+                {/* {!isTranslated ? (
+                <div className=" ">{response?.originalTextArray?.[i]}</div>
+              ) : null} */}
+                <div className="texts">{item}</div>
               </div>
             );
           })}
+        {/* <div>{translations}</div> */}
         {isValidating ? (
           <div className=" flex justify-center">
             <ClipLoader

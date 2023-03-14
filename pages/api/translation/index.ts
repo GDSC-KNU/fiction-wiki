@@ -102,7 +102,7 @@ export default async function handler(
           originalTextArray = await Promise.all(
             paragraphs
               .map(async (index: any, element: any) => {
-                let rawText = $(element).text().trim();
+                let rawText = $(element).text()?.trim();
 
                 return rawText || " ";
               })
@@ -123,7 +123,7 @@ export default async function handler(
             paragraphs = paragraphs?.split("<br>");
             originalTextArray = paragraphs
               ?.map((element: string) => {
-                let rawText = element.replace(/&nbsp;/g, "").trim();
+                let rawText = element.replace(/&nbsp;/g, "")?.trim();
                 return rawText;
               })
               .filter((str) => str !== "") || [""];
@@ -133,7 +133,7 @@ export default async function handler(
             originalTextArray = await Promise.all(
               paragraphs
                 .map(async (index: any, element: any) => {
-                  let rawText = $(element).text().trim();
+                  let rawText = $(element).text()?.trim();
 
                   return rawText.toString() || " ";
                 })
@@ -153,7 +153,7 @@ export default async function handler(
             : `https://www.uukanshu.com` + prevUrl;
 
           /// db initializer
-          let rawTitle = await $(".shuming")?.text()?.split("：")?.[1].trim();
+          let rawTitle = await $(".shuming")?.text()?.split("：")?.[1]?.trim();
           const exist = await client.fiction.findFirst({
             where: {
               originalTitle: rawTitle,
@@ -162,7 +162,7 @@ export default async function handler(
           // console.log(rawTitle);
           // console.log(exist);
           if (!exist) {
-            let rawAuthor = $(".author").text()?.split("：")?.[1].trim();
+            let rawAuthor = $(".author").text()?.split("：")?.[1]?.trim();
             const translatedTitle = await papagoTranslate(rawTitle);
             let translatedAuthor = await papagoTranslate(rawAuthor);
             // translatedAuthor = translatedAuthor?.split(":")?.[1].trim();
@@ -195,9 +195,7 @@ export default async function handler(
                 method: "GET",
               })
             ).json();
-            // console.log(uploadURL);
-            // const form = new FormData();
-            // form.append("file", imgUrl, translatedTitle);
+
             const {
               result: { id },
             } = await (
@@ -309,7 +307,7 @@ export default async function handler(
           originalTextArray = await Promise.all(
             paragraphs
               .map(async (index: any, element: any) => {
-                let rawText = $(element).text().trim();
+                let rawText = $(element).text()?.trim();
                 return rawText || " ";
               })
               .get()
@@ -329,9 +327,11 @@ export default async function handler(
 
       originalTextArray.push(subTitle);
 
-      const translatedTextArray = await Promise.all(
-        originalTextArray.map((item) => papagoTranslate(item))
-      );
+      // 파파고 번역 엔진 사용 중단 230313
+      // const translatedTextArray = await Promise.all(
+      //   originalTextArray.map((item) => papagoTranslate(item))
+      // );
+      const translatedTextArray = [""];
 
       return {
         originalTextArray,
@@ -343,7 +343,7 @@ export default async function handler(
     };
 
     let cache: any = await redis.get(prompt);
-    redis.del(prompt);
+    // redis.del(prompt);
     // console.log(cache);
     if (cache) {
       let {
