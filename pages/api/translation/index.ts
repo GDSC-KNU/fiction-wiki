@@ -332,7 +332,7 @@ export default async function handler(
       // const translatedTextArray = await Promise.all(
       //   originalTextArray.map((item) => papagoTranslate(item))
       // );
-      const translatedTextArray = [""];
+      let translatedTextArray = [""];
 
       return {
         originalTextArray,
