@@ -159,19 +159,17 @@ export default async function handler(
               originalTitle: rawTitle,
             },
           });
-          // console.log(rawTitle);
-          // console.log(exist);
+
           if (!exist) {
             let rawAuthor = $(".author").text()?.split("：")?.[1]?.trim();
-            const translatedTitle = await papagoTranslate(rawTitle);
+            let translatedTitle = await papagoTranslate(rawTitle);
             let translatedAuthor = await papagoTranslate(rawAuthor);
-            // translatedAuthor = translatedAuthor?.split(":")?.[1].trim();
 
-            // img scraping and upload
             let curUrl = prompt;
             const lastSlashIndex = curUrl.lastIndexOf("/");
             baseUrl = curUrl.substring(0, lastSlashIndex);
 
+            /// 목차페이지 parsing
             const responseText2 = await fetch(baseUrl);
             const buffer2 = await responseText2.arrayBuffer();
             const decoder2 = new TextDecoder("gbk");
@@ -182,8 +180,8 @@ export default async function handler(
               .text()
               .split("www.uukanshu.com")[1]
               .replace("https://", "");
-
             let translatedSynopsis = await papagoTranslate(rawSynopsis);
+            const volume = $main("#chapterList").find("li").length;
 
             const imgResponse = await fetch(imgUrl);
             const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
@@ -230,7 +228,7 @@ export default async function handler(
                   synopsis: translatedSynopsis,
                   characters: " ",
                   currentState: "미완",
-                  volume: 100,
+                  volume: volume || 100,
                   isTranslated: "미번",
                   introduction: " ",
                   type: "웹소설",
