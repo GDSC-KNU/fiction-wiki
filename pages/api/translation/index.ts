@@ -35,7 +35,7 @@ export default async function handler(
     if (!prompt || prompt === "") {
       return new Response("Plase send your prompt", { status: 400 });
     }
-
+    // redis.del(prompt);
     let baseUrl = "";
 
     const papagoTranslate = async (input: string) => {
@@ -311,12 +311,18 @@ export default async function handler(
           );
 
           // db 자동업데이트
-          let rawTitle = $(".crumbs li:nth-child(3)").text().trim();
+          let rawTitle =
+            (await $(".crumbs li:nth-child(3) > a")
+              .attr("title")
+              ?.toString()
+              ?.trim()) || "";
           const exist = await client.fiction.findFirst({
             where: {
               originalTitle: rawTitle,
             },
           });
+
+          // console.log(exist);
 
           if (!exist) {
             const newUrl = `https://www.aixdzs.com/novel/${rawTitle}`;
@@ -437,7 +443,7 @@ export default async function handler(
               createFiction();
             };
 
-            await dbInitiator();
+            dbInitiator();
           }
         } else {
           // console.log("");
