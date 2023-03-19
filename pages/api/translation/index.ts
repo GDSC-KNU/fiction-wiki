@@ -199,8 +199,8 @@ export default async function handler(
               await fetch(uploadURL, { method: "POST", body: formData })
             ).json();
 
-            const createFiction = async () => {
-              await client.fiction.create({
+            const createFiction = () => {
+              client.fiction.create({
                 data: {
                   title: translatedTitle,
                   originalTitle: rawTitle,
