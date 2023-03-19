@@ -285,7 +285,7 @@ export default function FictionList(props: any) {
             )}
           </ul>
           <div className=" ">
-            {props.isHidden === true ? null : (
+            {props.pagination === false ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
@@ -328,7 +328,7 @@ export default function FictionList(props: any) {
             ))}
           </div>
           <div className=" ">
-            {props.isHidden === true ? null : (
+            {props.pagination === false ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}

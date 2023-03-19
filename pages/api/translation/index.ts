@@ -113,9 +113,9 @@ export default async function handler(
           const decoder = new TextDecoder("gbk");
           const htmlString = decoder.decode(buffer);
           const $ = cheerio.load(htmlString);
-
+          // 파싱에러 발생 페이지 예외처리
           const hasBr = $("#contentbox").find("br").length > 2;
-          // console.log($("#contentbox").find("br").length);
+
           if (hasBr) {
             $(".ad_content").remove();
             $("#contentbox > p").remove();
@@ -127,7 +127,6 @@ export default async function handler(
                 return rawText;
               })
               .filter((str) => str !== "") || [""];
-            // console.log(originalTextArray);
           } else {
             paragraphs = $("#contentbox").find("p");
             originalTextArray = await Promise.all(
@@ -152,7 +151,7 @@ export default async function handler(
             ? ""
             : `https://www.uukanshu.com` + prevUrl;
 
-          /// db initializer
+          /// db 자동업데이트
           let rawTitle = await $(".shuming")?.text()?.split("：")?.[1]?.trim();
           const exist = await client.fiction.findFirst({
             where: {
@@ -310,6 +309,136 @@ export default async function handler(
               })
               .get()
           );
+
+          // db 자동업데이트
+          let rawTitle = $(".crumbs li:nth-child(3)").text().trim();
+          const exist = await client.fiction.findFirst({
+            where: {
+              originalTitle: rawTitle,
+            },
+          });
+
+          if (!exist) {
+            const newUrl = `https://www.aixdzs.com/novel/${rawTitle}`;
+            const dbInitiator = async () => {
+              const indexResponseText = await fetch(newUrl);
+              let indexHtmlString = await indexResponseText.text();
+              let $index = cheerio.load(indexHtmlString);
+
+              let rawAuthor = $index(
+                ".d_ac.fdl > ul > li:nth-child(1) > a"
+              ).text();
+              let translatedAuthor = await papagoTranslate(rawAuthor);
+              let translatedTitle = await papagoTranslate(rawTitle);
+              let imgUrl =
+                $index('[itemprop="image"]')?.attr("src")?.toString() || "";
+              let volume = $index("#i-chapter > ul").find("li").length;
+              let rawsynopsis = $index(".d_co").text();
+              let translatedSynopsis = await papagoTranslate(rawsynopsis);
+
+              const imgResponse = await fetch(imgUrl);
+              const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
+              const formData = new FormData();
+              formData.append("file", new Blob([imgBuffer]), translatedTitle);
+              // console.log("before uploadURL");
+              const { uploadURL } = await (
+                await fetch(`${process.env.NEXTAUTH_URL}/api/files`, {
+                  method: "GET",
+                })
+              ).json();
+
+              const {
+                result: { id },
+              } = await (
+                await fetch(uploadURL, { method: "POST", body: formData })
+              ).json();
+
+              const createFiction = async () => {
+                await client.fiction.create({
+                  data: {
+                    title: translatedTitle,
+                    originalTitle: rawTitle,
+                    relatedTitle: rawTitle,
+                    author: {
+                      connectOrCreate: {
+                        where: {
+                          name: translatedAuthor,
+                        },
+                        create: {
+                          name: translatedAuthor,
+                          relatedName: rawAuthor,
+                        },
+                      },
+                    },
+                    relatedAuthor: rawAuthor,
+                    nationality: "중국",
+                    genre: "",
+                    startDate: new Date(0),
+                    endDate: new Date(0),
+                    original: "",
+                    platforms: "치디엔",
+                    image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
+                    synopsis: translatedSynopsis,
+                    characters: " ",
+                    currentState: "미완",
+                    volume: volume || 100,
+                    isTranslated: "미번",
+                    introduction: " ",
+                    type: "웹소설",
+                    mediaMix: "",
+                    setup: " ",
+                    categories: {
+                      create: {
+                        category: {
+                          connectOrCreate: {
+                            where: {
+                              name: "미정",
+                            },
+                            create: {
+                              name: "미정",
+                            },
+                          },
+                        },
+                      },
+                    },
+                    keywords: {
+                      create: {
+                        keyword: {
+                          connectOrCreate: {
+                            where: {
+                              name: "미정",
+                            },
+                            create: {
+                              name: "미정",
+                            },
+                          },
+                        },
+                      },
+                    },
+                    fictionStat: {
+                      create: {
+                        originality: 0,
+                        writing: 0,
+                        character: 0,
+                        verisimilitude: 0,
+                        synopsisComposition: 0,
+                        value: 0,
+                      },
+                    },
+                    user: {
+                      connect: {
+                        id: "cl5gg5htn0030q4uuoaryy8c1",
+                      },
+                    },
+                    // keywords: { some: { keyword: { name: "" || undefined } } }
+                  },
+                });
+              };
+              createFiction();
+            };
+
+            await dbInitiator();
+          }
         } else {
           // console.log("");
         }

@@ -63,7 +63,11 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
       <div className=" bg-white  grid grid-cols-12  pl-3 mb-4">
         <div className=" col-span-12 lg:col-span-12">
           <div className="mt-5 font-bold text-xl">작품 목록</div>
-          <FictionList data={author} type={"fictions_list"} isHidden={true} />
+          <FictionList
+            data={author}
+            type={"fictions_list"}
+            pagination={false}
+          />
         </div>
       </div>
       <div className=" bg-white  grid grid-cols-12 pl-3 mb-4">
