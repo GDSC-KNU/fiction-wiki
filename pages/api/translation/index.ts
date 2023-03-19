@@ -384,7 +384,7 @@ export default async function handler(
                     original: "",
                     platforms: "치디엔",
                     image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
-                    synopsis: translatedSynopsis,
+                    synopsis: translatedSynopsis || "업데이트 예정",
                     characters: " ",
                     currentState: "미완",
                     volume: volume || 100,
