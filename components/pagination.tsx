@@ -1,7 +1,4 @@
 import { useRouter } from "next/router";
-// import { useEffect, useState } from "react";
-// import { useRecoilState } from "recoil";
-// import { pageAtom, authorPageAtom, searchPageAtom } from "../atoms";
 import { cls } from "@libs/client/utils";
 import Link from "next/link";
 import { useRecoilState } from "recoil";
@@ -265,17 +262,6 @@ PaginationProps) {
       <div className="flex flex-1 items-center justify-between pr-1">
         <div>
           <p className="text-sm text-gray-700">
-            {/* Showing */}
-            {/* <span className="font-medium">
-              {(+(router?.query?.page || 0).toString() - 1) *
-                itemsCountPerPage +k 
-                1}
-            </span>
-            to
-            <span className="font-medium">
-              {+(router?.query?.page || 0).toString() * itemsCountPerPage + 1}
-            </span>
-            of */}
             <span className="font-medium">{totalItemsCount || 0} </span>
             results
           </p>
@@ -323,14 +309,8 @@ PaginationProps) {
                 }
                 key={item}
                 href={pageHrefObject(+item) || "/"}
-                // shallow={
-                //   (router?.query?.pathname || "").includes("/fictions")
-                //     ? true
-                //     : false
-                // }
               >
                 {item}
-                {/* border-indigo-500 bg-indigo-50 text-indigo-600 */}
               </Link>
             ))}
 

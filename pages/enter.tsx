@@ -58,7 +58,7 @@ const Enter: NextPage = () => {
     }
   }, [tokenData, router]);
 
-  console.log(`session:` + session);
+  // console.log(`session:` + session);
 
   return (
     <div className="mt-16 px-4">

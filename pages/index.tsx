@@ -30,6 +30,7 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
   return (
     <div>
       <HeadMeta />
+
       <div>
         <Search />
       </div>
