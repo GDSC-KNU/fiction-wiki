@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { useRecoilState } from "recoil";
-import { pageAtom } from "../../atoms";
+import { fictionPageAtom } from "../../atoms";
 
 export default function useSearch(search: string | undefined) {
-  const [page, setPage] = useRecoilState(pageAtom);
+  const [page, setPage] = useRecoilState(fictionPageAtom);
   const { data, error, mutate } = useSWR(
     search
       ? typeof window === "undefined"

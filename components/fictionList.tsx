@@ -298,6 +298,7 @@ export default function FictionList(props: any) {
                   Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
                 }
                 checkedParams={props?.checkedParams}
+                // onChange={() => {}}
               />
             )}
           </div>

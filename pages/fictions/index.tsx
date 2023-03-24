@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useRecoilState } from "recoil";
+import { fictionPageAtom } from "../../atoms";
+import HeadMeta from "@components/headMeata";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -68,6 +71,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     "필력",
     "화수",
   ];
+  const [page, setPage] = useRecoilState(fictionPageAtom);
 
   // console.log(process.env.HOST);
   // console.log(process.env.NEXT_PUBLIC_HOST);
@@ -89,7 +93,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       .join(",") || "all")
   }${"&sorting=" + (Array.from(checkedSortings).join(",") || "all")}${
     "&dateYear=" + (router?.query?.dateYear || "all")
-  }${"&page=" + (router?.query?.page || 1)}
+  }${"&page=" + (page || 1)}
   `;
 
   const { data, isValidating } = useSWR<FictionsResponse>(
@@ -189,7 +193,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
         nationalities: Array.from(checkedNationalities).join(",") || "all",
         genres: Array.from(checkedGenres).join(",") || "all",
         sorting: Array.from(checkedSortings).join(",") || "all",
-        page: router?.query?.page || 1,
+        page: page || 1,
         RelaseTimeFilter:
           Array.from(checkedReleaseTimeFilter).join(",") || "all",
         dateYear: checkedReleaseTimeFilter.has("전체")
@@ -199,7 +203,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     };
 
     router.replace(path, undefined, { shallow: true });
-  }, [isChecked]);
+  }, [queryString]);
 
   const RelaseTimeFilters = ["전체", "연도별"];
   const thisYear = new Date().getFullYear();
@@ -214,6 +218,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   return (
     <div className=" mt-10 ">
+      <HeadMeta />
       <div className=" justify-center bg-white rounded m-2 p-2">
         <form className=" ">
           <div>

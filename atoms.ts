@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export const pageAtom = atom({
+export const fictionPageAtom = atom({
   key: "whatPage",
   default: 1,
 });

@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { pageAtom } from "../../../../atoms";
+import { fictionPageAtom } from "../../../../atoms";
 import { useRouter } from "next/router";
 
 interface IParams extends ParsedUrlQuery {
@@ -24,7 +24,7 @@ interface dataResponse {
 
 const SearchKeywordPage: NextPage<dataResponse> = (data) => {
   const router = useRouter();
-  // const [pageIndex, setPageIndex] = useRecoilState(pageAtom);
+  // const [pageIndex, setPageIndex] = useRecoilState(fictionPageAtom);
 
   // const { search } = router.query;
 
