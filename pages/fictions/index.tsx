@@ -315,7 +315,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     ))}
                   </td>
                 </tr>
-
                 <tr>
                   <th className=" ">정렬</th>
                   <td className=" leading-[1.8rem] flex flex-wrap">

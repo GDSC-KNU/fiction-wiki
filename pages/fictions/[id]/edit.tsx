@@ -46,6 +46,7 @@ interface EditFictionForm {
   isTranslated?: string;
   relatedTitle?: string;
   relatedAuthor?: string;
+  originalAuthor?: string;
   type?: string;
   mediaMix?: string;
   setup?: string;
@@ -81,6 +82,7 @@ interface FictionWithMore extends Fiction {
   };
   userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
   author: Author;
+  originalAuthor: string;
   categories: [Category];
 }
 
@@ -164,6 +166,7 @@ const EditFiction: NextPage = () => {
       setValue("introduction", fiction?.fiction?.introduction || "");
       setValue("mediaMix", fiction.fiction?.mediaMix || "");
       setValue("isTranslated", fiction.fiction?.isTranslated || "");
+      setValue("originalAuthor", fiction.fiction?.author.rawName || "");
       if (md === "") {
         setMd(fiction.fiction?.setup || "");
       }
@@ -372,6 +375,13 @@ const EditFiction: NextPage = () => {
                     required={false}
                     label="RelatedTitle"
                     name="relatedTitle"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("originalAuthor", { required: true })}
+                    required={false}
+                    label="OriginalAuthor"
+                    name="originalAuthor"
                     type="text_detail"
                   />
                   <Input

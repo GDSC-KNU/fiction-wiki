@@ -134,6 +134,7 @@ async function handler(
         originalTitle,
         relatedTitle,
         author,
+        originalAuthor,
         relatedAuthor,
         nationality,
         genre,
@@ -269,6 +270,7 @@ async function handler(
             create: {
               name: author,
               relatedName: relatedAuthor,
+              rawName: originalAuthor,
             },
           },
         },

@@ -208,11 +208,12 @@ export default async function handler(
                   author: {
                     connectOrCreate: {
                       where: {
-                        name: translatedAuthor,
+                        rawName: translatedAuthor,
                       },
                       create: {
                         name: translatedAuthor,
-                        relatedName: rawAuthor,
+                        rawName: rawAuthor,
+                        nationality: "중국",
                       },
                     },
                   },
@@ -368,11 +369,12 @@ export default async function handler(
                     author: {
                       connectOrCreate: {
                         where: {
-                          name: translatedAuthor,
+                          rawName: translatedAuthor,
                         },
                         create: {
                           name: translatedAuthor,
-                          relatedName: rawAuthor,
+                          rawName: rawAuthor,
+                          nationality: "중국",
                         },
                       },
                     },

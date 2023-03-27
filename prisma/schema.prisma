@@ -55,6 +55,7 @@ model Author {
   fictions  Fiction[]
   name          String    @unique
   relatedName   String?
+  rawName       String   @unique
   description   String?   @db.MediumText
   nationality   String?
   sns           String?

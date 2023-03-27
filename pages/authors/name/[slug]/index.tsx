@@ -53,7 +53,9 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
           />
           <div className=" flex flex-col justify-center">
             <h5 className=" font-bold">{author?.name}</h5>
-            <p>{author?.relatedName}</p>
+            <p>{`${author?.rawName}${
+              author?.relatedName === null ? "" : `, ` + author?.relatedName
+            }`}</p>
             <p>{`국적 - ` + author?.nationality}</p>
             <p>{`SNS - ` + (author?.sns || "업데이트 예정")}</p>
           </div>

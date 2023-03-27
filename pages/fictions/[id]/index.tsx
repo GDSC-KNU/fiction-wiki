@@ -29,19 +29,28 @@ interface FictionDetailResponse {
   isLiked: boolean;
 }
 
-interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
-  keyword: Keyword;
-}
+// interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
+//   keyword: Keyword;
+// }
 
 interface FictionWithMore extends Fiction {
-  keywords: [KeywordsOnFictionsWithMore];
+  // keywords: [KeywordsOnFictionsWithMore];
+  keywords: [
+    {
+      keyword: Keyword;
+    }
+  ];
   fictionStat: [FictionStat];
   userFictionStat: {
     userRationOnFictions: [UserRationOnFiction];
     total: number;
   };
   author: Author;
-  categories: [Category];
+  categories: [
+    {
+      category: Category;
+    }
+  ];
 }
 
 const FictionDetail: NextPage<FictionDetailResponse> = ({
@@ -92,6 +101,40 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     fiction.endDate = new Date(fiction?.endDate || 0);
   }
 
+  const structuedReviewData = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Book",
+    name: fiction?.title,
+    image: fiction?.image,
+    description: fiction?.synopsis.slice(0, 145) + "...",
+    genre: fiction?.categories?.[0]?.category?.name,
+    keywords: fiction?.keywords.reduce(
+      (acc, cur) => acc + cur.keyword.name + ",",
+      ""
+    ),
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: +fiction?.userFictionStat?.total || 0,
+      reviewCount: +fiction?.userFictionStat?.userRationOnFictions?.length || 0,
+      bestRating: "5",
+      worstRating: "0",
+    },
+    author: {
+      "@type": "Person",
+      name: fiction.author.name,
+    },
+    url: `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
+    workExample: [
+      {
+        "@type": "Book",
+        "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
+        isbn: "",
+        bookEdition: "",
+        bookFormat: "https://schema.org/EBook",
+      },
+    ],
+  });
+
   return (
     <div className=" max-w-[1100px]">
       <HeadMeta
@@ -99,7 +142,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         description={fiction?.synopsis}
         url={`https://fictiondbs.com/fictions/${fiction?.id}`}
         img={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
-      />
+      >
+        <script type="application/ld+json">{structuedReviewData}</script>
+      </HeadMeta>
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
           <Link
@@ -180,7 +225,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] ">
                 <div className=" col-span-4 font-bold font-sans">원제</div>
                 <div className=" col-span-6">
-                  {fiction?.relatedTitle?.split(",")?.[0] || fiction.title}
+                  {fiction?.relatedTitle?.split(",")?.[0] || fiction?.title}
                 </div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
@@ -224,7 +269,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-6">{`${fiction?.startDate.getFullYear()}. ${
                   fiction?.startDate.getMonth() + 1
                 }. ${fiction?.startDate.getDate()} ~ ${
-                  JSON.stringify(fiction.endDate) ===
+                  JSON.stringify(fiction?.endDate) ===
                   JSON.stringify(new Date(0))
                     ? ""
                     : `${fiction?.endDate.getFullYear()}. ${
@@ -308,7 +353,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
-                  {fiction?.relatedTitle} &nbsp;
+                  {fiction?.relatedTitle} | {fiction?.author?.rawName}
                   {fiction?.relatedAuthor}
                 </div>
               </div>
@@ -336,7 +381,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       )
                     </p>
                   </h2>
-                  <StarRating data={+fiction.userFictionStat?.total || 0} />
+                  <StarRating data={+fiction?.userFictionStat?.total || 0} />
                 </div>
                 <div className=" px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
                   <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
@@ -374,7 +419,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     주인공 태그
                   </h2>
                   <ul className=" pt-2 px-3 inline-flex flex-wrap">
-                    {fiction.keywords
+                    {fiction?.keywords
                       .filter((item) => item?.keyword?.isOfMC === true)
                       .map((item: any, index: any) => (
                         <li

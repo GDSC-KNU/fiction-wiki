@@ -34,6 +34,7 @@ interface CreateFictionForm {
   isTranslated?: string;
   relatedTitle?: string;
   relatedAuthor?: string;
+  originalAuthor?: string;
   type?: string;
   mediaMix?: string;
   setup?: string;
@@ -236,11 +237,19 @@ const Create: NextPage = (props) => {
                     name="originalTitle"
                     type="text_detail"
                   />
+
                   <Input
                     register={register("relatedTitle", { required: false })}
                     required={false}
                     label="RelatedTitle"
                     name="relatedTitle"
+                    type="text_detail"
+                  />
+                  <Input
+                    register={register("originalAuthor", { required: true })}
+                    required={false}
+                    label="OriginalAuthor"
+                    name="originalAuthor"
                     type="text_detail"
                   />
                   <Input
