@@ -268,9 +268,9 @@ async function handler(
               name: author,
             },
             create: {
-              name: author,
-              relatedName: relatedAuthor,
-              rawName: originalAuthor,
+              name: author?.toString(),
+              relatedName: relatedAuthor?.toString(),
+              rawName: originalAuthor?.toString(),
             },
           },
         },
