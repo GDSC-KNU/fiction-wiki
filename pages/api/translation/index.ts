@@ -35,7 +35,7 @@ export default async function handler(
     if (!prompt || prompt === "") {
       return new Response("Plase send your prompt", { status: 400 });
     }
-    // redis.del(prompt);
+    redis.del(prompt);
     let baseUrl = "";
 
     const papagoTranslate = async (input: string) => {
@@ -199,90 +199,94 @@ export default async function handler(
               await fetch(uploadURL, { method: "POST", body: formData })
             ).json();
 
-            const createFiction = () => {
-              client.fiction.create({
-                data: {
-                  title: translatedTitle,
-                  originalTitle: rawTitle,
-                  relatedTitle: rawTitle,
-                  author: {
-                    connectOrCreate: {
-                      where: {
-                        rawName: translatedAuthor,
+            try {
+              const createFiction = () => {
+                console.log("fiction created");
+                client.fiction.create({
+                  data: {
+                    title: translatedTitle,
+                    originalTitle: rawTitle,
+                    relatedTitle: rawTitle,
+                    author: {
+                      connectOrCreate: {
+                        where: {
+                          rawName: translatedAuthor,
+                        },
+                        create: {
+                          name: translatedAuthor,
+                          rawName: rawAuthor,
+                          nationality: "중국",
+                        },
                       },
+                    },
+                    relatedAuthor: rawAuthor,
+                    nationality: "중국",
+                    genre: "",
+                    startDate: new Date(0),
+                    endDate: new Date(0),
+                    original: "",
+                    platforms: "치디엔",
+                    image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
+                    synopsis: translatedSynopsis,
+                    characters: " ",
+                    currentState: "미완",
+                    volume: volume || 100,
+                    isTranslated: "미번",
+                    introduction: " ",
+                    type: "웹소설",
+                    mediaMix: "",
+                    setup: " ",
+                    categories: {
                       create: {
-                        name: translatedAuthor,
-                        rawName: rawAuthor,
-                        nationality: "중국",
-                      },
-                    },
-                  },
-                  relatedAuthor: rawAuthor,
-                  nationality: "중국",
-                  genre: "",
-                  startDate: new Date(0),
-                  endDate: new Date(0),
-                  original: "",
-                  platforms: "치디엔",
-                  image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
-                  synopsis: translatedSynopsis,
-                  characters: " ",
-                  currentState: "미완",
-                  volume: volume || 100,
-                  isTranslated: "미번",
-                  introduction: " ",
-                  type: "웹소설",
-                  mediaMix: "",
-                  setup: " ",
-                  categories: {
-                    create: {
-                      category: {
-                        connectOrCreate: {
-                          where: {
-                            name: "미정",
-                          },
-                          create: {
-                            name: "미정",
+                        category: {
+                          connectOrCreate: {
+                            where: {
+                              name: "미정",
+                            },
+                            create: {
+                              name: "미정",
+                            },
                           },
                         },
                       },
                     },
-                  },
-                  keywords: {
-                    create: {
-                      keyword: {
-                        connectOrCreate: {
-                          where: {
-                            name: "미정",
-                          },
-                          create: {
-                            name: "미정",
+                    keywords: {
+                      create: {
+                        keyword: {
+                          connectOrCreate: {
+                            where: {
+                              name: "미정",
+                            },
+                            create: {
+                              name: "미정",
+                            },
                           },
                         },
                       },
                     },
-                  },
-                  fictionStat: {
-                    create: {
-                      originality: 0,
-                      writing: 0,
-                      character: 0,
-                      verisimilitude: 0,
-                      synopsisComposition: 0,
-                      value: 0,
+                    fictionStat: {
+                      create: {
+                        originality: 0,
+                        writing: 0,
+                        character: 0,
+                        verisimilitude: 0,
+                        synopsisComposition: 0,
+                        value: 0,
+                      },
                     },
-                  },
-                  user: {
-                    connect: {
-                      id: "cl5gg5htn0030q4uuoaryy8c1",
+                    user: {
+                      connect: {
+                        id: "cl5gg5htn0030q4uuoaryy8c1",
+                      },
                     },
+                    // keywords: { some: { keyword: { name: "" || undefined } } }
                   },
-                  // keywords: { some: { keyword: { name: "" || undefined } } }
-                },
-              });
-            };
-            createFiction();
-            // console.log("fiction created");
+                });
+              };
+              createFiction();
+            } catch (error) {
+              console.log(error);
+            }
           }
         } else if (prompt.startsWith("https://www.aixdzs.com/read")) {
           let htmlString = await responseText.text();
@@ -506,7 +510,6 @@ export default async function handler(
         originalTextArray,
         translatedTextArray,
       } = await terminator();
-
       // redis.set(
       //   prompt,
       //   JSON.stringify({

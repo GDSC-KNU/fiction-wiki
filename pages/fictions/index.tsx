@@ -8,7 +8,7 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import client from "@libs/server/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
@@ -16,6 +16,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "../../atoms";
 import HeadMeta from "@components/headMeata";
+import { ParsedUrlQueryInput } from "querystring";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -43,24 +44,39 @@ interface FictionsResponse {
   nationalities: string[];
 }
 
+interface QueryObject extends ParsedUrlQueryInput {
+  keywords: string;
+  nationalities: string;
+  genres: string;
+  sorting: string;
+  releaseTimeFilter: string;
+  dateYear: string;
+  page: number;
+}
+
 const FictionsWithParams: NextPage<FictionsResponse> = ({
   keywords,
   categories,
   nationalities,
 }) => {
-  // console.log(fictions);
   const router = useRouter();
 
   //세부 필터링
-  const [isChecked, setIsChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [checkedGenres, setCheckedGenres] = useState(new Set());
   const [checkedNationalities, setCheckedNationalities] = useState(new Set());
   const [checkedSortings, setCheckedSortings] = useState(new Set());
-  const [checkedReleaseTimeFilter, setCheckedReleaseTimeFilter] = useState(
-    new Set()
-  );
-  const [checkedDateYear, setCheckedDateYear] = useState(new Set());
+  const [checkedReleaseTimeFilter, setCheckedReleaseTimeFilter] = useState("");
+  const [checkedDateYear, setCheckedDateYear] = useState("");
+  const [queryObject, setQueryObject] = useState<QueryObject>({
+    keywords: "all",
+    nationalities: "all",
+    genres: "all",
+    sorting: "all",
+    releaseTimeFilter: "all",
+    dateYear: "all",
+    page: 1,
+  });
   const sortingList = [
     "총점",
     "캐릭터성",
@@ -76,136 +92,131 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // console.log(process.env.HOST);
   // console.log(process.env.NEXT_PUBLIC_HOST);
 
-  let queryString = `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${
-    "keywords=" +
-    (Array.from(checkedItems)
-      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
-      .join(",") || "all")
-  }${
-    "&nationalities=" +
-    (Array.from(checkedNationalities)
-      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
-      .join(",") || "all")
-  }${
-    "&genres=" +
-    (Array.from(checkedGenres)
-      .sort((a: any, b: any) => (a > b ? -1 : a < b ? 1 : 0))
-      .join(",") || "all")
-  }${"&sorting=" + (Array.from(checkedSortings).join(",") || "all")}${
-    "&dateYear=" + (router?.query?.dateYear || "all")
-  }${"&page=" + (page || 1)}
-  `;
+  useEffect(() => {
+    const updatedQueryObject: QueryObject = {
+      keywords: Array.from(checkedItems).sort().reverse().join(",") || "all",
+      nationalities:
+        Array.from(checkedNationalities).sort().reverse().join(",") || "all",
+      genres: Array.from(checkedGenres).sort().reverse().join(",") || "all",
+      sorting: Array.from(checkedSortings).join(",") || "all",
+      releaseTimeFilter: checkedReleaseTimeFilter.toString() || "all",
+      dateYear:
+        checkedReleaseTimeFilter === "전체" ? "all" : checkedDateYear || "all",
+      page: page || 1,
+    };
 
-  const { data, isValidating } = useSWR<FictionsResponse>(
-    queryString || null,
-    {}
-  );
+    setQueryObject(updatedQueryObject);
+  }, [
+    checkedItems,
+    checkedNationalities,
+    checkedGenres,
+    checkedSortings,
+    checkedReleaseTimeFilter,
+    checkedDateYear,
+    page,
+  ]);
+
+  let queryString = useMemo(() => {
+    const queryString = Object.entries(queryObject)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+
+    if (queryString === "undefined") {
+      return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}`;
+    }
+
+    return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${queryString}`;
+  }, [queryObject]);
+
+  const { data, isValidating } = useSWR<FictionsResponse>(queryString, {});
 
   const checkHandler = ({
     currentTarget,
   }: React.MouseEvent<HTMLInputElement>) => {
-    setIsChecked(!isChecked);
-
-    checkedItemHandler(
-      currentTarget.parentNode,
-      currentTarget.value,
-      currentTarget.checked,
-      currentTarget.id,
-      currentTarget
-    );
+    checkedItemHandler(currentTarget);
   };
 
-  const checkedItemHandler = (
-    box: any,
-    name: any,
-    isChecked: any,
-    id: any,
-    target: any
-  ) => {
-    // 키워드
-    if (isChecked && id === "keyword") {
-      checkedItems.add(name);
-      setCheckedItems(checkedItems);
-      // box.style.backgroundColor = "blue";
-      // box.style.color = "white";
-    } else if (!isChecked && checkedItems.has(name) && id === "keyword") {
-      checkedItems.delete(name);
-      setCheckedItems(checkedItems);
-    }
-    // 국가
-    if (isChecked && id === "nationality") {
-      checkedNationalities.add(name);
-      setCheckedNationalities(checkedNationalities);
-    } else if (
-      !isChecked &&
-      checkedNationalities.has(name) &&
-      id === "nationality"
-    ) {
-      checkedNationalities.delete(name);
-      setCheckedNationalities(checkedNationalities);
-    }
-    // 장르
-    if (isChecked && id === "genre") {
-      checkedGenres.add(name);
-      setCheckedGenres(checkedGenres);
-    } else if (!isChecked && checkedGenres.has(name) && id === "genre") {
-      checkedGenres.delete(name);
-      setCheckedGenres(checkedGenres);
-    }
-    // 정렬
-    if (isChecked && id === "sorting") {
-      checkedSortings.clear();
-      checkedSortings.add(name);
-      setCheckedSortings(checkedSortings);
-    } else if (!isChecked && checkedSortings.has(name) && id === "sorting") {
-      checkedSortings.delete(name);
-      setCheckedSortings(checkedSortings);
-    }
-    // Release time
-    if (isChecked && id === "RelaseTimeFilter") {
-      checkedReleaseTimeFilter.clear();
-      checkedReleaseTimeFilter.add(name);
-      setCheckedReleaseTimeFilter(checkedReleaseTimeFilter);
-    } else if (
-      !isChecked &&
-      checkedReleaseTimeFilter.has(name) &&
-      id === "RelaseTimeFilter"
-    ) {
-      checkedReleaseTimeFilter.delete(name);
-      setCheckedReleaseTimeFilter(checkedReleaseTimeFilter);
-    }
-    // Release time - year
-    if (isChecked && id === "dateYear") {
-      checkedDateYear.clear();
-      checkedDateYear.add(name);
-      setCheckedDateYear(checkedDateYear);
-    } else if (!isChecked && checkedDateYear.has(name) && id === "dateYear") {
-      checkedDateYear.delete(name);
-      setCheckedDateYear(checkedDateYear);
+  const checkedItemHandler = (target: EventTarget & HTMLInputElement) => {
+    const { value: name, checked: isChecked, id } = target;
+
+    if (isChecked) {
+      switch (id) {
+        case "keyword":
+          setCheckedItems((prev) => new Set([...prev, name]));
+          break;
+        case "nationality":
+          setCheckedNationalities((prev) => new Set([...prev, name]));
+          break;
+        case "genre":
+          setCheckedGenres((prev) => new Set([...prev, name]));
+          break;
+        case "sorting":
+          setCheckedSortings(() => new Set(name));
+          break;
+        case "releaseTimeFilter":
+          setCheckedReleaseTimeFilter((prev) => {
+            if (prev === "전체") setCheckedDateYear("all");
+            return name;
+          });
+          break;
+        case "dateYear":
+          setCheckedDateYear(() => name);
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (id) {
+        case "keyword":
+          setCheckedItems((prev) => {
+            prev.delete(name);
+            return new Set([...prev]);
+          });
+          break;
+        case "nationality":
+          setCheckedNationalities((prev) => {
+            prev.delete(name);
+            return new Set([...prev]);
+          });
+          break;
+        case "genre":
+          setCheckedGenres((prev) => {
+            prev.delete(name);
+            return new Set([...prev]);
+          });
+          break;
+        case "sorting":
+          setCheckedSortings((prev) => {
+            prev.delete(name);
+            return new Set([...prev]);
+          });
+          break;
+        case "releaseTimeFilter":
+          setCheckedReleaseTimeFilter(() => {
+            return name;
+          });
+          break;
+        case "dateYear":
+          setCheckedDateYear((prev) => {
+            return "";
+          });
+          break;
+        default:
+          break;
+      }
     }
   };
 
   useEffect(() => {
     const path = {
       pathname: "/fictions",
-      query: {
-        keywords: Array.from(checkedItems).join(",") || "all",
-        nationalities: Array.from(checkedNationalities).join(",") || "all",
-        genres: Array.from(checkedGenres).join(",") || "all",
-        sorting: Array.from(checkedSortings).join(",") || "all",
-        page: page || 1,
-        RelaseTimeFilter:
-          Array.from(checkedReleaseTimeFilter).join(",") || "all",
-        dateYear: checkedReleaseTimeFilter.has("전체")
-          ? "all"
-          : Array.from(checkedDateYear).join(",") || "all",
-      },
+      query: queryObject,
     };
 
     router.replace(path, undefined, { shallow: true });
-  }, [queryString]);
+  }, [queryObject]);
 
-  const RelaseTimeFilters = ["전체", "연도별"];
+  const releaseTimeFilters = ["전체", "연도별"];
   const thisYear = new Date().getFullYear();
   const yearDummy = [
     thisYear,
@@ -226,15 +237,15 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               Filter by Release Time
             </h5>
             <div className=" leading-[1.8rem] flex flex-wrap">
-              {RelaseTimeFilters.map((criteria, i) => (
+              {releaseTimeFilters.map((criteria, i) => (
                 <label key={i} className=" cursor-pointer flex">
                   <input
                     onClick={(e) => checkHandler(e)}
                     type="radio"
                     className=" hidden peer"
-                    id="RelaseTimeFilter"
+                    id="releaseTimeFilter"
                     value={criteria}
-                    name="RelaseTimeFilter"
+                    name="releaseTimeFilter"
                   />
                   <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-lg text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
                     {criteria}
@@ -243,12 +254,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               ))}
             </div>
             <div className=" mb-2 flex">
-              {checkedReleaseTimeFilter.has("연도별") ? (
+              {checkedReleaseTimeFilter === "연도별" ? (
                 yearDummy.map((year, i) => (
                   <label key={i} className=" cursor-pointer flex">
                     <input
                       onClick={(e) => checkHandler(e)}
-                      type="radio"
+                      type="checkbox"
                       className=" hidden peer"
                       id="dateYear"
                       value={year}

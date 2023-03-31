@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { cls } from "@libs/client/utils";
-import Link from "next/link";
 import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "../atoms";
 
@@ -26,16 +25,12 @@ export default function Pagination({
   totalPagesCount,
   pageRangeDisplayed,
   pageGroup,
-}: // checkedParams,
-PaginationProps) {
+}: PaginationProps) {
   const router = useRouter();
   const [page, setPage] = useRecoilState(fictionPageAtom);
 
-  let { nationalities, genres, sorting, keywords } = router?.query || {};
-  // console.log(router?.query);
-
-  // PageSetup function
-  let pagingSetup = () => {
+  // Pagination Rendering function
+  const pageButtons = () => {
     pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
     let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
 
@@ -49,67 +44,36 @@ PaginationProps) {
         ? 1
         : lastIndexOfPageGroup - (pageRangeDisplayed - 1);
 
-    // console.log(pageGroup, firstNumber, lastNumber);
     let arr = [];
-    // console.log("pagingSetup", firstNumber, lastNumber);
+
     for (let i = firstNumber; i <= lastNumber; i++) {
       arr.push(i);
     }
-    return arr;
-  };
 
-  const pageHrefObject = (i: any) => {
-    if (router?.pathname.includes("/fictions")) {
-      return {
-        pathname: `/fictions`,
-        query: {
-          nationality: nationalities || "all",
-          genres: genres || "all",
-          sorting: sorting || "all",
-          keywords: keywords || "all",
-          page: i,
-        },
-      };
-    } else if (router?.pathname.includes("/authors/")) {
-      return {
-        pathname: `/authors/[page]`,
-        query: {
-          page: i,
-        },
-      };
-    } else if (router?.pathname.includes("/search/title")) {
-      return {
-        pathname: `/search/title/[title]`,
-        query: {
-          title: router?.query?.search || "?",
-          page: i,
-        },
-      };
-    } else if (router?.pathname.includes("/search/keyword")) {
-      return {
-        pathname: `/search/keyword/[keyword]/[page]`,
-        query: {
-          keyword: router?.query?.search || "?",
-          page: i,
-        },
-      };
-    } else if (router?.pathname.includes("/search/genre")) {
-      return {
-        pathname: `/search/genre/[genre]/[page]`,
-        query: {
-          genre: router?.query?.search || "?",
-          page: i,
-        },
-      };
-    } else if (router?.pathname.includes("/search/type")) {
-      return {
-        pathname: `/search/type/[type]/[page]`,
-        query: {
-          type: router?.query?.search || "?",
-          page: i,
-        },
-      };
-    }
+    return arr.map((item) => {
+      // console.log(router?.query?.page || page);
+      const currentPage = router?.query?.page || page;
+      // console.log(currentPage === item);
+      // console.log(currentPage);
+      return (
+        <div
+          onClick={pageChangeHandler}
+          aria-current="page"
+          className={
+            +currentPage === +item
+              ? cls(
+                  "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
+                )
+              : cls(
+                  "relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20 cursor-pointer"
+                )
+          }
+          key={item}
+        >
+          {item}
+        </div>
+      );
+    });
   };
 
   const pageChangeHandler = (e: any) => {
@@ -167,111 +131,100 @@ PaginationProps) {
       return;
     }
 
+    const baseUrl = router.pathname;
     const currentPage = +(router?.query?.page || page || 1);
-    // pageGroup 게산후 해당 pageGroup의 첫번째 페이지 계산
     pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
     let firstPageOfNextPageGroup =
       (pageGroup + 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
 
-    // 현재 페이지 pathname 기준으로 query생성하여 라우팅
     if (router?.pathname.includes("/fictions?")) {
-      // fictionPage 갱신
+      // 동적 페이지 페이지 이동(/fictions)
       setPage(firstPageOfNextPageGroup);
-    } else if (router?.pathname.includes("/authors/")) {
+    } else {
+      // 정적 페이지 페이지 이동
+      const query: any = {
+        search: router?.query?.search || "",
+        page: firstPageOfNextPageGroup,
+      };
+
+      if (!router.query.search) delete query.search;
+
       router.push({
-        pathname: `/authors/[page]`,
-        query: {
-          page: +e?.target?.innerHTML || 1,
-        },
-      });
-    } else if (router?.pathname.includes("/search/title")) {
-      router.push({
-        pathname: `/search/title/[title]`,
-        query: {
-          title: router?.query?.search || "?",
-          page: firstPageOfNextPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/keyword")) {
-      router.push({
-        pathname: `/search/keyword/[keyword]/[page]`,
-        query: {
-          keyword: router?.query?.search || "?",
-          page: firstPageOfNextPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/genre")) {
-      router.push({
-        pathname: `/search/genre/[genre]/[page]`,
-        query: {
-          genre: router?.query?.search || "?",
-          page: firstPageOfNextPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/type")) {
-      router.push({
-        pathname: `/search/type/[type]/[page]`,
-        query: {
-          type: router?.query?.search || "?",
-          page: firstPageOfNextPageGroup,
-        },
+        pathname: baseUrl,
+        query: query,
       });
     }
+
+    // else if (router?.pathname.includes("/authors/")) {
+    //   router.push({
+    //     pathname: `/authors/[page]`,
+    //     query: {
+    //       page: +e?.target?.innerHTML || 1,
+    //     },
+    //   });
+    // } else if (router?.pathname.includes("/search/title")) {
+    //   router.push({
+    //     pathname: `/search/title/[title]`,
+    //     query: {
+    //       title: router?.query?.search || "?",
+    //       page: firstPageOfNextPageGroup,
+    //     },
+    //   });
+    // } else if (router?.pathname.includes("/search/keyword")) {
+    //   router.push({
+    //     pathname: `/search/keyword/[keyword]/[page]`,
+    //     query: {
+    //       keyword: router?.query?.search || "?",
+    //       page: firstPageOfNextPageGroup,
+    //     },
+    //   });
+    // } else if (router?.pathname.includes("/search/genre")) {
+    //   router.push({
+    //     pathname: `/search/genre/[genre]/[page]`,
+    //     query: {
+    //       genre: router?.query?.search || "?",
+    //       page: firstPageOfNextPageGroup,
+    //     },
+    //   });
+    // } else if (router?.pathname.includes("/search/type")) {
+    //   router.push({
+    //     pathname: `/search/type/[type]/[page]`,
+    //     query: {
+    //       type: router?.query?.search || "?",
+    //       page: firstPageOfNextPageGroup,
+    //     },
+    //   });
+    // }
   };
 
   const prevHandler = (e: any) => {
     const isFirstGruop = pageGroup === 1 ? true : false;
     if (isFirstGruop) {
-      // console.log(pageGroup, router?.query);
       alert("첫 페이지목록 입니다.");
       e.preventDefault();
       return;
     }
+    const baseUrl = router.pathname;
     const currentPage = +(router?.query?.page || page || 1);
     pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
     const firstPageOfPrevPageGroup =
       (pageGroup - 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
 
     if (router?.pathname.includes("/fictions/")) {
+      // 동적 페이지 페이지 이동(/fictions)
       setPage(firstPageOfPrevPageGroup);
-    } else if (router?.pathname.includes("/authors/")) {
+    } else {
+      // 정적 페이지 페이지 이동
+      const query: any = {
+        search: router?.query?.search || "",
+        page: firstPageOfPrevPageGroup,
+      };
+
+      if (!router.query.search) delete query.search;
+
       router.push({
-        pathname: `/authors/[page]`,
-        query: {
-          page: +e?.target?.innerHTML || 1,
-        },
-      });
-    } else if (router?.pathname.includes("/search/title")) {
-      router.push({
-        pathname: `/search/title/[title]`,
-        query: {
-          title: router?.query?.search || "?",
-          page: firstPageOfPrevPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/keyword")) {
-      router.push({
-        pathname: `/search/keyword/[keyword]/[page]`,
-        query: {
-          keyword: router?.query?.search || "?",
-          page: firstPageOfPrevPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/genre")) {
-      router.push({
-        pathname: `/search/genre/[genre]/[page]`,
-        query: {
-          genre: router?.query?.search || "?",
-          page: firstPageOfPrevPageGroup,
-        },
-      });
-    } else if (router?.pathname.includes("/search/type")) {
-      router.push({
-        pathname: `/search/type/[type]/[page]`,
-        query: {
-          type: router?.query?.search || "?",
-          page: firstPageOfPrevPageGroup,
-        },
+        pathname: baseUrl,
+        query: query,
       });
     }
   };
@@ -312,26 +265,7 @@ PaginationProps) {
               </svg>
             </a>
 
-            {pagingSetup().map((item, i) => (
-              <div
-                onClick={pageChangeHandler}
-                aria-current="page"
-                className={
-                  (router?.query?.page || page) === `${item}` ||
-                  (!page && item === 1)
-                    ? cls(
-                        "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
-                      )
-                    : cls(
-                        "relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20 cursor-pointer"
-                      )
-                }
-                key={item}
-                // href={pageHrefObject(+item) || "/"}
-              >
-                {item}
-              </div>
-            ))}
+            {pageButtons()}
 
             <a
               onClick={nextHandler}

@@ -34,7 +34,6 @@ interface FictionDetailResponse {
 // }
 
 interface FictionWithMore extends Fiction {
-  // keywords: [KeywordsOnFictionsWithMore];
   keywords: [
     {
       keyword: Keyword;
@@ -225,7 +224,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] ">
                 <div className=" col-span-4 font-bold font-sans">원제</div>
                 <div className=" col-span-6">
-                  {fiction?.relatedTitle?.split(",")?.[0] || fiction?.title}
+                  {fiction?.originalTitle || fiction?.title}
                 </div>
               </div>
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
@@ -354,7 +353,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
                   {fiction?.relatedTitle} | {fiction?.author?.rawName}
-                  {fiction?.relatedAuthor}
+                  {", "}
+                  {fiction?.author?.relatedName}
                 </div>
               </div>
             </div>
