@@ -201,16 +201,16 @@ export default async function handler(
 
             try {
               const createFiction = () => {
+                console.log(translatedTitle, rawTitle, rawAuthor);
                 console.log("fiction created");
                 client.fiction.create({
                   data: {
                     title: translatedTitle,
                     originalTitle: rawTitle,
-                    relatedTitle: rawTitle,
                     author: {
                       connectOrCreate: {
                         where: {
-                          rawName: translatedAuthor,
+                          rawName: rawAuthor,
                         },
                         create: {
                           name: translatedAuthor,
@@ -219,7 +219,7 @@ export default async function handler(
                         },
                       },
                     },
-                    relatedAuthor: rawAuthor,
+                    // relatedAuthor: rawAuthor,
                     nationality: "중국",
                     genre: "",
                     startDate: new Date(0),
@@ -365,6 +365,12 @@ export default async function handler(
               ).json();
 
               const createFiction = async () => {
+                console.log(
+                  translatedTitle,
+                  rawTitle,
+                  translatedAuthor,
+                  rawAuthor
+                );
                 await client.fiction.create({
                   data: {
                     title: translatedTitle,
@@ -373,7 +379,7 @@ export default async function handler(
                     author: {
                       connectOrCreate: {
                         where: {
-                          rawName: translatedAuthor,
+                          rawName: rawAuthor,
                         },
                         create: {
                           name: translatedAuthor,
@@ -483,7 +489,7 @@ export default async function handler(
     };
 
     let cache: any = await redis.get(prompt);
-    // redis.del(prompt);
+    redis.del(prompt);
     // console.log(cache);
     if (cache) {
       let {

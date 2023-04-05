@@ -65,7 +65,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [checkedGenres, setCheckedGenres] = useState(new Set());
   const [checkedNationalities, setCheckedNationalities] = useState(new Set());
-  const [checkedSortings, setCheckedSortings] = useState(new Set());
+  const [checkedSortings, setCheckedSortings] = useState("");
   const [checkedReleaseTimeFilter, setCheckedReleaseTimeFilter] = useState("");
   const [checkedDateYear, setCheckedDateYear] = useState("");
   const [queryObject, setQueryObject] = useState<QueryObject>({
@@ -98,10 +98,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
       nationalities:
         Array.from(checkedNationalities).sort().reverse().join(",") || "all",
       genres: Array.from(checkedGenres).sort().reverse().join(",") || "all",
-      sorting: Array.from(checkedSortings).join(",") || "all",
+      sorting: checkedSortings || "all",
       releaseTimeFilter: checkedReleaseTimeFilter.toString() || "all",
       dateYear:
-        checkedReleaseTimeFilter === "전체" ? "all" : checkedDateYear || "all",
+        checkedReleaseTimeFilter.toString() === "전체"
+          ? "all"
+          : checkedDateYear || "all",
       page: page || 1,
     };
 
@@ -132,74 +134,74 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   const checkHandler = ({
     currentTarget,
-  }: React.MouseEvent<HTMLInputElement>) => {
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(
+    //   currentTarget.value,
+    //   currentTarget.name,
+    //   currentTarget?.checked
+    // );
     checkedItemHandler(currentTarget);
   };
 
   const checkedItemHandler = (target: EventTarget & HTMLInputElement) => {
-    const { value: name, checked: isChecked, id } = target;
+    const { value, checked: isChecked, name } = target;
 
+    // console.log();
+    // console.log(isChecked);
     if (isChecked) {
-      switch (id) {
+      switch (name) {
         case "keyword":
-          setCheckedItems((prev) => new Set([...prev, name]));
+          setCheckedItems((prev) => new Set([...prev, value]));
           break;
         case "nationality":
-          setCheckedNationalities((prev) => new Set([...prev, name]));
+          setCheckedNationalities((prev) => new Set([...prev, value]));
           break;
         case "genre":
-          setCheckedGenres((prev) => new Set([...prev, name]));
+          setCheckedGenres((prev) => new Set([...prev, value]));
           break;
         case "sorting":
-          setCheckedSortings(() => new Set(name));
+          setCheckedSortings(() => value);
           break;
         case "releaseTimeFilter":
           setCheckedReleaseTimeFilter((prev) => {
             if (prev === "전체") setCheckedDateYear("all");
-            return name;
+            return value;
           });
           break;
         case "dateYear":
-          setCheckedDateYear(() => name);
+          setCheckedDateYear(() => value);
           break;
         default:
           break;
       }
     } else {
-      switch (id) {
+      switch (name) {
         case "keyword":
           setCheckedItems((prev) => {
-            prev.delete(name);
+            prev.delete(value);
             return new Set([...prev]);
           });
           break;
         case "nationality":
           setCheckedNationalities((prev) => {
-            prev.delete(name);
+            prev.delete(value);
             return new Set([...prev]);
           });
           break;
         case "genre":
           setCheckedGenres((prev) => {
-            prev.delete(name);
+            prev.delete(value);
             return new Set([...prev]);
           });
           break;
         case "sorting":
-          setCheckedSortings((prev) => {
-            prev.delete(name);
-            return new Set([...prev]);
-          });
+          setCheckedSortings(() => "");
           break;
         case "releaseTimeFilter":
-          setCheckedReleaseTimeFilter(() => {
-            return name;
-          });
+          setCheckedReleaseTimeFilter(() => "전체");
           break;
         case "dateYear":
-          setCheckedDateYear((prev) => {
-            return "";
-          });
+          setCheckedDateYear(() => "");
           break;
         default:
           break;
@@ -241,12 +243,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               {releaseTimeFilters.map((criteria, i) => (
                 <label key={i} className=" cursor-pointer flex">
                   <input
-                    onClick={(e) => checkHandler(e)}
-                    type="radio"
+                    onChange={(e) => checkHandler(e)}
+                    type="checkbox"
                     className=" hidden peer"
-                    id="releaseTimeFilter"
+                    // id="releaseTimeFilter"
                     value={criteria}
                     name="releaseTimeFilter"
+                    checked={checkedReleaseTimeFilter === criteria}
                   />
                   <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-lg text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
                     {criteria}
@@ -259,12 +262,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 yearDummy.map((year, i) => (
                   <label key={i} className=" cursor-pointer flex">
                     <input
-                      onClick={(e) => checkHandler(e)}
+                      onChange={(e) => checkHandler(e)}
                       type="checkbox"
                       className=" hidden peer"
-                      id="dateYear"
+                      // id="dateYear"
                       value={year}
                       name="dateYear"
+                      checked={+checkedDateYear === year}
                     />
                     <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-xs text-center mx-[0.35rem]">
                       {year}
@@ -295,11 +299,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     {nationalities.map((nationality, i) => (
                       <label key={i} className=" cursor-pointer flex">
                         <input
-                          onClick={(e) => checkHandler(e)}
+                          onChange={(e) => checkHandler(e)}
                           type="checkbox"
                           className=" hidden peer"
-                          id="nationality"
+                          // id="nationality"
                           value={nationality}
+                          name="nationality"
+                          // checked={checkedNationalities.has(nationality)}
                         />
                         <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
                           {nationality}
@@ -314,11 +320,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     {categories.map((category: any, i) => (
                       <label key={i} className=" cursor-pointer flex">
                         <input
-                          onClick={(e) => checkHandler(e)}
+                          onChange={(e) => checkHandler(e)}
                           type="checkbox"
-                          id="genre"
+                          // id="genre"
                           className=" hidden peer"
                           value={category.name}
+                          name="genre"
+                          // checked={checkedGenres.has(category.name)}
                         />
                         <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
                           {category.name}
@@ -333,12 +341,13 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     {sortingList.map((sorting, i) => (
                       <label key={i} className="  cursor-pointer flex ">
                         <input
-                          onClick={(e) => checkHandler(e)}
-                          type="radio"
+                          onChange={(e) => checkHandler(e)}
+                          type="checkbox"
                           className=" hidden peer"
                           id="sorting"
                           value={sorting}
                           name="sorting"
+                          checked={sorting === checkedSortings}
                         ></input>
                         <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
                           {sorting}
@@ -370,11 +379,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                         .map((keyword) => (
                           <label key={keyword?.id} className="  flex ">
                             <input
-                              onClick={(e) => checkHandler(e)}
+                              onChange={(e) => checkHandler(e)}
                               type="checkbox"
-                              id="keyword"
+                              // id="keyword"
                               className=" hidden peer"
                               value={keyword?.name}
+                              name="keyword"
                             />
                             <div className=" cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mx-[0.35rem] rounded-3xl border-[#BBBBBB] p-1  ">
                               #{keyword?.name}
@@ -426,52 +436,9 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 export async function getStaticProps() {
   const fictions = await client.fiction.findMany({
     select: {
-      // title: true,
-      // author: {
-      //   select: {
-      //     name: true,
-      //   },
-      // },
-      // userFictionStat: {
-      //   select: {
-      //     originality: true,
-      //     verisimilitude: true,
-      //     synopsisComposition: true,
-      //     character: true,
-      //     writing: true,
-      //     value: true,
-      //   },
-      // },
-      // keywords: {
-      //   select: {
-      //     keyword: {
-      //       select: {
-      //         name: true,
-      //       },
-      //     },
-      //   },
-      // },
-      // type: true,
-      // currentState: true,
       nationality: true,
-      // categories: {
-      //   include: {
-      //     category: {
-      //       select: {
-      //         name: true,
-      //       },
-      //     },
-      //   },
-      // },
-      // startDate: true,
-
-      // isTranslated: true,
     },
   });
-
-  // const fictionsCount = await client.fiction.count({
-  //   where: {},
-  // });
 
   let keywords = await client.keyword.findMany();
 
