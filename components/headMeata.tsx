@@ -3,12 +3,16 @@ import Head from "next/head";
 const HeadMeta = ({ title, description, url, img }: any) => {
   return (
     <Head>
-      <title>{title ? title + " - FDBS" : "FDBS: 웹소설 랭킹, 검색"}</title>
+      <title>
+        {title
+          ? title + " - 웹소설정보 - FDBS"
+          : "FDBS: 웹소설 정보 데이터베이스"}
+      </title>
       <meta
         name="description"
         content={
           description ||
-          "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 레이팅하고 검색하세요"
+          "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요"
         }
       />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />\
@@ -18,7 +22,7 @@ const HeadMeta = ({ title, description, url, img }: any) => {
         name="og:description"
         content={
           description ||
-          "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 레이팅하고 검색하세요"
+          "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요"
         }
       />
       <meta property="og:url" content={url || "https://fictiondbs.com"} />
