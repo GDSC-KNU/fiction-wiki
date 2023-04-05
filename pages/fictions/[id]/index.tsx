@@ -134,6 +134,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     ],
   });
 
+  const urlToString = (string: string) => {
+    if (string.includes("munpia")) string = "문피아";
+    else if (string.includes("qidian")) string = "치디엔";
+    else if (string.includes("series")) string = "시리즈";
+    else if (string.includes("kakao")) string = "카카오";
+    else if (string.includes("novelpia")) string = "노벨피아";
+    return string;
+  };
+
   return (
     <div className=" max-w-[1100px]">
       <HeadMeta
@@ -231,7 +240,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans">작가</div>
                 <Link
                   title={fiction?.author?.name}
-                  className=" col-span-6 hover:cursor-pointer text-blue-500"
+                  className=" col-span-6 hover:cursor-pointer text-blue-500 w-fit"
                   passHref
                   href={`/authors/name/${fiction?.author?.name}`}
                 >
@@ -280,7 +289,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" col-span-4 font-bold font-sans ">원본</div>
                 <div className=" col-span-6 text-blue-500">
                   <a
-                    className=" flex"
+                    className=" flex w-fit"
                     href={fiction?.original}
                     title={fiction?.original}
                   >
@@ -295,7 +304,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
                       <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
                     </svg>
-                    바로가기
+                    {urlToString(fiction?.original)}
                   </a>
                 </div>
               </div>
@@ -352,9 +361,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
-                  {fiction?.relatedTitle} | {fiction?.author?.rawName}
-                  {", "}
-                  {fiction?.author?.relatedName}
+                  {fiction?.relatedTitle ? fiction?.relatedTitle + "|" : ""}
+                  {fiction?.author?.rawName}
+                  {fiction?.author?.relatedName
+                    ? ", " + fiction?.author?.relatedName
+                    : ""}
                 </div>
               </div>
             </div>
