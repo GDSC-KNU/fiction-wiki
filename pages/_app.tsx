@@ -10,6 +10,9 @@ import * as gtag from "@libs/gtag";
 import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { DefaultSeo } from "next-seo";
+import SEO from "../seo.config";
+import HeadMeta from "@components/headMeata";
 
 function MyApp({
   Component,
@@ -36,6 +39,8 @@ function MyApp({
               fetch(url).then((response) => response.json()),
           }}
         >
+          <HeadMeta isMain={true} />
+          <DefaultSeo {...SEO} />
           <Script
             strategy="afterInteractive"
             src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}

@@ -27,6 +27,7 @@
     "iron-session": "^6.3.1",
     "next": "^13.0.0",
     "next-auth": "^4.19.2",
+    "next-seo": "^6.0.0",
     "next-sitemap": "^3.1.52",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",

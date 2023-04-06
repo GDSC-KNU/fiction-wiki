@@ -17,6 +17,7 @@ import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "../../atoms";
 import HeadMeta from "@components/headMeata";
 import { ParsedUrlQueryInput } from "querystring";
+import { NextSeo } from "next-seo";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -232,7 +233,15 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
 
   return (
     <div className=" mt-10 ">
-      <HeadMeta />
+      {/* <HeadMeta /> */}
+      <NextSeo
+        title="작품 찾기"
+        description="국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요"
+        canonical="https://fictiondbs.com"
+        openGraph={{
+          url: "https://fictiondbs.com",
+        }}
+      />
       <div className=" justify-center bg-white rounded m-2 p-2">
         <form className=" ">
           <div>

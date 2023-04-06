@@ -21,6 +21,8 @@ import Comments from "@components/comment";
 // import "@uiw/react-markdown-preview/markdown.css";
 import HeadMeta from "@components/headMeata";
 import StarRating from "@components/starRating";
+import { NextSeo } from "next-seo";
+import StructuredData from "@components/structuredData";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -100,39 +102,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     fiction.endDate = new Date(fiction?.endDate || 0);
   }
 
-  const structuedReviewData = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Book",
-    name: fiction?.title,
-    image: fiction?.image,
-    description: fiction?.synopsis.slice(0, 145) + "...",
-    genre: fiction?.categories?.[0]?.category?.name,
-    keywords: fiction?.keywords.reduce(
-      (acc, cur) => acc + cur.keyword.name + ",",
-      ""
-    ),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: +fiction?.userFictionStat?.total || 0,
-      reviewCount: +fiction?.userFictionStat?.userRationOnFictions?.length || 0,
-      bestRating: "5",
-      worstRating: "0",
-    },
-    author: {
-      "@type": "Person",
-      name: fiction.author.name,
-    },
-    url: `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
-    workExample: [
-      {
-        "@type": "Book",
-        "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
-        isbn: "",
-        bookEdition: "",
-        bookFormat: "https://schema.org/EBook",
-      },
-    ],
-  });
+
 
   const urlToString = (string: string) => {
     if (string.includes("munpia")) string = "문피아";
@@ -145,14 +115,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
 
   return (
     <div className=" max-w-[1100px]">
-      <HeadMeta
-        title={fiction?.title}
+      <StructuredData data={fiction} />
+      <NextSeo
+        title={`${fiction?.title}`}
         description={fiction?.synopsis}
-        url={`https://fictiondbs.com/fictions/${fiction?.id}`}
-        img={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
-      >
-        <script type="application/ld+json">{structuedReviewData}</script>
-      </HeadMeta>
+        canonical={`https://fictiondbs.com/fictions/${fiction?.id}`}
+        openGraph={{
+          url: `https://fictiondbs.com/fictions/${fiction?.id}`,
+        }}
+      />
       {user ? (
         <div className=" flex justify-end mx-5 mt-2">
           <Link

@@ -5,6 +5,7 @@ import client from "@libs/server/client";
 import Search from "@components/search";
 import FictionList from "@components/fictionList";
 import HeadMeta from "@components/headMeata";
+import { NextSeo } from "next-seo";
 
 export interface UserFictionStatWithMore extends UserFictionStat {
   total: number;
@@ -29,8 +30,15 @@ interface FictionsResponse {
 const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
   return (
     <div>
-      <HeadMeta />
-
+      {/* <HeadMeta /> */}
+      <NextSeo
+        title="Home"
+        description="국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요"
+        canonical="https://fictiondbs.com"
+        openGraph={{
+          url: "https://fictiondbs.com",
+        }}
+      />
       <div>
         <Search />
       </div>

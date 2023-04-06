@@ -10,6 +10,7 @@ import { ParsedUrlQuery } from "querystring";
 import FictionList from "@components/fictionList";
 import HeadMeta from "@components/headMeata";
 import Image from "next/image";
+import { NextSeo } from "next-seo";
 
 interface AuthorWithFictions extends Author {
   fictions: Fiction[];
@@ -38,10 +39,18 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
 
   return (
     <div className="   min-h-[213px] mx-auto mt-20">
-      <HeadMeta
+      {/* <HeadMeta
         title={author?.name}
         description={author?.description}
         url={`https://fictiondbs.com/authors/name/${author?.name}`}
+      /> */}
+      <NextSeo
+        title={author?.name}
+        description={author?.description || "작가에 대한 설명입니다."}
+        canonical={`https://fictiondbs.com/authors/name/${author?.name}`}
+        openGraph={{
+          url: `https://fictiondbs.com/authors/name/${author?.name}`,
+        }}
       />
       <div className=" bg-white mb-4">
         <div className=" py-4 flex">
