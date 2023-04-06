@@ -90,7 +90,7 @@ export default function Comments() {
               )}
         </ul>
         <div className=" flex mb-2 mt-5 justify-center">
-          <a
+          <button
             onClick={prevHandler}
             id="prev"
             className=" hover:cursor-pointer relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
@@ -111,11 +111,11 @@ export default function Comments() {
                 clipRule="evenodd"
               />
             </svg>
-          </a>
-          <a className="relative inline-flex items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+          </button>
+          <button className="relative inline-flex items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
             {commentIndex}
-          </a>
-          <a
+          </button>
+          <button
             onClick={nextHandler}
             id="next"
             className=" hover:cursor-pointer relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
@@ -136,7 +136,7 @@ export default function Comments() {
                 clipRule="evenodd"
               />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
     </div>
