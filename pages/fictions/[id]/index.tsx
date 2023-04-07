@@ -102,8 +102,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     fiction.endDate = new Date(fiction?.endDate || 0);
   }
 
-
-
   const urlToString = (string: string) => {
     if (string.includes("munpia")) string = "문피아";
     else if (string.includes("qidian")) string = "치디엔";
@@ -332,7 +330,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
                 <div className=" col-span-4 font-bold font-sans">Related</div>
                 <div className=" col-span-6">
-                  {fiction?.relatedTitle ? fiction?.relatedTitle + "|" : ""}
+                  {fiction?.relatedTitle ? fiction?.relatedTitle + " | " : ""}
                   {fiction?.author?.rawName}
                   {fiction?.author?.relatedName
                     ? ", " + fiction?.author?.relatedName
