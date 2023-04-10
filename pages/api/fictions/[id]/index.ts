@@ -336,7 +336,7 @@ async function handler(
         },
       },
     });
-
+    // await res.revalidate(`/fictions/${id}`);
     res.json({ ok: true, fiction });
   }
 }

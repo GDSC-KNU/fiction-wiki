@@ -5,7 +5,7 @@ import type {
   FictionStat,
   Keyword,
   UserRationOnFiction,
-  KeywordsOnFictions,
+  // KeywordsOnFictions,
   Author,
   Category,
 } from "@prisma/client";
@@ -19,7 +19,7 @@ import FictionRadarChart from "@components/fictionRadarChart";
 import Comments from "@components/comment";
 // import "@uiw/react-md-editor/markdown-editor.css";
 // import "@uiw/react-markdown-preview/markdown.css";
-import HeadMeta from "@components/headMeata";
+// import HeadMeta from "@components/headMeata";
 import StarRating from "@components/starRating";
 import { NextSeo } from "next-seo";
 import StructuredData from "@components/structuredData";
@@ -530,7 +530,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: "blocking",
@@ -543,6 +543,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       props: {},
     };
   }
+
+  // if (ctx.query.secret !== process.env.MY_SECRET_TOKEN) {
+  //   return res.status(401).json({ message: 'Invalid token' })
+  // }
+
   const fiction = await client.fiction.findUnique({
     where: {
       id: +ctx.params.id!.toString(),
