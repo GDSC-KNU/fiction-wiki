@@ -1,5 +1,6 @@
 import React from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
+import SearchIcon from "../public/svg/searchIcon.svg";
 
 interface InputProps {
   label: string;
@@ -51,34 +52,24 @@ export default function Input({
         </>
       ) : null}
       {kind === "search" ? (
-        <>
-          <div
-            className=" mt-16 mb-6  rounded-3xl re
-        lative flex  items-center"
-          >
+        <div className=" flex items-center">
+          <SearchIcon
+            width="20"
+            height="20"
+            fill="black"
+            className=" relative top-1"
+          />
+          <div className=" flex items-center w-full">
             <input
               placeholder="검색어를 입력하세요"
               id={name}
               required={required}
               {...register}
               type={type}
-              className="rounded-3xl appearance-none w-full px-3 py-2 border border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+              className=" w-full px-3 pt-3 pb-1  placeholder-gray-400 focus:outline-none text-black"
             />
-            {/* <svg
-              className=""
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                fill="black"
-              ></path>
-            </svg> */}
           </div>
-        </>
+        </div>
       ) : null}
       {kind === "comment" ? (
         <>

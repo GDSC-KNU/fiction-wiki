@@ -22,6 +22,7 @@
     // "types": ["@types/gtag.js"]
   },
   "include": [
+    "./public/type/custom.d.ts",
     "next-env.d.ts",
     "next-env.d.js",
     "**/*.ts",

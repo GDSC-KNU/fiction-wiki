@@ -6,7 +6,7 @@
 //   enabled: process.env.ANALYZE === 'true',
 // })
 
-const nextConfig = {
+let nextConfig = {
   reactStrictMode: true,
   // experimental: {
   //   reactRoot: true,
@@ -28,6 +28,24 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
+  },
 };
 
 module.exports = nextConfig;
+
+// {
+//   webpack(config) {
+//     config.module.rules.push({
+//       test: /\.svg$/,
+//       use: ["@svgr/webpack"],
+//     });
+
+//     return config;
+//   },
+// };

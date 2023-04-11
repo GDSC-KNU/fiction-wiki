@@ -39,9 +39,7 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
           url: "https://fictiondbs.com",
         }}
       />
-      <div>
-        <Search />
-      </div>
+      <div>{/* <Search /> */}</div>
       <section className=" max-w-[1200px]">
         <div className="mt-5 font-bold text-xl border-b-[1px] py-4">
           평점 TOP{" "}
