@@ -11,11 +11,6 @@ export default function Gnb() {
   const { data: nextSession } = useSession();
   const { user } = useUser();
 
-  // const { data: CredentailSession } = useSWR("/api/users/me");
-  // console.log(user);
-  // console.log(nextSession);
-
-  // console.log(data);
   return (
     <header className=" bg-white fixed top-0 w-full py-2 z-20  h-12 shadow-md">
       <nav className="flex w-full justify-between items-center">
@@ -26,13 +21,6 @@ export default function Gnb() {
               href="/"
               passHref
             >
-              {/* <Image
-                className=" rounded-xl border-blue-800 border-solid h-full  min-w-[26px] min-h-[26px]"
-                src={logo}
-                width={26}
-                height={26}
-                alt="FictionDbs"
-              ></Image> */}
               FDBS
             </Link>
           </li>

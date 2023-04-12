@@ -61,6 +61,7 @@ export default function Input({
           />
           <div className=" flex items-center w-full">
             <input
+              autoComplete="off"
               placeholder="검색어를 입력하세요"
               id={name}
               required={required}
