@@ -59,9 +59,9 @@ function MyApp({
           `,
             }}
           />
-          <div className=" bg-white  max-h-fit flex flex-col items-center min-h-[100vh] relative">
+          <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
             <Top />
-            <section className=" mt-10 mx-3 flex-column items-center pb-[60px] w-full max-w-[1300px] px-3">
+            <section className=" mx-3 mt-10 w-full max-w-[1300px] items-center px-3 pb-[60px]">
               <Component {...pageProps} />
             </section>
             <Footer />

@@ -62,14 +62,14 @@ const Enter: NextPage = () => {
 
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-3xl font-bold text-center">
+      <h3 className="text-center text-3xl font-bold">
         Enter to FDBS(현재 구글 로그인만 가능)
       </h3>
       <div className="mt-12">
         {data?.ok ? (
           <form
             onSubmit={tokenHandleSubmit(onTokenValid)}
-            className="flex flex-col mt-8 space-y-4"
+            className="mt-8 flex flex-col space-y-4"
           >
             <Input
               register={tokenRegister("token", {
@@ -86,16 +86,16 @@ const Enter: NextPage = () => {
         ) : (
           <>
             <div className="flex flex-col items-center">
-              <h5 className="text-sm text-gray-500 font-medium">
+              <h5 className="text-sm font-medium text-gray-500">
                 Enter using:
               </h5>
-              <div className="grid border-b  w-full mt-8 grid-cols-2 ">
+              <div className="mt-8 grid  w-full grid-cols-2 border-b ">
                 <button
                   className={cls(
-                    "pb-4 font-medium text-sm border-b-2",
+                    "border-b-2 pb-4 text-sm font-medium",
                     method === "email"
                       ? " border-blue-400 text-blue-300"
-                      : "border-transparent hover:text-gray-400 text-gray-500"
+                      : "border-transparent text-gray-500 hover:text-gray-400"
                   )}
                   onClick={onEmailClick}
                 >
@@ -103,10 +103,10 @@ const Enter: NextPage = () => {
                 </button>
                 <button
                   className={cls(
-                    "pb-4 font-medium text-sm border-b-2",
+                    "border-b-2 pb-4 text-sm font-medium",
                     method === "phone"
                       ? " border-blue-400 text-blue-300"
-                      : "border-transparent hover:text-gray-400 text-gray-500"
+                      : "border-transparent text-gray-500 hover:text-gray-400"
                   )}
                   onClick={onPhoneClick}
                 >
@@ -116,7 +116,7 @@ const Enter: NextPage = () => {
             </div>
             <form
               onSubmit={handleSubmit(onValid)}
-              className="flex flex-col mt-8 space-y-4"
+              className="mt-8 flex flex-col space-y-4"
             >
               {method === "email" ? (
                 <Input
@@ -162,7 +162,7 @@ const Enter: NextPage = () => {
             {session ? (
               <div className=" flex justify-center">
                 <button
-                  className=" flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  className=" flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                   onClick={() => signOut()}
                 >
                   <span>
@@ -197,7 +197,7 @@ const Enter: NextPage = () => {
             ) : (
               <div className=" flex justify-center">
                 <button
-                  className=" flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  className=" flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                   onClick={() => signIn("google")}
                 >
                   <span>

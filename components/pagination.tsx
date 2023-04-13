@@ -62,10 +62,10 @@ export default function Pagination({
           className={
             +currentPage === +item
               ? cls(
-                  "relative z-10 inline-flex items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20 cursor-pointer"
+                  "relative z-10 inline-flex cursor-pointer items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20"
                 )
               : cls(
-                  "relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20 cursor-pointer"
+                  "relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20"
                 )
           }
           key={item}
@@ -230,7 +230,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="flex items-center justify-between  bg-white px-4 py-3 rounded-md m-2">
+    <div className="m-2 flex items-center  justify-between rounded-md bg-white px-4 py-3">
       <div className="flex flex-1 items-center justify-between pr-1">
         <div>
           <p className="text-sm text-gray-700">
@@ -246,7 +246,7 @@ export default function Pagination({
             <a
               onClick={prevHandler}
               id="prev"
-              className=" hover:cursor-pointer relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
             >
               <span className="sr-only">Prev</span>
 
@@ -270,7 +270,7 @@ export default function Pagination({
             <a
               onClick={nextHandler}
               id="next"
-              className=" hover:cursor-pointer relative inline-flex itecems-nter rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
             >
               <span className="sr-only">Next</span>
 

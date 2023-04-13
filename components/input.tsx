@@ -38,15 +38,15 @@ export default function Input({
             {label}
           </label>
           <div
-            className="rounded-md re
-        lative flex  items-center shadow-sm"
+            className=" relative
+        flex items-center  rounded-md shadow-sm"
           >
             <input
               id={name}
               required={required}
               {...register}
               type={type}
-              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+              className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
             />
           </div>
         </>
@@ -59,7 +59,7 @@ export default function Input({
             fill="black"
             className=" relative top-1"
           />
-          <div className=" flex items-center w-full">
+          <div className=" flex w-full items-center">
             <input
               autoComplete="off"
               placeholder="검색어를 입력하세요"
@@ -67,7 +67,7 @@ export default function Input({
               required={required}
               {...register}
               type={type}
-              className=" w-full px-3 pt-3 pb-1  placeholder-gray-400 focus:outline-none text-black"
+              className=" w-full px-3 pb-1 pt-3  text-black placeholder:text-gray-400 focus:outline-none"
             />
           </div>
         </div>
@@ -79,8 +79,8 @@ export default function Input({
             htmlFor={name}
           ></label>
           <div
-            className="rounded-md re
-        lative flex  items-center shadow-sm"
+            className=" relative
+        flex items-center  rounded-md shadow-sm"
           >
             <input
               id={name}
@@ -88,19 +88,19 @@ export default function Input({
               {...register}
               type={type}
               placeholder="한줄평을 입력해주세요. 과도한 비방, 욕설, 도배는 차단됩니다."
-              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+              className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
             />
           </div>
         </>
       ) : null}
       {kind === "text_detail" ? (
-        <div className="rounded-md relative flex  items-center shadow-sm">
+        <div className="relative flex items-center  rounded-md shadow-sm">
           <input
             id={name}
             required={required}
             {...register}
             type={type}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
           />
         </div>
       ) : null}
@@ -113,22 +113,22 @@ export default function Input({
             {label}
           </label>
           <div
-            className="rounded-md re
-        lative flex  items-center shadow-sm"
+            className=" relative
+        flex items-center  rounded-md shadow-sm"
           >
             <input
               id={name}
               required={required}
               {...register}
               type={type}
-              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+              className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
             />
           </div>
         </>
       ) : null}
       {kind === "status" ? (
-        <div className="rounded-md relative flex  items-center">
-          <span className=" w-2/4 pb-1 text-xs text-center">{label}</span>
+        <div className="relative flex items-center  rounded-md">
+          <span className=" w-2/4 pb-1 text-center text-xs">{label}</span>
           <input
             id={name}
             placeholder={label}
@@ -136,23 +136,23 @@ export default function Input({
             type={type}
             min="0"
             max="5"
-            className="appearance-none w-2/4 px-3 py-1 border text-xs border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            className="w-2/4 appearance-none rounded-md border border-gray-300 px-3 py-1 text-xs shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
           />
         </div>
       ) : null}
       {kind === "price" ? (
-        <div className="rounded-md relative flex  items-center shadow-sm">
-          <div className="absolute left-0 pointer-events-none pl-3 flex items-center justify-center">
-            <span className="text-gray-500 text-sm">$</span>
+        <div className="relative flex items-center  rounded-md shadow-sm">
+          <div className="pointer-events-none absolute left-0 flex items-center justify-center pl-3">
+            <span className="text-sm text-gray-500">$</span>
           </div>
           <input
             id={name}
             required={required}
             {...register}
             type={type}
-            className="appearance-none pl-7 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+            className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pl-7 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
           />
-          <div className="absolute right-0 pointer-events-none pr-3 flex items-center">
+          <div className="pointer-events-none absolute right-0 flex items-center pr-3">
             <span className="text-gray-500">KRW</span>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function Input({
             {label}
           </label>
           <div className="flex rounded-md shadow-sm">
-            <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
+            <span className="flex select-none items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
               +82
             </span>
             <input
@@ -174,7 +174,7 @@ export default function Input({
               required={required}
               {...register}
               type={type}
-              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
           </div>
         </>

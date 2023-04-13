@@ -38,7 +38,7 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // console.log(author);
 
   return (
-    <div className="   min-h-[213px] mx-auto mt-20">
+    <div className="   mx-auto mt-20 min-h-[213px]">
       {/* <HeadMeta
         title={author?.name}
         description={author?.description}
@@ -52,8 +52,8 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
           url: `https://fictiondbs.com/authors/name/${author?.name}`,
         }}
       />
-      <div className=" bg-white mb-4">
-        <div className=" py-4 flex">
+      <div className=" mb-4 bg-white">
+        <div className=" flex py-4">
           <Image
             src="/anoynymous_user.png"
             width={142}
@@ -71,9 +71,9 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
         </div>
         <div className=" ml-4 pb-2 text-sm"> {author?.description}</div>
       </div>
-      <div className=" bg-white  grid grid-cols-12  pl-3 mb-4">
+      <div className=" mb-4  grid grid-cols-12  bg-white pl-3">
         <div className=" col-span-12 lg:col-span-12">
-          <div className="mt-5 font-bold text-xl">작품 목록</div>
+          <div className="mt-5 text-xl font-bold">작품 목록</div>
           <FictionList
             data={author}
             type={"fictions_list"}
@@ -81,9 +81,9 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
           />
         </div>
       </div>
-      <div className=" bg-white  grid grid-cols-12 pl-3 mb-4">
+      <div className=" mb-4  grid grid-cols-12 bg-white pl-3">
         <div className=" col-span-12 lg:col-span-12">
-          <div className="mt-5 font-bold text-xl">SNS</div>
+          <div className="mt-5 text-xl font-bold">SNS</div>
         </div>
       </div>
     </div>

@@ -123,16 +123,16 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         }}
       />
       {user ? (
-        <div className=" flex justify-end mx-5 mt-2">
+        <div className=" mx-5 mt-2 flex justify-end">
           <Link
-            className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 mx-1"
+            className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
             passHref
             href={`/fictions/${fiction?.id}/edit`}
           >
             EDIT
           </Link>
           <Link
-            className=" hover:cursor-pointer bg-white border-[0.5px] border-[#BBBBBB] rounded-md p-1 ml-1"
+            className=" ml-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
             passHref
             href={`/fictions/${fiction?.id}/delete`}
           >
@@ -141,9 +141,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         </div>
       ) : null}
 
-      <div className=" grid grid-cols-1 sm:grid-cols-10 h-fit">
-        <div className="  sm:max-w-[380px]  overflow-hidden object-cover h-fit bg-white col-span-3 mt-7 border-[0.5px] border-[#BBBBBB] rounded-md ">
-          <div className="  w-full h-[467px] relative">
+      <div className=" grid h-fit grid-cols-1 sm:grid-cols-10">
+        <div className="  col-span-3  mt-7 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white object-cover sm:max-w-[380px] ">
+          <div className="  relative h-[467px] w-full">
             <Image
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
               fill
@@ -154,7 +154,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
           <div className=" px-4">
             <div className=" flex justify-between">
-              <h1 className=" font-semibold text-2xl mb-2 pt-2 ml-">
+              <h1 className=" mb-2 pt-2 text-2xl font-semibold">
                 {fiction?.title}
               </h1>
               {/* <button
@@ -198,30 +198,30 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 )}
               </button> */}
             </div>
-            <div className=" grid grid-cols-10 text-xs overflow-hidden">
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] ">
-                <div className=" col-span-4 font-bold font-sans">원제</div>
+            <div className=" grid grid-cols-10 overflow-hidden text-xs">
+              <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">
+                <div className=" col-span-4 font-sans font-bold">원제</div>
                 <div className=" col-span-6">
                   {fiction?.originalTitle || fiction?.title}
                 </div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">작가</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">작가</div>
                 <Link
                   title={fiction?.author?.name}
-                  className=" col-span-6 hover:cursor-pointer text-blue-500 w-fit"
+                  className=" col-span-6 w-fit text-blue-500 hover:cursor-pointer"
                   passHref
                   href={`/authors/name/${fiction?.author?.name}`}
                 >
                   {fiction?.author?.name}
                 </Link>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">국가</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">국가</div>
                 <div className=" col-span-6">{fiction?.nationality}</div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">장르</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">장르</div>
                 <div className=" col-span-6">
                   <span>
                     {fiction?.categories
@@ -231,7 +231,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       )
                       .map((item, index) => (
                         <Link
-                          className=" col-span-6 hover:cursor -pointer text-blue-500 mr-2"
+                          className=" col-span-6 mr-2 text-blue-500 hover:cursor-pointer"
                           key={index}
                           href={`/search/genre/${item}/1`}
                         >
@@ -241,8 +241,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </span>
                 </div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">연재기간</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">연재기간</div>
                 <div className=" col-span-6">{`${fiction?.startDate.getFullYear()}. ${
                   fiction?.startDate.getMonth() + 1
                 }. ${fiction?.startDate.getDate()} ~ ${
@@ -254,8 +254,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       }. ${fiction?.endDate.getDate()}`
                 }`}</div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px] ">
-                <div className=" col-span-4 font-bold font-sans ">원본</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] ">
+                <div className=" col-span-4 font-sans font-bold ">원본</div>
                 <div className=" col-span-6 text-blue-500">
                   <a
                     className=" flex w-fit"
@@ -267,7 +267,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       width="16"
                       height="16"
                       fill="currentColor"
-                      className="bi bi-link"
                       viewBox="0 0 16 16"
                     >
                       <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
@@ -277,8 +276,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </a>
                 </div>
               </div>
-              <div className=" w-full col-span-10 sm:col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">플랫폼</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:col-span-10">
+                <div className=" col-span-4 font-sans font-bold">플랫폼</div>
                 <div className=" col-span-6 ">
                   <span
                     className=" flex"
@@ -300,22 +299,22 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </span>
                 </div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">상태</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">상태</div>
                 <div className=" col-span-6">
                   {fiction?.volume}&nbsp;
                   {fiction?.currentState || "??"}
                 </div>
               </div>
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">
                   미디어믹스
                 </div>
                 <div className=" col-span-6">{fiction?.mediaMix || "X"}</div>
               </div>
               {fiction?.isTranslated ? (
-                <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                  <div className=" col-span-4 font-bold font-sans">
+                <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                  <div className=" col-span-4 font-sans font-bold">
                     번역상태
                   </div>
                   <div className=" col-span-6">
@@ -327,8 +326,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </div>
                 </div>
               ) : null}
-              <div className=" w-full col-span-10 grid grid-cols-10 py-[5px] border-t-[1px]">
-                <div className=" col-span-4 font-bold font-sans">Related</div>
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                <div className=" col-span-4 font-sans font-bold">Related</div>
                 <div className=" col-span-6">
                   {fiction?.relatedTitle ? fiction?.relatedTitle + " | " : ""}
                   {fiction?.author?.rawName}
@@ -348,11 +347,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
         </div>
         <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-5">
-          <div className=" grid grid-cols-10 row-span-3">
-            <div className=" col-span-10 lg:col-span-5 sm:pl-5 lg:px-5 h-full pb-3 ">
-              <div className=" flex flex-col h-full">
-                <div className=" mb-3 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md">
-                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md flex items-center">
+          <div className=" row-span-3 grid grid-cols-10">
+            <div className=" col-span-10 h-full pb-3 sm:pl-5 lg:col-span-5 lg:px-5 ">
+              <div className=" flex h-full flex-col">
+                <div className="  mb-3 w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                  <h2 className=" mx-3 flex items-center border-b-[1px] pt-1">
                     평점
                     <p className="ml-2 text-sm font-bold text-gray-500 ">
                       {+fiction?.userFictionStat?.total || 0} / 5 (
@@ -363,11 +362,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </h2>
                   <StarRating data={+fiction?.userFictionStat?.total || 0} />
                 </div>
-                <div className=" px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full">
-                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                    메인 태그
-                  </h2>
-                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                <div className=" h-full w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+                  <h2 className=" mx-3 border-b-[1px] pt-1">메인 태그</h2>
+                  <ul className=" inline-flex flex-wrap px-3 pt-2">
                     {fiction?.keywords
                       ?.filter(
                         (item) =>
@@ -380,10 +377,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           key={index}
                           className={
                             item?.keyword?.isOfMC
-                              ? " text-sm text-center ring-2 ring-red-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
+                              ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-red-500"
                               : item?.keyword?.isOfHeroine
-                              ? " text-sm text-center ring-2 ring-blue-500 mx-1 my-1 rounded-md h-fit border-[#BBBBBB]"
-                              : " text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap cursor-pointer"
+                              ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-blue-500"
+                              : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
                           }
                         >
                           <Link
@@ -395,16 +392,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         </li>
                       ))}
                   </ul>
-                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                    주인공 태그
-                  </h2>
-                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                  <h2 className=" mx-3 border-b-[1px] pt-1">주인공 태그</h2>
+                  <ul className=" inline-flex flex-wrap px-3 pt-2">
                     {fiction?.keywords
                       .filter((item) => item?.keyword?.isOfMC === true)
                       .map((item: any, index: any) => (
                         <li
                           key={index}
-                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
+                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
                         >
                           <Link
                             href={`/search/keyword/${item?.keyword?.name}/1`}
@@ -415,16 +410,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         </li>
                       ))}
                   </ul>
-                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                    히로인 태그
-                  </h2>
-                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                  <h2 className=" mx-3 border-b-[1px] pt-1">히로인 태그</h2>
+                  <ul className=" inline-flex flex-wrap px-3 pt-2">
                     {fiction?.keywords
                       .filter((item) => item?.keyword?.isOfHeroine === true)
                       .map((item: any, index: any) => (
                         <li
                           key={index}
-                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-gray-200 text-[#666676] p-1 whitespace-nowrap"
+                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
                         >
                           <Link
                             href={`/search/keyword/${item?.keyword?.name}/1`}
@@ -435,16 +428,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         </li>
                       ))}
                   </ul>
-                  <h2 className=" pt-1 border-b-[1px] mx-3 text-md">
-                    호불호 키워드
-                  </h2>
-                  <ul className=" pt-2 px-3 inline-flex flex-wrap">
+                  <h2 className=" mx-3 border-b-[1px] pt-1">호불호 키워드</h2>
+                  <ul className=" inline-flex flex-wrap px-3 pt-2">
                     {fiction?.keywords
                       .filter((item) => item?.keyword?.isOfCons === true)
                       .map((item: any, index: any) => (
                         <li
                           key={index}
-                          className=" text-sm text-center  mx-1 my-1 rounded-3xl h-fit bg-red-200 text-[#666676] p-1 whitespace-nowrap"
+                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-red-200 p-1 text-center text-sm text-[#666676]"
                         >
                           <Link
                             href={`/search/keyword/${item?.keyword?.name}/1`}
@@ -458,17 +449,17 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 </div>
               </div>
             </div>
-            <div className=" col-span-10 sm:pl-5 lg:px-0 lg:col-span-5 pb-3">
-              <div className=" bg-white mb-3 w-full border-[0.5px] border-[#BBBBBB] rounded-md col-span-6 h-full">
-                <h2 className=" font-bold pt-1 px-2"></h2>
+            <div className=" col-span-10 pb-3 sm:pl-5 lg:col-span-5 lg:px-0">
+              <div className=" col-span-6 mb-3 h-full w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+                <h2 className=" px-2 pt-1 font-bold"></h2>
 
                 <FictionRadarChart props={fiction?.fictionStat} />
 
-                <div className=" w-full px-3 h-fit mx-auto my-2">
+                <div className=" mx-auto my-2 h-fit w-full px-3">
                   <details>
                     <summary
                       style={{ listStyle: "none" }}
-                      className=" text-center font-bold cursor-pointer my-2 border-[0.5px] border-[#BBBBBB] rounded-md"
+                      className=" my-2 cursor-pointer rounded-md border-[0.5px] border-[#BBBBBB] text-center font-bold"
                     >
                       평가하기
                     </summary>
@@ -483,20 +474,20 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
         </div>
       </div>
-      <div className=" mt-3 sm:mt-7  px-3 py-3 bg-white  border-[0.5px] border-[#BBBBBB] rounded-md">
+      <div className=" mt-3 rounded-md  border-[0.5px] border-[#BBBBBB] bg-white p-3 sm:mt-7">
         <div className=" ">
-          <h2 className=" font-bold text-xl border-b-[1px]">줄거리</h2>
-          <p className=" whitespace-pre-wrap mt-2">{fiction?.synopsis}</p>
+          <h2 className=" border-b-[1px] text-xl font-bold">줄거리</h2>
+          <p className=" mt-2 whitespace-pre-wrap">{fiction?.synopsis}</p>
         </div>
         <div className=" mt-3">
-          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">개요</h2>
-          <p className=" whitespace-pre-wrap mt-2">{fiction?.introduction}</p>
+          <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">개요</h2>
+          <p className=" mt-2 whitespace-pre-wrap">{fiction?.introduction}</p>
         </div>
         <div className=" mt-3">
-          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
+          <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
             등장인물
           </h2>
-          <p className=" whitespace-pre-wrap mt-2"> {fiction?.characters}</p>
+          <p className=" mt-2 whitespace-pre-wrap"> {fiction?.characters}</p>
           {/* <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {similarFictions?.slice(0, 4).map((fiction) => (
               <div key={fiction?.id}>
@@ -514,13 +505,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <EditerMarkdown source={fiction.setup || ""}></EditerMarkdown>
         </div> */}
       </div>
-      <div className=" mt-3 sm:mt-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md">
-        <h3 className=" font-bold text-xl">비슷한 소설</h3>
-        <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className=" mt-3 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 sm:mt-7">
+        <h3 className=" text-xl font-bold">비슷한 소설</h3>
+        <div className=" mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {similarFictions?.slice(0, 4).map((fiction) => (
             <div key={fiction?.id}>
-              <div className="h-56 w-full mb-4 bg-slate-300"></div>
-              <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
+              <div className="mb-4 h-56 w-full bg-slate-300"></div>
+              <h3 className=" -mb-1 text-gray-700">{fiction?.title}</h3>
               {/* <span>description</span> */}
             </div>
           ))}

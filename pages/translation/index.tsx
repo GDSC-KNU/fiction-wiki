@@ -35,7 +35,7 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
   return (
     <div className=" flex">
       <input
-        className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-400"
+        className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
         value={input}
         onChange={(ev: any) => setInput(ev.target.value)}
         type="text"
@@ -52,7 +52,7 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
         width="16"
         height="16"
         fill="currentColor"
-        className=" top-[14px] mb-6 relative right-8 hover:cursor-pointer"
+        className=" relative right-8 top-[14px] mb-6 hover:cursor-pointer"
         viewBox="0 0 16 16"
       >
         <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z" />{" "}
@@ -165,8 +165,8 @@ const Translation = () => {
   // const length = response?.originalTextArray.length;
 
   return (
-    <main className=" relative max-w-2xl mx-auto mt-6">
-      <div className=" ml-5 mb-2 text-gray-500">
+    <main className=" relative mx-auto mt-6 max-w-2xl">
+      <div className=" mb-2 ml-5 text-gray-500">
         지원사이트 목록: qidian, uukanshu, aixdzs
       </div>
       {/* <div className=" invisible">新章</div> */}
@@ -179,10 +179,10 @@ const Translation = () => {
         />
       </div>
       <div id="content" className=" mt-6 px-4">
-        <h2 translate="no" className=" font-semibold text-xl w-fit">
+        <h2 translate="no" className=" w-fit text-xl font-semibold">
           {response?.originalTextArray.at(-1)}
         </h2>
-        <div className=" font-semibold text-xl w-fit">
+        <div className=" w-fit text-xl font-semibold">
           {response?.originalTextArray.at(-1)}
         </div>
         {/* {!isTranslated ? (
@@ -196,13 +196,13 @@ const Translation = () => {
 
             return (
               <div className=" pt-5" key={i}>
-                <div translate="no" className="texts">
+                <div translate="no" className="">
                   {item}
                 </div>
                 {/* {!isTranslated ? (
                 <div className=" ">{response?.originalTextArray?.[i]}</div>
               ) : null} */}
-                <div className="texts">{item}</div>
+                <div className="">{item}</div>
               </div>
             );
           })}
@@ -218,9 +218,9 @@ const Translation = () => {
         ) : null}
       </div>
       {!isValidating && response && (
-        <div className=" flex justify-between mt-4 mx-3">
+        <div className=" mx-3 mt-4 flex justify-between">
           <button
-            className=" bg-white p-1 rounded-md"
+            className=" rounded-md bg-white p-1"
             onClick={() => {
               const prevUrl = response?.prevUrl || "";
               // console.log(prevUrl);
@@ -235,7 +235,7 @@ const Translation = () => {
             이전화
           </button>
           <button
-            className=" bg-white p-1 rounded-md"
+            className=" rounded-md bg-white p-1"
             onClick={() => {
               const nextUrl = response?.nextUrl || "";
               // console.log(nextUrl);

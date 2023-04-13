@@ -24,8 +24,8 @@ const SearchGenrePage: NextPage<dataResponse> = (data) => {
   const router = useRouter();
 
   return (
-    <section className="  w-[100vw] max-w-[1300px] min-h-[213px] ">
-      <div className=" bg-slate-100 mb-7 pl-6 py-4">
+    <section className="  min-h-[213px] w-[100vw] max-w-[1300px] ">
+      <div className=" mb-7 bg-slate-100 py-4 pl-6">
         <h5 className=" font-bold">장르: {router.query.search}</h5>
       </div>
       <div className=" mx-3">

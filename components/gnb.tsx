@@ -12,12 +12,12 @@ export default function Gnb() {
   const { user } = useUser();
 
   return (
-    <header className=" bg-white fixed top-0 w-full py-2 z-20  h-12 shadow-md">
-      <nav className="flex w-full justify-between items-center">
-        <ul className=" flex uppercase space-x-2 ml-2 whitespace-nowrap items-center ">
+    <header className=" fixed top-0 z-20 h-12 w-full bg-white  py-2 shadow-md">
+      <nav className="flex w-full items-center justify-between">
+        <ul className=" ml-2 flex items-center space-x-2 whitespace-nowrap uppercase ">
           <li className=" cursor-pointer ">
             <Link
-              className=" first-letter:flex items-center font-bold font-mono text-2xl"
+              className=" items-center font-mono text-2xl font-bold first-letter:flex"
               href="/"
               passHref
             >
@@ -51,7 +51,7 @@ export default function Gnb() {
           {/* <SearchAutoComplete /> */}
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
-            <li className=" mr-3 p-0 flex items-center cursor-pointer min-w-[26px]">
+            <li className=" mr-3 flex min-w-[26px] cursor-pointer items-center p-0">
               <Link
                 className=" flex items-center rounded-full"
                 href="/profile"
@@ -80,7 +80,7 @@ export default function Gnb() {
           )}
         </ul>
       </nav>
-      <div className="bg-white flex md:hidden list-none space-x-6 px-3 py-2 pl-3 whitespace-nowrap shadow-md">
+      <div className=" flex list-none space-x-6 whitespace-nowrap bg-white px-3 py-2 shadow-md md:hidden">
         <li className=" ">
           <Link href="/fictions ">작품</Link>
         </li>

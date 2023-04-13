@@ -15,10 +15,6 @@ import {
 import { useRouter } from "next/router";
 import ClipLoader from "react-spinners/ClipLoader";
 
-interface EnterForm {
-  searchInput?: string;
-}
-
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
     users: number;
@@ -29,15 +25,6 @@ interface FictionWithMore extends Fiction {
   fictionStat: [FictionStat];
   userFictionStat: UserFictionStatWithMore;
   author: Author;
-}
-
-interface FictionsResponse {
-  ok: boolean;
-  fictions: FictionWithMore[];
-  fictionsCount: number;
-  keywords: Keyword[];
-  categories: string[];
-  nationalities: string[];
 }
 
 export default function SearchModal() {
@@ -78,9 +65,9 @@ export default function SearchModal() {
       />
       {showModal ? (
         <>
-          <div className="flex overflow-x-hidden overflow-y-auto fixed inset-0 z-20 outline-none focus:outline-none ">
-            <div className="relative w-full backdrop-blur-sm mt-[48px] ">
-              <div className=" px-2 border-0 shadow-lg relative flex justify-between w-full bg-white outline-none focus:outline-none">
+          <div className=" fixed inset-0  z-20 flex overflow-y-auto overflow-x-hidden outline-none focus:outline-none ">
+            <div className=" relative mt-[48px] w-full backdrop-blur-sm ">
+              <div className=" relative flex w-full justify-between border-0 bg-white px-2 shadow-lg outline-none focus:outline-none">
                 <form
                   className=" w-full pb-2"
                   onSubmit={() => {
@@ -96,27 +83,27 @@ export default function SearchModal() {
                     type="text_detail"
                     kind="search"
                   /> */}
-                  <div className=" flex items-centerv">
+                  <div className=" flex items-center">
                     <SearchIcon
                       width="20"
                       height="20"
                       fill="black"
                       className=" relative top-[14px]"
                     />
-                    <div className=" flex items-center w-full">
+                    <div className=" flex w-full items-center">
                       <input
                         autoComplete="off"
                         placeholder="검색어를 입력하세요"
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className=" w-full px-3 pt-3 pb-1  placeholder-gray-400 focus:outline-none text-black"
+                        className=" w-full px-3  pb-1 pt-3  text-black placeholder:text-gray-400 focus:outline-none"
                       />
                     </div>
                   </div>
                 </form>
                 <button
-                  className="text-red-500 background-transparent uppercase text-2xl outline-none focus:outline-none ease-linear transition-all duration-150"
+                  className=" text-2xl uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                   type="button"
                   onClick={() => setShowModal(false)}
                 >
@@ -143,7 +130,7 @@ export default function SearchModal() {
               ))}
             </div>
           </div>
-          <div className="opacity-40 mt-[48px] fixed inset-0 z-10 bg-black"></div>
+          <div className="fixed inset-0 z-10 mt-[48px] bg-black opacity-40"></div>
         </>
       ) : null}
     </>

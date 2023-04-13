@@ -31,8 +31,8 @@ const Profile: NextPage = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   // console.log(data);
   return (
-    <div className="   max-w-[1300px] min-h-[213px] ">
-      <div className=" bg-slate-400 mb-7 pl-6 py-4">
+    <div className="   min-h-[213px] max-w-[1300px] ">
+      <div className=" mb-7 bg-slate-400 py-4 pl-6">
         <h5 className=" font-bold">계정 정보</h5>
         <div className=" ">
           <Image
@@ -45,19 +45,19 @@ const Profile: NextPage = () => {
         </div>
       </div>
       <div className=" grid grid-cols-12">
-        <div className=" col-span-0 lg:col-span-1 "></div>
+        <div className=" lg:col-span-1 "></div>
         <ul className=" col-span-12 lg:col-span-10">
           <h5 className=" font-bold ">내가 쓴 댓글</h5>
           {data?.comments?.map(({ comment, fiction, id }, i) => (
-            <li key={id} className=" flex justify-between items-center mb-2">
-              <div className=" text-xs ring-black bg-black text-white p-1 rounded">
+            <li key={id} className=" mb-2 flex items-center justify-between">
+              <div className=" rounded bg-black p-1 text-xs text-white ring-black">
                 {fiction?.title}
               </div>
               <div>{comment}</div>
             </li>
           ))}
         </ul>
-        <div className=" col-span-0 lg:col-span-1 "></div>
+        <div className=" lg:col-span-1 "></div>
       </div>
     </div>
   );

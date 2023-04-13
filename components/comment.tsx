@@ -43,8 +43,8 @@ export default function Comments() {
   ///pagination
 
   return (
-    <div className=" sm:pl-5 h-full">
-      <div className=" w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md h-full flex flex-col justify-between">
+    <div className=" h-full sm:pl-5">
+      <div className=" flex h-full w-full flex-col justify-between rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
         <div></div>
         <ul className=" ">
           {(commentsResponse?.comments || []).length < 7
@@ -57,15 +57,15 @@ export default function Comments() {
                 .map((comment: Comment, index: number) => (
                   <ul
                     key={index}
-                    className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
+                    className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
                   >
-                    <li className=" mt-2 text-sm overflow-hidden mr-16">
+                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
                       {comment?.comment || ""}
                     </li>
-                    <li className=" mt-2 text-sm absolute right-24">
+                    <li className=" absolute right-24 mt-2 text-sm">
                       {`${comment?.createdById.slice(0, 5) || ""}...`}
                     </li>
-                    <li className=" mt-2 ml-5 text-sm min-w-[78px]">
+                    <li className=" ml-5 mt-2 min-w-[78px] text-sm">
                       👍 👎 ()
                     </li>
                   </ul>
@@ -74,26 +74,26 @@ export default function Comments() {
                 (comment: Comment, index: number) => (
                   <ul
                     key={index}
-                    className=" flex place-content-between mx-2 border-b-2 pb-1 last:border-b-0 relative"
+                    className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
                   >
-                    <li className=" mt-2 text-sm overflow-hidden mr-16">
+                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
                       {comment?.comment || " asd"}
                     </li>
-                    <li className=" mt-2 text-sm absolute right-24">
+                    <li className=" absolute right-24 mt-2 text-sm">
                       {`${comment?.createdById.slice(0, 5)}...`}
                     </li>
-                    <li className=" mt-2 ml-5 text-sm min-w-[78px]">
+                    <li className=" ml-5 mt-2 min-w-[78px] text-sm">
                       👍 👎 (+3)
                     </li>
                   </ul>
                 )
               )}
         </ul>
-        <div className=" flex mb-2 mt-5 justify-center">
+        <div className=" mb-2 mt-5 flex justify-center">
           <button
             onClick={prevHandler}
             id="prev"
-            className=" hover:cursor-pointer relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+            className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
           >
             <span className="sr-only">Prev</span>
 
@@ -112,13 +112,13 @@ export default function Comments() {
               />
             </svg>
           </button>
-          <button className="relative inline-flex items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+          <button className="relative inline-flex items-center border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
             {commentIndex}
           </button>
           <button
             onClick={nextHandler}
             id="next"
-            className=" hover:cursor-pointer relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+            className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
           >
             <span className="sr-only">Next</span>
 

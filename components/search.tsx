@@ -38,7 +38,7 @@ export default function Search() {
   return (
     <div className=" ">
       <form
-        className=" max-w-[581px] mx-auto flex"
+        className=" mx-auto flex max-w-[581px]"
         onSubmit={handleSubmit(onValid, onInvalid)}
       >
         <div className=" w-full">
@@ -57,7 +57,7 @@ export default function Search() {
           />
         </div>
         <svg
-          className=" mt-[4.8rem] mb-6 relative right-8 hover:cursor-pointer"
+          className=" relative right-8 mb-6 mt-[4.8rem] hover:cursor-pointer"
           onClick={handleSubmit(onValid, onInvalid)}
           xmlns="http://www.w3.org/2000/svg"
           width="20"

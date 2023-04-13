@@ -181,10 +181,10 @@ const Create: NextPage = (props) => {
         <form className=" w-[90vw]" onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
-              <div className=" bg-white col-span-2 mx-5 mt-7 h-fit border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+              <div className=" col-span-2 mx-5 mt-7 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
                 <div className=" min-h-[330px] w-full">
                   {thumbPreview ? (
-                    <label className=" relative pb-100 w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
+                    <label className=" relative flex h-[330px] w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
                       <Image
                         className=" object-cover"
                         src={thumbPreview || "/"}
@@ -198,7 +198,7 @@ const Create: NextPage = (props) => {
                       />
                     </label>
                   ) : (
-                    <label className="w-full cursor-pointer text-gray-600 hover:border-blue-500 hover:text-blue-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-[330px] rounded-md">
+                    <label className="flex h-[330px] w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
                       <svg
                         className="h-12 w-12"
                         stroke="currentColor"
@@ -287,7 +287,7 @@ const Create: NextPage = (props) => {
                     name="genre"
                     type="text_detail"
                   />
-                  <div className=" flex relative items-center justify-between">
+                  <div className=" relative flex items-center justify-between">
                     <div className=" w-[48%]">
                       <Input
                         register={register("date.0")}
@@ -353,8 +353,8 @@ const Create: NextPage = (props) => {
               </div>
               <div className=" col-span-3 mx-5 mt-7">
                 <div className=" grid  sm:grid-cols-1">
-                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                    <h2 className=" font-bold pt-1 px-2">Keywords</h2>
+                  <div className=" mb-10 w-full overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                    <h2 className=" px-2 pt-1 font-bold">Keywords</h2>
                     <input
                       className=" w-full"
                       {...register("keywords.0")}
@@ -362,12 +362,12 @@ const Create: NextPage = (props) => {
                       placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown}
                     ></input>
-                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                    <ul className=" grid grid-cols-4 px-3 pt-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5">
                       {wKeywords
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            className=" m-1 h-fit rounded-md bg-[#3D414D] text-center text-sm text-white ring-offset-1 hover:cursor-pointer"
                             key={index}
                             onClick={(e) => {
                               wKeywords = wKeywords.filter(
@@ -381,8 +381,8 @@ const Create: NextPage = (props) => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                    <h2 className=" font-bold pt-1 px-2">Mc Keywords</h2>
+                  <div className=" mb-10 w-full overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                    <h2 className=" px-2 pt-1 font-bold">Mc Keywords</h2>
                     <input
                       className=" w-full"
                       {...register("mcKeywords.0")}
@@ -390,12 +390,12 @@ const Create: NextPage = (props) => {
                       placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown2}
                     ></input>
-                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                    <ul className=" grid grid-cols-4 px-3 pt-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5">
                       {wKeywords2
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            className=" m-1 h-fit rounded-md bg-[#3D414D] text-center text-sm text-white ring-offset-1 hover:cursor-pointer"
                             key={index}
                             onClick={(e) => {
                               wKeywords2 = wKeywords2.filter(
@@ -409,8 +409,8 @@ const Create: NextPage = (props) => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                    <h2 className=" font-bold pt-1 px-2">Sub Keywords</h2>
+                  <div className=" mb-10 w-full overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                    <h2 className=" px-2 pt-1 font-bold">Sub Keywords</h2>
                     <input
                       className=" w-full"
                       {...register("subKeywords.0")}
@@ -418,12 +418,12 @@ const Create: NextPage = (props) => {
                       placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown3}
                     ></input>
-                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                    <ul className=" grid grid-cols-4 px-3 pt-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5">
                       {wKeywords3
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            className=" m-1 h-fit rounded-md bg-[#3D414D] text-center text-sm text-white ring-offset-1 hover:cursor-pointer"
                             key={index}
                             onClick={(e) => {
                               wKeywords3 = wKeywords3.filter(
@@ -437,8 +437,8 @@ const Create: NextPage = (props) => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" mb-10 pb-3 px- w-full bg-white border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
-                    <h2 className=" font-bold pt-1 px-2">Cons Keywords</h2>
+                  <div className=" mb-10 w-full overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                    <h2 className=" px-2 pt-1 font-bold">Cons Keywords</h2>
                     <input
                       className=" w-full"
                       {...register("consKeywords.0")}
@@ -446,12 +446,12 @@ const Create: NextPage = (props) => {
                       placeholder=" 키워드(,를 눌러서 입력하세요)"
                       onKeyDown={onKeyDown4}
                     ></input>
-                    <ul className=" grid grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5 pt-3 px-3">
+                    <ul className=" grid grid-cols-4 px-3 pt-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-5">
                       {wKeywords4
                         ?.filter((item) => item !== undefined)
                         .map((item, index) => (
                           <li
-                            className=" bg-[#3D414D] text-white text-sm text-center ring-offset-1 mx-1 my-1 rounded-md h-fit hover:cursor-pointer"
+                            className=" m-1 h-fit rounded-md bg-[#3D414D] text-center text-sm text-white ring-offset-1 hover:cursor-pointer"
                             key={index}
                             onClick={(e) => {
                               wKeywords4 = wKeywords4.filter(
@@ -465,10 +465,10 @@ const Create: NextPage = (props) => {
                         ))}
                     </ul>
                   </div>
-                  <div className=" h-max bg-white mb-10 w-full border-[0.5px] border-[#BBBBBB] rounded-md overflow-x-auto">
-                    <h2 className=" font-bold pt-1 px-2">graphs and charts</h2>
+                  <div className=" mb-10 h-max w-full overflow-x-auto rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+                    <h2 className=" px-2 pt-1 font-bold">graphs and charts</h2>
                     <FictionRadarChart props={wStatus} />
-                    <div className=" grid grid-cols-2 mx-2">
+                    <div className=" mx-2 grid grid-cols-2">
                       <Input
                         register={register("status.0", {
                           max: 5,
@@ -525,7 +525,7 @@ const Create: NextPage = (props) => {
                 </div>
               </div>
             </div>
-            <div className=" mx-5 my-7 bg-white px-3 py-3 border-[0.5px] border-[#BBBBBB] rounded-md overflow-hidden">
+            <div className=" mx-5 my-7 overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
               <Textarea
                 register={register("synopsis")}
                 name="synopsis"

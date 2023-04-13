@@ -41,7 +41,7 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
       />
       <div>{/* <Search /> */}</div>
       <section className=" max-w-[1200px]">
-        <div className="mt-5 font-bold text-xl border-b-[1px] py-4">
+        <div className="mt-5 border-b-[1px] pt-8 text-xl font-bold md:py-1">
           평점 TOP{" "}
         </div>
         <FictionList

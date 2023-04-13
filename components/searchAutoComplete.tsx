@@ -59,37 +59,38 @@ function SearchAutoComplete() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div style={{ width: 150 }} className=" px-2">
-          <ReactSearchAutocomplete
-            items={items}
-            onSearch={handleOnSearch}
-            onHover={handleOnHover}
-            onSelect={handleOnSelect}
-            onFocus={handleOnFocus}
-            autoFocus
-            formatResult={formatResult}
-            styling={{
-              height: "34px",
-              border: "0px solid #dfe1e5",
-              borderRadius: "24px",
-              backgroundColor: "white",
-              boxShadow: "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
-              hoverBackgroundColor: "#eee",
-              color: "#212121",
-              fontSize: "16px",
-              fontFamily: "Arial",
-              iconColor: "grey",
-              lineColor: "rgb(232, 234, 237)",
-              placeholderColor: "grey",
-              clearIconMargin: "3px 14px 0 0",
-              searchIconMargin: "0 0 0 16px",
-            }}
-          />
-        </div>
-      </header>
-    </div>
+    <></>
+    // <div className="App">
+    //   <header className="App-header">
+    //     <div style={{ width: 150 }} className=" px-2">
+    //       <ReactSearchAutocomplete
+    //         items={items}
+    //         onSearch={handleOnSearch}
+    //         onHover={handleOnHover}
+    //         onSelect={handleOnSelect}
+    //         onFocus={handleOnFocus}
+    //         autoFocus
+    //         formatResult={formatResult}
+    //         styling={{
+    //           height: "34px",
+    //           border: "0px solid #dfe1e5",
+    //           borderRadius: "24px",
+    //           backgroundColor: "white",
+    //           boxShadow: "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    //           hoverBackgroundColor: "#eee",
+    //           color: "#212121",
+    //           fontSize: "16px",
+    //           fontFamily: "Arial",
+    //           iconColor: "grey",
+    //           lineColor: "rgb(232, 234, 237)",
+    //           placeholderColor: "grey",
+    //           clearIconMargin: "3px 14px 0 0",
+    //           searchIconMargin: "0 0 0 16px",
+    //         }}
+    //       />
+    //     </div>
+    //   </header>
+    // </div>
   );
 }
 

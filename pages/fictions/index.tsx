@@ -15,7 +15,6 @@ import useSWR from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "../../atoms";
-import HeadMeta from "@components/headMeata";
 import { ParsedUrlQueryInput } from "querystring";
 import { NextSeo } from "next-seo";
 
@@ -242,25 +241,25 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           url: "https://fictiondbs.com",
         }}
       />
-      <div className=" justify-center bg-white rounded m-2 p-2">
+      <div className=" m-2 justify-center rounded bg-white p-2">
         <form className=" ">
           <div>
-            <h5 className=" text-sm border-b-2 text-gray-400">
+            <h5 className=" border-b-2 text-sm text-gray-400">
               Filter by Release Time
             </h5>
-            <div className=" leading-[1.8rem] flex flex-wrap">
+            <div className=" flex flex-wrap leading-[1.8rem]">
               {releaseTimeFilters.map((criteria, i) => (
-                <label key={i} className=" cursor-pointer flex">
+                <label key={i} className=" flex cursor-pointer">
                   <input
                     onChange={(e) => checkHandler(e)}
                     type="checkbox"
-                    className=" hidden peer"
+                    className=" peer hidden"
                     // id="releaseTimeFilter"
                     value={criteria}
                     name="releaseTimeFilter"
                     checked={checkedReleaseTimeFilter === criteria}
                   />
-                  <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-lg text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
+                  <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-lg  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
                     {criteria}
                   </div>
                 </label>
@@ -269,17 +268,17 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
             <div className=" mb-2 flex">
               {checkedReleaseTimeFilter === "연도별" ? (
                 yearDummy.map((year, i) => (
-                  <label key={i} className=" cursor-pointer flex">
+                  <label key={i} className=" flex cursor-pointer">
                     <input
                       onChange={(e) => checkHandler(e)}
                       type="checkbox"
-                      className=" hidden peer"
+                      className=" peer hidden"
                       // id="dateYear"
                       value={year}
                       name="dateYear"
                       checked={+checkedDateYear === year}
                     />
-                    <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-xs text-center mx-[0.35rem]">
+                    <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-xs hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
                       {year}
                     </div>
                   </label>
@@ -289,7 +288,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               )}
             </div>
           </div>
-          <h5 className=" text-sm border-b-2 text-gray-400">
+          <h5 className=" border-b-2 text-sm text-gray-400">
             Filter by options
           </h5>
           <div className=" ">
@@ -304,19 +303,19 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               <tbody>
                 <tr>
                   <th className=" min-w-[35px]">국가</th>
-                  <td className=" leading-[1.8rem] flex flex-wrap">
+                  <td className=" flex flex-wrap leading-[1.8rem]">
                     {nationalities.map((nationality, i) => (
-                      <label key={i} className=" cursor-pointer flex">
+                      <label key={i} className=" flex cursor-pointer">
                         <input
                           onChange={(e) => checkHandler(e)}
                           type="checkbox"
-                          className=" hidden peer"
+                          className=" peer hidden"
                           // id="nationality"
                           value={nationality}
                           name="nationality"
                           // checked={checkedNationalities.has(nationality)}
                         />
-                        <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px]">
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
                           {nationality}
                         </div>
                       </label>
@@ -325,19 +324,19 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 </tr>
                 <tr>
                   <th>장르</th>
-                  <td className=" leading-[1.8rem] flex flex-wrap">
+                  <td className=" flex flex-wrap leading-[1.8rem]">
                     {categories.map((category: any, i) => (
-                      <label key={i} className=" cursor-pointer flex">
+                      <label key={i} className=" flex cursor-pointer">
                         <input
                           onChange={(e) => checkHandler(e)}
                           type="checkbox"
                           // id="genre"
-                          className=" hidden peer"
+                          className=" peer hidden"
                           value={category.name}
                           name="genre"
                           // checked={checkedGenres.has(category.name)}
                         />
-                        <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white ">
                           {category.name}
                         </div>
                       </label>
@@ -346,19 +345,19 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 </tr>
                 <tr>
                   <th className=" ">정렬</th>
-                  <td className=" leading-[1.8rem] flex flex-wrap">
+                  <td className=" flex flex-wrap leading-[1.8rem]">
                     {sortingList.map((sorting, i) => (
-                      <label key={i} className="  cursor-pointer flex ">
+                      <label key={i} className="  flex cursor-pointer ">
                         <input
                           onChange={(e) => checkHandler(e)}
                           type="checkbox"
-                          className=" hidden peer"
+                          className=" peer hidden"
                           id="sorting"
                           value={sorting}
                           name="sorting"
                           checked={sorting === checkedSortings}
                         ></input>
-                        <div className=" peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 p-[0.12rem] mt-1 text-sm text-center  ring-gray-500 mx-[0.35rem] rounded-md border-[#BBBBBB] border-[0.5px] ">
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white ">
                           {sorting}
                         </div>
                       </label>
@@ -370,7 +369,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
           </div>
 
           <details className=" text-center">
-            <div className=" mt-5 bg-white px-2 pt-2 pb-1 border-[0.5px] border-[#BBBBBB] rounded-md blue ">
+            <div className=" mt-5 rounded-md border-[0.5px] border-[#BBBBBB] bg-white px-2 pb-1 pt-2 ">
               <table className=" leading-7">
                 <thead>
                   <tr>
@@ -382,7 +381,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 <tbody>
                   <tr>
                     <th className=" min-w-[50px]">키워드</th>
-                    <td className=" leading-[1.8rem] flex flex-wrap">
+                    <td className=" flex flex-wrap leading-[1.8rem]">
                       {keywords
                         .filter((keyword) => keyword?.isOfCons !== true)
                         .map((keyword) => (
@@ -391,11 +390,11 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                               onChange={(e) => checkHandler(e)}
                               type="checkbox"
                               // id="keyword"
-                              className=" hidden peer"
+                              className=" peer hidden"
                               value={keyword?.name}
                               name="keyword"
                             />
-                            <div className=" cursor-pointer whitespace-nowrap bg-gray-200 text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white  hover:border-gray-400 hover:bg-gray-200 mt-1 text-sm text-center mx-[0.35rem] rounded-3xl border-[#BBBBBB] p-1  ">
+                            <div className=" mx-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white  ">
                               #{keyword?.name}
                             </div>
                           </label>
@@ -406,13 +405,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               </table>
             </div>
             <summary style={{ listStyle: "none" }} className=" mt-4 w-fit">
-              <span className=" hover:cursor-pointer hover:bg-gray-200  border-[0.5px] p-1 border-[#BBBBBB] rounded-md flex items-center">
+              <span className=" flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  className="bi bi-plus-circle-fill"
                   viewBox="0 0 16 16"
                 >
                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />{" "}
