@@ -8,7 +8,7 @@ import {
 } from "@prisma/client";
 import useSWR from "swr";
 import React, { useEffect, useState } from "react";
-import FictionList from "./fictionList";
+import FictionList from "@components/fictionList";
 import { useRouter } from "next/router";
 // import { pageAtom } from "../atoms";
 // import { useRecoilState } from "recoil";

@@ -1,9 +1,9 @@
 import React from "react";
-import FictionList from "@components/fictionList";
+import FictionList from "src/components/fictionList";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../../atoms";
+import { fictionPageAtom } from "../../../src/store/atoms";
 import useSWR from "swr";
 
 const TitleSearch: NextPage = () => {

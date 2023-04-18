@@ -31,6 +31,7 @@ export default function withHandler({
     // console.log(req.method);
     // console.log(req.session);
     const nextAuthsession = await getServerSession(req, res, authOptions);
+    // console.log("session: ");
     // console.log(nextAuthsession);
 
     if (req.method && !methods.includes(req.method as any)) {

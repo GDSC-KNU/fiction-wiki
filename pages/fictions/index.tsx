@@ -14,7 +14,7 @@ import FictionList from "@components/fictionList";
 import useSWR from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../atoms";
+import { fictionPageAtom } from "../../src/store/atoms";
 import { ParsedUrlQueryInput } from "querystring";
 import { NextSeo } from "next-seo";
 
@@ -231,7 +231,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   // console.log("");
 
   return (
-    <div className=" mt-10 ">
+    <div className=" ">
       {/* <HeadMeta /> */}
       <NextSeo
         title="작품 찾기"

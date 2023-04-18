@@ -17,13 +17,14 @@
     "baseUrl": ".",
     "paths": {
       "@libs/*": ["libs/*"],
-      "@components/*": ["components/*"],
-      "@public/*" : ["public/*"]
+      "@components/*": ["src/components/*"],
+      "@public/*": ["public/*"],
+      "@store/*": ["src/store/*"]
     }
     // "types": ["@types/gtag.js"]
   },
   "include": [
-    "./public/type/custom.d.ts",
+    "src/type/custom.d.ts",
     "next-env.d.ts",
     "next-env.d.js",
     "**/*.ts",

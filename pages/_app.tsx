@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import Top from "@components/top";
-import Footer from "@components/footer";
+import Top from "src/components/top";
+import Footer from "src/components/footer";
 import { SessionProvider } from "next-auth/react";
 import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { DefaultSeo } from "next-seo";
 import SEO from "../seo.config";
-import HeadMeta from "@components/headMeata";
+import HeadMeta from "src/components/headMeata";
 
 function MyApp({
   Component,
@@ -61,7 +61,7 @@ function MyApp({
           />
           <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
             <Top />
-            <section className=" mx-3 mt-10 w-full max-w-[1300px] items-center px-3 pb-[60px]">
+            <section className=" mx-3 mt-[94px] w-full max-w-[1300px] items-center px-3 pb-[60px] md:mt-[62px]">
               <Component {...pageProps} />
             </section>
             <Footer />

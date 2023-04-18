@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Button from "@components/button";
-import FictionRadarChart from "@components/fictionRadarChart";
-import Input from "@components/input";
-import Textarea from "@components/textarea";
+import Button from "src/components/button";
+import FictionRadarChart from "src/components/fictionRadarChart";
+import Input from "src/components/input";
+import Textarea from "src/components/textarea";
 import useMutation from "@libs/client/useMutation";
 import {
   Author,

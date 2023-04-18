@@ -10,19 +10,19 @@ import type {
   Category,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
-import UserStat from "@components/userStat";
+import UserStat from "src/components/userStat";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import Link from "next/link";
-import FictionRadarChart from "@components/fictionRadarChart";
-import Comments from "@components/comment";
+import FictionRadarChart from "src/components/fictionRadarChart";
+import Comments from "src/components/comment";
 // import "@uiw/react-md-editor/markdown-editor.css";
 // import "@uiw/react-markdown-preview/markdown.css";
 // import HeadMeta from "@components/headMeata";
-import StarRating from "@components/starRating";
+import StarRating from "src/components/starRating";
 import { NextSeo } from "next-seo";
-import StructuredData from "@components/structuredData";
+import StructuredData from "src/components/structuredData";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -108,11 +108,12 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     else if (string.includes("series")) string = "시리즈";
     else if (string.includes("kakao")) string = "카카오";
     else if (string.includes("novelpia")) string = "노벨피아";
+    else if (string.includes("joara")) string = "조아라";
     return string;
   };
 
   return (
-    <div className=" max-w-[1100px]">
+    <div className=" max-w-[1100px] ">
       <StructuredData data={fiction} />
       <NextSeo
         title={`${fiction?.title}`}
@@ -142,7 +143,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       ) : null}
 
       <div className=" grid h-fit grid-cols-1 sm:grid-cols-10">
-        <div className="  col-span-3  mt-7 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white object-cover sm:max-w-[380px] ">
+        <div className="  col-span-3 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white object-cover sm:max-w-[380px] ">
           <div className="  relative h-[467px] w-full">
             <Image
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
@@ -346,7 +347,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             <div className=" mb-2"></div>
           </div>
         </div>
-        <div className=" col-span-7 mt-3 sm:mt-7  sm:grid lg:grid-rows-5">
+        <div className=" col-span-7  sm:grid lg:grid-rows-5">
           <div className=" row-span-3 grid grid-cols-10">
             <div className=" col-span-10 h-full pb-3 sm:pl-5 lg:col-span-5 lg:px-5 ">
               <div className=" flex h-full flex-col">
@@ -474,7 +475,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
         </div>
       </div>
-      <div className=" mt-3 rounded-md  border-[0.5px] border-[#BBBBBB] bg-white p-3 sm:mt-7">
+      <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
         <div className=" ">
           <h2 className=" border-b-[1px] text-xl font-bold">줄거리</h2>
           <p className=" mt-2 whitespace-pre-wrap">{fiction?.synopsis}</p>
@@ -505,7 +506,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <EditerMarkdown source={fiction.setup || ""}></EditerMarkdown>
         </div> */}
       </div>
-      <div className=" mt-3 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 sm:mt-7">
+      <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
         <h3 className=" text-xl font-bold">비슷한 소설</h3>
         <div className=" mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {similarFictions?.slice(0, 4).map((fiction) => (

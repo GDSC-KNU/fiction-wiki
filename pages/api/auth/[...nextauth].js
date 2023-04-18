@@ -13,20 +13,22 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  secret: process.env.SECRET,
+  secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
-      user && (token.user = user);
-      return token;
-    },
+    // async jwt({ token, user }) {
+    //   user && (token.user = user);
+    //   return token;
+    // },
     async session({ session, user }) {
-      session = {
-        ...session,
-        user: {
-          id: user.id,
-          ...session.user,
-        },
-      };
+      if (user) {
+        session = {
+          ...session,
+          user: {
+            id: user.id,
+            ...session.user,
+          },
+        };
+      }
       return session;
     },
   },

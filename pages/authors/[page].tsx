@@ -1,7 +1,7 @@
 import client from "@libs/server/client";
 import { Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/fictionList";
+import FictionList from "src/components/fictionList";
 import type {
   GetStaticPaths,
   GetStaticProps,
@@ -35,7 +35,7 @@ const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
   // }, [authorPageIndex]);
 
   return (
-    <div className=" mt-12">
+    <div className="">
       <FictionList
         data={authors}
         type="authors_list"

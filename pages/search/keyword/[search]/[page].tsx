@@ -7,10 +7,10 @@ import type {
 import client from "@libs/server/client";
 import { Fiction } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/fictionList";
+import FictionList from "src/components/fictionList";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../../../atoms";
+import { fictionPageAtom } from "../../../../src/store/atoms";
 import { useRouter } from "next/router";
 
 interface IParams extends ParsedUrlQuery {

@@ -7,8 +7,8 @@ import type {
 import client from "@libs/server/client";
 import type { Fiction, Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/fictionList";
-import HeadMeta from "@components/headMeata";
+import FictionList from "src/components/fictionList";
+import HeadMeta from "src/components/headMeata";
 import Image from "next/image";
 import { NextSeo } from "next-seo";
 

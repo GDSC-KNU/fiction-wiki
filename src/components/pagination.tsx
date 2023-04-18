@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { cls } from "@libs/client/utils";
 import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../atoms";
+import { fictionPageAtom } from "@store/atoms";
 
 interface PaginationProps {
   activePage: number;

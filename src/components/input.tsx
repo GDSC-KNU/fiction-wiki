@@ -1,6 +1,6 @@
 import React from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
-import SearchIcon from "../public/svg/searchIcon.svg";
+import SearchIcon from "@public/svg/searchIcon.svg";
 
 interface InputProps {
   label: string;

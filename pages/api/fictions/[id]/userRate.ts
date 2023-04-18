@@ -1,8 +1,10 @@
+import { getSession } from "next-auth/react";
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
-import { getSession } from "next-auth/react";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
 
 async function handler(
   req: NextApiRequest,
@@ -19,8 +21,13 @@ async function handler(
     // session: { user },
     body: { UserFictionStat, comment },
   } = req;
-  const session = await getSession({ req });
+  // const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
+  // console.log("session");
+  // console.log(session);
+
   if (!session) {
+    // console.log("????1!");
     res.json({ ok: false });
     return;
   } else {
@@ -141,7 +148,7 @@ async function handler(
             },
             userRationOnFictions: {
               create: {
-                userId: session!.user!.id,
+                userId: session?.user?.id || "1",
                 originality: +UserFictionStat[0],
                 writing: +UserFictionStat[1],
                 character: +UserFictionStat[2],

@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
 import Search from "@components/search";
-import FictionList from "@components/fictionList";
+import FictionList from "src/components/fictionList";
 import HeadMeta from "@components/headMeata";
 import { NextSeo } from "next-seo";
 
@@ -41,8 +41,8 @@ const Home: NextPage<{ fictions: FictionWithMore[] }> = (data) => {
       />
       <div>{/* <Search /> */}</div>
       <section className=" max-w-[1200px]">
-        <div className="mt-5 border-b-[1px] pt-8 text-xl font-bold md:py-1">
-          평점 TOP{" "}
+        <div className=" border-b-[1px] text-xl font-bold md:py-1">
+          평점 TOP
         </div>
         <FictionList
           data={data}

@@ -7,7 +7,7 @@ import type {
 import client from "@libs/server/client";
 import { Fiction } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@components/fictionList";
+import FictionList from "src/components/fictionList";
 import React from "react";
 import { useRouter } from "next/router";
 

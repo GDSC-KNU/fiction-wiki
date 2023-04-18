@@ -1,7 +1,6 @@
-import SearchAutoComplete from "@components/searchAutoComplete";
 import Input from "@components/input";
 import { FieldErrors, useForm } from "react-hook-form";
-import SearchIcon from "../public/svg/searchIcon.svg";
+import SearchIcon from "@public/svg/searchIcon.svg";
 import { useState, useEffect, useDeferredValue, Suspense } from "react";
 import useSWR from "swr";
 import {
@@ -75,20 +74,12 @@ export default function SearchModal() {
                     router.push(`/search/title/${query}?page=1`);
                   }}
                 >
-                  {/* <Input
-                    register={register("searchInput", { required: true })}
-                    required
-                    label=""
-                    name="searchInput"
-                    type="text_detail"
-                    kind="search"
-                  /> */}
                   <div className=" flex items-center">
                     <SearchIcon
                       width="20"
                       height="20"
                       fill="black"
-                      className=" relative top-[14px]"
+                      className=" relative top-[5px]"
                     />
                     <div className=" flex w-full items-center">
                       <input
@@ -112,7 +103,6 @@ export default function SearchModal() {
               </div>
               {fictions?.map((fiction: any, i: number) => (
                 <div key={fiction.id} className=" bg-white p-3">
-                  {/* <Link href={`/fictions/${fiction.id}`}> */}
                   <a
                     className=" ml-7"
                     href={`/fictions/${fiction.id}`}

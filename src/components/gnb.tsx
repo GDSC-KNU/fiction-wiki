@@ -2,9 +2,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
-import logo from "../public/fdb_logo.png";
-import SearchAutoComplete from "@components/searchAutoComplete";
-import searchModal from "@components/searchModal";
+import logo from "@public/fdb_logo.png";
 import SearchModal from "@components/searchModal";
 
 export default function Gnb() {
