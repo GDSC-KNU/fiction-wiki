@@ -10,7 +10,7 @@ import type {
   Category,
 } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
-import UserStat from "src/components/userStat";
+import UserStat from "@components/userRate";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
@@ -23,6 +23,7 @@ import Comments from "src/components/comment";
 import StarRating from "src/components/starRating";
 import { NextSeo } from "next-seo";
 import StructuredData from "src/components/structuredData";
+import useSWR from "swr";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -61,9 +62,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   const router = useRouter();
 
   // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
-  // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-  //   router.query.id ? `/api/fictions/${router.query.id}` : null
-  // );
+  const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
+    router.query.id ? `/api/fictions/${router.query.id}` : null
+  );
+  console.log(data);
   // const { data: nextAuthSession } = useSession();
   const { user } = useUser();
 
@@ -355,13 +357,20 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   <h2 className=" mx-3 flex items-center border-b-[1px] pt-1">
                     평점
                     <p className="ml-2 text-sm font-bold text-gray-500 ">
-                      {+fiction?.userFictionStat?.total || 0} / 5 (
+                      {data?.fiction.userFictionStat?.total ??
+                        (+fiction?.userFictionStat?.total || 0)}{" "}
+                      / 5 (
                       {fiction?.userFictionStat?.userRationOnFictions?.length ||
                         0}
                       )
                     </p>
                   </h2>
-                  <StarRating data={+fiction?.userFictionStat?.total || 0} />
+                  <StarRating
+                    data={
+                      data?.fiction.userFictionStat?.total ??
+                      (+fiction?.userFictionStat?.total || 0)
+                    }
+                  />
                 </div>
                 <div className=" h-full w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
                   <h2 className=" mx-3 border-b-[1px] pt-1">메인 태그</h2>
@@ -457,15 +466,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <FictionRadarChart props={fiction?.fictionStat} />
 
                 <div className=" mx-auto my-2 h-fit w-full px-3">
-                  <details>
-                    <summary
-                      style={{ listStyle: "none" }}
-                      className=" my-2 cursor-pointer rounded-md border-[0.5px] border-[#BBBBBB] text-center font-bold"
-                    >
-                      평가하기
-                    </summary>
+
                     <UserStat />
-                  </details>
+
                 </div>
               </div>
             </div>
