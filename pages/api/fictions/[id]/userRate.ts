@@ -33,15 +33,15 @@ async function handler(
   } else {
     let Ration;
     let commentation;
-    // console.log(session?.user?.email);
+
     const alreadyExists = await client.userFictionStat.findFirst({
       include: {
         _count: {
           select: {
-            users: true,
+            userRationOnFictions: true,
           },
         },
-        users: true,
+        // users: true,
         userRationOnFictions: {
           where: {
             userId: session?.user?.id,
@@ -53,6 +53,23 @@ async function handler(
       },
     });
 
+    // //comment 생성
+    // commentation = await client.comment.create({
+    //   data: {
+    //     comment: comment,
+    //     createdBy: {
+    //       connect: {
+    //         id: session?.user?.id,
+    //       },
+    //     },
+    //     fiction: {
+    //       connect: {
+    //         id: +id!.toString(),
+    //       },
+    //     },
+    //   },
+    // });
+
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
     if (!alreadyExists) {
       Ration = await client.userFictionStat.create({
@@ -62,11 +79,11 @@ async function handler(
               id: +id!.toString(),
             },
           },
-          users: {
-            connect: {
-              id: session?.user!.id,
-            },
-          },
+          // users: {
+          //   connect: {
+          //     id: session?.user!.id,
+          //   },
+          // },
           userRationOnFictions: {
             create: {
               userId: session!.user!.id,
@@ -77,6 +94,21 @@ async function handler(
               synopsisComposition: +UserFictionStat[4],
               value: +UserFictionStat[5],
               // comment: comment.toString() || "",
+              comment: {
+                create: {
+                  comment: comment,
+                  createdBy: {
+                    connect: {
+                      id: session?.user?.id,
+                    },
+                  },
+                  fiction: {
+                    connect: {
+                      id: +id!.toString(),
+                    },
+                  },
+                },
+              },
             },
           },
           originality: +UserFictionStat[0],
@@ -98,24 +130,7 @@ async function handler(
         include: {
           _count: {
             select: {
-              users: true,
-            },
-          },
-        },
-      });
-
-      //comment 생성
-      commentation = await client.comment.create({
-        data: {
-          comment: comment,
-          createdBy: {
-            connect: {
-              id: session?.user?.id,
-            },
-          },
-          fiction: {
-            connect: {
-              id: +id!.toString(),
+              userRationOnFictions: true,
             },
           },
         },
@@ -132,7 +147,6 @@ async function handler(
           },
         },
       });
-      // if (userRated) console.log(userRated);
       // 유저가 처음 제출하는 경우
       if (!userRated) {
         // console.log(alreadyExists.userRationOnFictions);
@@ -141,11 +155,11 @@ async function handler(
             id: alreadyExists.id,
           },
           data: {
-            users: {
-              connect: {
-                id: session?.user?.id,
-              },
-            },
+            // users: {
+            //   connect: {
+            //     id: session?.user?.id,
+            //   },
+            // },
             userRationOnFictions: {
               create: {
                 userId: session?.user?.id || "1",
@@ -155,7 +169,21 @@ async function handler(
                 verisimilitude: +UserFictionStat[3],
                 synopsisComposition: +UserFictionStat[4],
                 value: +UserFictionStat[5],
-                // comment: comment.toString() || "",
+                comment: {
+                  create: {
+                    comment: comment,
+                    createdBy: {
+                      connect: {
+                        id: session?.user?.id,
+                      },
+                    },
+                    fiction: {
+                      connect: {
+                        id: +id!.toString(),
+                      },
+                    },
+                  },
+                },
               },
               // update: {
               //   where: {
@@ -172,37 +200,44 @@ async function handler(
               // },
             },
             originality: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[0]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             writing: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[1]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             character: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[2]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             verisimilitude: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[3]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             synopsisComposition: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[4]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             value: fixFloat(
-              (+alreadyExists.originality * alreadyExists._count.users +
+              (+alreadyExists.originality *
+                alreadyExists._count.userRationOnFictions +
                 +UserFictionStat[5]) /
-                (+alreadyExists._count.users + 1)
+                (+alreadyExists._count.userRationOnFictions + 1)
             ),
             total: fixFloat(
-              ((alreadyExists.total || 0) * alreadyExists._count.users +
+              ((alreadyExists.total || 0) *
+                alreadyExists._count.userRationOnFictions +
                 (+UserFictionStat[0] +
                   +UserFictionStat[1] +
                   +UserFictionStat[2] +
@@ -210,26 +245,26 @@ async function handler(
                   +UserFictionStat[4] +
                   +UserFictionStat[5]) /
                   6) /
-                (alreadyExists._count.users + 1)
+                (alreadyExists._count.userRationOnFictions + 1)
             ),
           },
         });
 
-        commentation = await client.comment.create({
-          data: {
-            comment: comment,
-            createdBy: {
-              connect: {
-                id: session?.user?.id,
-              },
-            },
-            fiction: {
-              connect: {
-                id: +id!.toString(),
-              },
-            },
-          },
-        });
+        // commentation = await client.comment.create({
+        //   data: {
+        //     comment: comment,
+        //     createdBy: {
+        //       connect: {
+        //         id: session?.user?.id,
+        //       },
+        //     },
+        //     fiction: {
+        //       connect: {
+        //         id: +id!.toString(),
+        //       },
+        //     },
+        //   },
+        // });
       }
       // 유저가 중복 제출하는 경우
       else {
@@ -289,9 +324,7 @@ async function handler(
       }
     }
 
-    // console.log(Ration);
-
-    res.json({ ok: true, Ration, commentation });
+    res.json({ ok: true, Ration });
   }
 }
 

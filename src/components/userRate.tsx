@@ -18,8 +18,8 @@ interface RateUserStatForm {
 export default function UserStat() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session, status } = useSession();
-  const { mutate: unboundMutate } = useSWRConfig();
+  const { data: session} = useSession();
+  // const { mutate: unboundMutate } = useSWRConfig();
   const [rateUserStat, { loading, data, error }] =
     useMutation<RateUserStatMutation>(
       `/api/fictions/${router.query.id}/userRate`

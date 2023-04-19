@@ -42,10 +42,13 @@ interface FictionWithMore extends Fiction {
       keyword: Keyword;
     }
   ];
-  fictionStat: [FictionStat];
+  fictionStat: FictionStat;
   userFictionStat: {
     userRationOnFictions: [UserRationOnFiction];
     total: number;
+    _count: {
+      userRationOnFictions: number;
+    };
   };
   author: Author;
   categories: [
@@ -65,7 +68,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
-  console.log(data);
+
   // const { data: nextAuthSession } = useSession();
   const { user } = useUser();
 
@@ -114,6 +117,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     return string;
   };
 
+  console.log(data?.fiction.userFictionStat);
   return (
     <div className=" max-w-[1100px] ">
       <StructuredData data={fiction} />
@@ -353,15 +357,18 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <div className=" row-span-3 grid grid-cols-10">
             <div className=" col-span-10 h-full pb-3 sm:pl-5 lg:col-span-5 lg:px-5 ">
               <div className=" flex h-full flex-col">
-                <div className="  mb-3 w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3">
+                <div className="  my-3 w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3 sm:mt-0">
                   <h2 className=" mx-3 flex items-center border-b-[1px] pt-1">
                     평점
-                    <p className="ml-2 text-sm font-bold text-gray-500 ">
+                    <p className="ml-2 text-sm font-bold text-gray-500">
                       {data?.fiction.userFictionStat?.total ??
                         (+fiction?.userFictionStat?.total || 0)}{" "}
                       / 5 (
-                      {fiction?.userFictionStat?.userRationOnFictions?.length ||
-                        0}
+                      {data?.fiction.userFictionStat._count
+                        .userRationOnFictions ??
+                        (fiction?.userFictionStat?.userRationOnFictions
+                          ?.length ||
+                          0)}
                       )
                     </p>
                   </h2>
@@ -466,9 +473,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <FictionRadarChart props={fiction?.fictionStat} />
 
                 <div className=" mx-auto my-2 h-fit w-full px-3">
-
-                    <UserStat />
-
+                  <UserStat />
                 </div>
               </div>
             </div>
@@ -554,7 +559,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
           userRationOnFictions: true,
           _count: {
             select: {
-              users: true,
+              userRationOnFictions: true,
             },
           },
         },

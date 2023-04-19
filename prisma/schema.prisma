@@ -168,7 +168,7 @@ model UserRationOnFiction {
   character             Float
   writing               Float
   value                 Float
-  comment               String?
+  comment               Comment?
 
   @@index([userId])
   @@index([userFictionStatId])
@@ -238,14 +238,18 @@ model VerificationToken {
 }
 
 model Comment {
-  id                Int  @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  comment           String   @db.MediumText
-  createdBy         User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  createdById       String
-  fiction           Fiction     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
-  fictionId         Int
+  updatedAt         DateTime @updatedAt @default(now())
+  comment           String   @db.MediumText @default("")
+  createdBy         User?     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById       String?
+  fiction           Fiction?     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
+  fictionId         Int?
+  userRationOnFictions    UserRationOnFiction?   @relation(fields: [userRationOnFictionsId], references: [id], onDelete:Cascade)
+  userRationOnFictionsId  Int? @unique
+  upVote            Int      @default(0)
+  downVote          Int      @default(0)
 
   @@index([createdById])
   @@index([fictionId])
