@@ -117,7 +117,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     return string;
   };
 
-  console.log(data?.fiction.userFictionStat);
+
   return (
     <div className=" max-w-[1100px] ">
       <StructuredData data={fiction} />
@@ -535,6 +535,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [],
     fallback: "blocking",
   };
+
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
@@ -543,10 +544,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       props: {},
     };
   }
-
-  // if (ctx.query.secret !== process.env.MY_SECRET_TOKEN) {
-  //   return res.status(401).json({ message: 'Invalid token' })
-  // }
 
   const fiction = await client.fiction.findUnique({
     where: {

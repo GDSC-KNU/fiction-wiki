@@ -23,4 +23,6 @@ export const URL = {
 
   ENTER: "/enter",
   MYPAGE: "/profile",
+
+  REVALIDATE: "/api/revalidate",
 };

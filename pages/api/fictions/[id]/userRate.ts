@@ -1,10 +1,10 @@
-import { getSession } from "next-auth/react";
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import revalidator from "@libs/server/revalidator";
 
 async function handler(
   req: NextApiRequest,
@@ -21,13 +21,10 @@ async function handler(
     // session: { user },
     body: { UserFictionStat, comment },
   } = req;
-  // const session = await getSession({ req });
+
   const session = await getServerSession(req, res, authOptions);
-  // console.log("session");
-  // console.log(session);
 
   if (!session) {
-    // console.log("????1!");
     res.json({ ok: false });
     return;
   } else {
@@ -41,7 +38,6 @@ async function handler(
             userRationOnFictions: true,
           },
         },
-        // users: true,
         userRationOnFictions: {
           where: {
             userId: session?.user?.id,
@@ -52,23 +48,6 @@ async function handler(
         fictionId: +id!.toString(),
       },
     });
-
-    // //comment 생성
-    // commentation = await client.comment.create({
-    //   data: {
-    //     comment: comment,
-    //     createdBy: {
-    //       connect: {
-    //         id: session?.user?.id,
-    //       },
-    //     },
-    //     fiction: {
-    //       connect: {
-    //         id: +id!.toString(),
-    //       },
-    //     },
-    //   },
-    // });
 
     /// DB에 userFictionStat이 존재하지 않는 최초의 유저 제출.
     if (!alreadyExists) {
@@ -149,17 +128,11 @@ async function handler(
       });
       // 유저가 처음 제출하는 경우
       if (!userRated) {
-        // console.log(alreadyExists.userRationOnFictions);
         Ration = await client.userFictionStat.update({
           where: {
             id: alreadyExists.id,
           },
           data: {
-            // users: {
-            //   connect: {
-            //     id: session?.user?.id,
-            //   },
-            // },
             userRationOnFictions: {
               create: {
                 userId: session?.user?.id || "1",
@@ -323,6 +296,9 @@ async function handler(
         // });
       }
     }
+
+    //  On-Demand revalidation
+    await revalidator(id, "comment");
 
     res.json({ ok: true, Ration });
   }

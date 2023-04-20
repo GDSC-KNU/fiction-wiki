@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
-import { getSession } from "next-auth/react";
+import revalidator from "@libs/server/revalidator";
 
 async function handler(
   req: NextApiRequest,
@@ -13,7 +13,43 @@ async function handler(
     // session: { user },
   } = req;
 
-  const session = await getSession({ req });
+  // const session = await getSession({ req });
+
+  // const fiction = await client.fiction.findUnique({
+  //   where: {
+  //     id: +id!.toString(),
+  //   },
+  //   include: {
+  //     fictionStat: true,
+  //     userFictionStat: {
+  //       include: {
+  //         _count: {
+  //           select: {
+  //             userRationOnFictions: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     keywords: {
+  //       include: {
+  //         keyword: {
+  //           select: {
+  //             name: true,
+  //             isOfHeroine: true,
+  //             isOfMC: true,
+  //             isOfCons: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     categories: {
+  //       include: {
+  //         category: true,
+  //       },
+  //     },
+  //     author: true,
+  //   },
+  // });
 
   const fiction = await client.fiction.findUnique({
     where: {
@@ -23,6 +59,7 @@ async function handler(
       fictionStat: true,
       userFictionStat: {
         include: {
+          userRationOnFictions: true,
           _count: {
             select: {
               userRationOnFictions: true,
@@ -51,9 +88,6 @@ async function handler(
     },
   });
 
-  // console.log(Fiction);
-  // console.log(Fiction?.categories[0].category.name);
-
   if (req.method === "GET") {
     const arr: any[] = [];
     fiction?.keywords.map((item) => arr.push(item.keyword?.name));
@@ -79,51 +113,32 @@ async function handler(
           },
         },
       },
+      select: {
+        id: true,
+        title: true,
+      },
     });
 
     similarFictions.map((item) => arr2.push([item.id, item.title]));
 
-    const isLiked = Boolean(
-      await client.fav.findFirst({
-        where: {
-          fictionId: fiction?.id,
-          userId: session?.user?.id,
-        },
-        select: {
-          id: true,
-        },
-      })
-    );
+    // const isLiked = Boolean(
+    //   await client.fav.findFirst({
+    //     where: {
+    //       fictionId: fiction?.id,
+    //       userId: session?.user?.id,
+    //     },
+    //     select: {
+    //       id: true,
+    //     },
+    //   })
+    // );
+    const isLiked = false;
 
-    // userfictionstat
-    // const ration = await client.userFictionStat.findFirst({
-    //   where: {
-    //     fictionId: Fiction?.id,
-    //   },
-    //   select: {
-    //     originality: true,
-    //     writing: true,
-    //     character: true,
-    //     verisimilitude: true,
-    //     synopsisComposition: true,
-    //     value: true,
-    //   },
-    // });
-
-    // userRationOnFiction
-    // const userRation = await client.userRationOnFiction.findFirst({
-    //   where: {
-    //     userId: session?.user?.id,
-    //   },
-    // });
-
-    res.json({
+    return res.json({
       ok: true,
       fiction,
+      similarFictions,
       isLiked,
-      // ration,
-      // userRation,
-      // similarFictions,
     });
   }
   if (req.method === "PUT") {
@@ -336,7 +351,10 @@ async function handler(
         },
       },
     });
-    // await res.revalidate(`/fictions/${id}`);
+
+    //  On-Demand revalidation
+    revalidator(id, "edit");
+
     res.json({ ok: true, fiction });
   }
 }

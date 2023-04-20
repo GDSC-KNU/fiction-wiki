@@ -17,10 +17,11 @@ import CountryFlag_China from "@public/svg/countryFlag_China.svg";
 import CountryFlag_Korea from "@public/svg/countryFlag_Korea.svg";
 import CountryFlag_Japan from "@public/svg/countryFlag_Japan.svg";
 import CountryFlag_USA from "@public/svg/countryFlag_USA.svg";
+import fictions from "pages/api/fictions";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
-    users: number;
+    userRationOnFictions: number;
   };
 }
 
@@ -46,7 +47,6 @@ interface authorWithMore extends Author {
 
 export default function FictionList(props: any) {
   const router = useRouter();
-
   return (
     <div className=" flex justify-center">
       {props?.type === "fictions_list" ? (
@@ -169,7 +169,9 @@ export default function FictionList(props: any) {
                         </svg>
                         &nbsp;
                         {fiction?.userFictionStat?.total || 0}(
-                        {fiction?.userFictionStat?._count?.users || 0})
+                        {fiction?.userFictionStat?._count
+                          ?.userRationOnFictions || 0}
+                        )
                       </strong>
                       <strong className=" w-24">
                         {fiction?.volume || "???"}화 &nbsp;

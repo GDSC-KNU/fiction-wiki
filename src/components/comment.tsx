@@ -1,12 +1,7 @@
 import { useRouter } from "next/router";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { Comment } from "@prisma/client";
-import comments from "pages/api/comments";
-
-interface CommentWithMore extends Comment {
-  ok: boolean;
-}
 
 interface CommentResponse {
   comments: Comment[];
@@ -63,7 +58,7 @@ export default function Comments() {
                       {comment?.comment || ""}
                     </li>
                     <li className=" absolute right-24 mt-2 text-sm">
-                      {`${comment?.createdById.slice(0, 5) || ""}...`}
+                      {`${comment?.createdById?.slice(0, 5) || ""}...`}
                     </li>
                     <li className=" ml-5 mt-2 min-w-[78px] text-sm">
                       👍 👎 ()
@@ -80,7 +75,7 @@ export default function Comments() {
                       {comment?.comment || " asd"}
                     </li>
                     <li className=" absolute right-24 mt-2 text-sm">
-                      {`${comment?.createdById.slice(0, 5)}...`}
+                      {`${comment?.createdById?.slice(0, 5)}...`}
                     </li>
                     <li className=" ml-5 mt-2 min-w-[78px] text-sm">
                       👍 👎 (+3)

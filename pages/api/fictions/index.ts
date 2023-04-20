@@ -144,7 +144,7 @@ async function handler(
             include: {
               _count: {
                 select: {
-                  users: true,
+                  userRationOnFictions: true,
                 },
               },
             },
