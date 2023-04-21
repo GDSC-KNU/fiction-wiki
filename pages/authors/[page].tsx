@@ -66,7 +66,11 @@ export const getStaticProps: GetStaticProps = async (
     take: 18,
     skip: (+page - 1) * 18,
     include: {
-      fictions: true,
+      fictions: {
+        include: {
+          userFictionStat: true
+        }
+      },
     },
   });
 

@@ -45,14 +45,14 @@ interface authorWithMore extends Author {
   fictions: Fiction;
 }
 
-export default function FictionList(props: any) {
+export default function FictionList({data, type, pagination, checkedParams, authorsCount}: any) {
   const router = useRouter();
   return (
     <div className=" flex justify-center">
-      {props?.type === "fictions_list" ? (
+      {type === "fictions_list" ? (
         <div className="">
           <ul className=" grid grid-cols-1 py-2 md:grid-cols-2 xl:grid-cols-3 ">
-            {props?.data?.fictions?.map(
+            {data?.fictions?.map(
               (fiction: FictionWithMore, i: number) => (
                 <li
                   key={fiction?.id || i}
@@ -170,7 +170,7 @@ export default function FictionList(props: any) {
                         &nbsp;
                         {fiction?.userFictionStat?.total || 0}(
                         {fiction?.userFictionStat?._count
-                          ?.userRationOnFictions || 0}
+                          ?.userRationOnFictions ?? 0}
                         )
                       </strong>
                       <strong className=" w-24">
@@ -185,28 +185,28 @@ export default function FictionList(props: any) {
             )}
           </ul>
           <div className=" ">
-            {props.pagination === false ? null : (
+            {pagination === false ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
-                totalItemsCount={props?.data?.fictionsCount || 0}
+                totalItemsCount={data?.fictionsCount || 0}
                 totalPagesCount={Math.ceil(
-                  (props?.data?.fictionsCount || 1) / 18
+                  (data?.fictionsCount || 1) / 18
                 )}
                 pageRangeDisplayed={5}
                 pageGroup={
                   Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
                 }
-                checkedParams={props?.checkedParams}
+                checkedParams={checkedParams}
                 // onChange={() => {}}
               />
             )}
           </div>
         </div>
-      ) : props?.type === "authors_list" ? (
+      ) : type === "authors_list" ? (
         <div>
           <div className=" grid grid-cols-3 px-1 py-2  sm:grid-cols-4 lg:grid-cols-8 ">
-            {props?.data?.map((author: authorWithMore) => (
+            {data?.map((author: authorWithMore) => (
               <Link
                 key={author.id}
                 href={`/authors/name/${author.name}`}
@@ -229,17 +229,17 @@ export default function FictionList(props: any) {
             ))}
           </div>
           <div className=" ">
-            {props.pagination === false ? null : (
+            {pagination === false ? null : (
               <Pagination
                 activePage={+(router?.query?.page || 1)?.toString()}
                 itemsCountPerPage={18}
-                totalItemsCount={props?.authorsCount || 0}
-                totalPagesCount={Math.ceil((props?.authorsCount || 1) / 18)}
+                totalItemsCount={authorsCount || 0}
+                totalPagesCount={Math.ceil((authorsCount || 1) / 18)}
                 pageRangeDisplayed={5}
                 pageGroup={
                   Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
                 }
-                checkedParams={props?.checkedParams}
+                checkedParams={checkedParams}
               />
             )}
           </div>

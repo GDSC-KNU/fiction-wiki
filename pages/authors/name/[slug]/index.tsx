@@ -35,10 +35,8 @@ interface IParams extends ParsedUrlQuery {
 const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // const { user, isLoading } = useUser();
 
-  // console.log(author);
-
   return (
-    <div className="   mx-auto mt-20 min-h-[213px]">
+    <div className="   mx-auto min-h-[213px] ">
       {/* <HeadMeta
         title={author?.name}
         description={author?.description}
@@ -52,16 +50,17 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
           url: `https://fictiondbs.com/authors/name/${author?.name}`,
         }}
       />
-      <div className=" mb-4 bg-white">
-        <div className=" flex py-4">
+      <div className=" mb-4 border bg-[#F5F5F5]">
+        <div className=" flex ">
           <Image
+            className=" rounded-full py-5 pl-3 pr-5"
             src="/anoynymous_user.png"
             width={142}
             height={160}
             alt={author.name}
           />
           <div className=" flex flex-col justify-center">
-            <h5 className=" font-bold">{author?.name}</h5>
+            <h5 className=" mb-2 text-xl font-bold">{author?.name}</h5>
             <p>{`${author?.rawName}${
               author?.relatedName === null ? "" : `, ` + author?.relatedName
             }`}</p>
@@ -69,19 +68,19 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
             <p>{`SNS - ` + (author?.sns || "업데이트 예정")}</p>
           </div>
         </div>
-        <div className=" ml-4 pb-2 text-sm"> {author?.description}</div>
+        <div className=" mb-4 ml-3 pb-2 text-sm"> {author?.description}</div>
       </div>
-      <div className=" mb-4  grid grid-cols-12  bg-white pl-3">
+      <div className=" mb-4  grid grid-cols-12">
         <div className=" col-span-12 lg:col-span-12">
           <div className="mt-5 text-xl font-bold">작품 목록</div>
           <FictionList
-            data={author}
+            data={{ fictions: author?.fictions }}
             type={"fictions_list"}
             pagination={false}
           />
         </div>
       </div>
-      <div className=" mb-4  grid grid-cols-12 bg-white pl-3">
+      <div className=" mb-4  grid grid-cols-12 bg-white">
         <div className=" col-span-12 lg:col-span-12">
           <div className="mt-5 text-xl font-bold">SNS</div>
         </div>
@@ -118,7 +117,7 @@ export const getStaticProps: GetStaticProps = async (
               userRationOnFictions: true,
               _count: {
                 select: {
-                  users: true,
+                  userRationOnFictions: true,
                 },
               },
             },
