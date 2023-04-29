@@ -12,7 +12,7 @@ export default function StarRating({ data }: { data: number }) {
   return (
     <Rating
       readOnly
-      style={{ maxWidth: 330 }}
+      style={{ maxWidth: 100 }}
       value={data}
       itemStyles={myStyles}
     />

@@ -9,6 +9,7 @@ import { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import MbtiInputModal from "@components/mbtiInputModal";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
@@ -16,9 +17,11 @@ interface RateUserStatForm {
 }
 
 export default function UserStat() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session} = useSession();
+  const { data: session } = useSession();
   // const { mutate: unboundMutate } = useSWRConfig();
   const [rateUserStat, { loading, data, error }] =
     useMutation<RateUserStatMutation>(
@@ -53,6 +56,9 @@ export default function UserStat() {
   }
 
   const buttonFlag = useRef(true);
+
+  // console.log(session);
+
   const onRateClick = (data: RateUserStatForm) => {
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
@@ -82,6 +88,10 @@ export default function UserStat() {
       return;
     }
 
+    if (!session?.user?.mbti || !session?.user?.sex) {
+      setIsModalOpen(true);
+    }
+
     rateUserStat(data, "POST");
     reset();
     closeDetails();
@@ -100,7 +110,7 @@ export default function UserStat() {
   };
 
   return (
-    <>
+    <div className=" mx-auto my-2 h-fit w-full px-3">
       {loading ? (
         <div className=" flex justify-center">
           <ClipLoader
@@ -210,8 +220,12 @@ export default function UserStat() {
               등록
             </button>
           </form>
+          <MbtiInputModal
+            isOpen={isModalOpen}
+            closeModal={() => setIsModalOpen(false)}
+          />
         </details>
       )}
-    </>
+    </div>
   );
 }

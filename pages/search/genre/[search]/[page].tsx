@@ -80,7 +80,7 @@ export const getStaticProps: GetStaticProps = async (
         include: {
           _count: {
             select: {
-              users: true,
+              userRationOnFictions: true,
             },
           },
         },

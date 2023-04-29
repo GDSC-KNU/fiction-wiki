@@ -7,10 +7,11 @@ import type {
 import client from "@libs/server/client";
 import type { Fiction, Author } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "src/components/fictionList";
-import HeadMeta from "src/components/headMeata";
+import FictionList from "@components/fictionList";
+import HeadMeta from "@components/headMeata";
 import Image from "next/image";
 import { NextSeo } from "next-seo";
+import { URL } from "@constants/url";
 
 interface AuthorWithFictions extends Author {
   fictions: Fiction[];
@@ -20,14 +21,6 @@ interface AuthorResponse {
   author: AuthorWithFictions;
 }
 
-// type Props = {
-//   authors: Author[];
-// };
-
-// interface Params extends ParsedUrlQuery {
-//   slug: string;
-// }
-
 interface IParams extends ParsedUrlQuery {
   slug: string;
 }
@@ -36,18 +29,18 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // const { user, isLoading } = useUser();
 
   return (
-    <div className="   mx-auto min-h-[213px] ">
+    <div className=" mx-auto min-h-[213px] ">
       {/* <HeadMeta
         title={author?.name}
         description={author?.description}
-        url={`https://fictiondbs.com/authors/name/${author?.name}`}
+        url={`https://fictiondbs.com${URL.AUTHOR_DETAIL}/${author?.name}`}
       /> */}
       <NextSeo
         title={author?.name}
         description={author?.description || "작가에 대한 설명입니다."}
-        canonical={`https://fictiondbs.com/authors/name/${author?.name}`}
+        canonical={`${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`}
         openGraph={{
-          url: `https://fictiondbs.com/authors/name/${author?.name}`,
+          url: `${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`,
         }}
       />
       <div className=" mb-4 border bg-[#F5F5F5]">

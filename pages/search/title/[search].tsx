@@ -2,13 +2,13 @@ import React from "react";
 import FictionList from "src/components/fictionList";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../../src/store/atoms";
+// import { useRecoilState } from "recoil";
+// import { fictionPageAtom } from "../../../src/store/atoms";
 import useSWR from "swr";
 
 const TitleSearch: NextPage = () => {
   const router = useRouter();
-  const [pageIndex, setPageIndex] = useRecoilState(fictionPageAtom);
+  // const [pageIndex, setPageIndex] = useRecoilState(fictionPageAtom);
 
   const { data, error, mutate } = useSWR(
     router?.query?.search

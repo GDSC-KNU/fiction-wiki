@@ -154,6 +154,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   comments      Comment[]
+  mbti          String?
+  sex           String?
 }
 
 model UserRationOnFiction {

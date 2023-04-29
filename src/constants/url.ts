@@ -8,12 +8,14 @@ export const URL = {
 
   // MYPAGE: '/profile/:id',
 
+  DOMAIN: process.env.NEXT_PUBLIC_HOST,
+
   FICTIONS: "/fictions",
   FICTION_DETAIL: "/fictions/:id",
   FICTION_POST: "/fictions/create",
 
-  AUTHORS: "/authors/:page",
-  AUTHOR_DETAIL: "/authors/name/:name",
+  AUTHORS: "/authors",
+  AUTHOR_DETAIL: "/authors/name",
 
   SEARCH_TITLE: "/search/genre/:title/:page",
   SEARCH_KEYWORD: "/search/genre/:keyword/:page",

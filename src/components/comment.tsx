@@ -38,8 +38,8 @@ export default function Comments() {
   ///pagination
 
   return (
-    <div className=" h-full sm:pl-5">
-      <div className=" flex h-full w-full flex-col justify-between rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+    <div className=" h-full ">
+      <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
         <div></div>
         <ul className=" ">
           {(commentsResponse?.comments || []).length < 7
@@ -52,15 +52,15 @@ export default function Comments() {
                 .map((comment: Comment, index: number) => (
                   <ul
                     key={index}
-                    className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
+                    className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
                   >
                     <li className=" mr-16 mt-2 overflow-hidden text-sm">
                       {comment?.comment || ""}
                     </li>
-                    <li className=" absolute right-24 mt-2 text-sm">
+                    <li className=" absolute right-20 mt-2 text-sm">
                       {`${comment?.createdById?.slice(0, 5) || ""}...`}
                     </li>
-                    <li className=" ml-5 mt-2 min-w-[78px] text-sm">
+                    <li className=" ml-5 mt-2 min-w-[60px] text-sm">
                       👍 👎 ()
                     </li>
                   </ul>

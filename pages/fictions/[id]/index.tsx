@@ -5,31 +5,30 @@ import type {
   FictionStat,
   Keyword,
   UserRationOnFiction,
-  // KeywordsOnFictions,
   Author,
   Category,
 } from "@prisma/client";
-import useMutation from "@libs/client/useMutation";
-import UserStat from "@components/userRate";
+import UserRate from "@components/userRate";
 import client from "@libs/server/client";
 import Image from "next/image";
-import useUser from "@libs/client/useUser";
 import Link from "next/link";
 import FictionRadarChart from "src/components/fictionRadarChart";
-import Comments from "src/components/comment";
-// import "@uiw/react-md-editor/markdown-editor.css";
-// import "@uiw/react-markdown-preview/markdown.css";
-// import HeadMeta from "@components/headMeata";
 import StarRating from "src/components/starRating";
 import { NextSeo } from "next-seo";
 import StructuredData from "src/components/structuredData";
 import useSWR from "swr";
+import MbtiBarChart from "@components/mbtiBarChart";
+import ReviewFeed from "@components/fiction/reviewFeed";
+import { useRef } from "react";
+import Comments from "@components/comment";
 
 interface FictionDetailResponse {
   ok: boolean;
   fiction: FictionWithMore;
   similarFictions: Fiction[];
   isLiked: boolean;
+  reviews: any;
+  mbtis: any;
 }
 
 // interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
@@ -61,7 +60,10 @@ interface FictionWithMore extends Fiction {
 const FictionDetail: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
+  reviews,
+  mbtis,
 }) => {
+  // console.log(mbtis);
   const router = useRouter();
 
   // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
@@ -70,7 +72,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   );
 
   // const { data: nextAuthSession } = useSession();
-  const { user } = useUser();
 
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
   //   router.query.id
@@ -80,27 +81,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   //     : null
   // );
 
-  const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
-
-  // 좋아요
-  // const onFavClick = () => {
-  //   if (!nextAuthSession) {
-  //     alert("선호작 기능은 로그인 이후 사용할 수 있습니다.");
-  //     return;
-  //   }
-  //   toggleFav({}, "POST");
-  //   if (!data) return;
-
-  //   boundMutate({ ...data, isLiked: !data.isLiked }, false);
-  // };
-
-  // if (router?.isFallback) {
-  //   return (
-  //     <div title="Loaidng for youuuuuuu">
-  //       <span>I love you</span>
-  //     </div>
-  //   );
-  // }
+  // const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
 
   if (fiction) {
     fiction.startDate = new Date(fiction?.startDate || 0);
@@ -116,10 +97,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     else if (string.includes("joara")) string = "조아라";
     return string;
   };
-
+  const synopsisRef = useRef<null | HTMLDivElement>(null);
 
   return (
-    <div className=" max-w-[1100px] ">
+    <div className=" grid grid-cols-10 ">
       <StructuredData data={fiction} />
       <NextSeo
         title={`${fiction?.title}`}
@@ -129,7 +110,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           url: `https://fictiondbs.com/fictions/${fiction?.id}`,
         }}
       />
-      {user ? (
+      {/* {user ? (
         <div className=" mx-5 mt-2 flex justify-end">
           <Link
             className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
@@ -146,152 +127,259 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             DELETE
           </Link>
         </div>
-      ) : null}
-
-      <div className=" grid h-fit grid-cols-1 sm:grid-cols-10">
-        <div className="  col-span-3 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white object-cover sm:max-w-[380px] ">
-          <div className="  relative h-[467px] w-full">
-            <Image
-              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
-              fill
-              alt={fiction?.title}
-              placeholder="blur"
-              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-            />
+      ) : null} */}
+      <div className=" col-span-10 flex-col justify-between">
+        <h1 className=" pt-2 text-2xl font-semibold">{fiction?.title}</h1>
+        <div className=" mb-2 flex">
+          <p className="  text-sm text-gray-500">{fiction?.originalTitle}</p>
+          <p className="  ml-2 text-sm text-gray-500">
+            {`(${fiction?.startDate?.getFullYear()})`}
+          </p>
+          {/* <p className=" mb-2 ml-3 text-sm text-gray-500">
+            {fiction?.volume}
+          </p> */}
+        </div>
+      </div>
+      <div id="main-container" className=" col-span-10 lg:col-span-7">
+        <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
+          <div className=" col-span-7 flex sm:col-span-2">
+            <div className=" h-full w-full">
+              <div className=" relative h-[178px] w-full min-w-[120px] sm:h-full sm:w-full ">
+                <Image
+                  src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
+                  fill
+                  alt={fiction?.title}
+                  placeholder="blur"
+                  blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                />
+              </div>
+            </div>
+            <div className=" ml-2  sm:hidden">
+              <div className=" flex-col px-2">
+                <div className="  mb-2 flex whitespace-nowrap">
+                  <StarRating
+                    data={
+                      data?.fiction.userFictionStat?.total ??
+                      (+fiction?.userFictionStat?.total || 0)
+                    }
+                  />
+                  <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
+                    {data?.fiction.userFictionStat?.total ??
+                      +fiction?.userFictionStat?.total ??
+                      0}{" "}
+                    (
+                    {data?.fiction.userFictionStat._count
+                      .userRationOnFictions ??
+                      (fiction?.userFictionStat?.userRationOnFictions?.length ||
+                        0)}
+                    )
+                  </p>
+                </div>
+                {/* <h3 className=" whitespace-nowrap">
+                  <Link
+                    title={`${fiction?.title}`}
+                    className=" cursor-pointer font-bold hover:underline "
+                    href={`/fictions/${fiction?.id}`}
+                  >
+                    {fiction?.title || "Loading"}
+                  </Link>
+                </h3> */}
+                {/* <p className=" text-xs text-gray-400">
+                  {"by "}
+                  <Link
+                    title={`${fiction?.author?.name}`}
+                    className=" cursor-pointer hover:underline"
+                    href={`/authors/name/${fiction?.author?.name}`}
+                  >
+                    {fiction?.author?.name || "작자 미상"}
+                  </Link>
+                </p> */}
+                {/* <div className=" flex">
+                  <p className=" h-[24px] overflow-hidden">
+                    {(
+                      fiction?.keywords?.filter(
+                        (keyword) => keyword?.keyword.isOfCons === false
+                      ) || Array.from({ length: 3 })
+                    ).map((keyword, i) => (
+                      <Link
+                        key={i}
+                        href={`/search/keyword/${keyword?.keyword.name}/1`}
+                        passHref
+                        title={`${keyword?.keyword.name}`}
+                        className=" mr-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB] bg-gray-200  p-[0.2rem] text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 hover:underline peer-checked:bg-blue-600 peer-checked:text-white"
+                      >
+                        #{keyword?.keyword.name || "loading"}
+                      </Link>
+                    ))}
+                  </p>
+                  <div className=" flex cursor-pointer items-center">
+                    <PlusCircle />
+                  </div>
+                </div> */}
+                <p className=" mt-1 h-[144px] overflow-x-hidden text-xs ">
+                  {fiction?.synopsis.slice(0, 90) ||
+                    "로딩중입니다".slice(0, 150)}
+                  <a
+                    onClick={() => {
+                      synopsisRef?.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                      });
+                    }}
+                    className=" cursor-pointer text-blue-800"
+                  >
+                    ... 더보기
+                  </a>
+                </p>
+                <p className=" text-xs"></p>
+                <p className=" overflow-hidden text-xs "></p>
+              </div>
+            </div>
           </div>
-          <div className=" px-4">
-            <div className=" flex justify-between">
+
+          <div className=" col-span-7 pt-2 sm:col-span-5 sm:px-3 sm:pt-0">
+            {/* <div className=" flex justify-between">
               <h1 className=" mb-2 pt-2 text-2xl font-semibold">
                 {fiction?.title}
               </h1>
-              {/* <button
-                onClick={onFavClick}
-                className={cls(
-                  "px-3 py-2 rounded-md flex items-center hover:bg-gray-100 justify-center",
-                  data?.isLiked
-                    ? "text-red-400 hover:text-red-500"
-                    : "text-gray-400  hover:text-gray-500"
+            </div> */}
+            <div className=" mb-1 mt-2 hidden  sm:block">
+              <div className=" flex">
+                {fiction?.userFictionStat?.total && (
+                  <StarRating
+                    data={
+                      data?.fiction.userFictionStat?.total ??
+                      (+fiction?.userFictionStat?.total || 0)
+                    }
+                  />
                 )}
-              >
-                {data?.isLiked ? (
-                  <svg
-                    className="w-6 h-6"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                ) : (
-                  <svg
-                    className="h-6 w-6 "
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                )}
-              </button> */}
+
+                <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
+                  {data?.fiction.userFictionStat?.total ??
+                    +fiction?.userFictionStat?.total ??
+                    0}{" "}
+                  (
+                  {data?.fiction.userFictionStat._count.userRationOnFictions ??
+                    (fiction?.userFictionStat?.userRationOnFictions?.length ||
+                      0)}
+                  )
+                </p>
+              </div>
             </div>
-            <div className=" grid grid-cols-10 overflow-hidden text-xs">
-              <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">
-                <div className=" col-span-4 font-sans font-bold">원제</div>
-                <div className=" col-span-6">
-                  {fiction?.originalTitle || fiction?.title}
-                </div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">작가</div>
-                <Link
-                  title={fiction?.author?.name}
-                  className=" col-span-6 w-fit text-blue-500 hover:cursor-pointer"
-                  passHref
-                  href={`/authors/name/${fiction?.author?.name}`}
+            <div className=" hidden overflow-x-hidden border-b-[1px] pb-2 sm:block">
+              <p className="  h-20 text-xs">
+                {fiction?.synopsis.slice(0, 200) || "로딩중입니다"}
+                <a
+                  className=" cursor-pointer text-blue-500"
+                  onClick={() => {
+                    synopsisRef?.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }}
                 >
-                  {fiction?.author?.name}
-                </Link>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">국가</div>
-                <div className=" col-span-6">{fiction?.nationality}</div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">장르</div>
-                <div className=" col-span-6">
-                  <span>
-                    {fiction?.categories
-                      .reduce(
-                        (acc: any, cur: any) => [...acc, cur?.category?.name],
-                        []
-                      )
-                      .map((item, index) => (
-                        <Link
-                          className=" col-span-6 mr-2 text-blue-500 hover:cursor-pointer"
-                          key={index}
-                          href={`/search/genre/${item}/1`}
+                  ... 더보기
+                </a>
+              </p>
+            </div>
+            <div className=" overflow-hidden text-xs">
+              <div className=" col-span-10 grid grid-cols-2">
+                <dl id="infoBox-left" className=" col-span-2 sm:col-span-1">
+                  <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">
+                    <dt className=" col-span-4 font-sans font-bold">원제</dt>
+                    <dd className=" col-span-6">
+                      {fiction?.originalTitle || fiction?.title}
+                    </dd>
+                  </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">작가</dt>
+                    <dd className=" col-span-6 w-fit text-blue-500">
+                      <Link
+                        title={fiction?.author?.name}
+                        className=" hover:cursor-pointer"
+                        passHref
+                        href={`/authors/name/${fiction?.author?.name}`}
+                      >
+                        {fiction?.author?.name}
+                      </Link>
+                    </dd>
+                  </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">국가</dt>
+                    <dd className=" col-span-6">{fiction?.nationality}</dd>
+                  </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">장르</dt>
+                    <dd className=" col-span-6">
+                      <span>
+                        {fiction?.categories
+                          .reduce(
+                            (acc: any, cur: any) => [
+                              ...acc,
+                              cur?.category?.name,
+                            ],
+                            []
+                          )
+                          .map((item, index) => (
+                            <Link
+                              className=" col-span-6 mr-2 text-blue-500 hover:cursor-pointer"
+                              key={index}
+                              href={`/search/genre/${item}/1`}
+                            >
+                              {item}
+                            </Link>
+                          ))}
+                      </span>
+                    </dd>
+                  </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">
+                      연재기간
+                    </dt>
+                    <dd className=" col-span-6 whitespace-nowrap">{`${fiction?.startDate.getFullYear()}. ${
+                      fiction?.startDate.getMonth() + 1
+                    }. ${fiction?.startDate.getDate()} ~ ${
+                      JSON.stringify(fiction?.endDate) ===
+                      JSON.stringify(new Date(0))
+                        ? ""
+                        : `${fiction?.endDate.getFullYear()}. ${
+                            fiction?.endDate.getMonth() + 1
+                          }. ${fiction?.endDate.getDate()}`
+                    }`}</dd>
+                  </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] ">
+                    <dt className=" col-span-4 font-sans font-bold ">원본</dt>
+                    <div className=" col-span-6 text-blue-500">
+                      <a
+                        className=" flex w-fit"
+                        href={fiction?.original}
+                        title={fiction?.original}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
                         >
-                          {item}
-                        </Link>
-                      ))}
-                  </span>
-                </div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">연재기간</div>
-                <div className=" col-span-6">{`${fiction?.startDate.getFullYear()}. ${
-                  fiction?.startDate.getMonth() + 1
-                }. ${fiction?.startDate.getDate()} ~ ${
-                  JSON.stringify(fiction?.endDate) ===
-                  JSON.stringify(new Date(0))
-                    ? ""
-                    : `${fiction?.endDate.getFullYear()}. ${
-                        fiction?.endDate.getMonth() + 1
-                      }. ${fiction?.endDate.getDate()}`
-                }`}</div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] ">
-                <div className=" col-span-4 font-sans font-bold ">원본</div>
-                <div className=" col-span-6 text-blue-500">
-                  <a
-                    className=" flex w-fit"
-                    href={fiction?.original}
-                    title={fiction?.original}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
-                      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
-                    </svg>
-                    {urlToString(fiction?.original)}
-                  </a>
-                </div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:col-span-10">
-                <div className=" col-span-4 font-sans font-bold">플랫폼</div>
-                <div className=" col-span-6 ">
-                  <span
-                    className=" flex"
-                    // href={fiction?.platforms}
-                    title={fiction?.platforms}
-                  >
-                    {/* <svg
+                          <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
+                          <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
+                        </svg>
+                        {urlToString(fiction?.original)}
+                      </a>
+                    </div>
+                  </div>
+                </dl>
+                <dl id="infoBox-right" className=" col-span-2 sm:col-span-1">
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:border-t-[0px]">
+                    <dt className=" col-span-4 font-sans font-bold">플랫폼</dt>
+                    <div className=" col-span-6 ">
+                      <span
+                        className=" flex"
+                        // href={fiction?.platforms}
+                        title={fiction?.platforms}
+                      >
+                        {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
                       height="16"
@@ -302,228 +390,201 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                       <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
                       <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
                     </svg> */}
-                    {fiction?.platforms}
-                  </span>
-                </div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">상태</div>
-                <div className=" col-span-6">
-                  {fiction?.volume}&nbsp;
-                  {fiction?.currentState || "??"}
-                </div>
-              </div>
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">
-                  미디어믹스
-                </div>
-                <div className=" col-span-6">{fiction?.mediaMix || "X"}</div>
-              </div>
-              {fiction?.isTranslated ? (
-                <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                  <div className=" col-span-4 font-sans font-bold">
-                    번역상태
+                        {fiction?.platforms}
+                      </span>
+                    </div>
                   </div>
-                  <div className=" col-span-6">
-                    {fiction?.isTranslated === "번역"
-                      ? "O"
-                      : fiction?.isTranslated === "미번"
-                      ? "X"
-                      : ""}
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">상태</dt>
+                    <dd className=" col-span-6">
+                      {fiction?.volume}&nbsp;
+                      {fiction?.currentState || "??"}
+                    </dd>
                   </div>
-                </div>
-              ) : null}
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
-                <div className=" col-span-4 font-sans font-bold">Related</div>
-                <div className=" col-span-6">
-                  {fiction?.relatedTitle ? fiction?.relatedTitle + " | " : ""}
-                  {fiction?.author?.rawName}
-                  {fiction?.author?.relatedName
-                    ? ", " + fiction?.author?.relatedName
-                    : ""}
-                </div>
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">
+                      미디어믹스
+                    </dt>
+                    <dd className=" col-span-6">{fiction?.mediaMix || "X"}</dd>
+                  </div>
+                  {fiction?.isTranslated ? (
+                    <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                      <dt className=" col-span-4 font-sans font-bold">
+                        번역상태
+                      </dt>
+                      <dd className=" col-span-6">
+                        {fiction?.isTranslated === "번역"
+                          ? "O"
+                          : fiction?.isTranslated === "미번"
+                          ? "X"
+                          : ""}
+                      </dd>
+                    </div>
+                  ) : null}
+                  <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
+                    <dt className=" col-span-4 font-sans font-bold">Related</dt>
+                    <dd className=" col-span-6">
+                      {fiction?.relatedTitle
+                        ? fiction?.relatedTitle + " | "
+                        : ""}
+                      {fiction?.author?.rawName}
+                      {fiction?.author?.relatedName
+                        ? ", " + fiction?.author?.relatedName
+                        : ""}
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </div>
-            <div className=" mb-2"></div>
-            <div className=" mb-2"></div>
-            <div className=" mb-2"></div>
-            <div className=" mb-2"></div>
-            <div className=" mb-2"></div>
-            <div className=" mb-2"></div>
             <div className=" mb-2"></div>
           </div>
         </div>
-        <div className=" col-span-7  sm:grid lg:grid-rows-5">
-          <div className=" row-span-3 grid grid-cols-10">
-            <div className=" col-span-10 h-full pb-3 sm:pl-5 lg:col-span-5 lg:px-5 ">
-              <div className=" flex h-full flex-col">
-                <div className="  my-3 w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white pb-3 sm:mt-0">
-                  <h2 className=" mx-3 flex items-center border-b-[1px] pt-1">
-                    평점
-                    <p className="ml-2 text-sm font-bold text-gray-500">
-                      {data?.fiction.userFictionStat?.total ??
-                        (+fiction?.userFictionStat?.total || 0)}{" "}
-                      / 5 (
-                      {data?.fiction.userFictionStat._count
-                        .userRationOnFictions ??
-                        (fiction?.userFictionStat?.userRationOnFictions
-                          ?.length ||
-                          0)}
-                      )
-                    </p>
-                  </h2>
-                  <StarRating
-                    data={
-                      data?.fiction.userFictionStat?.total ??
-                      (+fiction?.userFictionStat?.total || 0)
-                    }
-                  />
-                </div>
-                <div className=" h-full w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
-                  <h2 className=" mx-3 border-b-[1px] pt-1">메인 태그</h2>
-                  <ul className=" inline-flex flex-wrap px-3 pt-2">
-                    {fiction?.keywords
-                      ?.filter(
-                        (item) =>
-                          item?.keyword?.isOfHeroine === false &&
-                          item?.keyword?.isOfMC === false &&
-                          item?.keyword?.isOfCons === false
-                      )
-                      .map((item: any, index: any) => (
-                        <li
-                          key={index}
-                          className={
-                            item?.keyword?.isOfMC
-                              ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-red-500"
-                              : item?.keyword?.isOfHeroine
-                              ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-blue-500"
-                              : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
-                          }
-                        >
-                          <Link
-                            href={`/search/keyword/${item?.keyword?.name}/1`}
-                            passHref
-                          >
-                            #{item?.keyword?.name}
-                          </Link>
-                        </li>
-                      ))}
-                  </ul>
-                  <h2 className=" mx-3 border-b-[1px] pt-1">주인공 태그</h2>
-                  <ul className=" inline-flex flex-wrap px-3 pt-2">
-                    {fiction?.keywords
-                      .filter((item) => item?.keyword?.isOfMC === true)
-                      .map((item: any, index: any) => (
-                        <li
-                          key={index}
-                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
-                        >
-                          <Link
-                            href={`/search/keyword/${item?.keyword?.name}/1`}
-                            passHref
-                          >
-                            #{item?.keyword?.name}
-                          </Link>
-                        </li>
-                      ))}
-                  </ul>
-                  <h2 className=" mx-3 border-b-[1px] pt-1">히로인 태그</h2>
-                  <ul className=" inline-flex flex-wrap px-3 pt-2">
-                    {fiction?.keywords
-                      .filter((item) => item?.keyword?.isOfHeroine === true)
-                      .map((item: any, index: any) => (
-                        <li
-                          key={index}
-                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
-                        >
-                          <Link
-                            href={`/search/keyword/${item?.keyword?.name}/1`}
-                            passHref
-                          >
-                            #{item?.keyword?.name}
-                          </Link>
-                        </li>
-                      ))}
-                  </ul>
-                  <h2 className=" mx-3 border-b-[1px] pt-1">호불호 키워드</h2>
-                  <ul className=" inline-flex flex-wrap px-3 pt-2">
-                    {fiction?.keywords
-                      .filter((item) => item?.keyword?.isOfCons === true)
-                      .map((item: any, index: any) => (
-                        <li
-                          key={index}
-                          className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-red-200 p-1 text-center text-sm text-[#666676]"
-                        >
-                          <Link
-                            href={`/search/keyword/${item?.keyword?.name}/1`}
-                            passHref
-                          >
-                            #{item?.keyword?.name}
-                          </Link>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className=" col-span-10 pb-3 sm:pl-5 lg:col-span-5 lg:px-0">
-              <div className=" col-span-6 mb-3 h-full w-full rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
-                <h2 className=" px-2 pt-1 font-bold"></h2>
+        {/* <div className=" col-span-10 grid h-fit sm:grid-cols-10"></div> */}
 
-                <FictionRadarChart props={fiction?.fictionStat} />
-
-                <div className=" mx-auto my-2 h-fit w-full px-3">
-                  <UserStat />
-                </div>
-              </div>
+        <div className=" mb-3 grid grid-cols-5 ">
+          <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 sm:mr-3">
+            <div className=" mb-3 h-full w-full rounded-md sm:mb-0">
+              <h2 className=" border-b-[1px] pt-1 font-bold">메인 태그</h2>
+              <ul className=" inline-flex flex-wrap pt-2">
+                {fiction?.keywords
+                  ?.filter(
+                    (item) =>
+                      item?.keyword?.isOfHeroine === false &&
+                      item?.keyword?.isOfMC === false &&
+                      item?.keyword?.isOfCons === false
+                  )
+                  .map((item: any, index: any) => (
+                    <li
+                      key={index}
+                      className={
+                        item?.keyword?.isOfMC
+                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-red-500"
+                          : item?.keyword?.isOfHeroine
+                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center text-sm ring-2 ring-blue-500"
+                          : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
+                      }
+                    >
+                      <Link
+                        href={`/search/keyword/${item?.keyword?.name}/1`}
+                        passHref
+                      >
+                        #{item?.keyword?.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+              <h2 className=" border-b-[1px] pt-1 font-bold">주인공 태그</h2>
+              <ul className=" inline-flex flex-wrap pt-2">
+                {fiction?.keywords
+                  .filter((item) => item?.keyword?.isOfMC === true)
+                  .map((item: any, index: any) => (
+                    <li
+                      key={index}
+                      className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
+                    >
+                      <Link
+                        href={`/search/keyword/${item?.keyword?.name}/1`}
+                        passHref
+                      >
+                        #{item?.keyword?.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+              <h2 className=" border-b-[1px] pt-1 font-bold">히로인 태그</h2>
+              <ul className=" inline-flex flex-wrap pt-2">
+                {fiction?.keywords
+                  .filter((item) => item?.keyword?.isOfHeroine === true)
+                  .map((item: any, index: any) => (
+                    <li
+                      key={index}
+                      className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-sm text-[#666676]"
+                    >
+                      <Link
+                        href={`/search/keyword/${item?.keyword?.name}/1`}
+                        passHref
+                      >
+                        #{item?.keyword?.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+              <h2 className=" border-b-[1px] pt-1 font-bold">호불호 태그</h2>
+              <ul className=" inline-flex flex-wrap pt-2">
+                {fiction?.keywords
+                  .filter((item) => item?.keyword?.isOfCons === true)
+                  .map((item: any, index: any) => (
+                    <li
+                      key={index}
+                      className=" m-1 h-fit whitespace-nowrap rounded-3xl bg-red-200 p-1 text-center text-sm text-[#666676]"
+                    >
+                      <Link
+                        href={`/search/keyword/${item?.keyword?.name}/1`}
+                        passHref
+                      >
+                        #{item?.keyword?.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </div>
-          <div className=" row-span-3 flex flex-col">
-            <Comments />
+          <div className=" col-span-5 sm:col-span-2">
+            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+              <FictionRadarChart props={fiction?.fictionStat} />
+              <UserRate />
+            </div>
           </div>
         </div>
-      </div>
-      <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
-        <div className=" ">
-          <h2 className=" border-b-[1px] text-xl font-bold">줄거리</h2>
-          <p className=" mt-2 whitespace-pre-wrap">{fiction?.synopsis}</p>
+
+        <div className=" row-span-3 flex flex-col">
+          <h2 className=" border-b-[1px] py-2 text-xl font-bold">코멘트</h2>
+          <Comments />
         </div>
-        <div className=" mt-3">
-          <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">개요</h2>
-          <p className=" mt-2 whitespace-pre-wrap">{fiction?.introduction}</p>
+        <div className="  rounded-md ">
+          <ReviewFeed data={reviews}></ReviewFeed>
         </div>
-        <div className=" mt-3">
-          <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
-            등장인물
-          </h2>
-          <p className=" mt-2 whitespace-pre-wrap"> {fiction?.characters}</p>
-          {/* <div className=" mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+        <div className=" mt-3 rounded-md bg-white sm:pt-3">
+          <div className=" ">
+            <h2 className=" border-b-[1px] py-2 text-xl font-bold">줄거리</h2>
+            <p ref={synopsisRef} className=" mt-2 whitespace-pre-wrap">
+              {fiction?.synopsis}
+            </p>
+          </div>
+          <div className=" mt-3">
+            <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
+              개요
+            </h2>
+            <p className=" mt-2 whitespace-pre-wrap">{fiction?.introduction}</p>
+          </div>
+          <div className=" mt-3">
+            <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
+              등장인물
+            </h2>
+            <p className=" mt-2 whitespace-pre-wrap"> {fiction?.characters}</p>
+          </div>
+        </div>
+        <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
+          <h3 className=" text-xl font-bold">비슷한 소설</h3>
+          <div className=" mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {similarFictions?.slice(0, 4).map((fiction) => (
               <div key={fiction?.id}>
-                <div className="h-56 w-full mb-4 bg-slate-300"></div>
-                <h3 className=" text-gray-700 -mb-1">{fiction?.title}</h3>
-      
+                <div className="mb-4 h-56 w-full bg-slate-300"></div>
+                <h3 className=" -mb-1 text-gray-700">{fiction?.title}</h3>
+                {/* <span>description</span> */}
               </div>
             ))}
-          </div> */}
+          </div>
         </div>
-        {/* <div>
-          <h2 className=" font-bold text-xl mt-4 border-b-[1px] py-2">
-            세계관 및 설정
-          </h2>
-          <EditerMarkdown source={fiction.setup || ""}></EditerMarkdown>
-        </div> */}
       </div>
-      <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
-        <h3 className=" text-xl font-bold">비슷한 소설</h3>
-        <div className=" mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {similarFictions?.slice(0, 4).map((fiction) => (
-            <div key={fiction?.id}>
-              <div className="mb-4 h-56 w-full bg-slate-300"></div>
-              <h3 className=" -mb-1 text-gray-700">{fiction?.title}</h3>
-              {/* <span>description</span> */}
-            </div>
-          ))}
+      <div
+        id="side-container"
+        className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
+      >
+        <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
+        <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
+          <MbtiBarChart mbtis={mbtis} />
         </div>
       </div>
     </div>
@@ -535,11 +596,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [],
     fallback: "blocking",
   };
-
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  if (!ctx?.params?.id) {
+  const fictionId = ctx?.params?.id;
+  if (!fictionId) {
     return {
       props: {},
     };
@@ -547,7 +608,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const fiction = await client.fiction.findUnique({
     where: {
-      id: +ctx.params.id!.toString(),
+      id: +fictionId ?? 1,
     },
     include: {
       fictionStat: true,
@@ -616,11 +677,54 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const isLiked = false;
 
+  const { google } = require("googleapis");
+
+  /// scrape Google SearchResult for review data.
+  const customsearch = google.customsearch("v1");
+  const API_KEY = process.env.GOOGLE_API_KEY;
+  const cx = process.env.GOOGLE_SEARCH_ENGINE_ID;
+  const searchQuery = `${fiction?.title} 리뷰`;
+
+  const search = async (query: string) => {
+    const res = await customsearch.cse.list({
+      q: query,
+      cx: cx,
+      key: API_KEY,
+      num: 5, // number of search results to return
+    });
+    return res.data.items;
+  };
+
+  const reviewResponse = await search(searchQuery ?? "");
+
+  const groupedByMBTI = await client.$queryRaw`
+  SELECT User.mbti,
+  CAST(SUM(UserRationOnFiction.originality 
+  + UserRationOnFiction.synopsisComposition + 
+  UserRationOnFiction.value + 
+  UserRationOnFiction.writing + 
+  UserRationOnFiction.character + 
+  UserRationOnFiction.verisimilitude)
+  / (COUNT(*)*6)
+  AS CHAR(32)) AS avg,
+  CAST(COUNT(*) AS CHAR(32)) AS cnt 
+  FROM UserRationOnFiction 
+  JOIN User ON UserRationOnFiction.userId = User.id 
+  JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id 
+  WHERE UserFictionStat.fictionId = ${fictionId}
+  GROUP by User.mbti
+  `;
+  // console.log(groupedByMBTI);
+
+  const mbtis = groupedByMBTI;
+
   return {
     props: {
       fiction: JSON.parse(JSON.stringify(fiction)),
       similarFictions: JSON.parse(JSON.stringify(similarFictions)),
       isLiked,
+      reviews: reviewResponse,
+      mbtis: JSON.parse(JSON.stringify(mbtis)),
     },
   };
 };

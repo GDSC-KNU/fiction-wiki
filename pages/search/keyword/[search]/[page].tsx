@@ -8,9 +8,7 @@ import client from "@libs/server/client";
 import { Fiction } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
 import FictionList from "src/components/fictionList";
-import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../../../src/store/atoms";
+import React from "react";
 import { useRouter } from "next/router";
 
 interface IParams extends ParsedUrlQuery {
@@ -89,7 +87,7 @@ export const getStaticProps: GetStaticProps = async (
         include: {
           _count: {
             select: {
-              users: true,
+              userRationOnFictions: true,
             },
           },
         },

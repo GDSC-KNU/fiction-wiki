@@ -12,25 +12,43 @@ async function handler(
   //   return res.status(200).json({ ok: false, error: "Plase Log in" });
   // }
 
-  let profile = await client.user.findUnique({
+  const profile = await client.user.findUnique({
     where: { id: req.session.user?.id || "" },
   });
 
   if (!profile) {
-    // console.log("no profile");
-    res.json({ ok: false });
+    return res.json({ ok: false });
   } else {
-    res.json({
-      ok: true,
-      profile,
-    });
-    res.status(200).end();
+    if (req.method === "GET") {
+      return res.json({
+        ok: true,
+        profile,
+      });
+      // res.status(200).end();
+    } else if (req.method === "PUT") {
+      const {
+        query,
+        body: { mbti, sex },
+      } = req;
+
+      await client.user.update({
+        where: { id: req.session.user?.id || "" },
+        data: {
+          mbti: mbti,
+          sex: sex,
+        },
+      });
+      // console.log("asd")
+
+      return res.json({ ok: true });
+      // res.status(200).end();
+    }
   }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ["GET", "PUT"],
     handler,
   })
 );
