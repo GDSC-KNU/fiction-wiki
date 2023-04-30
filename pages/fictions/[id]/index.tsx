@@ -100,7 +100,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   const synopsisRef = useRef<null | HTMLDivElement>(null);
 
   return (
-    <div className=" grid grid-cols-10 ">
+    <div className=" grid grid-cols-10 px-2">
       <StructuredData data={fiction} />
       <NextSeo
         title={`${fiction?.title}`}
