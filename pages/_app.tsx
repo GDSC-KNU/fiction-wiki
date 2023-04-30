@@ -61,7 +61,7 @@ function MyApp({
           />
           <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
             <Top />
-            <section className=" mx-3 mt-[94px] w-full max-w-[1300px] items-center px-3 pb-[60px] md:mt-[62px]">
+            <section className="  mt-[80px] w-full max-w-[1300px] items-center pb-[60px]  md:mt-[48px]">
               <Component {...pageProps} />
             </section>
             <Footer />

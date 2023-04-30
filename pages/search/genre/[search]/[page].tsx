@@ -24,11 +24,11 @@ const SearchGenrePage: NextPage<dataResponse> = (data) => {
   const router = useRouter();
 
   return (
-    <section className="  min-h-[213px] w-[100vw] max-w-[1300px] ">
+    <section className="  min-h-[213px] max-w-[1300px] ">
       <div className=" mb-7 bg-slate-100 py-4 pl-6">
         <h5 className=" font-bold">장르: {router.query.search}</h5>
       </div>
-      <div className=" mx-3">
+      <div className=" ">
         <FictionList
           className=" "
           data={data}
