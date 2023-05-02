@@ -34,10 +34,8 @@ export default async function handler(
       await res.revalidate(`/fictions/${idToRevalidate}`);
       // console.log("revalidated");
     } else {
-      await res.revalidate(`${process.env.NEXTAUTH_URL}/fictions`);
-      await res.revalidate(
-        `${process.env.NEXTAUTH_URL}/fictions/${idToRevalidate}`
-      );
+      await res.revalidate(`/fictions`);
+      await res.revalidate(`/fictions/${idToRevalidate}`);
     }
     // await res.revalidate(`/fictions/${""}`);
     return res.json({ revalidated: true });

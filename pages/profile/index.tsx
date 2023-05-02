@@ -15,18 +15,26 @@ interface UserFictionStatWithFiction extends UserFictionStat {
   fiction: Fiction;
 }
 
-interface CommentsResponse {
+interface ProfileResponse {
   ok: boolean;
-  comments: CommentWithUser[];
+  profile: {
+    comments: CommentWithUser[];
+  };
 }
 
 const Profile: NextPage = () => {
   // const { user, isLoading } = useUser();
   // const { data: user, error } = useSWR("/api/users/me");
-  const { data } = useSWR<CommentsResponse>(
-    typeof window === "undefined" ? null : `/api/comments`
-  );
   const { data: session, status } = useSession();
+
+  const { data } = useSWR<ProfileResponse>(
+    typeof window === "undefined"
+      ? null
+      : !session
+      ? null
+      : `/api/users/me?userId=${session?.user?.id}`
+  );
+
   //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   // console.log(data);
@@ -48,7 +56,7 @@ const Profile: NextPage = () => {
         <div className=" lg:col-span-1 "></div>
         <ul className=" col-span-12 lg:col-span-10">
           <h5 className=" mb-4 font-bold">내가 쓴 댓글</h5>
-          {data?.comments?.map(({ comment, fiction, id }, i) => (
+          {data?.profile?.comments?.map(({ comment, fiction, id }, i) => (
             <li key={id} className=" mb-2 flex items-center justify-between">
               <div className=" rounded bg-black p-1 text-xs text-white ring-black">
                 {fiction?.title}

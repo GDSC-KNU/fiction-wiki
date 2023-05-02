@@ -11,9 +11,19 @@ async function handler(
   //   console.log("not logged in");
   //   return res.status(200).json({ ok: false, error: "Plase Log in" });
   // }
+  const {
+    query: { userId },
+  } = req;
 
   const profile = await client.user.findUnique({
-    where: { id: req.session.user?.id || "" },
+    where: { id: Array.isArray(userId) ? userId[0] : userId || "" },
+    include: {
+      comments: {
+        include: {
+          fiction: true,
+        },
+      },
+    },
   });
 
   if (!profile) {
@@ -24,6 +34,7 @@ async function handler(
         ok: true,
         profile,
       });
+
       // res.status(200).end();
     } else if (req.method === "PUT") {
       const {

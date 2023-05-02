@@ -219,8 +219,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   />
                 )}
                 <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                  {(data?.fiction?.userFictionStat?.total ||
-                    +fiction?.userFictionStat?.total) ??
+                  {data?.fiction?.userFictionStat?.total ||
+                    +fiction?.userFictionStat?.total ||
                     0}
                   ({fiction?.userFictionStat?._count?.userRationOnFictions || 0}
                   )

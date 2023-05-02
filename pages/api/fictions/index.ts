@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import revalidator from "@libs/server/revalidator";
 // import { Redis } from "@upstash/redis";
 
 // const redis = new Redis({
@@ -395,7 +396,7 @@ async function handler(
       },
     });
     // console.log(fiction);
-    // await res.revalidate("/fictions");
+    // await revalidator();
 
     res.json({ ok: true, fiction });
   }
