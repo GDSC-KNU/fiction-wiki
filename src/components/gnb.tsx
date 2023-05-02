@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
-import logo from "@public/fdb_logo.png";
+// import logo from "@public/fdb_logo.png";
 import SearchModal from "@components/searchModal";
 
 export default function Gnb() {
@@ -22,30 +22,34 @@ export default function Gnb() {
               FDBS
             </Link>
           </li>
-          <div className="hidden md:flex">
-            <li className="mr-3 ">
-              <Link href="/fictions ">작품</Link>
-            </li>
-            <li className="mr-3">
-              <Link href="/authors/1" passHref>
-                작가
-              </Link>
-            </li>
-            <li className="mr-3">
-              <Link href="/translation" passHref>
-                번역
-              </Link>
-            </li>
-            {user ? (
-              <li className="mr-3">
-                <Link href="/fictions/create">Create</Link>
+          <li className=" ">
+            <ul className=" hidden md:flex">
+              <li className="mr-3 ">
+                <Link href="/fictions ">작품</Link>
               </li>
-            ) : null}
-          </div>
+              <li className="mr-3">
+                <Link href="/authors/1" passHref>
+                  작가
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link href="/translation" passHref>
+                  번역
+                </Link>
+              </li>
+              {user ? (
+                <li className="mr-3">
+                  <Link href="/fictions/create">Create</Link>
+                </li>
+              ) : null}
+            </ul>
+          </li>
         </ul>
 
         <ul className=" flex items-center whitespace-nowrap">
-          <SearchModal />
+          <li>
+            <SearchModal />
+          </li>
           {/* <SearchAutoComplete /> */}
           {user ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
@@ -66,9 +70,9 @@ export default function Gnb() {
             </li>
           ) : null}
           {nextSession ? (
-            <button className=" mr-5 font-bold" onClick={() => signOut()}>
-              로그아웃
-            </button>
+            <li className=" mr-5 font-bold">
+              <button onClick={() => signOut()}>로그아웃</button>
+            </li>
           ) : (
             <li>
               <Link className=" mr-5 hover:cursor-pointer" href="/enter">
@@ -78,8 +82,8 @@ export default function Gnb() {
           )}
         </ul>
       </nav>
-      <div className=" flex list-none space-x-6 whitespace-nowrap bg-white px-3 py-2 shadow-md md:hidden">
-        <li className=" ">
+      <ul className=" flex list-none space-x-6 whitespace-nowrap bg-white px-3 py-2 shadow-md md:hidden">
+        <li>
           <Link href="/fictions ">작품</Link>
         </li>
         <li className="">
@@ -97,7 +101,7 @@ export default function Gnb() {
             <Link href="/fictions/create">Create</Link>
           </li>
         ) : null}
-      </div>
+      </ul>
     </header>
   );
 }

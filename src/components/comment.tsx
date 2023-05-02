@@ -40,50 +40,46 @@ export default function Comments() {
   return (
     <div className=" h-full ">
       <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-        <div></div>
-        <ul className=" ">
-          {(commentsResponse?.comments || []).length < 7
-            ? (commentsResponse?.comments || [])
-                .concat(
-                  Array.from({
-                    length: 7 - (commentsResponse?.comments || []).length,
-                  })
-                )
-                .map((comment: Comment, index: number) => (
-                  <ul
-                    key={index}
-                    className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
-                  >
-                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                      {comment?.comment || ""}
-                    </li>
-                    <li className=" absolute right-20 mt-2 text-sm">
-                      {`${comment?.createdById?.slice(0, 5) || ""}...`}
-                    </li>
-                    <li className=" ml-5 mt-2 min-w-[60px] text-sm">
-                      👍 👎 ()
-                    </li>
-                  </ul>
-                ))
-            : commentsResponse?.comments?.map(
-                (comment: Comment, index: number) => (
-                  <ul
-                    key={index}
-                    className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
-                  >
-                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                      {comment?.comment || " asd"}
-                    </li>
-                    <li className=" absolute right-24 mt-2 text-sm">
-                      {`${comment?.createdById?.slice(0, 5)}...`}
-                    </li>
-                    <li className=" ml-5 mt-2 min-w-[78px] text-sm">
-                      👍 👎 (+3)
-                    </li>
-                  </ul>
-                )
-              )}
-        </ul>
+        {(commentsResponse?.comments || []).length < 7
+          ? (commentsResponse?.comments || [])
+              .concat(
+                Array.from({
+                  length: 7 - (commentsResponse?.comments || []).length,
+                })
+              )
+              .map((comment: Comment, index: number) => (
+                <ul
+                  key={index}
+                  className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
+                >
+                  <li className=" mr-16 mt-2 overflow-hidden text-sm">
+                    {comment?.comment || ""}
+                  </li>
+                  <li className=" absolute right-20 mt-2 text-sm">
+                    {`${comment?.createdById?.slice(0, 5) || ""}...`}
+                  </li>
+                  <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>
+                </ul>
+              ))
+          : commentsResponse?.comments?.map(
+              (comment: Comment, index: number) => (
+                <ul
+                  key={index}
+                  className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
+                >
+                  <li className=" mr-16 mt-2 overflow-hidden text-sm">
+                    {comment?.comment || " asd"}
+                  </li>
+                  <li className=" absolute right-24 mt-2 text-sm">
+                    {`${comment?.createdById?.slice(0, 5)}...`}
+                  </li>
+                  <li className=" ml-5 mt-2 min-w-[78px] text-sm">
+                    👍 👎 (+3)
+                  </li>
+                </ul>
+              )
+            )}
+
         <div className=" mb-2 mt-5 flex justify-center">
           <button
             onClick={prevHandler}
@@ -93,7 +89,6 @@ export default function Comments() {
             <span className="sr-only">Prev</span>
 
             <svg
-              id="prev"
               className="h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -118,7 +113,6 @@ export default function Comments() {
             <span className="sr-only">Next</span>
 
             <svg
-              id="next"
               className="h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"

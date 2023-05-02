@@ -9,6 +9,14 @@ import { withApiSession } from "@libs/server/withSession";
 //   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 // });
 
+// export const config = {
+//   runtime: "edge",
+//   unstable_allowDynamic: [
+//     "/lib/utilities.js", // allows a single file
+//     "/node_modules/function-bind/**", // use a glob to allow anything in the function-bind 3rd party module
+//   ],
+// };
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>

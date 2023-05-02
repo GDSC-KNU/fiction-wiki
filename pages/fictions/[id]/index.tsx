@@ -21,6 +21,7 @@ import MbtiBarChart from "@components/mbtiBarChart";
 import ReviewFeed from "@components/fiction/reviewFeed";
 import { useRef } from "react";
 import Comments from "@components/comment";
+import useUser from "@libs/client/useUser";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -64,6 +65,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   mbtis,
 }) => {
   // console.log(mbtis);
+  const { user } = useUser();
   const router = useRouter();
 
   // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
@@ -110,8 +112,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           url: `https://fictiondbs.com/fictions/${fiction?.id}`,
         }}
       />
-      {/* {user ? (
-        <div className=" mx-5 mt-2 flex justify-end">
+      {user ? (
+        <div className=" col-span-10 mt-2 flex justify-start">
           <Link
             className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
             passHref
@@ -127,7 +129,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             DELETE
           </Link>
         </div>
-      ) : null} */}
+      ) : null}
       <div className=" col-span-10 flex-col justify-between">
         <h1 className=" pt-2 text-2xl font-semibold">{fiction?.title}</h1>
         <div className=" mb-2 flex">
@@ -142,12 +144,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       </div>
       <div id="main-container" className=" col-span-10 lg:col-span-7">
         <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
-          <div className=" col-span-7 flex sm:col-span-2">
-            <div className=" h-full w-full">
-              <div className=" relative h-[178px] w-full min-w-[120px] sm:h-full sm:w-full ">
+          <div className=" col-span-7 flex sm:absolute sm:col-span-2">
+            <div className=" ">
+              <div className=" relative h-[178px] w-[120px] sm:h-[278px] sm:w-[187.4157px] ">
                 <Image
                   src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
                   fill
+                  className=" object-contain"
                   alt={fiction?.title}
                   placeholder="blur"
                   blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
@@ -159,67 +162,24 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className="  mb-2 flex whitespace-nowrap">
                   <StarRating
                     data={
-                      data?.fiction.userFictionStat?.total ??
+                      data?.fiction?.userFictionStat?.total ??
+                      0 ??
                       (+fiction?.userFictionStat?.total || 0)
                     }
                   />
+
                   <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                    {data?.fiction.userFictionStat?.total ??
-                      +fiction?.userFictionStat?.total ??
-                      0}{" "}
-                    (
-                    {data?.fiction.userFictionStat._count
-                      .userRationOnFictions ??
-                      (fiction?.userFictionStat?.userRationOnFictions?.length ||
-                        0)}
+                    {fiction?.userFictionStat?.total || 0}(
+                    {fiction?.userFictionStat?._count?.userRationOnFictions ??
+                      0}
                     )
                   </p>
                 </div>
-                {/* <h3 className=" whitespace-nowrap">
-                  <Link
-                    title={`${fiction?.title}`}
-                    className=" cursor-pointer font-bold hover:underline "
-                    href={`/fictions/${fiction?.id}`}
-                  >
-                    {fiction?.title || "Loading"}
-                  </Link>
-                </h3> */}
-                {/* <p className=" text-xs text-gray-400">
-                  {"by "}
-                  <Link
-                    title={`${fiction?.author?.name}`}
-                    className=" cursor-pointer hover:underline"
-                    href={`/authors/name/${fiction?.author?.name}`}
-                  >
-                    {fiction?.author?.name || "작자 미상"}
-                  </Link>
-                </p> */}
-                {/* <div className=" flex">
-                  <p className=" h-[24px] overflow-hidden">
-                    {(
-                      fiction?.keywords?.filter(
-                        (keyword) => keyword?.keyword.isOfCons === false
-                      ) || Array.from({ length: 3 })
-                    ).map((keyword, i) => (
-                      <Link
-                        key={i}
-                        href={`/search/keyword/${keyword?.keyword.name}/1`}
-                        passHref
-                        title={`${keyword?.keyword.name}`}
-                        className=" mr-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB] bg-gray-200  p-[0.2rem] text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 hover:underline peer-checked:bg-blue-600 peer-checked:text-white"
-                      >
-                        #{keyword?.keyword.name || "loading"}
-                      </Link>
-                    ))}
-                  </p>
-                  <div className=" flex cursor-pointer items-center">
-                    <PlusCircle />
-                  </div>
-                </div> */}
+
                 <p className=" mt-1 h-[144px] overflow-x-hidden text-xs ">
                   {fiction?.synopsis.slice(0, 90) ||
                     "로딩중입니다".slice(0, 150)}
-                  <a
+                  <button
                     onClick={() => {
                       synopsisRef?.current?.scrollIntoView({
                         behavior: "smooth",
@@ -229,7 +189,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     className=" cursor-pointer text-blue-800"
                   >
                     ... 더보기
-                  </a>
+                  </button>
                 </p>
                 <p className=" text-xs"></p>
                 <p className=" overflow-hidden text-xs "></p>
@@ -237,7 +197,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             </div>
           </div>
 
-          <div className=" col-span-7 pt-2 sm:col-span-5 sm:px-3 sm:pt-0">
+          <div className=" col-span-7 pt-2 sm:col-span-7 sm:ml-[187.4157px] sm:px-3 sm:pt-0">
             {/* <div className=" flex justify-between">
               <h1 className=" mb-2 pt-2 text-2xl font-semibold">
                 {fiction?.title}
@@ -253,24 +213,17 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     }
                   />
                 )}
-
                 <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                  {data?.fiction.userFictionStat?.total ??
-                    +fiction?.userFictionStat?.total ??
-                    0}{" "}
-                  (
-                  {data?.fiction.userFictionStat._count.userRationOnFictions ??
-                    (fiction?.userFictionStat?.userRationOnFictions?.length ||
-                      0)}
-                  )
+                  {fiction?.userFictionStat?.total ?? 0}(
+                  {fiction?.userFictionStat?._count?.userRationOnFictions ?? 0})
                 </p>
               </div>
             </div>
             <div className=" hidden overflow-x-hidden border-b-[1px] pb-2 sm:block">
               <p className="  h-20 text-xs">
                 {fiction?.synopsis.slice(0, 200) || "로딩중입니다"}
-                <a
-                  className=" cursor-pointer text-blue-500"
+                <button
+                  className=" cursor-pointer text-blue-600"
                   onClick={() => {
                     synopsisRef?.current?.scrollIntoView({
                       behavior: "smooth",
@@ -279,7 +232,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   }}
                 >
                   ... 더보기
-                </a>
+                </button>
               </p>
             </div>
             <div className=" overflow-hidden text-xs">
@@ -293,7 +246,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </div>
                   <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
                     <dt className=" col-span-4 font-sans font-bold">작가</dt>
-                    <dd className=" col-span-6 w-fit text-blue-500">
+                    <dd className=" col-span-6 w-fit text-blue-600">
                       <Link
                         title={fiction?.author?.name}
                         className=" hover:cursor-pointer"
@@ -322,7 +275,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                           )
                           .map((item, index) => (
                             <Link
-                              className=" col-span-6 mr-2 text-blue-500 hover:cursor-pointer"
+                              className=" col-span-6 mr-2 text-blue-600 hover:cursor-pointer"
                               key={index}
                               href={`/search/genre/${item}/1`}
                             >
@@ -349,7 +302,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   </div>
                   <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] ">
                     <dt className=" col-span-4 font-sans font-bold ">원본</dt>
-                    <div className=" col-span-6 text-blue-500">
+                    <dd className=" col-span-6 text-blue-600">
                       <a
                         className=" flex w-fit"
                         href={fiction?.original}
@@ -367,13 +320,13 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                         </svg>
                         {urlToString(fiction?.original)}
                       </a>
-                    </div>
+                    </dd>
                   </div>
                 </dl>
                 <dl id="infoBox-right" className=" col-span-2 sm:col-span-1">
                   <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:border-t-[0px]">
                     <dt className=" col-span-4 font-sans font-bold">플랫폼</dt>
-                    <div className=" col-span-6 ">
+                    <dd className=" col-span-6 ">
                       <span
                         className=" flex"
                         // href={fiction?.platforms}
@@ -392,7 +345,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     </svg> */}
                         {fiction?.platforms}
                       </span>
-                    </div>
+                    </dd>
                   </div>
                   <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
                     <dt className=" col-span-4 font-sans font-bold">상태</dt>
