@@ -32,7 +32,7 @@ export default async function handler(
 
     if (type === "comment") {
       await res.revalidate(`/fictions/${idToRevalidate}`);
-      console.log("revalidated");
+      // console.log("revalidated");
     } else {
       await res.revalidate(`${process.env.NEXTAUTH_URL}/fictions`);
       await res.revalidate(
