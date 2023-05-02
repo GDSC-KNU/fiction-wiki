@@ -415,7 +415,7 @@ const EditFiction: NextPage = () => {
                   <Input
                     register={register("genre")}
                     required
-                    label="Genre"
+                    label="Genre (,필수)"
                     name="genre"
                     type="text_detail"
                   />

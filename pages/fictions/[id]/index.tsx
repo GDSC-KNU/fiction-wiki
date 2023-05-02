@@ -93,10 +93,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   const urlToString = (string: string) => {
     if (string.includes("munpia")) string = "문피아";
     else if (string.includes("qidian")) string = "치디엔";
-    else if (string.includes("series")) string = "시리즈";
+    else if (string.includes("series.naver")) string = "시리즈";
     else if (string.includes("kakao")) string = "카카오";
     else if (string.includes("novelpia")) string = "노벨피아";
     else if (string.includes("joara")) string = "조아라";
+    else if (string.includes("tapas")) string = "타파스";
     return string;
   };
   const synopsisRef = useRef<null | HTMLDivElement>(null);
@@ -162,15 +163,18 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className="  mb-2 flex whitespace-nowrap">
                   <StarRating
                     data={
-                      data?.fiction?.userFictionStat?.total ??
-                      0 ??
-                      (+fiction?.userFictionStat?.total || 0)
+                      (data?.fiction?.userFictionStat?.total ||
+                        +fiction?.userFictionStat?.total) ??
+                      0
                     }
                   />
 
                   <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                    {fiction?.userFictionStat?.total || 0}(
-                    {fiction?.userFictionStat?._count?.userRationOnFictions ??
+                    {(data?.fiction?.userFictionStat?.total ||
+                      +fiction?.userFictionStat?.total) ??
+                      0}
+                    (
+                    {fiction?.userFictionStat?._count?.userRationOnFictions ||
                       0}
                     )
                   </p>
@@ -208,14 +212,18 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 {fiction?.userFictionStat?.total && (
                   <StarRating
                     data={
-                      data?.fiction.userFictionStat?.total ??
-                      (+fiction?.userFictionStat?.total || 0)
+                      (data?.fiction?.userFictionStat?.total ||
+                        +fiction?.userFictionStat?.total) ??
+                      0
                     }
                   />
                 )}
                 <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                  {fiction?.userFictionStat?.total ?? 0}(
-                  {fiction?.userFictionStat?._count?.userRationOnFictions ?? 0})
+                  {(data?.fiction?.userFictionStat?.total ||
+                    +fiction?.userFictionStat?.total) ??
+                    0}
+                  ({fiction?.userFictionStat?._count?.userRationOnFictions || 0}
+                  )
                 </p>
               </div>
             </div>

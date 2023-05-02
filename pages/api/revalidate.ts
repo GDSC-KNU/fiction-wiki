@@ -31,9 +31,8 @@ export default async function handler(
     // e.g. for "/products/[slug]" this should be "/products/1"
 
     if (type === "comment") {
-      await res.revalidate(
-        `${process.env.NEXTAUTH_URL}/fictions/${idToRevalidate}`
-      );
+      await res.revalidate(`/fictions/${idToRevalidate}`);
+      console.log("revalidated");
     } else {
       await res.revalidate(`${process.env.NEXTAUTH_URL}/fictions`);
       await res.revalidate(
@@ -43,6 +42,7 @@ export default async function handler(
     // await res.revalidate(`/fictions/${""}`);
     return res.json({ revalidated: true });
   } catch (err) {
+    console.log(err);
     // If there was an error, Next.js will continue
     // to show the last successfully generated page
     return res.status(500).send("Error revalidating");

@@ -1,12 +1,12 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "orderByNulls"]
+  previewFeatures = ["orderByNulls"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  relationMode = "prisma"
 }
 
 model Fiction {
@@ -47,6 +47,8 @@ model Fiction {
   originalTitle String?             @default("")
 
   @@index([userId])
+  @@index([nationality])
+  @@index([createdAt])
   @@index([authorId])
 }
 
@@ -219,6 +221,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {

@@ -28,7 +28,7 @@ const SearchTypePage: NextPage<dataResponse> = (data) => {
       <div className=" mb-7 bg-slate-100 py-4 pl-6">
         <h5 className=" font-bold">분류: {router.query.search}</h5>
       </div>
-      <div className=" mx-3">
+      <div className="">
         <FictionList
           className=" "
           data={data}
