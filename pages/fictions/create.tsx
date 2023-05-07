@@ -1,6 +1,5 @@
 // import "@uiw/react-md-editor/markdown-editor.css";
 // import "@uiw/react-markdown-preview/markdown.css";
-import dynamic from "next/dynamic";
 import Button from "src/components/button";
 import FictionRadarChart from "src/components/fictionRadarChart";
 import Input from "src/components/input";

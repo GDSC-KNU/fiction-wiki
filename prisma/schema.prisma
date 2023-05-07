@@ -158,6 +158,8 @@ model User {
   comments      Comment[]
   mbti          String?
   sex           String?
+  clientID      String?
+  clientKey     String?
 }
 
 model UserRationOnFiction {

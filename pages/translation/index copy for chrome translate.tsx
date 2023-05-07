@@ -2,8 +2,6 @@ import useState from "react-usestateref";
 import ClipLoader from "react-spinners/ClipLoader";
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-// import useUser from "@libs/client/useUser";
 
 interface MessageProps {
   subTitle: string;
@@ -20,8 +18,6 @@ interface InputProps {
 }
 
 const ChatInput = ({ onSend, disabled }: InputProps) => {
-  // const { user } = useUser();
-
   const [input, setInput] = useState("");
 
   const sendInput = () => {
@@ -35,10 +31,6 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
       sendInput();
     }
   };
-
-  // const checkClient = () => {
-  //   if()
-  // }
 
   return (
     <div className=" flex">
@@ -72,7 +64,7 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
 
 const Translation = () => {
   const { data: session, status } = useSession();
-  // const [messages, setMessages, messagesRef] = useState<MessageProps>();
+  const [messages, setMessages, messagesRef] = useState<MessageProps>();
   let [queryString, setQueryString] = useState("");
   const customFetcher = async (url: any, queryString: string) => {
     const response = await fetch(url, {
@@ -82,23 +74,22 @@ const Translation = () => {
       },
       body: JSON.stringify({
         prompt: queryString,
-        session: session,
       }),
     });
     return response.json();
   };
-  let {
-    data: response,
-    isValidating,
-    error,
-  } = useSWR<any>(["/api/translation", queryString], customFetcher, {
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshWhenOffline: false,
-    refreshWhenHidden: false,
-    refreshInterval: 0,
-  });
+  let { data: response, isValidating } = useSWR<any>(
+    ["/api/translation", queryString],
+    customFetcher,
+    {
+      revalidateOnMount: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      refreshInterval: 0,
+    }
+  );
   // console.log(response);
   const onSubmitHandler = async (input: string) => {
     if (!session) {
@@ -155,8 +146,8 @@ const Translation = () => {
     //   translatedsubTitle: response?.translatedTextArray?.at(-1)
     // };
 
-    // const rawSubTitle = await response?.originalTextArray?.at(-1);
-    // const translatedsubTitle = await response?.translatedTextArray?.at(-1);
+    const rawSubTitle = await response?.originalTextArray?.at(-1);
+    const translatedsubTitle = await response?.translatedTextArray?.at(-1);
 
     // let botMessage: MessageProps = {
     //   subTitle: await translatedsubTitle,
@@ -176,14 +167,7 @@ const Translation = () => {
   return (
     <main className=" relative mx-auto mt-6 max-w-2xl">
       <div className=" mb-2 ml-5 text-gray-500">
-        1. 지원사이트 목록: qidian, uukanshu, aixdzs
-      </div>
-      <div className=" mb-2 ml-5 text-gray-500">
-        2.{" "}
-        <Link className=" font-bold text-blue-600" href={"/profile/edit"}>
-          이곳
-        </Link>{" "}
-        에서 papago clientId, clientKey를 입력하세요
+        지원사이트 목록: qidian, uukanshu, aixdzs
       </div>
       {/* <div className=" invisible">新章</div> */}
       <div className=" sticky top-0 w-full px-4">
@@ -199,7 +183,7 @@ const Translation = () => {
           {response?.originalTextArray.at(-1)}
         </h2>
         <div className=" w-fit text-xl font-semibold">
-          {response?.translatedTextArray.at(-1)}
+          {response?.originalTextArray.at(-1)}
         </div>
         {/* {!isTranslated ? (
         <div className=" font-semibold text-xl w-fit">
@@ -212,8 +196,13 @@ const Translation = () => {
 
             return (
               <div className=" pt-5" key={i}>
-                <div>{item}</div>
-                <div className=" ">{response?.translatedTextArray?.[i]}</div>
+                <div translate="no" className="">
+                  {item}
+                </div>
+                {/* {!isTranslated ? (
+                <div className=" ">{response?.originalTextArray?.[i]}</div>
+              ) : null} */}
+                <div className="">{item}</div>
               </div>
             );
           })}

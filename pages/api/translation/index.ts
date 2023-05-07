@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 // import { Configuration, OpenAIApi } from "openai";
 // const cheerio = require("cheerio");
@@ -5,6 +6,7 @@ import cheerio from "cheerio";
 // import { TranslationServiceClient } from "@google-cloud/translate";
 import { Redis } from "@upstash/redis";
 import client from "@libs/server/client";
+// import { Session } from "@prisma/client"
 
 type ResponseData = {
   subTitle: string;
@@ -17,6 +19,7 @@ type ResponseData = {
 interface GenerateNextApirequest extends NextApiRequest {
   body: {
     prompt: string;
+    session: any;
   };
 }
 
@@ -35,8 +38,38 @@ export default async function handler(
   req: GenerateNextApirequest,
   res: NextApiResponse<ResponseData>
 ) {
+  const session: {
+    user?: {
+      id: string;
+      clientID?: string;
+      clientKey?: string;
+    };
+  } = req.body.session;
+  // console.log(req.session)
   const prompt = req.body.prompt;
   // console.log(prompt);
+
+  // find papagoClientId and clientKey by nextSessionID
+  const userProfile = await client.user.findUnique({
+    // where: { id: userId?.toString() || req?.session?.user?.id },
+    where: { id: session?.user?.id },
+    select: {
+      clientID: true,
+      clientKey: true,
+    },
+  });
+
+  if (!userProfile?.clientID || !userProfile?.clientKey) {
+    redis.del(prompt);
+    return res.status(500).json({
+      subTitle: "",
+      nextUrl: "",
+      prevUrl: "",
+      originalTextArray: [""],
+      translatedTextArray: [""],
+    });
+  }
+
   try {
     if (!prompt || prompt === "") {
       return new Response("Plase send your prompt", { status: 400 });
@@ -52,18 +85,38 @@ export default async function handler(
             text: input,
             source: "zh-CN",
             target: "ko",
-            // replaceInfo: {
-            //   infos: [
-            //     { begin: 0, length: 4 },
-            //     { begin: 5, length: 4, str: "test" },
-            //   ],
-            // },
-            glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
+            // glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
           }),
           headers: {
             "Content-Type": "application/json",
-            "X-NCP-APIGW-API-KEY-ID": process?.env.PAPAGO_CLIENT_ID || "",
-            "X-NCP-APIGW-API-KEY": process?.env.PAPAGO_CLIENT_SECRET || "",
+            "X-NCP-APIGW-API-KEY-ID": userProfile.clientID || "",
+            "X-NCP-APIGW-API-KEY": userProfile.clientKey || "",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            resolve(data?.message?.result?.translatedText || "");
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    };
+
+    const papagoCustomTranslate = async (input: string) => {
+      return new Promise<string>((resolve, reject) => {
+        fetch("https://naveropenapi.apigw.ntruss.com/nmt/v1/translation", {
+          method: "POST",
+          body: JSON.stringify({
+            text: input,
+            source: "zh-CN",
+            target: "ko",
+            // glossaryKey: process?.env.PAPAGO_CUSTOM_DICT,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-NCP-APIGW-API-KEY-ID": userProfile.clientID || "",
+            "X-NCP-APIGW-API-KEY": userProfile.clientKey || "",
           },
         })
           .then((res) => res.json())
@@ -207,11 +260,11 @@ export default async function handler(
 
             try {
               const createFiction = () => {
-                console.log(translatedTitle, rawTitle, rawAuthor);
-                console.log("fiction created");
+                // console.log(translatedTitle, rawTitle, rawAuthor);
+                // console.log("fiction created");
                 client.fiction.create({
                   data: {
-                    title: translatedTitle,
+                    title: translatedTitle || "",
                     originalTitle: rawTitle,
                     author: {
                       connectOrCreate: {
@@ -219,7 +272,7 @@ export default async function handler(
                           rawName: rawAuthor,
                         },
                         create: {
-                          name: translatedAuthor,
+                          name: translatedAuthor || "",
                           rawName: rawAuthor,
                           nationality: "중국",
                         },
@@ -233,7 +286,7 @@ export default async function handler(
                     original: "",
                     platforms: "치디엔",
                     image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
-                    synopsis: translatedSynopsis,
+                    synopsis: translatedSynopsis || "",
                     characters: " ",
                     currentState: "미완",
                     volume: volume || 100,
@@ -379,7 +432,7 @@ export default async function handler(
                 );
                 await client.fiction.create({
                   data: {
-                    title: translatedTitle,
+                    title: translatedTitle || "",
                     originalTitle: rawTitle,
                     relatedTitle: rawTitle,
                     author: {
@@ -388,7 +441,7 @@ export default async function handler(
                           rawName: rawAuthor,
                         },
                         create: {
-                          name: translatedAuthor,
+                          name: translatedAuthor || "",
                           rawName: rawAuthor,
                           nationality: "중국",
                         },
@@ -480,10 +533,11 @@ export default async function handler(
       originalTextArray.push(subTitle);
 
       // 파파고 번역 엔진 사용 중단 230313
-      // const translatedTextArray = await Promise.all(
-      //   originalTextArray.map((item) => papagoTranslate(item))
-      // );
-      let translatedTextArray = [""];
+      const translatedTextArray = await Promise.all(
+        originalTextArray.map((item) => papagoCustomTranslate(item))
+      );
+      // 구글 크롬 번역기 의존
+      // let translatedTextArray = [""];
 
       return {
         originalTextArray,
@@ -498,7 +552,7 @@ export default async function handler(
     redis.del(prompt);
     // console.log(cache);
     if (cache) {
-      let {
+      const {
         subTitle,
         nextUrl,
         prevUrl,
@@ -515,6 +569,7 @@ export default async function handler(
       });
     } else {
       // console.log("no cache");
+      if (session?.user?.clientID || session?.user?.clientKey) return;
       const {
         subTitle,
         nextUrl,

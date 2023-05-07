@@ -2,10 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 
-export default function useUser() {
-  const { data, error } = useSWR(
-    typeof window === "undefined" ? null : "/api/users/me"
-  );
+export default function useUser(url = "/api/users/me") {
+  const { data, error } = useSWR(typeof window === "undefined" ? null : url);
   // const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
@@ -16,5 +14,9 @@ export default function useUser() {
 
   //   return router.replace("/enter");
 
-  return { user: data?.profile, isLoading: !data && !error };
+  return {
+    user: data?.profile,
+    isAdmin: data?.isAdmin,
+    isLoading: !data && !error,
+  };
 }

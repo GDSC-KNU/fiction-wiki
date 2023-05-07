@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   }
 
   if (
-    req.nextUrl.pathname.includes("/edit") &&
+    req.nextUrl.pathname.includes("/fictions/edit") &&
     !req.cookies.get("fdbssession")
   ) {
     return NextResponse.rewrite(new URL("/enter", req.url));

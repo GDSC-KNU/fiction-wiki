@@ -7,7 +7,8 @@ import SearchModal from "@components/searchModal";
 
 export default function Gnb() {
   const { data: nextSession } = useSession();
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
+  // console.log(user)
 
   return (
     <header className=" fixed top-0 z-20 h-12 w-full bg-white  py-2 shadow-md">
@@ -51,7 +52,7 @@ export default function Gnb() {
             <SearchModal />
           </li>
           {/* <SearchAutoComplete /> */}
-          {user ? <li className="mr-3">Admin</li> : null}
+          {isAdmin ? <li className="mr-3">Admin</li> : null}
           {nextSession ? (
             <li className=" mr-3 flex min-w-[26px] cursor-pointer items-center p-0">
               <Link
@@ -96,7 +97,7 @@ export default function Gnb() {
             번역
           </Link>
         </li>
-        {user ? (
+        {isAdmin ? (
           <li className="">
             <Link href="/fictions/create">Create</Link>
           </li>

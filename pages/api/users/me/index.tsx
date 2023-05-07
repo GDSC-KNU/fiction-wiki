@@ -7,52 +7,67 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  // if (!req.session.user) {
-  //   console.log("not logged in");
-  //   return res.status(200).json({ ok: false, error: "Plase Log in" });
-  // }
   const {
-    query: { userId },
+    query: { userId = "" },
+    method,
+    session: credentialSession,
   } = req;
+  // console.log(userId)
 
-  const profile = await client.user.findUnique({
-    where: { id: Array.isArray(userId) ? userId[0] : userId || "" },
-    include: {
-      comments: {
-        include: {
-          fiction: true,
+  let profile;
+  let isAdmin;
+  if (Object.keys(credentialSession).length !== 0) {
+    profile = await client.user.findUnique({
+      where: { id: credentialSession?.user?.id || "" },
+      include: {
+        comments: {
+          include: {
+            fiction: true,
+          },
         },
       },
-    },
-  });
+    });
+
+    isAdmin = true;
+  } else {
+    profile = await client.user.findUnique({
+      where: { id: userId?.toString() || "" },
+    });
+    isAdmin = false;
+  }
 
   if (!profile) {
     return res.json({ ok: false });
   } else {
-    if (req.method === "GET") {
+    if (method === "GET") {
+      // console.log("aaaa");
       return res.json({
         ok: true,
         profile,
+        isAdmin,
       });
 
       // res.status(200).end();
-    } else if (req.method === "PUT") {
+    } else if (method === "PUT") {
       const {
-        query,
-        body: { mbti, sex },
+        body: { mbti, sex, papagoClientID, papagoClientKey, name },
       } = req;
-
+      // console.log("asdas");
+      // console.log(papagoClientID, papagoClientKey);
       await client.user.update({
-        where: { id: req.session.user?.id || "" },
+        where: {
+          id: userId?.toString() || "",
+        },
         data: {
+          name: name,
           mbti: mbti,
           sex: sex,
+          clientID: papagoClientID,
+          clientKey: papagoClientKey,
         },
       });
-      // console.log("asd")
 
       return res.json({ ok: true });
-      // res.status(200).end();
     }
   }
 }
