@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 // import { Configuration, OpenAIApi } from "openai";
-// const cheerio = require("cheerio");
 import cheerio from "cheerio";
 // import { TranslationServiceClient } from "@google-cloud/translate";
 import { Redis } from "@upstash/redis";
 import client from "@libs/server/client";
-// import { Session } from "@prisma/client"
+import { downloadAndUploadImage } from "./helper";
 
 type ResponseData = {
   subTitle: string;
@@ -241,22 +239,11 @@ export default async function handler(
             let translatedSynopsis = await papagoTranslate(rawSynopsis);
             const volume = $main("#chapterList").find("li").length;
 
-            const imgResponse = await fetch(imgUrl);
-            const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
-            const formData = new FormData();
-            formData.append("file", new Blob([imgBuffer]), translatedTitle);
-            // console.log("before uploadURL");
-            const { uploadURL } = await (
-              await fetch(`${process.env.NEXTAUTH_URL}/api/files`, {
-                method: "GET",
-              })
-            ).json();
-
-            const {
-              result: { id },
-            } = await (
-              await fetch(uploadURL, { method: "POST", body: formData })
-            ).json();
+            /// download and upload image
+            const { id: imageId } = await downloadAndUploadImage(
+              imgUrl,
+              translatedTitle
+            );
 
             try {
               const createFiction = () => {
@@ -285,7 +272,7 @@ export default async function handler(
                     endDate: new Date(0),
                     original: "",
                     platforms: "치디엔",
-                    image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
+                    image: imageId || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
                     synopsis: translatedSynopsis || "",
                     characters: " ",
                     currentState: "미완",
@@ -402,34 +389,24 @@ export default async function handler(
               let translatedTitle = await papagoTranslate(rawTitle);
               let imgUrl =
                 $index('[itemprop="image"]')?.attr("src")?.toString() || "";
+
               let volume = $index("#i-chapter > ul").find("li").length;
               let rawsynopsis = $index(".d_co").text();
               let translatedSynopsis = await papagoTranslate(rawsynopsis);
 
-              const imgResponse = await fetch(imgUrl);
-              const imgBuffer = Buffer.from(await imgResponse.arrayBuffer());
-              const formData = new FormData();
-              formData.append("file", new Blob([imgBuffer]), translatedTitle);
-              // console.log("before uploadURL");
-              const { uploadURL } = await (
-                await fetch(`${process.env.NEXTAUTH_URL}/api/files`, {
-                  method: "GET",
-                })
-              ).json();
-
-              const {
-                result: { id },
-              } = await (
-                await fetch(uploadURL, { method: "POST", body: formData })
-              ).json();
+              /// download and upload image
+              const { id: imageId } = await downloadAndUploadImage(
+                imgUrl,
+                translatedTitle
+              );
 
               const createFiction = async () => {
-                console.log(
-                  translatedTitle,
-                  rawTitle,
-                  translatedAuthor,
-                  rawAuthor
-                );
+                // console.log(
+                //   translatedTitle,
+                //   rawTitle,
+                //   translatedAuthor,
+                //   rawAuthor
+                // );
                 await client.fiction.create({
                   data: {
                     title: translatedTitle || "",
@@ -454,7 +431,7 @@ export default async function handler(
                     endDate: new Date(0),
                     original: "",
                     platforms: "치디엔",
-                    image: id || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
+                    image: imageId || "0ac8b5cf-235a-479d-815d-a89bb37d6400",
                     synopsis: translatedSynopsis || "업데이트 예정",
                     characters: " ",
                     currentState: "미완",
@@ -577,17 +554,17 @@ export default async function handler(
         originalTextArray,
         translatedTextArray,
       } = await terminator();
-      // redis.set(
-      //   prompt,
-      //   JSON.stringify({
-      //     subTitle,
-      //     prevUrl,
-      //     nextUrl,
-      //     originalTextArray,
-      //     translatedTextArray,
-      //   }),
-      //   { ex: 360000 }
-      // );
+      redis.set(
+        prompt,
+        JSON.stringify({
+          subTitle,
+          prevUrl,
+          nextUrl,
+          originalTextArray,
+          translatedTextArray,
+        }),
+        { ex: 360000 }
+      );
 
       // const rawTitle = originalTextArray[0]
 

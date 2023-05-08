@@ -6,7 +6,7 @@ export default {
     locale: "ko_KR",
     url: "https://fictiondbs.com/",
     siteName: "FDBS",
-    title: "카카오톡, 페이스북에 링크 넣으면 올라올 타이틀",
+    title: " FDBS | 웹소설정보, 리뷰",
   },
   twitter: {
     handle: "@handle",
