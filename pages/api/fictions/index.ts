@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
-import revalidator from "@libs/server/revalidator";
+// import revalidator from "@libs/server/revalidator";
 // import { Redis } from "@upstash/redis";
 
 // const redis = new Redis({
@@ -67,7 +67,6 @@ async function handler(
     //     })) || [];
 
     const genresArray = genres?.toString().split(",") || [""];
-    console.log(genresArray);
     const genresManyquery = [
       ...(genresArray?.includes("")
         ? []
@@ -196,18 +195,18 @@ async function handler(
       ...sortingOne(),
     });
 
-    const fictionsCount = await client.fiction.count({
-      where: {
-        AND: [
-          ...genresManyquery,
-          {
-            OR: [...nationalitiesMany],
-          },
-          ...keywordManyQuery,
-          ReleaseDateFilter(),
-        ],
-      },
-    });
+    // const fictionsCount = await client.fiction.count({
+    //   where: {
+    //     AND: [
+    //       ...genresManyquery,
+    //       {
+    //         OR: [...nationalitiesMany],
+    //       },
+    //       ...keywordManyQuery,
+    //       ReleaseDateFilter(),
+    //     ],
+    //   },
+    // });
 
     // redis.set(
     //   JSON.stringify(req?.query),
@@ -221,7 +220,7 @@ async function handler(
     res.json({
       ok: true,
       fictions,
-      fictionsCount,
+      // fictionsCount,
     });
   }
   if (req.method === "POST") {
@@ -264,13 +263,13 @@ async function handler(
       session: { user },
     } = req;
 
-    // console.log(genre);
+
     genre = genre
       .split(" ")
       .join("")
       .split(",")
       .filter((item: any) => item !== "");
-    // console.log(genre);
+
     const genreMany = genre.map((item: string) => ({
       category: {
         connectOrCreate: {

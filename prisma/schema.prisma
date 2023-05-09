@@ -47,8 +47,8 @@ model Fiction {
   originalTitle String?             @default("")
 
   @@index([userId])
-  @@index([nationality])
-  @@index([createdAt])
+  @@index([nationality,createdAt])
+  // @@index([createdAt])
   @@index([authorId])
 }
 
@@ -103,6 +103,8 @@ model Keyword {
   isOfHeroine   Boolean     @default(false)
   isOfCons      Boolean     @default(false)
   fictions      KeywordsOnFictions[]
+
+  @@index([name])
 }
 
 model KeywordsOnFictions {
