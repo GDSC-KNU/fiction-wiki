@@ -23,13 +23,6 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
-    // let cache: any = await redis.get(JSON.stringify(req?.query));
-    // redis.del(JSON.stringify(req?.query));
-    // if (cache) {
-
-    //   return res.json(cache);
-    // } else {
-    // console.log(req?.query);
     let {
       query: { keywords, genres, nationalities, sorting, page, dateYear },
     } = req;
@@ -42,27 +35,60 @@ async function handler(
     if (dateYear === "all") dateYear = "";
     // if (sorting === "all") keywords = "";
 
-    // console.log(
-    //   keywords
+    const keywordArray = !Array.isArray(keywords) ? keywords?.split(",") : [""];
+    const keywordManyQuery = [
+      ...(keywordArray?.includes("")
+        ? []
+        : [
+            {
+              AND: [
+                {
+                  keywords: {
+                    some: {
+                      keyword: {
+                        name: {
+                          in: keywordArray,
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ]),
+    ];
+
+    // const genresMany =
+    //   genres
     //     ?.toString()
     //     .split(",")
+    //     .map((item: string) => ({
+    //       categories: { some: { category: { name: item || undefined } } },
+    //     })) || [];
 
-    // );
-    const keywordMany =
-      keywords
-        ?.toString()
-        .split(",")
-        .map((item: string) => ({
-          keywords: { some: { keyword: { name: item || undefined } } },
-        })) || [];
-
-    const genresMany =
-      genres
-        ?.toString()
-        .split(",")
-        .map((item: string) => ({
-          categories: { some: { category: { name: item || undefined } } },
-        })) || [];
+    const genresArray = genres?.toString().split(",") || [""];
+    console.log(genresArray);
+    const genresManyquery = [
+      ...(genresArray?.includes("")
+        ? []
+        : [
+            {
+              OR: [
+                {
+                  categories: {
+                    some: {
+                      category: {
+                        name: {
+                          in: genresArray,
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ]),
+    ];
 
     const nationalitiesMany =
       nationalities
@@ -132,13 +158,11 @@ async function handler(
       skip: (+page!.toString() - 1 || 0) * 18,
       where: {
         AND: [
-          { OR: [...genresMany] },
+          ...genresManyquery,
           {
             OR: [...nationalitiesMany],
           },
-          {
-            AND: [...keywordMany],
-          },
+          ...keywordManyQuery,
           ReleaseDateFilter(),
         ],
       },
@@ -175,13 +199,11 @@ async function handler(
     const fictionsCount = await client.fiction.count({
       where: {
         AND: [
-          { OR: [...genresMany] },
+          ...genresManyquery,
           {
             OR: [...nationalitiesMany],
           },
-          {
-            AND: [...keywordMany],
-          },
+          ...keywordManyQuery,
           ReleaseDateFilter(),
         ],
       },
