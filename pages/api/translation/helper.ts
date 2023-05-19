@@ -10,13 +10,15 @@ export async function downloadAndUploadImage(
     const response = await axios.get(imgUrl, {
       responseType: "arraybuffer",
     });
-
+    console.log(typeof response)
+    console.log(response)
     // Create a FormData instance
     const formData = new FormData();
     formData.append("file", Buffer.from(response.data), {
       contentType: response.headers["content-type"],
       filename: translatedTitle,
     });
+    
 
     // Fetch the uploadURL from your API route
     const { uploadURL } = await (

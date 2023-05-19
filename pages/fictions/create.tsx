@@ -57,8 +57,10 @@ const Create: NextPage = (props) => {
   //   setMd(md);
   // };
   const router = useRouter();
+  
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");
+
   const {
     register,
     handleSubmit,

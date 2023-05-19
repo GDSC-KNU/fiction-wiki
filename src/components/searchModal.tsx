@@ -50,8 +50,8 @@ export default function SearchModal() {
     const debounce = setTimeout(() => {
       return setDeferredQuery(query);
     }, 700);
-    return () => clearTimeout(debounce); //->clearTimeout 바로 타이머 제거
-  }, [query]); //->결국 마지막 이벤트에만 setTimeout이 실행됨
+    return () => clearTimeout(debounce);
+  }, [query]); 
 
   return (
     <>

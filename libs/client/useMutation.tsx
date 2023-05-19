@@ -19,20 +19,9 @@ export default function useMutation<T = any>(
     data: undefined,
     error: undefined,
   });
-  async function mutation(data: any, method: string) {
-    setState((prev) => ({ ...prev, loading: true }));
 
-    // await fetch(url, {
-    //   method: method?.toString() || "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then((response) => response.json().catch(() => {}))
-    //   .then((data) => setState((prev) => ({ ...prev, data })))
-    //   .catch((error) => setState((prev) => ({ ...prev, error })))
-    //   .finally(() => setState((prev) => ({ ...prev, loading: false })));
+
+  async function mutation(data: any, method: string) {
 
     setState((prev) => ({ ...prev, loading: true }));
     try {
