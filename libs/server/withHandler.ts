@@ -13,30 +13,32 @@ interface ConfigType {
   methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
+  isForAdmin?: boolean;
 }
 
 export default function withHandler({
   methods,
   isPrivate = false,
+  isForAdmin,
   handler,
 }: ConfigType) {
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    // if (!req.session.user) {
-    //   console.log("not logged in");
-    //   return res.status(200).json({ ok: false, error: "Plase Log in" });
-    // }
-    // console.log(req.method);
-    // console.log(req.session);
     const nextAuthsession = await getServerSession(req, res, authOptions);
-    // console.log("session: ");
-    // console.log(nextAuthsession);
 
+    // if (isForAdmin === true) {
+    //   return res
+    //     .status(401)
+    //     .json({ ok: false, error: "관리자만 접근 가능합니다." });
+    // }
+
+    // method not allowed
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
+    // Public페이지에서, credentialSession 혹은 nextSession 중 하나라도 없는 경우
     if (isPrivate && !(req.session?.user || nextAuthsession)) {
       return res.status(401).json({ ok: false, error: "Plase Log in" });
     }

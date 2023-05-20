@@ -8,7 +8,7 @@ import SearchModal from "@components/searchModal";
 export default function Gnb() {
   const { data: nextSession } = useSession();
   const { user, isAdmin } = useUser();
-  // console.log(user)
+  // console.log(user);
 
   return (
     <header className=" fixed top-0 z-20 h-12 w-full bg-white  py-2 shadow-md">
@@ -38,7 +38,7 @@ export default function Gnb() {
                   번역
                 </Link>
               </li>
-              {user ? (
+              {isAdmin ? (
                 <li className="mr-3">
                   <Link href="/fictions/create">Create</Link>
                 </li>

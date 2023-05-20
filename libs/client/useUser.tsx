@@ -18,5 +18,6 @@ export default function useUser(url = "/api/users/me") {
     user: data?.profile,
     isAdmin: data?.isAdmin,
     isLoading: !data && !error,
+    error: error,
   };
 }

@@ -59,7 +59,10 @@ export default function UserStat() {
 
   // console.log(session);
 
-  const onRateClick = (data: RateUserStatForm) => {
+  const onRateClick = async (data: RateUserStatForm) => {
+    console.log(session);
+    if (!session || !session.user) return;
+
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
       return;
@@ -88,9 +91,7 @@ export default function UserStat() {
       return;
     }
 
-    if (!session?.user?.mbti || !session?.user?.sex) {
-      setIsModalOpen(true);
-    }
+    console.log(session);
 
     rateUserStat(data, "POST");
     reset();
@@ -109,6 +110,14 @@ export default function UserStat() {
     setIsOpen(false);
   };
 
+  const handleBeforeSubmit = () => {
+    console.log("sad");
+    if (!session || !session.user) return alert("로그인 해주세요");
+    if (session.user.mbti === null || session.user.sex === null) {
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <div className=" mx-auto my-2 h-fit w-full px-3">
       {loading ? (
@@ -122,6 +131,7 @@ export default function UserStat() {
       ) : (
         <details open={false}>
           <summary
+            onClick={handleBeforeSubmit}
             style={{ listStyle: "none" }}
             className=" my-2 cursor-pointer rounded-md border-[0.5px] border-[#BBBBBB] text-center font-bold"
           >

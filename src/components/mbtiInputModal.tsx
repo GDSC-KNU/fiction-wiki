@@ -46,7 +46,7 @@ const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
 
   const handleMBTISelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const mbti = event.target.value.toUpperCase();
-
+    console.log(mbti);
     setMBTI(mbti);
   };
 
