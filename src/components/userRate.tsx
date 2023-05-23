@@ -91,7 +91,7 @@ export default function UserStat() {
       return;
     }
 
-    console.log(session);
+    // console.log(session);
 
     rateUserStat(data, "POST");
     reset();
@@ -111,7 +111,6 @@ export default function UserStat() {
   };
 
   const handleBeforeSubmit = () => {
-    console.log("sad");
     if (!session || !session.user) return alert("로그인 해주세요");
     if (session.user.mbti === null || session.user.sex === null) {
       setIsModalOpen(true);

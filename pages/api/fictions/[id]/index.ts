@@ -134,11 +134,32 @@ async function handler(
     // );
     const isLiked = false;
 
+    const mbtis = await client.$queryRaw`
+    SELECT User.mbti,
+    CAST(SUM(UserRationOnFiction.originality 
+    + UserRationOnFiction.synopsisComposition + 
+    UserRationOnFiction.value + 
+    UserRationOnFiction.writing + 
+    UserRationOnFiction.character + 
+    UserRationOnFiction.verisimilitude)
+    / (COUNT(*)*6)
+    AS CHAR(32)) AS avg,
+    CAST(COUNT(*) AS CHAR(32)) AS cnt 
+    FROM UserRationOnFiction 
+    JOIN User ON UserRationOnFiction.userId = User.id 
+    JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id 
+    WHERE UserFictionStat.fictionId = ${+id!.toString()}
+    GROUP by User.mbti
+    `;
+
+    // const mbtis = JSON.stringify(groupedByMBTI);
+
     return res.json({
       ok: true,
       fiction,
       similarFictions,
       isLiked,
+      mbtis,
     });
   }
   if (req.method === "PUT") {

@@ -19,7 +19,7 @@ import StructuredData from "src/components/structuredData";
 import useSWR from "swr";
 import MbtiBarChart from "@components/mbtiBarChart";
 import ReviewFeed from "@components/fiction/reviewFeed";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Comments from "@components/comment";
 import useUser from "@libs/client/useUser";
 
@@ -67,12 +67,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // console.log(mbtis);
   const { user } = useUser();
   const router = useRouter();
+  const [deferredMbtis, setDeferredMbtis] = useState(mbtis);
 
   // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
   const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
-
+  const mbtisResponse = data ? data?.mbtis : [];
+  // console.log(data?.mbtis);
   // const { data: nextAuthSession } = useSession();
 
   // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
@@ -84,6 +86,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // );
 
   // const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
+
+  /// swr로 data fetching이후 데이터 synchronize
+  useEffect(() => {
+    if (data) setDeferredMbtis(mbtisResponse);
+  }, [data]);
 
   if (fiction) {
     fiction.startDate = new Date(fiction?.startDate || 0);
@@ -545,7 +552,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       >
         <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
         <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
-          <MbtiBarChart mbtis={mbtis} />
+          <MbtiBarChart mbtis={deferredMbtis} />
         </div>
       </div>
     </div>
@@ -660,22 +667,21 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const groupedByMBTI = await client.$queryRaw`
   SELECT User.mbti,
-  CAST(SUM(UserRationOnFiction.originality 
-  + UserRationOnFiction.synopsisComposition + 
-  UserRationOnFiction.value + 
-  UserRationOnFiction.writing + 
-  UserRationOnFiction.character + 
+  CAST(SUM(UserRationOnFiction.originality
+  + UserRationOnFiction.synopsisComposition +
+  UserRationOnFiction.value +
+  UserRationOnFiction.writing +
+  UserRationOnFiction.character +
   UserRationOnFiction.verisimilitude)
   / (COUNT(*)*6)
   AS CHAR(32)) AS avg,
-  CAST(COUNT(*) AS CHAR(32)) AS cnt 
-  FROM UserRationOnFiction 
-  JOIN User ON UserRationOnFiction.userId = User.id 
-  JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id 
+  CAST(COUNT(*) AS CHAR(32)) AS cnt
+  FROM UserRationOnFiction
+  JOIN User ON UserRationOnFiction.userId = User.id
+  JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id
   WHERE UserFictionStat.fictionId = ${fictionId}
   GROUP by User.mbti
   `;
-  // console.log(groupedByMBTI);
 
   const mbtis = groupedByMBTI;
 
@@ -687,6 +693,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       reviews: reviewResponse,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
     },
+    // revalidate: 60 * 60 * 24 * 30,
   };
 };
 

@@ -6,9 +6,7 @@ export default async function handler(
 ) {
   const { method, query, body } = req;
   // Check for secret to confirm this is a valid request
-  // console.log(req?.query);
-  // console.log("hey");
-  // console.log(query, body);
+
   if (method !== "POST") {
     return res
       .status(400)
@@ -27,20 +25,22 @@ export default async function handler(
     const idToRevalidate = body.id;
     const type = body.type;
 
+    // console.log(idToRevalidate, type);
+
     // this should be the actual path not a rewritten path
     // e.g. for "/products/[slug]" this should be "/products/1"
 
     if (type === "comment") {
       await res.revalidate(`/fictions/${idToRevalidate}`);
-      // console.log("revalidated");
+      console.log("revalidated");
     } else {
       await res.revalidate(`/fictions`);
       await res.revalidate(`/fictions/${idToRevalidate}`);
     }
-    // await res.revalidate(`/fictions/${""}`);
+    // await res.revalidate(`${process.env.NEXTAUTH_URL}/fictions/${""}`);
     return res.json({ revalidated: true });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     // If there was an error, Next.js will continue
     // to show the last successfully generated page
     return res.status(500).send("Error revalidating");

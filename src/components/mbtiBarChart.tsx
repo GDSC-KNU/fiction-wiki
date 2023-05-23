@@ -17,9 +17,12 @@ import type {
   Author,
   Category,
 } from "@prisma/client";
+// import client from "@libs/server/client";
+import { PrismaClient } from "@prisma/client";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -73,56 +76,12 @@ export const options = {
   },
 };
 
-// const mbtiTypes = [
-//   "ISTJ",
-//   "ISFJ",
-//   "INFJ",
-//   "INTJ",
-//   "ISTP",
-//   "ISFP",
-//   "INFP",
-//   "INTP",
-//   "ESTP",
-//   "ESFP",
-//   "ENFP",
-//   "ENTP",
-//   "ESTJ",
-//   "ESFJ",
-//   "ENFJ",
-//   "ENTJ",
-// ];
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: "남성",
-//       data: labels.map((item, i) => labels.length - i),
-//       backgroundColor: "rgba(255, 99, 132, 0.5)",
-//     },
-//     {
-//       label: "여성",
-//       data: labels.map((item, i) => labels.length - i - 0.3),
-//       backgroundColor: "rgba(53, 162, 235, 0.5)",
-//     },
-//   ],
-// };
-
-// Array.from(mbtis).reduce((acc: any, cur: any, i: number) => {
-//   acc[i] = {
-
-//     data: mbtis[i].cnt,
-
-//   };
-//   return acc;
-// }, [])
-
 function MbtiBarChart({ mbtis }: any) {
   const router = useRouter();
   const { data: fiction, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
-  // console.log(mbtis);
+
   const data = {
     labels: Array.from(mbtis).map((item: any, i) => {
       return item?.mbti;
@@ -151,3 +110,45 @@ function MbtiBarChart({ mbtis }: any) {
 }
 
 export default MbtiBarChart;
+
+// export const getServerSideProps: GetServerSideProps<{ mbtis: any }> = async (
+//   ctx
+// ) => {
+//   const fictionId = ctx?.params?.id;
+//   if (!fictionId) {
+//     return {
+//       props: {
+//         mbtis: null,
+//       },
+//     };
+//   }
+//   try {
+//     const groupedByMBTI = await new PrismaClient().$queryRaw`
+//   SELECT User.mbti,
+//   CAST(SUM(UserRationOnFiction.originality
+//   + UserRationOnFiction.synopsisComposition +
+//   UserRationOnFiction.value +
+//   UserRationOnFiction.writing +
+//   UserRationOnFiction.character +
+//   UserRationOnFiction.verisimilitude)
+//   / (COUNT(*)*6)
+//   AS CHAR(32)) AS avg,
+//   CAST(COUNT(*) AS CHAR(32)) AS cnt
+//   FROM UserRationOnFiction
+//   JOIN User ON UserRationOnFiction.userId = User.id
+//   JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id
+//   WHERE UserFictionStat.fictionId = ${fictionId}
+//   GROUP by User.mbti
+//   `;
+
+//     const mbtis = JSON.stringify(groupedByMBTI);
+
+//     return { props: { mbtis } };
+//   } catch (e) {
+//     return {
+//       props: {
+//         mbtis: null, // or provide a default value in case of an error
+//       },
+//     };
+//   }
+// };

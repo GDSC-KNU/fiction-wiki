@@ -223,8 +223,8 @@ async function handler(
       });
 
       await redis.setex(
-        JSON.stringify(req?.query),
-        3600 * 24,
+        JSON.stringify(req.query),
+        3600 * 24 * 7,
         JSON.stringify({
           ok: true,
           fictions,

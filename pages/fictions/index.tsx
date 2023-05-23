@@ -89,9 +89,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   ];
   const [page, setPage] = useRecoilState(fictionPageAtom);
 
-  // console.log(process.env.HOST);
-  // console.log(process.env.NEXT_PUBLIC_HOST);
-
   useEffect(() => {
     const updatedQueryObject: QueryObject = {
       keywords: Array.from(checkedItems).sort().reverse().join(",") || "all",
@@ -228,7 +225,6 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
     thisYear - 4,
     thisYear - 5,
   ];
-
 
   return (
     <div className=" ">
