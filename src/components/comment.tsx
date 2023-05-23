@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { Comment } from "@prisma/client";
+import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
 
 interface CommentResponse {
   comments: Comment[];
@@ -11,12 +13,19 @@ interface CommentResponse {
 
 export default function Comments() {
   const router = useRouter();
-  // comments displayer
+  const { user } = useUser();
+  const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
   const { data: commentsResponse } = useSWR<CommentResponse>(
     router.query.id
       ? `/api/fictions/${router.query.id}/comment?page=${commentIndex}`
       : null
+  );
+
+  // console.log(user);
+
+  const [deleteComment, { loading }] = useMutation(
+    `/api/fictions/${router.query.id}/comment`
   );
 
   const nextHandler = (e: any) => {
@@ -55,7 +64,25 @@ export default function Comments() {
                   <li className=" mr-16 mt-2 overflow-hidden text-sm">
                     {comment?.comment || ""}
                   </li>
-                  <li className=" absolute right-20 mt-2 text-sm">
+                  {user && comment?.createdById === user?.id ? (
+                    <li
+                      onClick={async () => {
+                        await deleteComment(
+                          { userId: user?.id, commentId: comment.id },
+                          "DELETE"
+                        );
+
+                        mutate(`/api/fictions/${router.query.id}`);
+                        mutate(
+                          `/api/fictions/${router.query.id}/comment?page=${1}`
+                        );
+                      }}
+                      className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
+                    >
+                      X
+                    </li>
+                  ) : null}
+                  <li className=" absolute right-[67px] mt-2 text-sm">
                     {`${comment?.createdById?.slice(0, 5) || ""}...`}
                   </li>
                   <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>

@@ -19,17 +19,16 @@ export default function useMutation<T = any>(
     data: undefined,
     error: undefined,
   });
-
-
   async function mutation(data: any, method: string) {
-
+    // console.log(JSON.stringify(data));
     setState((prev) => ({ ...prev, loading: true }));
     try {
       const response = await axios({
-        method: method?.toString() || "POST",
+        method: method ? method?.toString() : "POST",
         url: url,
         headers: {
           "Content-Type": "application/json",
+          "X-Data": JSON.stringify(data),
         },
         data: JSON.stringify(data),
       });

@@ -10,6 +10,7 @@ async function handler(
   const {
     query: { id, page },
     // session: { user },
+    body,
   } = req;
   //   const session = await getSession({ req });
 
@@ -33,14 +34,43 @@ async function handler(
     });
 
     res.json({ comments, commentsCount, ok: true });
+  } else if (req.method === "DELETE") {
+    const xDataHeader = req.headers?.["x-data"];
+
+    if (!xDataHeader || typeof xDataHeader !== "string") return;
+
+    const { userId, commentId } = JSON.parse(xDataHeader);
+
+    // if (!commentId) return res.json({ ok: false });
+
+    const entity = await client.userRationOnFiction.findFirst({
+      where: {
+        comment: {
+          id: commentId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (entity) {
+      await client.userRationOnFiction.delete({
+        where: {
+          id: entity!.id,
+        },
+      });
+    }
+
+    return res.json({ ok: true });
   } else {
-    res.json({ ok: false });
+    return res.json({ ok: false });
   }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE"],
     handler,
   })
 );

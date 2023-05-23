@@ -22,6 +22,7 @@ import ReviewFeed from "@components/fiction/reviewFeed";
 import { useEffect, useRef, useState } from "react";
 import Comments from "@components/comment";
 import useUser from "@libs/client/useUser";
+import useMutation from "@libs/client/useMutation";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -64,7 +65,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   reviews,
   mbtis,
 }) => {
-  // console.log(mbtis);
   const { user } = useUser();
   const router = useRouter();
   const [deferredMbtis, setDeferredMbtis] = useState(mbtis);
@@ -86,6 +86,10 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   // );
 
   // const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
+
+  const [deleteComment, { loading }] = useMutation(
+    `/api/fictions/${router.query.id}/comment`
+  );
 
   /// swr로 data fetching이후 데이터 synchronize
   useEffect(() => {
