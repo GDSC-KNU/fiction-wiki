@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { DefaultSeo } from "next-seo";
 import SEO from "../seo.config";
 import HeadMeta from "src/components/headMeata";
+import { Analytics } from "@vercel/analytics/react";
 
 function MyApp({
   Component,
@@ -63,6 +64,7 @@ function MyApp({
             <Top />
             <section className="  mt-[80px] w-full max-w-[1300px] items-center pb-[60px]  md:mt-[48px]">
               <Component {...pageProps} />
+              <Analytics />
             </section>
             <Footer />
           </div>

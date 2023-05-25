@@ -26,7 +26,7 @@ async function handler(
 
   // credential, session 모두 없을시 ok: false
   if (Object.keys(credentialSession).length === 0 && !session) {
-    return res.json({ ok: false });
+    return res.status(401).json({ ok: false, message: "Unauthorized" });
   }
 
   // 1) CredentialSession 존재 => 관리자
