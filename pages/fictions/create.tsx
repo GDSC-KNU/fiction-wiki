@@ -1,5 +1,5 @@
-// import "@uiw/react-md-editor/markdown-editor.css";
-// import "@uiw/react-markdown-preview/markdown.css";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 import Button from "src/components/button";
 import FictionRadarChart from "src/components/fictionRadarChart";
 import Input from "src/components/input";
@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 interface CreateFictionForm {
   title: string;
@@ -46,18 +47,18 @@ interface CreateFictionMutation {
   fiction: Fiction;
 }
 
-// const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-//   ssr: false,
-// });
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
 
 const Create: NextPage = (props) => {
-  // const [md, setMd] = useState<string | undefined>("# Hello World");
+  const [md, setMd] = useState<string | undefined>("setup");
 
-  // const handleChange = (md: any) => {
-  //   setMd(md);
-  // };
+  const handleChange = (md: any) => {
+    setMd(md);
+  };
   const router = useRouter();
-  
+
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");
 
@@ -80,9 +81,9 @@ const Create: NextPage = (props) => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      createFiction({ ...data, thumbId: id, setup: "" }, "POST");
+      createFiction({ ...data, thumbId: id, setup: md }, "POST");
     } else {
-      createFiction({ ...data, setup: "" }, "POST");
+      createFiction({ ...data, setup: md }, "POST");
     }
     return;
   };
@@ -179,7 +180,7 @@ const Create: NextPage = (props) => {
   return (
     <>
       <div>
-        <form className=" w-[90vw]" onSubmit={handleSubmit(onValid, onInvalid)}>
+        <form className=" " onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
               <div className=" col-span-2 mx-5 mt-7 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
@@ -545,9 +546,9 @@ const Create: NextPage = (props) => {
                 label="Characters"
                 required
               />
-              {/* <div>
-                <MDEditor value={md} onChange={handleChange} />
-              </div> */}
+              <div className="">
+                <MDEditor height={700} value={md} onChange={handleChange} />
+              </div>
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

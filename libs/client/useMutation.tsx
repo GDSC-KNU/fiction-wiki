@@ -20,20 +20,20 @@ export default function useMutation<T = any>(
     error: undefined,
   });
   async function mutation(data: any, method: string) {
-    // console.log(JSON.stringify(data));
     setState((prev) => ({ ...prev, loading: true }));
     try {
       const response = await axios({
-        method: method ? method?.toString() : "POST",
+        method: method ? method.toString() : "POST",
         url: url,
         headers: {
           "Content-Type": "application/json",
-          "X-Data": JSON.stringify(data),
+          // "X-Data": JSON.stringify(data),
         },
         data: JSON.stringify(data),
       });
       setState((prev) => ({ ...prev, data: response.data }));
     } catch (error) {
+      // console.log(error);
       setState((prev) => ({ ...prev, error: error }));
     } finally {
       setState((prev) => ({ ...prev, loading: false }));

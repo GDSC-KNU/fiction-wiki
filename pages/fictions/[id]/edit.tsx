@@ -17,13 +17,14 @@ import { useRouter } from "next/router";
 import { FieldErrors, useForm } from "react-hook-form";
 import Image from "next/image";
 import useSWR from "swr";
-// import dynamic from "next/dynamic";
-// import "@uiw/react-md-editor/markdown-editor.css";
-// import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
 
-// const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-//   ssr: false,
-// });
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
 
 interface EditFictionForm {
   title: string;
@@ -101,9 +102,8 @@ const EditFiction: NextPage = () => {
         : `/api/fictions/${router.query.id}`
       : null
   );
-  const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
-    `/api/fictions/${router.query.id}`
-  );
+  const [editFiction, { loading, data, error }] =
+    useMutation<EditFictionMutation>(`/api/fictions/${router.query.id}`);
   const { register, handleSubmit, resetField, watch, setValue } =
     useForm<EditFictionForm>({ mode: "onBlur" });
 
@@ -119,16 +119,7 @@ const EditFiction: NextPage = () => {
 
     return [year, month, day].join("-");
   }
-  // console.log(fiction?.fiction?);
-  // console.log(md);
-  // console.log(
-  //   fiction?.fiction??.categories.reduce(
-  //     (prev, cur) =>
-  //       (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
-  //     ""
-  //   )
-  // );
-  console.log(fiction);
+
   useEffect(() => {
     if (fiction?.fiction) {
       setValue("title", fiction.fiction?.title || "");
@@ -170,8 +161,8 @@ const EditFiction: NextPage = () => {
       if (md === "") {
         setMd(fiction.fiction?.setup || "");
       }
-      // console.log(md);
-      // setValue("setup", fiction.fiction?.setup || "");
+
+      setValue("setup", fiction.fiction?.setup || "");
       // Keywords, mcKeywords, subKeywords
       fiction.fiction?.keywords
         .filter(
@@ -193,11 +184,10 @@ const EditFiction: NextPage = () => {
       // setValue("keywords.0", "asd");
     }
   }, [fiction, setValue, md]);
-  console.log(fiction);
-  console.log(fiction?.fiction?.genre);
 
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;
+    // console.log(data.thumb);
     if (data.thumb && data.thumb.length > 0) {
       await fetch(`/api/files`, {
         method: "DELETE",
@@ -209,9 +199,9 @@ const EditFiction: NextPage = () => {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      editFiction({ ...data, thumbId: id, setup: "" }, "PUT");
+      editFiction({ ...data, thumbId: id, setup: md }, "PUT");
     } else {
-      editFiction({ ...data, setup: "" }, "PUT");
+      editFiction({ ...data, setup: md }, "PUT");
     }
     return;
   };
@@ -232,6 +222,7 @@ const EditFiction: NextPage = () => {
   }, [thumb]);
 
   const onInvalid = (errors: FieldErrors) => {
+    console.log(errors);
     if (loading) return;
     if (errors) return;
   };
@@ -303,7 +294,7 @@ const EditFiction: NextPage = () => {
         wKeywords4.filter((item) => item !== " ");
         setValue("consKeywords", [wKeywords4[0], ...wKeywords4]);
       }
-      console.log(wKeywords4);
+
       resetField("consKeywords.0");
     }
   };
@@ -311,7 +302,7 @@ const EditFiction: NextPage = () => {
   return (
     <>
       <div>
-        <form className=" w-[90vw]" onSubmit={handleSubmit(onValid, onInvalid)}>
+        <form className=" " onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
             <div className=" grid grid-cols-1 sm:grid-cols-5 ">
               <div className=" col-span-2 mx-5 mt-7 h-fit overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
@@ -677,7 +668,7 @@ const EditFiction: NextPage = () => {
                 label="Characters"
                 required
               />
-              {/* <MDEditor value={md} onChange={handleChange} /> */}
+              <MDEditor height={700} value={md} onChange={handleChange} />
             </div>
           </div>
           <Button text={loading ? "Loading..." : "저장"} />

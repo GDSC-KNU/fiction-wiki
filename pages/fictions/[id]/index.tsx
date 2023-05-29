@@ -1,5 +1,23 @@
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
+import useSWR from "swr";
+
+import UserRate from "@components/userRate";
+import FictionRadarChart from "@components/fictionRadarChart";
+import StarRating from "@components/starRating";
+import StructuredData from "@components/structuredData";
+import MbtiBarChart from "@components/mbtiBarChart";
+import ReviewFeed from "@components/fiction/reviewFeed";
+
+import client from "@libs/server/client";
+import Comments from "@components/comment";
+import useUser from "@libs/client/useUser";
+
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import type {
   Fiction,
   FictionStat,
@@ -8,20 +26,17 @@ import type {
   Author,
   Category,
 } from "@prisma/client";
-import UserRate from "@components/userRate";
-import client from "@libs/server/client";
-import Image from "next/image";
-import Link from "next/link";
-import FictionRadarChart from "src/components/fictionRadarChart";
-import StarRating from "src/components/starRating";
-import { NextSeo } from "next-seo";
-import StructuredData from "src/components/structuredData";
-import useSWR from "swr";
-import MbtiBarChart from "@components/mbtiBarChart";
-import ReviewFeed from "@components/fiction/reviewFeed";
-import { useEffect, useRef, useState } from "react";
-import Comments from "@components/comment";
-import useUser from "@libs/client/useUser";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
+const EditorMarkdown = dynamic(
+  () =>
+    import("@uiw/react-md-editor").then((mod) => {
+      return mod.default.Markdown;
+    }),
+  { ssr: false }
+);
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -113,6 +128,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
       <StructuredData data={fiction} />
       <NextSeo
         title={`${fiction?.title}`}
+        // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
         description={fiction?.synopsis}
         canonical={`https://fictiondbs.com/fictions/${fiction?.id}`}
         openGraph={{
@@ -138,7 +154,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         </div>
       ) : null}
       <div className=" col-span-10 flex-col justify-between">
-        <h1 className=" pt-2 text-2xl font-semibold">{fiction?.title}</h1>
+        <h1 className=" pt-2 text-3xl font-semibold">{fiction?.title}</h1>
         <div className=" mb-2 flex">
           <p className="  text-sm text-gray-500">{fiction?.originalTitle}</p>
           <p className="  ml-2 text-sm text-gray-500">
@@ -187,8 +203,8 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 </div>
 
                 <p className=" mt-1 h-[144px] overflow-x-hidden text-xs ">
-                  {fiction?.synopsis.slice(0, 90) ||
-                    "로딩중입니다".slice(0, 150)}
+                  {fiction?.setup.slice(6, 96) ||
+                    "줄거리 업데이트 예정".slice(0, 150)}
                   <button
                     onClick={() => {
                       synopsisRef?.current?.scrollIntoView({
@@ -198,7 +214,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     }}
                     className=" cursor-pointer text-blue-800"
                   >
-                    ... 더보기
+                    {fiction?.setup ? `... 더보기` : ""}
                   </button>
                 </p>
                 <p className=" text-xs"></p>
@@ -235,7 +251,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             </div>
             <div className=" hidden overflow-x-hidden border-b-[1px] pb-2 sm:block">
               <p className="  h-20 text-xs">
-                {fiction?.synopsis.slice(0, 200) || "로딩중입니다"}
+                {fiction?.setup.slice(6, 206) || "줄거리 업데이트 예정"}
                 <button
                   className=" cursor-pointer text-blue-600"
                   onClick={() => {
@@ -245,11 +261,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     });
                   }}
                 >
-                  ... 더보기
+                  {fiction?.setup ? `... 더보기` : ""}
                 </button>
               </p>
             </div>
-            <div className=" overflow-hidden text-xs">
+            <div className=" overflow-hidden text-sm">
               <div className=" col-span-10 grid grid-cols-2">
                 <dl id="infoBox-left" className=" col-span-2 sm:col-span-1">
                   <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">
@@ -440,7 +456,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     </li>
                   ))}
               </ul>
-              <h2 className=" border-b-[1px] pt-1 font-bold">주인공 태그</h2>
+              <div className=" border-b-[1px] pt-1 font-bold">주인공 태그</div>
               <ul className=" inline-flex flex-wrap pt-2">
                 {fiction?.keywords
                   .filter((item) => item?.keyword?.isOfMC === true)
@@ -458,7 +474,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     </li>
                   ))}
               </ul>
-              <h2 className=" border-b-[1px] pt-1 font-bold">히로인 태그</h2>
+              <div className=" border-b-[1px] pt-1 font-bold">히로인 태그</div>
               <ul className=" inline-flex flex-wrap pt-2">
                 {fiction?.keywords
                   .filter((item) => item?.keyword?.isOfHeroine === true)
@@ -476,7 +492,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     </li>
                   ))}
               </ul>
-              <h2 className=" border-b-[1px] pt-1 font-bold">호불호 태그</h2>
+              <div className=" border-b-[1px] pt-1 font-bold">호불호 태그</div>
               <ul className=" inline-flex flex-wrap pt-2">
                 {fiction?.keywords
                   .filter((item) => item?.keyword?.isOfCons === true)
@@ -508,38 +524,48 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <h2 className=" border-b-[1px] py-2 text-xl font-bold">코멘트</h2>
           <Comments />
         </div>
-        <div className="  rounded-md ">
-          <ReviewFeed data={reviews}></ReviewFeed>
-        </div>
 
         <div className=" mt-3 rounded-md bg-white sm:pt-3">
-          <div className=" ">
+          {/* <div className=" ">
             <h2 className=" border-b-[1px] py-2 text-xl font-bold">줄거리</h2>
             <p ref={synopsisRef} className=" mt-2 whitespace-pre-wrap">
               {fiction?.synopsis}
             </p>
-          </div>
-          <div className=" mt-3">
+          </div> */}
+          {/* <div className=" mt-3">
             <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
               개요
             </h2>
             <p className=" mt-2 whitespace-pre-wrap">{fiction?.introduction}</p>
-          </div>
-          <div className=" mt-3">
+          </div> */}
+          {/* <div className=" mt-3">
             <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
               등장인물
             </h2>
             <p className=" mt-2 whitespace-pre-wrap"> {fiction?.characters}</p>
+          </div> */}
+          <div className=" mb-3">
+            <div ref={synopsisRef}></div>
+            {/* <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
+              설정
+            </h2> */}
+            <EditorMarkdown source={fiction.setup} />
           </div>
         </div>
-        <div className=" mt-4 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3">
-          <h3 className=" text-xl font-bold">비슷한 소설</h3>
-          <div className=" mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="  rounded-md ">
+          <ReviewFeed data={reviews}></ReviewFeed>
+        </div>
+        <div className=" mt-4">
+          <h3 className=" mb-2 text-xl font-bold">비슷한 소설</h3>
+          <div className=" lg:grid-cols-4">
             {similarFictions?.slice(0, 4).map((fiction) => (
-              <div key={fiction?.id}>
-                <div className="mb-4 h-56 w-full bg-slate-300"></div>
-                <h3 className=" -mb-1 text-gray-700">{fiction?.title}</h3>
-                {/* <span>description</span> */}
+              <div className=" mb-1 border-b-[1px] pb-1" key={fiction?.id}>
+                <Link
+                  href={`/fictions/${fiction.id}`}
+                  className=" cursor-pointer text-gray-700"
+                >
+                  {fiction?.title}
+                </Link>
               </div>
             ))}
           </div>
@@ -637,6 +663,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     select: {
       id: true,
       title: true,
+      // setup: true,
     },
   });
 

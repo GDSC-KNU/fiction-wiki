@@ -29,7 +29,7 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
   // const { user, isLoading } = useUser();
 
   return (
-    <div className=" mx-auto min-h-[213px] ">
+    <div className=" mx-auto min-h-[213px] px-2">
       {/* <HeadMeta
         title={author?.name}
         description={author?.description}
@@ -53,19 +53,26 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
             alt={author.name}
           />
           <div className=" flex flex-col justify-center">
-            <h5 className=" mb-2 text-xl font-bold">{author?.name}</h5>
+            <h1 className=" mb-2 text-xl font-bold">{author?.name}</h1>
             <p>{`${author?.rawName}${
               author?.relatedName === null ? "" : `, ` + author?.relatedName
             }`}</p>
-            <p>{`국적 - ` + author?.nationality}</p>
-            <p>{`SNS - ` + (author?.sns || "업데이트 예정")}</p>
+            <div className=" flex">
+              <dt>국적</dt>
+              <dd className=" ml-3">{author?.nationality}</dd>
+            </div>
+            <div className=" flex">
+              <dt>SNS</dt>
+              <dd className=" ml-3">{author?.sns || "업데이트 예정"}</dd>
+            </div>
           </div>
         </div>
         <div className=" mb-4 ml-3 pb-2 text-sm"> {author?.description}</div>
       </div>
       <div className=" mb-4  grid grid-cols-12">
         <div className=" col-span-12 lg:col-span-12">
-          <div className="mt-5 text-xl font-bold">작품 목록</div>
+          <div className=" mt-5"></div>
+          <h2 className=" text-xl font-bold">작품 목록</h2>
           <FictionList
             data={{ fictions: author?.fictions }}
             type={"fictions_list"}

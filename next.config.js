@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-// const removeImports = require("next-remove-imports")();
+const removeImports = require("next-remove-imports")();
 
 // const withBundleAnalyzer = require('@next/bundle-analyzer')({
 //   enabled: process.env.ANALYZE === 'true',
@@ -38,7 +38,7 @@ let nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = removeImports({ ...nextConfig });
 
 // {
 //   webpack(config) {
