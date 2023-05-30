@@ -27,7 +27,7 @@ export default function useMutation<T = any>(
         url: url,
         headers: {
           "Content-Type": "application/json",
-          // "X-Data": JSON.stringify(data),
+          "X-Data": method === "DELETE" ? JSON.stringify(data) : "",
         },
         data: JSON.stringify(data),
       });
