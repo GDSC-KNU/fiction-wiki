@@ -300,22 +300,22 @@ async function handler(
 
     //  On-Demand revalidation
     // await revalidator(id, "comment");
-    try {
-      await axios.post(
-        `${process.env.NEXTAUTH_URL}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
-        {
-          id,
-          comment,
-        }
-        // {
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await axios.get(
+    //     `${process.env.NEXTAUTH_URL}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
+    //     {
+    //       id: +id!.toString(),
+    //       comment,
+    //     }
+
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    await fetch(
+      `${process.env.NEXTAUTH_URL}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
+      { body: JSON.stringify({ id, comment }) }
+    );
 
     res.json({ ok: true, Ration });
   }
