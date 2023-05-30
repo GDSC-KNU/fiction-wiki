@@ -22,10 +22,10 @@ let nextConfig = {
       "imagedelivery.net",
     ],
   },
-  i18n: {
-    locales: ["ko"],
-    defaultLocale: "ko",
-  },
+  // i18n: {
+  //   locales: ["ko"],
+  //   defaultLocale: "ko",
+  // },
   env: {
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },

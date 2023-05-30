@@ -5,6 +5,7 @@ import { withApiSession } from "@libs/server/withSession";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import revalidator from "@libs/server/revalidator";
+import axios from "axios";
 
 async function handler(
   req: NextApiRequest,
@@ -298,7 +299,23 @@ async function handler(
     }
 
     //  On-Demand revalidation
-    await revalidator(id, "comment");
+    // await revalidator(id, "comment");
+    try {
+      await axios.post(
+        `${process.env.NEXTAUTH_URL}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
+        {
+          id,
+          comment,
+        }
+        // {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // }
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     res.json({ ok: true, Ration });
   }

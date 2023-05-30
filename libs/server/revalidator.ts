@@ -22,12 +22,12 @@ export default async function revalidator(
       {
         id,
         type,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
+      // {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // }
     );
   } catch (error) {
     console.log(error);
