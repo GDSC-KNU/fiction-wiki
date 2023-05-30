@@ -46,6 +46,17 @@ async function handler(
     // 2) CredentialSession 존재 X => 일반 유저
     profile = await client.user.findUnique({
       where: { id: session.user.id },
+      include: {
+        comments: {
+          include: {
+            fiction: {
+              select: {
+                title: true,
+              },
+            },
+          },
+        },
+      },
     });
     isAdmin = false;
   }

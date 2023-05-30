@@ -107,6 +107,11 @@ const HeadMeta = ({ title, description, url, img, isMain }: any) => {
             content="/favicon/ms-icon-144x144.png"
           />
           <meta name="theme-color" content="#ffffff"></meta>
+          {/* 네이버 검색엔진 등록 */}
+          <meta
+            name="naver-site-verification"
+            content="30cd8ea963377b6866389d39ec426e76543df5cd"
+          />
         </>
       ) : null}
     </Head>

@@ -17,14 +17,6 @@ const redisConfig = {
 
 const redis = new Redis(redisConfig);
 
-// export const config = {
-//   runtime: "edge",
-//   unstable_allowDynamic: [
-//     "/lib/utilities.js", // allows a single file
-//     "/node_modules/function-bind/**", // use a glob to allow anything in the function-bind 3rd party module
-//   ],
-// };
-
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -40,12 +32,10 @@ async function handler(
       // return cache;
       res.json(cache);
     } else {
-      // console.log(req.query);
       if (nationalities === "all") nationalities = "";
       if (genres === "all") genres = "";
       if (keywords === "all") keywords = "";
       if (dateYear === "all") dateYear = "";
-      // if (sorting === "all") keywords = "";
 
       const keywordArray = !Array.isArray(keywords)
         ? keywords?.split(",")
@@ -71,14 +61,6 @@ async function handler(
               },
             ]),
       ];
-
-      // const genresMany =
-      //   genres
-      //     ?.toString()
-      //     .split(",")
-      //     .map((item: string) => ({
-      //       categories: { some: { category: { name: item || undefined } } },
-      //     })) || [];
 
       const genresArray = genres?.toString().split(",") || [""];
       const genresManyquery = [

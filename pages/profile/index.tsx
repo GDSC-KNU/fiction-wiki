@@ -8,10 +8,8 @@ import EditSVG from "@public/svg/edit_pen-to-square.svg";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-interface CommentWithUser extends Comment {
-  createdBy: User;
+interface CommentWithFiction extends Comment {
   fiction: Fiction;
-  userFictionStat: UserFictionStatWithFiction;
 }
 
 interface UserFictionStatWithFiction extends UserFictionStat {
@@ -21,7 +19,7 @@ interface UserFictionStatWithFiction extends UserFictionStat {
 interface ProfileResponse {
   ok: boolean;
   profile: {
-    comments: CommentWithUser[];
+    comments: CommentWithFiction[];
   };
 }
 
@@ -41,7 +39,7 @@ const Profile: NextPage = () => {
 
   //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  // console.log(data);
+  console.log(data);
   return (
     <div className="min-h-[213px] max-w-[1300px] ">
       <div className=" mb-7 flex justify-between bg-slate-400 py-4 pl-6">
@@ -71,7 +69,7 @@ const Profile: NextPage = () => {
         <div className=" lg:col-span-1 "></div>
         <ul className=" col-span-12 lg:col-span-10">
           <h5 className=" mb-4 font-bold">내가 쓴 댓글</h5>
-          {data?.profile?.comments?.map(({ comment, fiction, id }, i) => (
+          {data?.profile.comments?.map(({ comment, fiction, id }, i) => (
             <li key={id} className=" mb-2 flex items-center justify-between">
               <div className=" rounded bg-black p-1 text-xs text-white ring-black">
                 {fiction?.title}

@@ -11,12 +11,25 @@ import client from "@libs/server/client";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import FictionList from "@components/fictionList";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "../../src/store/atoms";
 import { ParsedUrlQueryInput } from "querystring";
 import { NextSeo } from "next-seo";
+
+import { Redis } from "@upstash/redis";
+
+const redisConfig = {
+  url:
+    process.env.UPSTASH_REDIS_REST_URL ??
+    "https://apn1-sacred-manatee-34786.upstash.io",
+  token:
+    process.env.UPSTASH_REDIS_REST_TOKEN ??
+    "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
+};
+
+const redis = new Redis(redisConfig);
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -364,58 +377,70 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
             </table>
           </div>
 
-          <details className=" text-center">
-            <div className=" mt-5 rounded-md border-[0.5px] border-[#BBBBBB] bg-white px-2 pb-1 pt-2 ">
-              <table className=" leading-7">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th className=" min-w-[50px]">키워드</th>
-                    <td className=" flex flex-wrap leading-[1.8rem]">
-                      {keywords
-                        .filter((keyword) => keyword?.isOfCons !== true)
-                        .map((keyword) => (
-                          <label key={keyword?.id} className="  flex ">
-                            <input
-                              onChange={(e) => checkHandler(e)}
-                              type="checkbox"
-                              // id="keyword"
-                              className=" peer hidden"
-                              value={keyword?.name}
-                              name="keyword"
-                            />
-                            <div className=" mx-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white  ">
-                              #{keyword?.name}
-                            </div>
-                          </label>
-                        ))}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className=" flex justify-between text-center">
+            <details className=" ">
+              <div className=" mt-5 rounded-md border-[0.5px] border-[#BBBBBB] bg-white px-2 pb-1 pt-2 ">
+                <table className=" leading-7">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th className=" min-w-[50px]">키워드</th>
+                      <td className=" flex flex-wrap leading-[1.8rem]">
+                        {keywords
+                          .filter((keyword) => keyword?.isOfCons !== true)
+                          .map((keyword) => (
+                            <label key={keyword?.id} className="  flex ">
+                              <input
+                                onChange={(e) => checkHandler(e)}
+                                type="checkbox"
+                                // id="keyword"
+                                className=" peer hidden"
+                                value={keyword?.name}
+                                name="keyword"
+                              />
+                              <div className=" mx-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white  ">
+                                #{keyword?.name}
+                              </div>
+                            </label>
+                          ))}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <summary style={{ listStyle: "none" }} className=" mt-4 w-fit">
+                <span className=" flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />{" "}
+                  </svg>
+                  &nbsp;
+                  <span> 키워드 검색</span>
+                </span>
+              </summary>
+            </details>
+            <div
+              onClick={() => {
+                redis.del(JSON.stringify(queryString));
+                window.alert("갱신되었습니다.");
+                mutate(queryString);
+              }}
+              className=" mt-4 flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200"
+            >
+              데이터 갱신
             </div>
-            <summary style={{ listStyle: "none" }} className=" mt-4 w-fit">
-              <span className=" flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />{" "}
-                </svg>
-                &nbsp;
-                <span> 키워드 검색</span>
-              </span>
-            </summary>
-          </details>
+          </div>
         </form>
       </div>
       {isValidating && !data ? (
@@ -463,6 +488,16 @@ export async function getStaticProps() {
     },
     revalidate: 10000,
   };
+}
+
+async function getFictions() {
+  const fictions = await fetch(`${process.env.SITE_URL}/fictions`, {
+    next: {
+      revalidate: 60 * 60 * 24,
+    },
+  });
+
+  return fictions;
 }
 
 export default FictionsWithParams;
