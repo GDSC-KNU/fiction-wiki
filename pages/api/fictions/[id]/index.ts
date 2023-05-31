@@ -3,6 +3,7 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 import revalidator from "@libs/server/revalidator";
+import axios from "axios";
 
 async function handler(
   req: NextApiRequest,
@@ -374,7 +375,18 @@ async function handler(
     });
 
     //  On-Demand revalidation
-    revalidator(id, "edit");
+    // revalidator(id, "edit");
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
+        {
+          id,
+          type: "edit",
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     res.json({ ok: true, fiction });
   }

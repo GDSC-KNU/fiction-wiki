@@ -305,7 +305,8 @@ async function handler(
         `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
         {
           id,
-          comment,
+          // comment,
+          type: "edit",
         }
         // {
         //   headers: {

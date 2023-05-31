@@ -37,7 +37,10 @@ const AuthorDetail: NextPage<AuthorResponse> = ({ author }) => {
       /> */}
       <NextSeo
         title={author?.name}
-        description={author?.description || "작가에 대한 설명입니다."}
+        description={
+          author?.description ||
+          `작가 ${author?.name}의 페이지 입니다. 작품 목록, SNS 피드, 최신 소식을 확인하세요.`
+        }
         canonical={`${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`}
         openGraph={{
           url: `${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`,

@@ -40,7 +40,9 @@ function MyApp({
               fetch(url).then((response) => response.json()),
           }}
         >
-          <HeadMeta isMain={true} />
+          <HeadMeta isMain={true}>
+            <html lang="ko" />
+          </HeadMeta>
           <DefaultSeo {...SEO} />
           <Script
             strategy="afterInteractive"
