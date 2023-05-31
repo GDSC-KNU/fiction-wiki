@@ -39,7 +39,6 @@ const Profile: NextPage = () => {
 
   //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  console.log(data);
   return (
     <div className="min-h-[213px] max-w-[1300px] ">
       <div className=" mb-7 flex justify-between bg-slate-400 py-4 pl-6">
