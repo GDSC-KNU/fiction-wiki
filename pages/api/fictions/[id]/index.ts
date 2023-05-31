@@ -380,7 +380,7 @@ async function handler(
       await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
         {
-          id,
+          id: +id!.toString(),
           type: "edit",
         }
       );

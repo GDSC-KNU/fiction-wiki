@@ -24,7 +24,7 @@ export default async function handler(
     // this should be the actual path not a rewritten path
     // e.g. for "/products/[slug]" this should be "/products/1"
 
-    if (type === "comment") {
+    if (type === "edit") {
       await res.revalidate(`/fictions/${idToRevalidate}`);
       // console.log("revalidated");
     } else {
