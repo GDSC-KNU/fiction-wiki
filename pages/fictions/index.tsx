@@ -431,7 +431,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               </summary>
             </details>
             <div
-              title="해당 페이지의 데이터가 오래된 경우 클릭해주세요. 최신 데이터로 갱신됩니다."
+              title="해당 페이지의 ㅛ데이터가 오래된 경우 클릭해주세요. 최신 데이터로 갱신됩니다."
               onClick={() => {
                 redis.del(JSON.stringify(queryString));
                 window.alert("갱신되었습니다.");
@@ -491,14 +491,14 @@ export async function getStaticProps() {
   };
 }
 
-async function getFictions() {
-  const fictions = await fetch(`${process.env.SITE_URL}/fictions`, {
-    next: {
-      revalidate: 60 * 60 * 24,
-    },
-  });
+// async function getFictions() {
+//   const fictions = await fetch(`${process.env.SITE_URL}/fictions`, {
+//     next: {
+//       revalidate: 60 * 60 * 24,
+//     },
+//   });
 
-  return fictions;
-}
+//   return fictions;
+// }
 
 export default FictionsWithParams;

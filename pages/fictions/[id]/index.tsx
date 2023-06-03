@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import useSWR from "swr";
@@ -27,17 +26,6 @@ import type {
   Category,
 } from "@prisma/client";
 
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-
-const EditorMarkdown = dynamic(
-  () =>
-    import("@uiw/react-md-editor").then((mod) => {
-      return mod.default.Markdown;
-    }),
-  { ssr: false }
-);
-
 interface FictionDetailResponse {
   ok: boolean;
   fiction: FictionWithMore;
@@ -45,11 +33,8 @@ interface FictionDetailResponse {
   isLiked: boolean;
   reviews: any;
   mbtis: any;
+  setup: any;
 }
-
-// interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
-//   keyword: Keyword;
-// }
 
 interface FictionWithMore extends Fiction {
   keywords: [
@@ -78,6 +63,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   similarFictions,
   reviews,
   mbtis,
+  setup,
 }) => {
   const { user, isAdmin } = useUser();
   const router = useRouter();
@@ -122,6 +108,18 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     return string;
   };
   const synopsisRef = useRef<null | HTMLDivElement>(null);
+
+  // const [mdHTML, setMdHTML] = useState("");
+
+  // useEffect(() => {
+  //   const convertMarkdownToHtml = async (mdText: string) => {
+  //     const result = await remark().use(html).process(mdText);
+  //     const htmlSetup = DOMPurify.sanitize(result.toString());
+  //     setMdHTML(htmlSetup);
+  //   };
+
+  //   convertMarkdownToHtml(fiction.setup);
+  // }, [fiction.setup]);
 
   return (
     <div className=" grid grid-cols-10 px-2">
@@ -549,8 +547,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             {/* <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
               설정
             </h2> */}
-            <EditorMarkdown source={fiction.setup} />
           </div>
+          <div
+            className="prose prose-slate max-w-full"
+            dangerouslySetInnerHTML={{ __html: setup }}
+          ></div>
         </div>
         <div className="  rounded-md ">
           <ReviewFeed data={reviews}></ReviewFeed>
@@ -599,6 +600,13 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     };
   }
 
+  const { marked } = require("marked");
+
+  marked.setOptions({
+    headerIds: false,
+    mangle: false,
+  });
+
   const fiction = await client.fiction.findUnique({
     where: {
       id: +fictionId ?? 1,
@@ -635,6 +643,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       author: true,
     },
   });
+
+  const mdHtml = marked.parse(fiction?.setup);
 
   const arr: any[] = [];
   fiction?.keywords.map((item) => arr.push(item?.keyword?.name));
@@ -718,8 +728,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       isLiked,
       reviews: reviewResponse,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
+      setup: mdHtml,
     },
-    // revalidate: 60 * 60 * 24 * 30,
+    revalidate: 60 * 60 * 24 * 30,
   };
 };
 

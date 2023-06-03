@@ -52,75 +52,74 @@ async function handler(
   //   },
   // });
 
-  const fiction = await client.fiction.findUnique({
-    where: {
-      id: +id!.toString(),
-    },
-    include: {
-      fictionStat: true,
-      userFictionStat: {
-        include: {
-          userRationOnFictions: true,
-          _count: {
-            select: {
-              userRationOnFictions: true,
-            },
-          },
-        },
-      },
-      keywords: {
-        include: {
-          keyword: {
-            select: {
-              name: true,
-              isOfHeroine: true,
-              isOfMC: true,
-              isOfCons: true,
-            },
-          },
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-      author: true,
-    },
-  });
-
   if (req.method === "GET") {
-    const arr: any[] = [];
-    fiction?.keywords.map((item) => arr.push(item.keyword?.name));
-    const keywordSame = arr.map((word) => ({
-      keywords: {
-        some: {
-          keyword: {
-            name: {
-              equals: word,
+    const fiction = await client.fiction.findUnique({
+      where: {
+        id: +id!.toString(),
+      },
+      include: {
+        fictionStat: true,
+        userFictionStat: {
+          include: {
+            userRationOnFictions: true,
+            _count: {
+              select: {
+                userRationOnFictions: true,
+              },
             },
           },
         },
-      },
-    }));
-
-    const arr2: any[] = [];
-    const similarFictions = await client.fiction.findMany({
-      where: {
-        OR: keywordSame,
-        AND: {
-          id: {
-            not: fiction?.id,
+        keywords: {
+          include: {
+            keyword: {
+              select: {
+                name: true,
+                isOfHeroine: true,
+                isOfMC: true,
+                isOfCons: true,
+              },
+            },
           },
         },
-      },
-      select: {
-        id: true,
-        title: true,
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+        author: true,
       },
     });
+    // const arr: any[] = [];
+    // fiction?.keywords.map((item) => arr.push(item.keyword?.name));
+    // const keywordSame = arr.map((word) => ({
+    //   keywords: {
+    //     some: {
+    //       keyword: {
+    //         name: {
+    //           equals: word,
+    //         },
+    //       },
+    //     },
+    //   },
+    // }));
 
-    similarFictions.map((item) => arr2.push([item.id, item.title]));
+    // const arr2: any[] = [];
+    // const similarFictions = await client.fiction.findMany({
+    //   where: {
+    //     OR: keywordSame,
+    //     AND: {
+    //       id: {
+    //         not: fiction?.id,
+    //       },
+    //     },
+    //   },
+    //   select: {
+    //     id: true,
+    //     title: true,
+    //   },
+    // });
+
+    // similarFictions.map((item) => arr2.push([item.id, item.title]));
 
     // const isLiked = Boolean(
     //   await client.fav.findFirst({
@@ -133,7 +132,7 @@ async function handler(
     //     },
     //   })
     // );
-    const isLiked = false;
+    // const isLiked = false;
 
     const mbtis = await client.$queryRaw`
     SELECT User.mbti,
@@ -158,8 +157,8 @@ async function handler(
     return res.json({
       ok: true,
       fiction,
-      similarFictions,
-      isLiked,
+      // similarFictions,
+      // isLiked,
       mbtis,
     });
   }
@@ -203,8 +202,6 @@ async function handler(
       },
       // session: { user },
     } = req;
-
-    // console.log(setup);
 
     genre = genre
       .split(" ")
