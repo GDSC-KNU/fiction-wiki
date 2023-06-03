@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import useSWR from "swr";
+import { remark } from "remark";
+import html from "remark-html";
 
 import UserRate from "@components/userRate";
 import FictionRadarChart from "@components/fictionRadarChart";
@@ -600,13 +602,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     };
   }
 
-  const { marked } = require("marked");
-
-  marked.setOptions({
-    headerIds: false,
-    mangle: false,
-  });
-
   const fiction = await client.fiction.findUnique({
     where: {
       id: +fictionId ?? 1,
@@ -644,7 +639,16 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     },
   });
 
-  const mdHtml = marked.parse(fiction?.setup);
+  // remark()
+  // .use(html)
+  // .process(fiction?.setup, function(err, file) {
+  //   if (err) throw err;
+  //   console.log(String(file));
+  // });
+
+  const mdHtml = await remark()
+    .use(html)
+    .process(fiction?.setup || "");
 
   const arr: any[] = [];
   fiction?.keywords.map((item) => arr.push(item?.keyword?.name));
@@ -728,7 +732,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       isLiked,
       reviews: reviewResponse,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
-      setup: mdHtml,
+      setup: mdHtml.toString(),
     },
     revalidate: 60 * 60 * 24 * 30,
   };
