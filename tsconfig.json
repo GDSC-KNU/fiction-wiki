@@ -33,6 +33,6 @@
     "types/**/*.ts",
     "types/**/*.js",
     "pages/api/auth/[...nextauth].js"
-  ],
-  "exclude": ["node_modules"]
+, "pages/_document.js"  ],
+  "exclude": ["node_modules", ".next"]
 }

@@ -112,6 +112,11 @@ const HeadMeta = ({ title, description, url, img, isMain }: any) => {
             name="naver-site-verification"
             content="30cd8ea963377b6866389d39ec426e76543df5cd"
           />
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9616155322020486"
+            crossorigin="anonymous"
+          ></script>
         </>
       ) : null}
     </Head>

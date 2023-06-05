@@ -555,9 +555,9 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
-        <div className="  rounded-md ">
+        {/* <div className="  rounded-md ">
           <ReviewFeed data={reviews}></ReviewFeed>
-        </div>
+        </div> */}
         <div className=" mt-4">
           <h3 className=" mb-2 text-xl font-bold">비슷한 소설</h3>
           <div className=" lg:grid-cols-4">
@@ -693,17 +693,17 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const cx = process.env.GOOGLE_SEARCH_ENGINE_ID;
   const searchQuery = `${fiction?.title} 리뷰`;
 
-  const search = async (query: string) => {
-    const res = await customsearch.cse.list({
-      q: query,
-      cx: cx,
-      key: API_KEY,
-      num: 5, // number of search results to return
-    });
-    return res.data.items;
-  };
+  // const search = async (query: string) => {
+  //   const res = await customsearch.cse.list({
+  //     q: query,
+  //     cx: cx,
+  //     key: API_KEY,
+  //     num: 5, // number of search results to return
+  //   });
+  //   return res.data.items;
+  // };
 
-  const reviewResponse = await search(searchQuery ?? "");
+  // const reviewResponse = await search(searchQuery ?? "");
 
   const groupedByMBTI = await client.$queryRaw`
   SELECT User.mbti,
@@ -730,7 +730,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       fiction: JSON.parse(JSON.stringify(fiction)),
       similarFictions: JSON.parse(JSON.stringify(similarFictions)),
       isLiked,
-      reviews: reviewResponse,
+      // reviews: reviewResponse,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
       setup: mdHtml.toString(),
     },
