@@ -551,15 +551,15 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             </h2> */}
           </div>
           <div
-            className="prose prose-slate max-w-full"
+            className="prose prose-slate max-w-full "
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
         {/* <div className="  rounded-md ">
           <ReviewFeed data={reviews}></ReviewFeed>
         </div> */}
-        <div className=" mt-4">
-          <h3 className=" mb-2 text-xl font-bold">비슷한 소설</h3>
+        <div className=" mt-12">
+          <h3 className=" mb-2 text-2xl font-bold">비슷한 소설</h3>
           <div className=" lg:grid-cols-4">
             {similarFictions?.slice(0, 4).map((fiction) => (
               <div className=" mb-1 border-b-[1px] pb-1" key={fiction?.id}>

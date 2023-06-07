@@ -1,12 +1,12 @@
-export default {
-  titleTemplate: "%s | 웹소설정보 - FDBS",
+const config = {
+  titleTemplate: "%s | 웹소설위키 - FDBS",
   canonical: "https://fictiondbs.com",
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: "https://fictiondbs.com/",
     siteName: "FDBS",
-    title: " FDBS | 웹소설정보, 리뷰",
+    title: " FDBS | 웹소설위키, 평점",
   },
   twitter: {
     handle: "@handle",
@@ -14,3 +14,5 @@ export default {
     cardType: "summary_large_image",
   },
 };
+
+export default config;
