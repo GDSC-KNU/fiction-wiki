@@ -551,7 +551,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             </h2> */}
           </div>
           <div
-            className="prose prose-slate max-w-full "
+            className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:border-b-[1px] prose-h2:pb-2 prose-img:float-right prose-img:my-0"
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
