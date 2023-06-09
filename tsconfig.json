@@ -32,7 +32,9 @@
     "**/*.tsx",
     "types/**/*.ts",
     "types/**/*.js",
-    "pages/api/auth/[...nextauth].js"
-, "pages/_document.js"  ],
+    "pages/api/auth/[...nextauth].js",
+    "pages/_document.js",
+    "public/svg/*.svg"
+  ],
   "exclude": ["node_modules", ".next"]
 }

@@ -18,18 +18,21 @@ import { fictionPageAtom } from "../../src/store/atoms";
 import { ParsedUrlQueryInput } from "querystring";
 import { NextSeo } from "next-seo";
 
-import { Redis } from "@upstash/redis";
+import ExpandDown from "@public/svg/expandDown.svg";
+import CollapseUp from "@public/svg/CollapseUp.svg";
 
-const redisConfig = {
-  url:
-    process.env.UPSTASH_REDIS_REST_URL ??
-    "https://apn1-sacred-manatee-34786.upstash.io",
-  token:
-    process.env.UPSTASH_REDIS_REST_TOKEN ??
-    "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
-};
+// import { Redis } from "@upstash/redis";
 
-const redis = new Redis(redisConfig);
+// const redisConfig = {
+//   url:
+//     process.env.UPSTASH_REDIS_REST_URL ??
+//     "https://apn1-sacred-manatee-34786.upstash.io",
+//   token:
+//     process.env.UPSTASH_REDIS_REST_TOKEN ??
+//     "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
+// };
+
+// const redis = new Redis(redisConfig);
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -73,6 +76,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   nationalities,
 }) => {
   const router = useRouter();
+  //expand
+  const [isExpanded, setIsExpanded] = useState(true);
 
   //세부 필터링
   const [checkedItems, setCheckedItems] = useState(new Set());
@@ -145,19 +150,12 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
   const checkHandler = ({
     currentTarget,
   }: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(
-    //   currentTarget.value,
-    //   currentTarget.name,
-    //   currentTarget?.checked
-    // );
     checkedItemHandler(currentTarget);
   };
 
   const checkedItemHandler = (target: EventTarget & HTMLInputElement) => {
     const { value, checked: isChecked, name } = target;
 
-    // console.log();
-    // console.log(isChecked);
     if (isChecked) {
       switch (name) {
         case "keyword":
@@ -268,7 +266,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                     name="releaseTimeFilter"
                     checked={checkedReleaseTimeFilter === criteria}
                   />
-                  <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-lg  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
+                  <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-lg  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
                     {criteria}
                   </div>
                 </label>
@@ -287,7 +285,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                       name="dateYear"
                       checked={+checkedDateYear === year}
                     />
-                    <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-xs hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
+                    <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-xs peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
                       {year}
                     </div>
                   </label>
@@ -314,7 +312,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                   <th className=" min-w-[35px]">국가</th>
                   <td className=" flex flex-wrap leading-[1.8rem]">
                     {nationalities.map((nationality, i) => (
-                      <label key={i} className=" flex cursor-pointer">
+                      <label key={i + 1} className=" flex cursor-pointer">
                         <input
                           onChange={(e) => checkHandler(e)}
                           type="checkbox"
@@ -324,29 +322,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                           name="nationality"
                           // checked={checkedNationalities.has(nationality)}
                         />
-                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white">
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
                           {nationality}
-                        </div>
-                      </label>
-                    ))}
-                  </td>
-                </tr>
-                <tr>
-                  <th>장르</th>
-                  <td className=" flex flex-wrap leading-[1.8rem]">
-                    {categories.map((category: any, i) => (
-                      <label key={i} className=" flex cursor-pointer">
-                        <input
-                          onChange={(e) => checkHandler(e)}
-                          type="checkbox"
-                          // id="genre"
-                          className=" peer hidden"
-                          value={category.name}
-                          name="genre"
-                          // checked={checkedGenres.has(category.name)}
-                        />
-                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white ">
-                          {category.name}
                         </div>
                       </label>
                     ))}
@@ -366,8 +343,29 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                           name="sorting"
                           checked={sorting === checkedSortings}
                         ></input>
-                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white ">
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 ">
                           {sorting}
+                        </div>
+                      </label>
+                    ))}
+                  </td>
+                </tr>
+                <tr>
+                  <th>장르</th>
+                  <td className=" flex flex-wrap leading-[1.8rem]">
+                    {categories.map((category: any, i) => (
+                      <label key={i} className=" flex cursor-pointer">
+                        <input
+                          onChange={(e) => checkHandler(e)}
+                          type="checkbox"
+                          // id="genre"
+                          className=" peer hidden"
+                          value={category.name}
+                          name="genre"
+                          // checked={checkedGenres.has(category.name)}
+                        />
+                        <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 ">
+                          {category.name}
                         </div>
                       </label>
                     ))}
@@ -376,71 +374,60 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
               </tbody>
             </table>
           </div>
-
-          <div className=" flex justify-between text-center">
-            <details className=" ">
-              <div className=" mt-5 rounded-md border-[0.5px] border-[#BBBBBB] bg-white px-2 pb-1 pt-2 ">
-                <table className=" leading-7">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th className=" min-w-[50px]">키워드</th>
-                      <td className=" flex flex-wrap leading-[1.8rem]">
-                        {keywords
-                          .filter((keyword) => keyword?.isOfCons !== true)
-                          .map((keyword) => (
-                            <label key={keyword?.id} className="  flex ">
-                              <input
-                                onChange={(e) => checkHandler(e)}
-                                type="checkbox"
-                                // id="keyword"
-                                className=" peer hidden"
-                                value={keyword?.name}
-                                name="keyword"
-                              />
-                              <div className=" mx-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 peer-checked:bg-blue-600 peer-checked:text-white  ">
-                                #{keyword?.name}
-                              </div>
-                            </label>
-                          ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+          <div className=" relative flex text-center leading-[1.8rem]">
+            <div className=" mt-2 ">
+              <div className=" mt-1 whitespace-nowrap rounded-lg border-[#BBBBBB]   font-bold  peer-checked:bg-blue-600 peer-checked:text-white">
+                키워드
               </div>
-              <summary style={{ listStyle: "none" }} className=" mt-4 w-fit">
-                <span className=" flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />{" "}
-                  </svg>
-                  &nbsp;
-                  <span> 키워드 검색</span>
-                </span>
-              </summary>
-            </details>
-            <div
-              title="해당 페이지의 ㅛ데이터가 오래된 경우 클릭해주세요. 최신 데이터로 갱신됩니다."
-              onClick={() => {
-                redis.del(JSON.stringify(queryString));
-                window.alert("갱신되었습니다.");
-                mutate(queryString);
-              }}
-              className=" mt-4 flex items-center  rounded-md border-[0.5px] border-[#BBBBBB] p-1 hover:cursor-pointer hover:bg-gray-200"
-            >
-              데이터 갱신
             </div>
+            <div
+              className={
+                isExpanded
+                  ? ` relative mt-2 flex h-fit touch-auto flex-nowrap justify-between overflow-x-auto  scrollbar-thin scrollbar-thumb-slate-200`
+                  : ` relative mt-2 flex h-fit touch-auto flex-wrap justify-between overflow-x-auto  scrollbar-thin scrollbar-thumb-slate-200`
+              }
+            >
+              {keywords
+                .filter((keyword) => keyword?.isOfCons !== true)
+                .map((keyword) => (
+                  <label key={keyword?.id} className=" flex">
+                    <input
+                      onChange={(e) => checkHandler(e)}
+                      type="checkbox"
+                      // id="keyword"
+                      className=" peer hidden"
+                      value={keyword?.name}
+                      name="keyword"
+                    />
+                    <div className=" ml-[0.2rem] mt-1 h-fit cursor-pointer whitespace-nowrap rounded-lg border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200  ">
+                      {keyword?.name}
+                    </div>
+                  </label>
+                ))}
+            </div>
+            {!isExpanded ? (
+              <div className=" absolute bottom-0 left-0 mt-3 flex rounded-lg ">
+                <div className=" h-[28.8px] w-6  bg-transparent bg-gradient-to-l from-white backdrop-blur-[1.5px]"></div>
+                <span className=" cursor-pointer bg-white">
+                  <CollapseUp
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    height={28}
+                    width={28}
+                  />
+                </span>
+              </div>
+            ) : (
+              <div className=" absolute right-0 mt-3 flex rounded-lg ">
+                <div className=" h-[28.8px] w-6  bg-transparent bg-gradient-to-l from-white backdrop-blur-[1.5px]"></div>
+                <span className=" cursor-pointer bg-white">
+                  <ExpandDown
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    height={28}
+                    width={28}
+                  />
+                </span>
+              </div>
+            )}
           </div>
         </form>
       </div>
