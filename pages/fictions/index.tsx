@@ -19,7 +19,7 @@ import { ParsedUrlQueryInput } from "querystring";
 import { NextSeo } from "next-seo";
 
 import ExpandDown from "@public/svg/expandDown.svg";
-import CollapseUp from "@public/svg/CollapseUp.svg";
+import CollapseUp from "@public/svg/collapseUp.svg";
 
 // import { Redis } from "@upstash/redis";
 
