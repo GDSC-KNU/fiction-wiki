@@ -12,7 +12,7 @@ import FictionRadarChart from "@components/fictionRadarChart";
 import StarRating from "@components/starRating";
 import StructuredData from "@components/structuredData";
 import MbtiBarChart from "@components/mbtiBarChart";
-import ReviewFeed from "@components/fiction/reviewFeed";
+// import ReviewFeed from "@components/fiction/reviewFeed";
 
 import client from "@libs/server/client";
 import Comments from "@components/comment";

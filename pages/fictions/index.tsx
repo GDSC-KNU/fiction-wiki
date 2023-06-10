@@ -383,8 +383,8 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
             <div
               className={
                 isExpanded
-                  ? ` relative mt-2 flex h-fit touch-auto flex-nowrap justify-between overflow-x-auto  scrollbar-thin scrollbar-thumb-slate-200`
-                  : ` relative mt-2 flex h-fit touch-auto flex-wrap justify-between overflow-x-auto  scrollbar-thin scrollbar-thumb-slate-200`
+                  ? ` relative mt-2 flex h-fit touch-auto flex-nowrap justify-between overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[5px]`
+                  : ` relative mt-2 flex h-fit touch-auto flex-wrap justify-between overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[5px]`
               }
             >
               {keywords
@@ -406,7 +406,7 @@ const FictionsWithParams: NextPage<FictionsResponse> = ({
                 ))}
             </div>
             {!isExpanded ? (
-              <div className=" absolute bottom-0 left-0 mt-3 flex rounded-lg ">
+              <div className=" absolute bottom-0 left-[-4px] mt-3 flex rounded-lg ">
                 <div className=" h-[28.8px] w-6  bg-transparent bg-gradient-to-l from-white backdrop-blur-[1.5px]"></div>
                 <span className=" cursor-pointer bg-white">
                   <CollapseUp
