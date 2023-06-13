@@ -12,7 +12,6 @@ import FictionRadarChart from "@components/fictionRadarChart";
 import StarRating from "@components/starRating";
 import StructuredData from "@components/structuredData";
 import MbtiBarChart from "@components/mbtiBarChart";
-// import ReviewFeed from "@components/fiction/reviewFeed";
 
 import client from "@libs/server/client";
 import Comments from "@components/comments";
@@ -61,10 +60,9 @@ interface FictionWithMore extends Fiction {
   ];
 }
 
-const FictionDetail: NextPage<FictionDetailResponse> = ({
+const FictionDetailTemp: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
-  reviews,
   mbtis,
   setup,
 }) => {
@@ -77,20 +75,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
   const mbtisResponse = data ? data?.mbtis : [];
-  // console.log(data?.mbtis);
-  // const { data: nextAuthSession } = useSession();
 
-  // const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-  //   router.query.id
-  //     ? typeof window === "undefined"
-  //       ? null
-  //       : `/api/fictions/${router.query.id}/fav`
-  //     : null
-  // );
-
-  // const [toggleFav] = useMutation(`/api/fictions/${router.query.id}/fav`);
-
-  /// swr로 data fetching이후 데이터 synchronize
   useEffect(() => {
     if (data) setDeferredMbtis(mbtisResponse);
   }, [data]);
@@ -101,18 +86,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
   }
 
   const synopsisRef = useRef<null | HTMLDivElement>(null);
-
-  // const [mdHTML, setMdHTML] = useState("");
-
-  // useEffect(() => {
-  //   const convertMarkdownToHtml = async (mdText: string) => {
-  //     const result = await remark().use(html).process(mdText);
-  //     const htmlSetup = DOMPurify.sanitize(result.toString());
-  //     setMdHTML(htmlSetup);
-  //   };
-
-  //   convertMarkdownToHtml(fiction.setup);
-  // }, [fiction.setup]);
 
   return (
     <div className=" grid grid-cols-10 px-2">
@@ -151,9 +124,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           <p className="  ml-2 text-sm text-gray-500">
             {`(${fiction?.startDate?.getFullYear()})`}
           </p>
-          {/* <p className=" mb-2 ml-3 text-sm text-gray-500">
-            {fiction?.volume}
-          </p> */}
         </div>
       </div>
       <div id="main-container" className=" col-span-10 lg:col-span-7">
@@ -215,11 +185,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
           </div>
 
           <div className=" col-span-7 pt-2 sm:col-span-7 sm:ml-[187.4157px] sm:px-3 sm:pt-0">
-            {/* <div className=" flex justify-between">
-              <h1 className=" mb-2 pt-2 text-2xl font-semibold">
-                {fiction?.title}
-              </h1>
-            </div> */}
             <div className=" mb-1 mt-2 hidden  sm:block">
               <div className=" flex">
                 {fiction?.userFictionStat?.total && (
@@ -348,22 +313,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                   <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:border-t-[0px]">
                     <dt className=" col-span-4 font-sans font-bold">플랫폼</dt>
                     <dd className=" col-span-6 ">
-                      <span
-                        className=" flex"
-                        // href={fiction?.platforms}
-                        title={fiction?.platforms}
-                      >
-                        {/* <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-link"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
-                      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
-                    </svg> */}
+                      <span className=" flex" title={fiction?.platforms}>
                         {fiction?.platforms}
                       </span>
                     </dd>
@@ -413,7 +363,6 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
             <div className=" mb-2"></div>
           </div>
         </div>
-        {/* <div className=" col-span-10 grid h-fit sm:grid-cols-10"></div> */}
 
         <div className=" mb-3 grid grid-cols-5 ">
           <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 sm:mr-3">
@@ -517,38 +466,14 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         </div>
 
         <div className=" mt-3 rounded-md bg-white sm:pt-3">
-          {/* <div className=" ">
-            <h2 className=" border-b-[1px] py-2 text-xl font-bold">줄거리</h2>
-            <p ref={synopsisRef} className=" mt-2 whitespace-pre-wrap">
-              {fiction?.synopsis}
-            </p>
-          </div> */}
-          {/* <div className=" mt-3">
-            <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
-              개요
-            </h2>
-            <p className=" mt-2 whitespace-pre-wrap">{fiction?.introduction}</p>
-          </div> */}
-          {/* <div className=" mt-3">
-            <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
-              등장인물
-            </h2>
-            <p className=" mt-2 whitespace-pre-wrap"> {fiction?.characters}</p>
-          </div> */}
           <div className=" mb-3">
             <div ref={synopsisRef}></div>
-            {/* <h2 className=" mt-4 border-b-[1px] py-2 text-xl font-bold">
-              설정
-            </h2> */}
           </div>
           <div
             className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:border-b-[1px] prose-h2:pb-2 prose-img:float-right prose-img:my-0"
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
-        {/* <div className="  rounded-md ">
-          <ReviewFeed data={reviews}></ReviewFeed>
-        </div> */}
         <div className=" mt-12">
           <h3 className=" mb-2 text-2xl font-bold">비슷한 소설</h3>
           <div className=" lg:grid-cols-4">
@@ -701,4 +626,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default FictionDetail;
+export default FictionDetailTemp;

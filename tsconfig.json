@@ -20,7 +20,8 @@
       "@components/*": ["src/components/*"],
       "@public/*": ["public/*"],
       "@store/*": ["src/store/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@helper/*": ["src/helper/*"]
     }
     // "types": ["@types/gtag.js"]
   },

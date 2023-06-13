@@ -1,14 +1,51 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
-import { Comment } from "@prisma/client";
+
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-interface CommentResponse {
-  comments: Comment[];
-  commentsCount: number;
+import type {
+  Fiction,
+  FictionStat,
+  Keyword,
+  UserRationOnFiction,
+  Author,
+  Category,
+  Comment,
+} from "@prisma/client";
+
+interface FictionDetailResponse {
   ok: boolean;
+  fiction: FictionWithMore;
+  similarFictions: Fiction[];
+  isLiked: boolean;
+  reviews: any;
+  mbtis: any;
+  setup: any;
+}
+
+interface FictionWithMore extends Fiction {
+  keywords: [
+    {
+      keyword: Keyword;
+    }
+  ];
+  fictionStat: FictionStat;
+  userFictionStat: {
+    userRationOnFictions: [UserRationOnFiction];
+    total: number;
+    _count: {
+      userRationOnFictions: number;
+    };
+  };
+  author: Author;
+  categories: [
+    {
+      category: Category;
+    }
+  ];
+  comments: Comment[];
 }
 
 export default function Comments() {
@@ -16,21 +53,24 @@ export default function Comments() {
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
-  const { data: commentsResponse } = useSWR<CommentResponse>(
-    router.query.id
-      ? `/api/fictions/${router.query.id}/comment?page=${commentIndex}`
-      : null
+  const { data: fictionResponse, error } = useSWR<FictionDetailResponse>(
+    `/api/fictions/${router.query.id}`
   );
 
-  // console.log(user);
-
-  const [deleteComment, { loading }] = useMutation(
+  const [deleteComment] = useMutation(
     `/api/fictions/${router.query.id}/comment`
   );
 
+  if (error) return <div>Failed to load</div>;
+  if (!fictionResponse) return <div>Loading...</div>;
+
+  const {
+    fiction: { comments },
+  } = fictionResponse;
+
   const nextHandler = (e: any) => {
     const isBiggerThanLastPage =
-      commentIndex >= Math.ceil((commentsResponse?.commentsCount || 1) / 7);
+      commentIndex >= Math.ceil((comments.length || 1) / 7);
     if (isBiggerThanLastPage) return;
 
     setCommentIndex(commentIndex + 1);
@@ -49,11 +89,11 @@ export default function Comments() {
   return (
     <div className=" h-full ">
       <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-        {(commentsResponse?.comments || []).length < 7
-          ? (commentsResponse?.comments || [])
+        {comments.length < 7
+          ? (comments || [])
               .concat(
                 Array.from({
-                  length: 7 - (commentsResponse?.comments || []).length,
+                  length: 7 - (comments || []).length,
                 })
               )
               .map((comment: Comment, index: number) => (
@@ -88,30 +128,26 @@ export default function Comments() {
                   <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>
                 </ul>
               ))
-          : commentsResponse?.comments?.map(
-              (comment: Comment, index: number) => (
-                <ul
-                  key={index}
-                  className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
-                >
-                  <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                    {comment?.comment || " asd"}
-                  </li>
-                  <li className=" absolute right-24 mt-2 text-sm">
-                    {`${comment?.createdById?.slice(0, 5)}...`}
-                  </li>
-                  <li className=" ml-5 mt-2 min-w-[78px] text-sm">
-                    👍 👎 (+3)
-                  </li>
-                </ul>
-              )
-            )}
+          : comments?.map((comment: Comment, index: number) => (
+              <ul
+                key={index}
+                className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
+              >
+                <li className=" mr-16 mt-2 overflow-hidden text-sm">
+                  {comment?.comment || " asd"}
+                </li>
+                <li className=" absolute right-24 mt-2 text-sm">
+                  {`${comment?.createdById?.slice(0, 5)}...`}
+                </li>
+                <li className=" ml-5 mt-2 min-w-[78px] text-sm">👍 👎 (+3)</li>
+              </ul>
+            ))}
 
         <div className=" mb-2 mt-5 flex justify-center">
           <button
             onClick={prevHandler}
             id="prev"
-            className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
+            className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
           >
             <span className="sr-only">Prev</span>
 
@@ -129,13 +165,13 @@ export default function Comments() {
               />
             </svg>
           </button>
-          <button className="relative inline-flex items-center border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+          <button className="relative inline-flex items-center border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
             {commentIndex}
           </button>
           <button
             onClick={nextHandler}
             id="next"
-            className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
+            className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
           >
             <span className="sr-only">Next</span>
 
