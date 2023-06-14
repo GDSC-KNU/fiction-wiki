@@ -5,7 +5,7 @@ import { useSWRConfig } from "swr";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-import { FictionContext } from "pages/fictions/[id]/temp";
+import { FictionContext } from "pages/fictions/[id]";
 
 export default function Comments() {
   let fictionContext = useContext(FictionContext);
@@ -39,7 +39,6 @@ export default function Comments() {
 
     setCommentIndex(commentIndex - 1);
   };
-
   ///pagination
 
   return (
@@ -69,9 +68,6 @@ export default function Comments() {
                         );
 
                         mutate(`/api/fictions/${router.query.id}`);
-                        mutate(
-                          `/api/fictions/${router.query.id}/comment?page=${1}`
-                        );
                       }}
                       className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
                     >

@@ -8,9 +8,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useRouter } from "next/router";
 import { Radar } from "react-chartjs-2";
-import useSWR from "swr";
+import { useContext } from "react";
+
+import { FictionContext } from "pages/fictions/[id]";
 
 ChartJS.register(
   RadialLinearScale,
@@ -21,48 +22,21 @@ ChartJS.register(
   Legend
 );
 
-// interface RateUserStatForm {
-//   UserFictionStat: number[];
-// }
-
 export default function FictionRadarChart(props: any) {
-  const router = useRouter();
+  let fictionContext = useContext(FictionContext);
 
-  const { data: { fiction } = {} } = useSWR<any>(
-    router.query.id
-      ? typeof window === "undefined"
-        ? null
-        : `/api/fictions/${router.query.id}`
-      : null
-  );
-
-  // const {
-  //   fiction: {
-  //     userFictionStat: {
-  //       originality,
-  //       writing,
-  //       character,
-  //       verisimilitude,
-  //       synopsisComposition,
-  //       value,
-  //     },
-  //   },
-  // } = userFictionStatData;
-  // console.log(userFictionStat?._count);
-  // console.log(fiction?.userFictionStat?._count?.userRationOnFictions);
-  // console.log(fiction?.userFictionStat);
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [
       {
         label: "FDBS (admin)",
         data: [
-          props?.props ? parseInt(props?.props["originality"]) : 0,
-          props?.props ? parseInt(props?.props["writing"]) : 0,
-          props?.props ? parseInt(props?.props["character"]) : 0,
-          props?.props ? parseInt(props?.props["verisimilitude"]) : 0,
-          props?.props ? parseInt(props?.props["synopsisComposition"]) : 0,
-          props?.props ? parseInt(props?.props["value"]) : 0,
+          fictionContext?.fiction?.fictionStat.originality,
+          fictionContext?.fiction?.fictionStat.writing,
+          fictionContext?.fiction?.fictionStat.character,
+          fictionContext?.fiction?.fictionStat.verisimilitude,
+          fictionContext?.fiction?.fictionStat.synopsisComposition,
+          fictionContext?.fiction?.fictionStat.value,
         ],
         backgroundColor: "rgba(191, 219, 254, 0.5)",
         borderColor: "rgba(187, 187, 187, 1)",
@@ -70,15 +44,16 @@ export default function FictionRadarChart(props: any) {
       },
       {
         label: `유저 ${
-          fiction?.userFictionStat?._count?.userRationOnFictions || 0
+          fictionContext?.fiction.userFictionStat?._count
+            ?.userRationOnFictions || 0
         }명`,
         data: [
-          fiction?.userFictionStat?.originality,
-          fiction?.userFictionStat?.writing,
-          fiction?.userFictionStat?.character,
-          fiction?.userFictionStat?.verisimilitude,
-          fiction?.userFictionStat?.synopsisComposition,
-          fiction?.userFictionStat?.value,
+          fictionContext?.fiction.userFictionStat?.originality,
+          fictionContext?.fiction.userFictionStat?.writing,
+          fictionContext?.fiction.userFictionStat?.character,
+          fictionContext?.fiction.userFictionStat?.verisimilitude,
+          fictionContext?.fiction.userFictionStat?.synopsisComposition,
+          fictionContext?.fiction.userFictionStat?.value,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",

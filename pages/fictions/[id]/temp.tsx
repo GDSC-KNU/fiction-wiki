@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -43,7 +43,12 @@ interface FictionWithMore extends Fiction {
   ];
   fictionStat: FictionStat;
   userFictionStat: {
-    userRationOnFictions: [UserRationOnFiction];
+    originality: number;
+    writing: number;
+    verisimilitude: number;
+    value: number;
+    synopsisComposition: number;
+    character: number;
     total: number;
     _count: {
       userRationOnFictions: number;
@@ -66,7 +71,7 @@ const FictionDetailTemp: NextPage<FictionDetailResponse> = ({
   mbtis,
   setup,
 }) => {
-  const { user, isAdmin } = useUser();
+  const { isAdmin } = useUser();
   const router = useRouter();
 
   // // FAV을 CSR로 받기, 기존 Data 정리하여 fav만 get하여 가져옴
@@ -84,8 +89,6 @@ const FictionDetailTemp: NextPage<FictionDetailResponse> = ({
   useEffect(() => {
     if (data) setFictionContext(data);
   }, [data]);
-
-  //  const FictionContext = createContext(fictionContext);
 
   if (fiction) {
     fiction.startDate = new Date(fiction?.startDate || 0);
@@ -518,7 +521,7 @@ const FictionDetailTemp: NextPage<FictionDetailResponse> = ({
         >
           <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
           <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
-            <MbtiBarChart mbtis />
+            <MbtiBarChart mbtis={fictionContext.mbtis} />
           </div>
         </div>
       </div>
