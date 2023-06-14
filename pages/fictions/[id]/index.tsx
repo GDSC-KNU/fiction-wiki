@@ -154,18 +154,11 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                 <div className=" flex-col px-2">
                   <div className="  mb-2 flex whitespace-nowrap">
                     <StarRating
-                      data={
-                        (data?.fiction?.userFictionStat?.total ||
-                          +fiction?.userFictionStat?.total) ??
-                        0
-                      }
+                      data={fictionContext?.fiction.userFictionStat?.total || 0}
                     />
 
                     <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                      {(fiction?.userFictionStat?.total ||
-                        +fiction?.userFictionStat?.total) ??
-                        0}
-                      (
+                      {fictionContext.fiction.userFictionStat.total || 0}(
                       {fiction?.userFictionStat?._count?.userRationOnFictions ||
                         0}
                       )
