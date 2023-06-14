@@ -17,7 +17,6 @@
     "@next/bundle-analyzer": "^13.1.6",
     "@next/env": "^13.2.4",
     "@prisma/client": "^4.15.0",
-    "@reduxjs/toolkit": "^1.9.5",
     "@sendgrid/mail": "^7.7.0",
     "@smastrom/react-rating": "^1.2.2",
     "@types/react-js-pagination": "^3.0.4",

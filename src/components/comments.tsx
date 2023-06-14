@@ -1,72 +1,28 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import { useContext, useState } from "react";
+import { useSWRConfig } from "swr";
 
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-import type {
-  Fiction,
-  FictionStat,
-  Keyword,
-  UserRationOnFiction,
-  Author,
-  Category,
-  Comment,
-} from "@prisma/client";
-
-interface FictionDetailResponse {
-  ok: boolean;
-  fiction: FictionWithMore;
-  similarFictions: Fiction[];
-  isLiked: boolean;
-  reviews: any;
-  mbtis: any;
-  setup: any;
-}
-
-interface FictionWithMore extends Fiction {
-  keywords: [
-    {
-      keyword: Keyword;
-    }
-  ];
-  fictionStat: FictionStat;
-  userFictionStat: {
-    userRationOnFictions: [UserRationOnFiction];
-    total: number;
-    _count: {
-      userRationOnFictions: number;
-    };
-  };
-  author: Author;
-  categories: [
-    {
-      category: Category;
-    }
-  ];
-  comments: Comment[];
-}
+import { FictionContext } from "pages/fictions/[id]/temp";
 
 export default function Comments() {
+  let fictionContext = useContext(FictionContext);
   const router = useRouter();
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
-  const { data: fictionResponse, error } = useSWR<FictionDetailResponse>(
-    `/api/fictions/${router.query.id}`
-  );
 
   const [deleteComment] = useMutation(
     `/api/fictions/${router.query.id}/comment`
   );
 
-  if (error) return <div>Failed to load</div>;
-  if (!fictionResponse) return <div>Loading...</div>;
+  if (!fictionContext) return <div>loading</div>;
 
   const {
     fiction: { comments },
-  } = fictionResponse;
+  } = fictionContext;
 
   const nextHandler = (e: any) => {
     const isBiggerThanLastPage =
@@ -89,14 +45,14 @@ export default function Comments() {
   return (
     <div className=" h-full ">
       <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-        {comments.length < 7
+        {comments?.length < 7
           ? (comments || [])
               .concat(
                 Array.from({
                   length: 7 - (comments || []).length,
                 })
               )
-              .map((comment: Comment, index: number) => (
+              .map((comment: any, index: number) => (
                 <ul
                   key={index}
                   className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
@@ -128,7 +84,7 @@ export default function Comments() {
                   <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>
                 </ul>
               ))
-          : comments?.map((comment: Comment, index: number) => (
+          : comments?.map((comment: any, index: number) => (
               <ul
                 key={index}
                 className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
@@ -142,7 +98,6 @@ export default function Comments() {
                 <li className=" ml-5 mt-2 min-w-[78px] text-sm">👍 👎 (+3)</li>
               </ul>
             ))}
-
         <div className=" mb-2 mt-5 flex justify-center">
           <button
             onClick={prevHandler}
