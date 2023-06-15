@@ -1,17 +1,20 @@
 import SearchIcon from "@public/svg/searchIcon.svg";
-import { useState, useEffect, useDeferredValue, Suspense, use } from "react";
+import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import useESC from "@src/hooks/useESC";
+import useKeyHandler from "@src/hooks/useKeyHandler";
 
 export default function SearchModal() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [deferredQuery, setDeferredQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  useESC(() => setShowModal(false));
+  useKeyHandler(() => {
+    setShowModal(false);
+    setQuery("");
+  }, "Escape");
 
-  const { data: { fictions } = {}, error } = useSWR(
+  const { data: { fictions } = {} } = useSWR(
     deferredQuery !== ""
       ? typeof window === "undefined"
         ? null
