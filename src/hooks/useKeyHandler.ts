@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function useKeyHandler(handler: () => void, key: string = "Escape") {
+function useKeyHandler(handler: () => void, key: string = "escape") {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === key) {
