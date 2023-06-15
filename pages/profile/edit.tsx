@@ -12,7 +12,7 @@ import useUser from "@libs/client/useUser";
 import { useSession } from "next-auth/react";
 
 interface EditProfileForm {
-  name: string;
+  nickname: string;
   papagoClientID: string;
   papagoClientKey: string;
 }
@@ -36,7 +36,7 @@ const EditProfile: NextPage = () => {
 
   useEffect(() => {
     if (user) {
-      setValue("name", user?.name || "");
+      setValue("nickname", user?.nickname || "");
       setValue("papagoClientID", user?.clientID || "");
       setValue("papagoClientKey", user?.clientKey || "");
     }
@@ -61,10 +61,10 @@ const EditProfile: NextPage = () => {
         <form className=" " onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" mb-5">
             <Input
-              register={register("name", { required: true })}
+              register={register("nickname", { required: true })}
               required
-              label="name"
-              name="name"
+              label="nickname"
+              name="nickname"
               type="text_detail"
             />
             <Input

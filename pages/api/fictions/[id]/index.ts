@@ -86,7 +86,15 @@ async function handler(
             category: true,
           },
         },
-        comments: true,
+        comments: {
+          include: {
+            createdBy: {
+              select: {
+                nickname: true,
+              },
+            },
+          },
+        },
         author: true,
       },
     });
@@ -200,6 +208,7 @@ async function handler(
         isTranslated,
         introduction,
         setup,
+        nickname,
       },
       // session: { user },
     } = req;

@@ -21,7 +21,8 @@
       "@public/*": ["public/*"],
       "@store/*": ["src/store/*"],
       "@constants/*": ["src/constants/*"],
-      "@helper/*": ["src/helper/*"]
+      "@helper/*": ["src/helper/*"],
+      "@src/*": ["src/*"]
     }
     // "types": ["@types/gtag.js"]
   },

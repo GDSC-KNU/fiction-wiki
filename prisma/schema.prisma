@@ -161,6 +161,7 @@ model User {
   sex           String?
   clientID      String?
   clientKey     String?
+  nickname      String?
 }
 
 model UserRationOnFiction {

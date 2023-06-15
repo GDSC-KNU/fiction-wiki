@@ -569,7 +569,15 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         },
       },
       author: true,
-      comments: true,
+      comments: {
+        include: {
+          createdBy: {
+            select: {
+              nickname: true,
+            },
+          },
+        },
+      },
     },
   });
 

@@ -9,6 +9,7 @@ interface UpdatedData {
   name?: string;
   mbti?: string;
   sex?: string;
+  nickname?: string;
   clientID?: string;
   clientKey?: string;
 }
@@ -73,13 +74,14 @@ async function handler(
     });
   } else if (method === "PUT") {
     const {
-      body: { mbti, sex, papagoClientID, papagoClientKey, name },
+      body: { mbti, sex, papagoClientID, papagoClientKey, name, nickname },
     } = req;
 
     let updatedData: UpdatedData = {};
 
     // Only add fields to the object if they exist in the request body
     if (name) updatedData.name = name;
+    if (nickname) updatedData.nickname = nickname;
     if (mbti) updatedData.mbti = mbti;
     if (sex) updatedData.sex = sex;
     if (papagoClientID) updatedData.clientID = papagoClientID;

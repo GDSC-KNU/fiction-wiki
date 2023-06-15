@@ -1,36 +1,15 @@
-import Input from "@components/input";
-import { FieldErrors, useForm } from "react-hook-form";
 import SearchIcon from "@public/svg/searchIcon.svg";
-import { useState, useEffect, useDeferredValue, Suspense } from "react";
+import { useState, useEffect, useDeferredValue, Suspense, use } from "react";
 import useSWR from "swr";
-import {
-  Fiction,
-  Keyword,
-  FictionStat,
-  KeywordsOnFictions,
-  UserFictionStat,
-  Author,
-} from "@prisma/client";
 import { useRouter } from "next/router";
-import ClipLoader from "react-spinners/ClipLoader";
-
-interface UserFictionStatWithMore extends UserFictionStat {
-  _count: {
-    users: number;
-  };
-}
-
-interface FictionWithMore extends Fiction {
-  fictionStat: [FictionStat];
-  userFictionStat: UserFictionStatWithMore;
-  author: Author;
-}
+import useESC from "@src/hooks/useESC";
 
 export default function SearchModal() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [deferredQuery, setDeferredQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
+  useESC(() => setShowModal(false));
 
   const { data: { fictions } = {}, error } = useSWR(
     deferredQuery !== ""
@@ -49,9 +28,9 @@ export default function SearchModal() {
   useEffect(() => {
     const debounce = setTimeout(() => {
       return setDeferredQuery(query);
-    }, 700);
+    }, 300);
     return () => clearTimeout(debounce);
-  }, [query]); 
+  }, [query]);
 
   return (
     <>

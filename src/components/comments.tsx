@@ -75,7 +75,13 @@ export default function Comments() {
                     </li>
                   ) : null}
                   <li className=" absolute right-[67px] mt-2 text-sm">
-                    {`${comment?.createdById?.slice(0, 5) || ""}...`}
+                    {comment?.createdBy?.nickname !== null
+                      ? comment?.createdBy?.nickname?.length > 5
+                        ? `${
+                            comment?.createdBy?.nickname?.slice(0, 5) || ""
+                          }...`
+                        : comment?.createdBy?.nickname
+                      : "익명"}
                   </li>
                   <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>
                 </ul>
