@@ -6,6 +6,7 @@ import { NextSeo } from "next-seo";
 import useSWR from "swr";
 import { remark } from "remark";
 import remarkToc from "remark-toc";
+import remarkGfm from "remark-gfm";
 import html from "remark-html";
 
 import UserRate from "@components/userRate";
@@ -585,6 +586,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const mdHtml = await remark()
     .use(html)
     .use(remarkToc)
+    .use(remarkGfm)
     .process(fiction?.setup || "");
 
   const arr: any[] = [];
