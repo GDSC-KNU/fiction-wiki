@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import useSWR from "swr";
 import { remark } from "remark";
+import remarkToc from "remark-toc";
 import html from "remark-html";
 
 import UserRate from "@components/userRate";
@@ -158,7 +159,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
                     />
 
                     <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                      {fictionContext.fiction.userFictionStat.total || 0}(
+                      {fictionContext?.fiction.userFictionStat?.total || 0}(
                       {fiction?.userFictionStat?._count?.userRationOnFictions ||
                         0}
                       )
@@ -486,7 +487,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
               <div ref={synopsisRef}></div>
             </div>
             <div
-              className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:border-b-[1px] prose-h2:pb-2 prose-img:float-right prose-img:my-0"
+              className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:border-b-[1px] prose-h2:pb-2 prose-table:text-lg prose-img:float-right prose-img:my-0"
               dangerouslySetInnerHTML={{ __html: setup }}
             ></div>
           </div>
@@ -512,7 +513,7 @@ const FictionDetail: NextPage<FictionDetailResponse> = ({
         >
           <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
           <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
-            <MbtiBarChart mbtis={fictionContext.mbtis} />
+            <MbtiBarChart mbtis={fictionContext?.mbtis} />
           </div>
         </div>
       </div>
@@ -583,6 +584,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const mdHtml = await remark()
     .use(html)
+    .use(remarkToc)
     .process(fiction?.setup || "");
 
   const arr: any[] = [];

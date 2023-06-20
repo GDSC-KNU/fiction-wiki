@@ -12,7 +12,7 @@ export default function SearchModal() {
   useKeyHandler(() => {
     setShowModal(false);
     setQuery("");
-  }, "escape");
+  }, "Escape");
 
   const { data: { fictions } = {} } = useSWR(
     deferredQuery !== ""
