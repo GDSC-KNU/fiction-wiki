@@ -8,6 +8,7 @@ import type {
   GetStaticPropsContext,
   NextPage,
 } from "next";
+import { NextSeo } from "next-seo";
 
 // interface AuthorWithFictions extends Author {
 //   fictions: Fiction[];
@@ -16,6 +17,7 @@ import type {
 interface AuthorResponse {
   authors: Author[];
   authorsCount: number;
+  page: number;
 }
 
 // interface Params extends ParsedUrlQuery {
@@ -26,7 +28,11 @@ interface IParams extends ParsedUrlQuery {
   page: string;
 }
 
-const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
+const AuthorPage: NextPage<AuthorResponse> = ({
+  authors,
+  authorsCount,
+  page,
+}) => {
   // const [authorPageIndex, setAuthorPageIndex] = useRecoilState(authorPageAtom);
   // const router = useRouter();
 
@@ -36,6 +42,14 @@ const AuthorPage: NextPage<AuthorResponse> = ({ authors, authorsCount }) => {
 
   return (
     <div className="">
+      <NextSeo
+        title={`작가 목록`}
+        description={"웹소설 작가들을 검색하세요."}
+        canonical={`https://fictiondbs.com/authors/${page}`}
+        openGraph={{
+          url: `https://fictiondbs.com/authors/${page}`,
+        }}
+      />
       <FictionList
         data={authors}
         type="authors_list"
@@ -68,8 +82,8 @@ export const getStaticProps: GetStaticProps = async (
     include: {
       fictions: {
         include: {
-          userFictionStat: true
-        }
+          userFictionStat: true,
+        },
       },
     },
   });
@@ -80,6 +94,7 @@ export const getStaticProps: GetStaticProps = async (
     props: {
       authors: JSON.parse(JSON.stringify(authors)),
       authorsCount: JSON.parse(JSON.stringify(authorsCount)),
+      page: page,
     },
   };
 };

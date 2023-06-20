@@ -1,5 +1,6 @@
 const config = {
   titleTemplate: "%s | 웹소설위키 - FDBS",
+  defaultTitle: "웹소설위키 - FDBS",
   canonical: "https://fictiondbs.com",
   openGraph: {
     type: "website",

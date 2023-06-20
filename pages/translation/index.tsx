@@ -3,7 +3,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-// import useUser from "@libs/client/useUser";
+import { NextSeo } from "next-seo";
 
 interface MessageProps {
   subTitle: string;
@@ -42,6 +42,14 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
 
   return (
     <div className=" flex">
+      <NextSeo
+        title={`번역`}
+        description={"국외 웹소설들을 직접 번역해서 보세요."}
+        canonical={`https://fictiondbs.com/translation`}
+        openGraph={{
+          url: `https://fictiondbs.com/translation`,
+        }}
+      />
       <input
         className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
         value={input}
