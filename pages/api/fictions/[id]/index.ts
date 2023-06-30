@@ -70,10 +70,11 @@ async function handler(
           },
         },
         keywords: {
-          include: {
+          select: {
             keyword: {
               select: {
                 name: true,
+                id: true,
                 isOfHeroine: true,
                 isOfMC: true,
                 isOfCons: true,
@@ -82,7 +83,7 @@ async function handler(
           },
         },
         categories: {
-          include: {
+          select: {
             category: true,
           },
         },
