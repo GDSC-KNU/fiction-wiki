@@ -11,7 +11,7 @@ import {
 import { Radar } from "react-chartjs-2";
 import { useContext } from "react";
 
-import { FictionContext } from "pages/fictions/[id]";
+import { FictionContext } from "@src/context/fictionContext";
 
 ChartJS.register(
   RadialLinearScale,

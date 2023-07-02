@@ -5,7 +5,7 @@ import { useSWRConfig } from "swr";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-import { FictionContext } from "pages/fictions/[id]";
+import { FictionContext } from "@src/context/fictionContext";
 
 export default function Comments() {
   let fictionContext = useContext(FictionContext);

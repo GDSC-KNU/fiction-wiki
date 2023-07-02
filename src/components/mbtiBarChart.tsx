@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +23,8 @@ import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+
+import { FictionContext } from "@src/context/fictionContext";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -77,19 +79,20 @@ export const options = {
 };
 
 function MbtiBarChart({ mbtis }: any) {
+  let fictionContext = useContext(FictionContext);
   const router = useRouter();
   const { data: fiction, mutate: boundMutate } = useSWR<FictionDetailResponse>(
     router.query.id ? `/api/fictions/${router.query.id}` : null
   );
 
   const data = {
-    labels: Array.from(mbtis).map((item: any, i) => {
+    labels: Array.from(fictionContext.mbtis).map((item: any, i) => {
       return item?.mbti;
     }),
     datasets: [
       {
         label: "평균 평점",
-        data: Array.from(mbtis)
+        data: Array.from(fictionContext.mbtis)
           .map((item: any, i) => {
             return item?.avg;
           })

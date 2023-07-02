@@ -14,13 +14,23 @@ import { DefaultSeo } from "next-seo";
 import SEO from "../seo.config";
 import HeadMeta from "src/components/headMeata";
 import { Analytics } from "@vercel/analytics/react";
+import Layout from "src/components/layout/layout";
+
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactElement;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
 
 function MyApp({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps<{
-  session: Session;
-}>) {
+}: AppPropsWithLayout) {
   const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -60,14 +70,10 @@ function MyApp({
           `,
             }}
           />
-          <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
-            <Top />
-            <section className="  mt-[80px] w-full max-w-[1300px] items-center pb-[60px]  md:mt-[48px]">
-              <Component {...pageProps} />
-              <Analytics />
-            </section>
-            <Footer />
-          </div>
+          <Layout>
+            <Component {...pageProps} />
+            <Analytics />
+          </Layout>
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,8 +15,6 @@ import StarRating from "@components/starRating";
 import StructuredData from "@components/structuredData";
 import MbtiBarChart from "@components/mbtiBarChart";
 
-import { FictionProvider } from "@src/context/fictionContext";
-
 import client from "@libs/server/client";
 import Comments from "@components/comments";
 import useUser from "@libs/client/useUser";
@@ -30,10 +28,6 @@ import type {
   Author,
   Category,
 } from "@prisma/client";
-import Layout from "@components/layout/layout";
-import FictionLayout from "@components/layout/FictionLayout";
-import type { NextPageWithLayout } from "pages/_app";
-import { ReactElement } from "react-markdown/lib/react-markdown";
 
 interface FictionDetailResponse {
   fiction: FictionWithMore;
@@ -70,23 +64,42 @@ interface FictionWithMore extends Fiction {
   comments: Comment[];
 }
 
-const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
+export const FictionContext = createContext<FictionDetailResponse | null>(null);
+
+const FictionDetailOld: NextPage<FictionDetailResponse> = ({
   fiction,
   similarFictions,
   mbtis,
   setup,
 }) => {
-  const synopsisRef = useRef<null | HTMLDivElement>(null);
   const { isAdmin } = useUser();
+  const router = useRouter();
+
+  const [fictionContext, setFictionContext] = useState({
+    fiction,
+    similarFictions,
+    mbtis,
+    setup,
+  });
+
+  const { data, mutate: boundMutate } = useSWR<FictionDetailResponse>(
+    `/api/fictions/${router.query.id}`
+  );
+
+  useEffect(() => {
+    if (data) setFictionContext(data);
+  }, [data]);
+
+  if (fiction) {
+    fiction.startDate = new Date(fiction?.startDate || 0);
+    fiction.endDate = new Date(fiction?.endDate || 0);
+  }
+
+  const synopsisRef = useRef<null | HTMLDivElement>(null);
 
   return (
-    <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
-      <div className=" w-[500px] flex-col">
-        <Comments />
-        <FictionRadarChart />
-        <MbtiBarChart />
-      </div>
-      {/* <div className=" grid grid-cols-10 px-2">
+    <FictionContext.Provider value={fictionContext}>
+      <div className=" grid grid-cols-10 px-2">
         <StructuredData data={fiction} />
         <NextSeo
           title={`${fiction?.title}`}
@@ -142,10 +155,12 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
               <div className=" ml-2  sm:hidden">
                 <div className=" flex-col px-2">
                   <div className="  mb-2 flex whitespace-nowrap">
-                    <StarRating data={fiction.userFictionStat?.total || 0} />
+                    <StarRating
+                      data={fictionContext?.fiction.userFictionStat?.total || 0}
+                    />
 
                     <p className=" ml-2 flex items-center text-sm font-bold text-gray-500">
-                      {fiction.userFictionStat?.total || 0}(
+                      {fictionContext?.fiction.userFictionStat?.total || 0}(
                       {fiction?.userFictionStat?._count?.userRationOnFictions ||
                         0}
                       )
@@ -457,7 +472,7 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
             </div>
             <div className=" col-span-5 sm:col-span-2">
               <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-                <FictionRadarChart props={fiction.fictionStat} />
+                <FictionRadarChart props={data?.fiction.fictionStat} />
                 <UserRate />
               </div>
             </div>
@@ -502,16 +517,8 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
             <MbtiBarChart mbtis={fictionContext?.mbtis} />
           </div>
         </div>
-      </div> */}
-    </FictionProvider>
-  );
-};
-
-FictionDetail.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout>
-      <FictionLayout>{page}</FictionLayout>
-    </Layout>
+      </div>
+    </FictionContext.Provider>
   );
 };
 
@@ -649,4 +656,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default FictionDetail;
+export default FictionDetailOld;

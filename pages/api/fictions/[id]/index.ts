@@ -211,7 +211,6 @@ async function handler(
         setup,
         nickname,
       },
-      // session: { user },
     } = req;
 
     genre = genre
