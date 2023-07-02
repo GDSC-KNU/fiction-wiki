@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "src/components/button";
-import FictionRadarChart from "src/components/fictionRadarChart";
+import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import Input from "src/components/input";
 import Textarea from "src/components/textarea";
 import useMutation from "@libs/client/useMutation";

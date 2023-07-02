@@ -42,112 +42,119 @@ export default function Comments() {
   ///pagination
 
   return (
-    <div className=" h-full ">
-      <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-        {comments?.length < 7
-          ? (comments || [])
-              .concat(
-                Array.from({
-                  length: 7 - (comments || []).length,
-                })
-              )
-              .map((comment: any, index: number) => (
+    <>
+      <h2 className=" border-b-[1px] py-2 text-xl font-bold">코멘트</h2>
+      <div className=" h-full ">
+        <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
+          {comments?.length < 7
+            ? (comments || [])
+                .concat(
+                  Array.from({
+                    length: 7 - (comments || []).length,
+                  })
+                )
+                .map((comment: any, index: number) => (
+                  <ul
+                    key={index}
+                    className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
+                  >
+                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
+                      {comment?.comment || ""}
+                    </li>
+                    {user && comment?.createdById === user?.id ? (
+                      <li
+                        onClick={async () => {
+                          await deleteComment(
+                            { userId: user?.id, commentId: comment.id },
+                            "DELETE"
+                          );
+
+                          mutate(`/api/fictions/${router.query.id}`);
+                        }}
+                        className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
+                      >
+                        X
+                      </li>
+                    ) : null}
+                    <li className=" absolute right-[67px] mt-2 text-sm">
+                      {comment?.createdBy?.nickname !== null
+                        ? comment?.createdBy?.nickname?.length > 5
+                          ? `${
+                              comment?.createdBy?.nickname?.slice(0, 5) || ""
+                            }...`
+                          : comment?.createdBy?.nickname
+                        : "익명"}
+                    </li>
+                    <li className=" ml-5 mt-2 min-w-[60px] text-sm">
+                      👍 👎 ()
+                    </li>
+                  </ul>
+                ))
+            : comments?.map((comment: any, index: number) => (
                 <ul
                   key={index}
-                  className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
+                  className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
                 >
                   <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                    {comment?.comment || ""}
+                    {comment?.comment || " asd"}
                   </li>
-                  {user && comment?.createdById === user?.id ? (
-                    <li
-                      onClick={async () => {
-                        await deleteComment(
-                          { userId: user?.id, commentId: comment.id },
-                          "DELETE"
-                        );
-
-                        mutate(`/api/fictions/${router.query.id}`);
-                      }}
-                      className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
-                    >
-                      X
-                    </li>
-                  ) : null}
-                  <li className=" absolute right-[67px] mt-2 text-sm">
-                    {comment?.createdBy?.nickname !== null
-                      ? comment?.createdBy?.nickname?.length > 5
-                        ? `${
-                            comment?.createdBy?.nickname?.slice(0, 5) || ""
-                          }...`
-                        : comment?.createdBy?.nickname
-                      : "익명"}
+                  <li className=" absolute right-24 mt-2 text-sm">
+                    {`${comment?.createdById?.slice(0, 5)}...`}
                   </li>
-                  <li className=" ml-5 mt-2 min-w-[60px] text-sm">👍 👎 ()</li>
+                  <li className=" ml-5 mt-2 min-w-[78px] text-sm">
+                    👍 👎 (+3)
+                  </li>
                 </ul>
-              ))
-          : comments?.map((comment: any, index: number) => (
-              <ul
-                key={index}
-                className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
+              ))}
+          <div className=" mb-2 mt-5 flex justify-center">
+            <button
+              onClick={prevHandler}
+              id="prev"
+              className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
+            >
+              <span className="sr-only">Prev</span>
+
+              <svg
+                className="h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
               >
-                <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                  {comment?.comment || " asd"}
-                </li>
-                <li className=" absolute right-24 mt-2 text-sm">
-                  {`${comment?.createdById?.slice(0, 5)}...`}
-                </li>
-                <li className=" ml-5 mt-2 min-w-[78px] text-sm">👍 👎 (+3)</li>
-              </ul>
-            ))}
-        <div className=" mb-2 mt-5 flex justify-center">
-          <button
-            onClick={prevHandler}
-            id="prev"
-            className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
-          >
-            <span className="sr-only">Prev</span>
-
-            <svg
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
+                <path
+                  fillRule="evenodd"
+                  d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            <button className="relative inline-flex items-center border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+              {commentIndex}
+            </button>
+            <button
+              onClick={nextHandler}
+              id="next"
+              className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
             >
-              <path
-                fillRule="evenodd"
-                d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-          <button className="relative inline-flex items-center border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
-            {commentIndex}
-          </button>
-          <button
-            onClick={nextHandler}
-            id="next"
-            className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-1 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
-          >
-            <span className="sr-only">Next</span>
+              <span className="sr-only">Next</span>
 
-            <svg
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
+              <svg
+                className="h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

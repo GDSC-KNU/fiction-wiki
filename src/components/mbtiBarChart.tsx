@@ -109,7 +109,14 @@ function MbtiBarChart({ mbtis }: any) {
   // const userRationOnFictions =
   //   fiction?.fiction?.userFictionStat?.userRationOnFictions;
 
-  return <Bar options={options} data={data} />;
+  return (
+    <>
+      <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
+      <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
+        <Bar options={options} data={data} />
+      </div>
+    </>
+  );
 }
 
 export default MbtiBarChart;

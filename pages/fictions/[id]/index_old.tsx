@@ -10,7 +10,7 @@ import remarkGfm from "remark-gfm";
 import html from "remark-html";
 
 import UserRate from "@components/userRate";
-import FictionRadarChart from "@components/fictionRadarChart";
+import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import StarRating from "@components/starRating";
 import StructuredData from "@components/structuredData";
 import MbtiBarChart from "@components/mbtiBarChart";
@@ -99,7 +99,7 @@ const FictionDetailOld: NextPage<FictionDetailResponse> = ({
 
   return (
     <FictionContext.Provider value={fictionContext}>
-      <div className=" grid grid-cols-10 px-2">
+      {/* <div className=" grid grid-cols-10 px-2">
         <StructuredData data={fiction} />
         <NextSeo
           title={`${fiction?.title}`}
@@ -517,7 +517,7 @@ const FictionDetailOld: NextPage<FictionDetailResponse> = ({
             <MbtiBarChart mbtis={fictionContext?.mbtis} />
           </div>
         </div>
-      </div>
+      </div> */}
     </FictionContext.Provider>
   );
 };

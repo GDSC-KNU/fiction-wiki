@@ -70,7 +70,6 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
   const { data, mutate: boundMutate } = useSWR<any>(
     `/api/fictions/${router.query.id}`
   );
-  console.log(fictionContext);
 
   useEffect(() => {
     if (data) {
