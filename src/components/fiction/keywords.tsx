@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useContext } from "react";
 
-import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import UserRate from "@components/userRate";
 import { FictionContext } from "@src/context/fictionContext";
 
 export default function Keywords() {
@@ -95,12 +93,6 @@ export default function Keywords() {
                 </li>
               ))}
           </ul>
-        </div>
-      </div>
-      <div className=" col-span-5 sm:col-span-2">
-        <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-          <FictionRadarChart />
-          <UserRate />
         </div>
       </div>
     </>

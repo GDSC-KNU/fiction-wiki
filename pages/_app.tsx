@@ -41,6 +41,9 @@ function MyApp({
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
+
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <SessionProvider session={session}>
       <RecoilRoot>
@@ -70,10 +73,7 @@ function MyApp({
           `,
             }}
           />
-          <Layout>
-            <Component {...pageProps} />
-            <Analytics />
-          </Layout>
+          {getLayout(<Component {...pageProps} />)}
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>

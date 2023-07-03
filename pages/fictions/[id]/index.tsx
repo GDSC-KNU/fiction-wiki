@@ -124,13 +124,8 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
         </div>
         <div id="main-container" className=" col-span-10 lg:col-span-7">
           <InfoBox synopsisRef={synopsisRef} />
-          <div className=" mb-3 grid grid-cols-5 ">
-            <Keywords />
-          </div>
-          <div className=" row-span-3 flex flex-col">
-            <Comments />
-          </div>
-          <div className=" mt-3 rounded-md bg-white sm:pt-3">
+          <div className=" mb-3 grid grid-cols-5 "></div>
+          <div className="rounded-md bg-white ">
             <div className=" mb-3">
               <div ref={synopsisRef}></div>
             </div>
@@ -138,6 +133,9 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
               className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
               dangerouslySetInnerHTML={{ __html: setup }}
             ></div>
+          </div>
+          <div className=" row-span-3 flex flex-col">
+            <Comments />
           </div>
           <div className=" mt-12">
             <SimilarFictions />
@@ -147,6 +145,13 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
           id="side-container"
           className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
         >
+          <div className=" col-span-5 sm:col-span-2">
+            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+              <FictionRadarChart />
+              <UserRate />
+            </div>
+          </div>
+          <Keywords />
           <MbtiBarChart />
         </div>
       </div>
