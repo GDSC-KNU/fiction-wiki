@@ -20,7 +20,7 @@ import type {
 
 interface FictionContextData {
   fiction: FictionWithMore;
-  similarFictions: Fiction[];
+  similarFictions?: Fiction[];
   mbtis?: any;
   setup?: any;
 }

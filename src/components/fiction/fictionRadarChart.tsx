@@ -44,16 +44,16 @@ export default function FictionRadarChart(props: any) {
       },
       {
         label: `유저 ${
-          fictionContext?.fiction.userFictionStat?._count
+          fictionContext?.fiction?.userFictionStat?._count
             ?.userRationOnFictions || 0
         }명`,
         data: [
-          fictionContext?.fiction.userFictionStat?.originality,
-          fictionContext?.fiction.userFictionStat?.writing,
-          fictionContext?.fiction.userFictionStat?.character,
-          fictionContext?.fiction.userFictionStat?.verisimilitude,
-          fictionContext?.fiction.userFictionStat?.synopsisComposition,
-          fictionContext?.fiction.userFictionStat?.value,
+          fictionContext?.fiction?.userFictionStat?.originality,
+          fictionContext?.fiction?.userFictionStat?.writing,
+          fictionContext?.fiction?.userFictionStat?.character,
+          fictionContext?.fiction?.userFictionStat?.verisimilitude,
+          fictionContext?.fiction?.userFictionStat?.synopsisComposition,
+          fictionContext?.fiction?.userFictionStat?.value,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",

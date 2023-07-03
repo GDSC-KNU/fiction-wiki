@@ -73,7 +73,10 @@ function MyApp({
           `,
             }}
           />
-          {getLayout(<Component {...pageProps} />)}
+          <Layout>
+            <Component {...pageProps} />
+            <Analytics />
+          </Layout>
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>
