@@ -23,7 +23,7 @@
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
     "postbuild": "next-sitemap",
-    "connectDev": "pscale connect fdbs-ver1 main && yarn run dev "
+    "connectDev": "pscale connect fdbs-ver1 main & next dev "
   },
   "dependencies": {
     "@babel/core": "^7.22.1",

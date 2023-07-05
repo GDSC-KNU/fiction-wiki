@@ -1,42 +1,38 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import useSWR from "swr";
+import Link from "next/link";
+import { useContext, useRef } from "react";
+
 import { remark } from "remark";
-import remarkToc from "remark-toc";
 import remarkGfm from "remark-gfm";
 import html from "remark-html";
+import remarkToc from "remark-toc";
 
-import UserRate from "@components/userRate";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import StarRating from "@components/starRating";
-import StructuredData from "@components/structuredData";
 import MbtiBarChart from "@components/mbtiBarChart";
+import StructuredData from "@components/structuredData";
+import UserRate from "@components/userRate";
 
-import { FictionProvider } from "@src/context/fictionContext";
+import { FictionContext, FictionProvider } from "@src/context/fictionContext";
 
-import client from "@libs/server/client";
 import Comments from "@components/comments";
 import useUser from "@libs/client/useUser";
-import urlToString from "@helper/urlToString";
+import client from "@libs/server/client";
 
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import InfoBox from "@components/fiction/InfoBox";
+import Keywords from "@components/fiction/keywords";
+import SimilarFictions from "@components/fiction/similarFictions";
+import FictionLayout from "@components/layout/FictionLayout";
+import Layout from "@components/layout/layout";
 import type {
+  Author,
+  Category,
   Fiction,
   FictionStat,
   Keyword,
-  Author,
-  Category,
 } from "@prisma/client";
-import Layout from "@components/layout/layout";
-import FictionLayout from "@components/layout/FictionLayout";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import type { NextPageWithLayout } from "pages/_app";
 import { ReactElement } from "react-markdown/lib/react-markdown";
-import Keywords from "@components/fiction/keywords";
-import SimilarFictions from "@components/fiction/similarFictions";
-import InfoBox from "@components/fiction/InfoBox";
 
 interface FictionDetailResponse {
   fiction: FictionWithMore;
@@ -73,88 +69,99 @@ interface FictionWithMore extends Fiction {
   comments: Comment[];
 }
 
+const FictionPage = () => {
+  const fictionContext = useContext(FictionContext);
+  const synopsisRef = useRef<null | HTMLDivElement>(null);
+  const { isAdmin } = useUser();
+
+  return (
+    <div className=" grid grid-cols-10 px-2">
+      <StructuredData data={fictionContext.fiction} />
+      <NextSeo
+        title={`${fictionContext.fiction?.title}`}
+        // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
+        description={fictionContext.fiction?.synopsis}
+        canonical={`https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`}
+        openGraph={{
+          url: `https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`,
+        }}
+      />
+      {isAdmin ? (
+        <div className=" col-span-10 mt-2 flex justify-start">
+          <Link
+            className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
+            passHref
+            href={`/fictions/${fictionContext.fiction?.id}/edit`}
+          >
+            EDIT
+          </Link>
+          <Link
+            className=" ml-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
+            passHref
+            href={`/fictions/${fictionContext.fiction?.id}/delete`}
+          >
+            DELETE
+          </Link>
+        </div>
+      ) : null}
+      <div className=" col-span-10 flex-col justify-between">
+        <h1 className=" pt-2 text-3xl font-semibold">
+          {fictionContext.fiction?.title}
+        </h1>
+        <div className=" mb-2 flex">
+          <p className="  text-sm text-gray-500">
+            {fictionContext.fiction?.originalTitle}
+          </p>
+          <p className="  ml-2 text-sm text-gray-500">
+            {`(${new Date(fictionContext.fiction?.startDate).getFullYear()})`}
+          </p>
+        </div>
+      </div>
+      <div id="main-container" className=" col-span-10 lg:col-span-7">
+        <InfoBox synopsisRef={synopsisRef} />
+        <div className=" mb-3 grid grid-cols-5 "></div>
+        <div className="rounded-md bg-white ">
+          <div className=" mb-3">
+            <div ref={synopsisRef}></div>
+          </div>
+          <div
+            className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
+            dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
+          ></div>
+        </div>
+        <div className=" row-span-3 flex flex-col">
+          <Comments />
+        </div>
+        <div className=" mt-12">
+          <SimilarFictions />
+        </div>
+      </div>
+      <div
+        id="side-container"
+        className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
+      >
+        <div className=" col-span-5 sm:col-span-2">
+          <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+            <FictionRadarChart />
+            <UserRate />
+          </div>
+        </div>
+        <Keywords />
+        <MbtiBarChart />
+      </div>
+    </div>
+  );
+};
+
 const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
   fiction,
   similarFictions,
   mbtis,
   setup,
 }) => {
-  const synopsisRef = useRef<null | HTMLDivElement>(null);
-  const { isAdmin } = useUser();
-
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
-      <div className=" grid grid-cols-10 px-2">
-        <StructuredData data={fiction} />
-        <NextSeo
-          title={`${fiction?.title}`}
-          // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
-          description={fiction?.synopsis}
-          canonical={`https://fictiondbs.com/fictions/${fiction?.id}`}
-          openGraph={{
-            url: `https://fictiondbs.com/fictions/${fiction?.id}`,
-          }}
-        />
-        {isAdmin ? (
-          <div className=" col-span-10 mt-2 flex justify-start">
-            <Link
-              className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-              passHref
-              href={`/fictions/${fiction?.id}/edit`}
-            >
-              EDIT
-            </Link>
-            <Link
-              className=" ml-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-              passHref
-              href={`/fictions/${fiction?.id}/delete`}
-            >
-              DELETE
-            </Link>
-          </div>
-        ) : null}
-        <div className=" col-span-10 flex-col justify-between">
-          <h1 className=" pt-2 text-3xl font-semibold">{fiction?.title}</h1>
-          <div className=" mb-2 flex">
-            <p className="  text-sm text-gray-500">{fiction?.originalTitle}</p>
-            <p className="  ml-2 text-sm text-gray-500">
-              {`(${new Date(fiction?.startDate).getFullYear()})`}
-            </p>
-          </div>
-        </div>
-        <div id="main-container" className=" col-span-10 lg:col-span-7">
-          <InfoBox synopsisRef={synopsisRef} />
-          <div className=" mb-3 grid grid-cols-5 "></div>
-          <div className="rounded-md bg-white ">
-            <div className=" mb-3">
-              <div ref={synopsisRef}></div>
-            </div>
-            <div
-              className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
-              dangerouslySetInnerHTML={{ __html: setup }}
-            ></div>
-          </div>
-          <div className=" row-span-3 flex flex-col">
-            <Comments />
-          </div>
-          <div className=" mt-12">
-            <SimilarFictions />
-          </div>
-        </div>
-        <div
-          id="side-container"
-          className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
-        >
-          <div className=" col-span-5 sm:col-span-2">
-            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-              <FictionRadarChart />
-              <UserRate />
-            </div>
-          </div>
-          <Keywords />
-          <MbtiBarChart />
-        </div>
-      </div>
+      <FictionPage />
     </FictionProvider>
   );
 };
