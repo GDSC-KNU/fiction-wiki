@@ -1,0 +1,37 @@
+name: gitexporter
+on:
+  push:
+    branches:
+      - "dev"
+
+jobs:
+  gitexporter:
+    name: Gitexporter
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.SSH_SYNC_BOT_PRIVATE_KEY }}
+      - name: Checkout kirschX/fdbsVer1.0
+        uses: actions/checkout@v2
+        with:
+          repository: "kirschX/fdbsVer1.0"
+          fetch-depth: 0
+          submodules: recursive
+          ssh-key: ${{ secrets.SSH_SYNC_BOT_PRIVATE_KEY }}
+          path: gitexporter.source
+          ref: "master"
+      - name: Checkout GDSC_KNU/fiction-wiki
+        uses: actions/checkout@v2
+        with:
+          repository: "GDSC_KNU/fiction-wiki"
+          fetch-depth: 0
+          submodules: recursive
+          ssh-key: ${{ secrets.SSH_SYNC_BOT_PRIVATE_KEY }}
+          path: gitexporter.target
+          ref: "master"
+      - name: gitexporter.sh
+        run: |
+          bash .github/workflows/gitexporter.sh gitexporter.source gitexporter.target
+          cat gitexporter.source.log.json

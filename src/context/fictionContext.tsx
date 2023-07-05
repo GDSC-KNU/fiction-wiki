@@ -1,4 +1,8 @@
 import React, { createContext, useEffect, useState, ReactNode } from "react";
+import { remark } from "remark";
+import remarkGfm from "remark-gfm";
+import html from "remark-html";
+import remarkToc from "remark-toc";
 
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -71,12 +75,26 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
     `/api/fictions/${router.query.id}`
   );
 
+  // console.log(fictionContext);
   useEffect(() => {
-    if (data) {
-      data.fiction.startDate = new Date(data.fiction?.startDate || 0);
-      data.fiction.endDate = new Date(data.fiction?.endDate || 0);
-      setFictionContext(data);
-    }
+    const processData = async () => {
+      if (data) {
+        data.fiction.startDate = new Date(data.fiction?.startDate || 0);
+        data.fiction.endDate = new Date(data.fiction?.endDate || 0);
+
+        const vfile = await remark()
+          .use(html)
+          .use(remarkToc)
+          .use(remarkGfm)
+          .process(data.fiction.setup || "");
+
+        data.fiction.setup = String(vfile);
+
+        setFictionContext(data);
+      }
+    };
+
+    processData();
   }, [data]);
 
   return (

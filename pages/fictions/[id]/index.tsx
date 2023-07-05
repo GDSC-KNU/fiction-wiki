@@ -22,7 +22,7 @@ import InfoBox from "@components/fiction/InfoBox";
 import Keywords from "@components/fiction/keywords";
 import SimilarFictions from "@components/fiction/similarFictions";
 import FictionLayout from "@components/layout/FictionLayout";
-import Layout from "@components/layout/layout";
+import Layout from "@components/layout/Layout";
 import type {
   Author,
   Category,
@@ -126,7 +126,7 @@ const FictionPage = () => {
           </div>
           <div
             className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
-            dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
+            dangerouslySetInnerHTML={{ __html: fictionContext.fiction.setup }}
           ></div>
         </div>
         <div className=" row-span-3 flex flex-col">
@@ -162,6 +162,7 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
       <FictionPage />
+      {/* <>{FictionContext.fiction}</> */}
     </FictionProvider>
   );
 };
