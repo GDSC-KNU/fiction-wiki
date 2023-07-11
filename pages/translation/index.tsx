@@ -1,6 +1,6 @@
 import useState from "react-usestateref";
 import ClipLoader from "react-spinners/ClipLoader";
-import useSWR, { mutate, useSWRConfig } from "swr";
+import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { NextSeo } from "next-seo";
@@ -20,8 +20,6 @@ interface InputProps {
 }
 
 const ChatInput = ({ onSend, disabled }: InputProps) => {
-  // const { user } = useUser();
-
   const [input, setInput] = useState("");
 
   const sendInput = () => {
@@ -30,15 +28,10 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
   };
 
   const handleKeyDown = (event: any) => {
-    //when pressing enter
     if (event.keyCode === 13) {
       sendInput();
     }
   };
-
-  // const checkClient = () => {
-  //   if()
-  // }
 
   return (
     <div className=" flex">

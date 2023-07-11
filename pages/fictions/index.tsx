@@ -21,19 +21,6 @@ import { NextSeo } from "next-seo";
 import ExpandDown from "@public/svg/expandDown.svg";
 import CollapseUp from "@public/svg/collapseUp.svg";
 
-// import { Redis } from "@upstash/redis";
-
-// const redisConfig = {
-//   url:
-//     process.env.UPSTASH_REDIS_REST_URL ??
-//     "https://apn1-sacred-manatee-34786.upstash.io",
-//   token:
-//     process.env.UPSTASH_REDIS_REST_TOKEN ??
-//     "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
-// };
-
-// const redis = new Redis(redisConfig);
-
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
     users: number;
