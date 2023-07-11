@@ -14,7 +14,7 @@ import { DefaultSeo } from "next-seo";
 import SEO from "../seo.config";
 import HeadMeta from "src/components/headMeata";
 import { Analytics } from "@vercel/analytics/react";
-import Layout from "src/components/layout/layout";
+import Layout from "src/components/layout/Layout";
 
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
@@ -73,7 +73,10 @@ function MyApp({
           `,
             }}
           />
-          {getLayout(<Component {...pageProps} />)}
+          <Layout>
+            <Component {...pageProps} />
+            <Analytics />
+          </Layout>
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>

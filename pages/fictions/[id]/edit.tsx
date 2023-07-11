@@ -1,8 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Button from "src/components/button";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import Input from "src/components/input";
-import Textarea from "src/components/textarea";
 import useMutation from "@libs/client/useMutation";
 import {
   Author,
@@ -13,14 +9,19 @@ import {
   UserRationOnFiction,
 } from "@prisma/client";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { FieldErrors, useForm } from "react-hook-form";
-import Image from "next/image";
-import useSWR from "swr";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
+import Button from "src/components/button";
+import Input from "src/components/input";
+import Textarea from "src/components/textarea";
+import useSWR from "swr";
 
-import "@uiw/react-md-editor/markdown-editor.css";
+import { FictionProvider } from "@src/context/fictionContext";
 import "@uiw/react-markdown-preview/markdown.css";
+import "@uiw/react-md-editor/markdown-editor.css";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -88,14 +89,13 @@ interface FictionWithMore extends Fiction {
 }
 
 const EditFiction: NextPage = () => {
-  ///setup MdEditor
   const [md, setMd] = useState<string | undefined>("");
   const handleChange = useCallback((md: any) => {
     setMd(md);
   }, []);
 
   const router = useRouter();
-  const { data: fiction } = useSWR<FictionDetailResponse>(
+  const { data: { fiction, mbtis } = {} } = useSWR<any>(
     router.query.id
       ? typeof window === "undefined"
         ? null
@@ -120,18 +120,19 @@ const EditFiction: NextPage = () => {
     return [year, month, day].join("-");
   }
 
+  // Form에 데이터 주입
   useEffect(() => {
-    if (fiction?.fiction) {
-      setValue("title", fiction.fiction?.title || "");
-      setValue("originalTitle", fiction.fiction?.originalTitle || "");
-      setValue("relatedTitle", fiction.fiction?.relatedTitle || "");
-      setValue("author", fiction.fiction?.author?.name || "");
-      setValue("relatedAuthor", fiction.fiction?.relatedAuthor || "");
-      setValue("nationality", fiction?.fiction?.nationality || "");
-      setValue("type", fiction.fiction?.type || "");
+    if (fiction) {
+      setValue("title", fiction?.title || "");
+      setValue("originalTitle", fiction?.originalTitle || "");
+      setValue("relatedTitle", fiction?.relatedTitle || "");
+      setValue("author", fiction?.author?.name || "");
+      setValue("relatedAuthor", fiction?.relatedAuthor || "");
+      setValue("nationality", fiction?.nationality || "");
+      setValue("type", fiction?.type || "");
       setValue(
         "genre",
-        fiction?.fiction?.categories
+        fiction?.categories
           .reduce(
             (prev: any, cur: any) =>
               (prev?.category?.name ?? "") + " " + (cur?.category?.name ?? ""),
@@ -139,48 +140,56 @@ const EditFiction: NextPage = () => {
           )
           .trim()
       );
-      setValue("original", fiction?.fiction?.original);
-      setValue("platforms", [fiction.fiction?.platforms]);
-      setValue("currentState", fiction.fiction?.currentState);
-      setValue("synopsis", fiction.fiction?.synopsis);
-      setValue("characters", fiction.fiction?.characters);
-      setValue("date.0", formatDate(fiction.fiction?.startDate) as any);
-      setValue("date.1", formatDate(fiction.fiction?.endDate) as any);
-      setValue("currentState", fiction.fiction?.currentState);
-      setValue("status.0", fiction.fiction?.fictionStat.originality);
-      setValue("status.1", fiction.fiction?.fictionStat.writing);
-      setValue("status.2", fiction.fiction?.fictionStat.character);
-      setValue("status.3", fiction.fiction?.fictionStat.verisimilitude);
-      setValue("status.4", fiction.fiction?.fictionStat.synopsisComposition);
-      setValue("status.5", fiction.fiction?.fictionStat.value);
-      setValue("volume", fiction?.fiction?.volume || 0);
-      setValue("introduction", fiction?.fiction?.introduction || "");
-      setValue("mediaMix", fiction.fiction?.mediaMix || "");
-      setValue("isTranslated", fiction.fiction?.isTranslated || "");
-      setValue("originalAuthor", fiction.fiction?.author.rawName || "");
+      setValue("original", fiction?.original);
+      setValue("platforms", [fiction?.platforms]);
+      setValue("currentState", fiction?.currentState);
+      setValue("synopsis", fiction?.synopsis);
+      setValue("characters", fiction?.characters);
+      setValue("date.0", formatDate(fiction?.startDate) as any);
+      setValue("date.1", formatDate(fiction?.endDate) as any);
+      setValue("currentState", fiction?.currentState);
+      setValue("status.0", fiction?.fictionStat.originality);
+      setValue("status.1", fiction?.fictionStat.writing);
+      setValue("status.2", fiction?.fictionStat.character);
+      setValue("status.3", fiction?.fictionStat.verisimilitude);
+      setValue("status.4", fiction?.fictionStat.synopsisComposition);
+      setValue("status.5", fiction?.fictionStat.value);
+      setValue("volume", fiction?.volume || 0);
+      setValue("introduction", fiction?.introduction || "");
+      setValue("mediaMix", fiction?.mediaMix || "");
+      setValue("isTranslated", fiction?.isTranslated || "");
+      setValue("originalAuthor", fiction?.author.rawName || "");
       if (md === "") {
-        setMd(fiction.fiction?.setup || "");
+        setMd(fiction?.setup || "");
       }
 
-      setValue("setup", fiction.fiction?.setup || "");
+      setValue("setup", fiction?.setup || "");
       // Keywords, mcKeywords, subKeywords
-      fiction.fiction?.keywords
+      fiction?.keywords
         .filter(
-          (item) =>
+          (item: any) =>
             item.keyword.isOfHeroine === false &&
             item.keyword.isOfMC === false &&
             item.keyword.isOfCons === false
         )
-        .map((item, i) => setValue(`keywords.${i}`, item.keyword.name));
-      fiction.fiction?.keywords
-        .filter((item) => item.keyword.isOfMC === true)
-        .map((item, i) => setValue(`mcKeywords.${i}`, item.keyword.name));
-      fiction.fiction?.keywords
-        .filter((item) => item.keyword.isOfHeroine === true)
-        .map((item, i) => setValue(`subKeywords.${i}`, item.keyword.name));
-      fiction.fiction?.keywords
-        .filter((item) => item.keyword.isOfCons === true)
-        .map((item, i) => setValue(`consKeywords.${i}`, item.keyword.name));
+        .map((item: any, i: number) =>
+          setValue(`keywords.${i}`, item.keyword.name)
+        );
+      fiction?.keywords
+        .filter((item: any) => item.keyword.isOfMC === true)
+        .map((item: any, i: number) =>
+          setValue(`mcKeywords.${i}`, item.keyword.name)
+        );
+      fiction?.keywords
+        .filter((item: any) => item.keyword.isOfHeroine === true)
+        .map((item: any, i: number) =>
+          setValue(`subKeywords.${i}`, item.keyword.name)
+        );
+      fiction?.keywords
+        .filter((item: any) => item.keyword.isOfCons === true)
+        .map((item: any, i: number) =>
+          setValue(`consKeywords.${i}`, item.keyword.name)
+        );
       // setValue("keywords.0", "asd");
     }
   }, [fiction, setValue, md]);
@@ -222,7 +231,6 @@ const EditFiction: NextPage = () => {
   }, [thumb]);
 
   const onInvalid = (errors: FieldErrors) => {
-    console.log(errors);
     if (loading) return;
     if (errors) return;
   };
@@ -267,7 +275,6 @@ const EditFiction: NextPage = () => {
 
   const onKeyDown3: any = (e: any) => {
     const { key } = e;
-    // console.log(key);
 
     if (key === "," && wKeywords3[0].trim() !== "") {
       e.preventDefault();
@@ -284,7 +291,6 @@ const EditFiction: NextPage = () => {
 
   const onKeyDown4: any = (e: any) => {
     const { key } = e;
-    console.log(key);
 
     if (key === "," && wKeywords4[0].trim() !== "") {
       e.preventDefault();
@@ -299,8 +305,12 @@ const EditFiction: NextPage = () => {
     }
   };
 
+  if (!fiction) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <>
+    <FictionProvider initialData={{ fiction, mbtis }}>
       <div>
         <form className=" " onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
@@ -591,7 +601,7 @@ const EditFiction: NextPage = () => {
 
                   <div className=" mb-10 h-max w-full overflow-x-auto rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
                     <h2 className=" px-2 pt-1 font-bold">graphs and charts</h2>
-                    <FictionRadarChart props={wStatus} />
+                    <FictionRadarChart />
                     <div className=" mx-2 grid grid-cols-2">
                       <Input
                         register={register("status.0", {
@@ -674,7 +684,7 @@ const EditFiction: NextPage = () => {
           <Button text={loading ? "Loading..." : "저장"} />
         </form>
       </div>
-    </>
+    </FictionProvider>
   );
 };
 
