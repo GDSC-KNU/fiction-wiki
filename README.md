@@ -14,10 +14,10 @@ https://aromatic-lute-463.notion.site/4f87ada8ed2b417383b2ce1b4b1ca92a?v=0018de4
 
 ## 🙌🏻 멤버
 
-|                                          Frontend                                          |                                       Frontend                                        |                                       Frontend                                        |                                       Backend                                       |                                       Backend                                        |
-| :----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/68739701?v=4" width=400px alt="정현욱"/> | <img src="https://avatars.githubusercontent.com/u/110603550?v=4" width=400px alt=""/> | <img src="https://avatars.githubusercontent.com/u/113075769?v=4" width=400px alt=""/> | <img src="https://avatars.githubusercontent.com/u/63386322?v=4" width=400px alt=""> | <img src="https://avatars.githubusercontent.com/u/101933437?v=4" width=400px alt=""> |
-|                            [정현욱](https://github.com/kirschX)                            |                                                                                       |                                                                                       |                                                                                     |                                                                                      |
+|                                          Frontend                                          |             Frontend             |             Frontend             |
+| :----------------------------------------------------------------------------------------: | :------------------------------: | :------------------------------: | :-----------------------------: | :-----------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/68739701?v=4" width=400px alt="정현욱"/> | <img src="" width=400px alt=""/> | <img src="" width=400px alt=""/> | <img src="" width=400px alt=""> | <img src="" width=400px alt=""> |
+|                            [정현욱](https://github.com/kirschX)                            |                                  |                                  |
 
 ## ⚙️ 기술스택
 
