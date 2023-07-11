@@ -38,7 +38,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 .env
-
+fdbs-crt-93ec7b71e5e9.json
 
 # vercel
 .vercel

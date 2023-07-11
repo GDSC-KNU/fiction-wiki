@@ -1,7 +1,0 @@
-{
-  "forceReCreateRepo": true,
-  "targetRepoPath": "fictionWiki",
-  "sourceRepoPath": ".",
-  "allowedPaths": ["/pages/fictions/[id]/*"],
-  "ignoredPaths": [".env", "gitexporter.config.json"]
-}
