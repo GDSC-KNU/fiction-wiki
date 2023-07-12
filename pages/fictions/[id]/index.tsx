@@ -126,7 +126,7 @@ const FictionPage = () => {
           </div>
           <div
             className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
-            dangerouslySetInnerHTML={{ __html: fictionContext.fiction.setup }}
+            dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
           ></div>
         </div>
         <div className=" row-span-3 flex flex-col">
@@ -304,7 +304,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       similarFictions: JSON.parse(JSON.stringify(similarFictions)),
       isLiked,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
-      setup: mdHtml.toString(),
+      setup: String(mdHtml),
     },
     revalidate: 60 * 60 * 24 * 30,
   };

@@ -75,22 +75,18 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
     `/api/fictions/${router.query.id}`
   );
 
-  // console.log(fictionContext);
   useEffect(() => {
     const processData = async () => {
       if (data) {
-        data.fiction.startDate = new Date(data.fiction?.startDate || 0);
-        data.fiction.endDate = new Date(data.fiction?.endDate || 0);
+        let updatedFiction = { ...fictionContext.fiction, ...data.fiction };
 
-        const vfile = await remark()
-          .use(html)
-          .use(remarkToc)
-          .use(remarkGfm)
-          .process(data.fiction.setup || "");
-
-        data.fiction.setup = String(vfile);
-
-        setFictionContext(data);
+        updatedFiction.startDate = new Date(updatedFiction.startDate || 0);
+        updatedFiction.endDate = new Date(updatedFiction.endDate || 0);
+        setFictionContext({
+          ...fictionContext,
+          ...data,
+          fiction: updatedFiction,
+        });
       }
     };
 
