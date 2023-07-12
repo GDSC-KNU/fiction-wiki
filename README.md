@@ -15,9 +15,9 @@ https://aromatic-lute-463.notion.site/4f87ada8ed2b417383b2ce1b4b1ca92a?v=0018de4
 ## 🙌🏻 멤버
 
 |                                          Frontend                                          |             Frontend             |             Frontend             |
-| :----------------------------------------------------------------------------------------: | :------------------------------: | :------------------------------: | :-----------------------------: | :-----------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/68739701?v=4" width=400px alt="정현욱"/> | <img src="" width=400px alt=""/> | <img src="" width=400px alt=""/> | <img src="" width=400px alt=""> | <img src="" width=400px alt=""> |
-|                            [정현욱](https://github.com/kirschX)                            |                                  |                                  |
+| :----------------------------------------------------------------------------------------: | :------------------------------: | :------------------------------: | 
+| <img src="https://avatars.githubusercontent.com/u/68739701?v=4" width=400px alt="정현욱"/> | <img src="https://avatars.githubusercontent.com/u/48273875?v=4" width=400px alt=""/> | <img src="https://avatars.githubusercontent.com/u/102848645?v=4" width=400px alt=""/> |
+|                            [정현욱](https://github.com/kirschX)            |          [이채준](https://github.com/chaejunlee)       |          [남성훈](https://github.com/20220402)                     |
 
 ## ⚙️ 기술스택
 
