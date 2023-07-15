@@ -23,6 +23,8 @@ import Keywords from "@components/fiction/keywords";
 import SimilarFictions from "@components/fiction/similarFictions";
 import FictionLayout from "@components/layout/FictionLayout";
 import Layout from "@components/layout/Layout";
+import WikiNavBar from "@components/fiction/wikiNavBar";
+
 import type {
   Author,
   Category,
@@ -75,79 +77,66 @@ const FictionPage = () => {
   const { isAdmin } = useUser();
 
   return (
-    <div className=" grid grid-cols-10 px-2">
-      <StructuredData data={fictionContext.fiction} />
-      <NextSeo
-        title={`${fictionContext.fiction?.title}`}
-        // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
-        description={fictionContext.fiction?.synopsis}
-        canonical={`https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`}
-        openGraph={{
-          url: `https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`,
-        }}
-      />
-      {isAdmin ? (
-        <div className=" col-span-10 mt-2 flex justify-start">
-          <Link
-            className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-            passHref
-            href={`/fictions/${fictionContext.fiction?.id}/edit`}
-          >
-            EDIT
-          </Link>
-          <Link
-            className=" ml-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-            passHref
-            href={`/fictions/${fictionContext.fiction?.id}/delete`}
-          >
-            DELETE
-          </Link>
-        </div>
-      ) : null}
-      <div className=" col-span-10 flex-col justify-between">
-        <h1 className=" pt-2 text-3xl font-semibold">
-          {fictionContext.fiction?.title}
-        </h1>
-        <div className=" mb-2 flex">
-          <p className="  text-sm text-gray-500">
-            {fictionContext.fiction?.originalTitle}
-          </p>
-          <p className="  ml-2 text-sm text-gray-500">
-            {`(${new Date(fictionContext.fiction?.startDate).getFullYear()})`}
-          </p>
-        </div>
+    <div className=" block lg:flex">
+      <div className="static left-0 lg:fixed lg:h-screen lg:w-24 lg:py-10 ">
+        <WikiNavBar />
       </div>
-      <div id="main-container" className=" col-span-10 lg:col-span-7">
-        <InfoBox synopsisRef={synopsisRef} />
-        <div className=" mb-3 grid grid-cols-5 "></div>
-        <div className="rounded-md bg-white ">
-          <div className=" mb-3">
-            <div ref={synopsisRef}></div>
-          </div>
-          <div
-            className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
-            dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
-          ></div>
-        </div>
-        <div className=" row-span-3 flex flex-col">
-          <Comments />
-        </div>
-        <div className=" mt-12">
-          <SimilarFictions />
-        </div>
-      </div>
-      <div
-        id="side-container"
-        className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
-      >
-        <div className=" col-span-5 sm:col-span-2">
-          <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-            <FictionRadarChart />
-            <UserRate />
+      <div className=" grid grid-cols-10 px-2 lg:ml-24">
+        <StructuredData data={fictionContext.fiction} />
+        <NextSeo
+          title={`${fictionContext.fiction?.title}`}
+          // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
+          description={fictionContext.fiction?.synopsis}
+          canonical={`https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`}
+          openGraph={{
+            url: `https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`,
+          }}
+        />
+        <div className=" col-span-10 flex-col justify-between">
+          <h1 className=" pt-2 text-3xl font-semibold">
+            {fictionContext.fiction?.title}
+          </h1>
+          <div className=" mb-2 flex">
+            <p className="  text-sm text-gray-500">
+              {fictionContext.fiction?.originalTitle}
+            </p>
+            <p className="  ml-2 text-sm text-gray-500">
+              {`(${new Date(fictionContext.fiction?.startDate).getFullYear()})`}
+            </p>
           </div>
         </div>
-        <Keywords />
-        <MbtiBarChart />
+        <div id="main-container" className=" col-span-10 lg:col-span-7">
+          <InfoBox synopsisRef={synopsisRef} />
+          <div className=" mb-3 grid grid-cols-5 "></div>
+          <div className="rounded-md bg-white ">
+            <div className=" mb-3">
+              <div ref={synopsisRef}></div>
+            </div>
+            <div
+              className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2  prose-table:text-xs prose-img:float-right prose-img:my-0"
+              dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
+            ></div>
+          </div>
+          <div className=" row-span-3 flex flex-col">
+            <Comments />
+          </div>
+          <div className=" mt-12">
+            <SimilarFictions />
+          </div>
+        </div>
+        <div
+          id="side-container"
+          className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
+        >
+          <div className=" col-span-5 sm:col-span-2">
+            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+              <FictionRadarChart />
+              <UserRate />
+            </div>
+          </div>
+          <Keywords />
+          <MbtiBarChart />
+        </div>
       </div>
     </div>
   );
@@ -162,7 +151,6 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
       <FictionPage />
-      {/* <>{FictionContext.fiction}</> */}
     </FictionProvider>
   );
 };
