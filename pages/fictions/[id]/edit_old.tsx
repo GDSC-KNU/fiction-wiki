@@ -4,12 +4,11 @@ import {
   Author,
   Category,
   Fiction,
-  FictionStat,
   Keyword,
   KeywordsOnFictions,
   UserRationOnFiction,
 } from "@prisma/client";
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -19,12 +18,6 @@ import Button from "src/components/button";
 import Input from "src/components/input";
 import Textarea from "src/components/textarea";
 import useSWR from "swr";
-import client from "@libs/server/client";
-
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 
 import { FictionProvider } from "@src/context/fictionContext";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -69,61 +62,46 @@ interface EditFictionMutation {
 }
 
 interface FictionDetailResponse {
-  fiction: FictionWithMore;
+  ok: boolean;
+  fiction?: FictionWithMore;
   similarFictions: Fiction[];
-  mbtis: any;
-  setup: any;
+  isLiked: boolean;
+}
+
+interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
+  keyword: Keyword;
 }
 
 interface FictionWithMore extends Fiction {
-  fiction: any;
-  keywords: [
-    {
-      keyword: Keyword;
-    }
-  ];
-  fictionStat: FictionStat;
-  userFictionStat: {
+  keywords: [KeywordsOnFictionsWithMore];
+  fictionStat: {
     originality: number;
     writing: number;
-    verisimilitude: number;
-    value: number;
-    synopsisComposition: number;
     character: number;
-    total: number;
-    _count: {
-      userRationOnFictions: number;
-    };
+    verisimilitude: number;
+    synopsisComposition: number;
+    value: number;
   };
+  userFictionStat: { userRationOnFictions: [UserRationOnFiction] };
   author: Author;
-  categories: [
-    {
-      category: Category;
-    }
-  ];
-  comments: Comment[];
+  originalAuthor: string;
+  categories: [Category];
 }
 
-const EditFiction: NextPage<FictionDetailResponse> = ({
-  fiction,
-  similarFictions,
-  mbtis,
-  setup,
-}) => {
+const EditFiction: NextPage = () => {
   const [md, setMd] = useState<string | undefined>("");
   const handleChange = useCallback((md: any) => {
     setMd(md);
   }, []);
 
   const router = useRouter();
-  // const { data: { fiction, mbtis } = {} } = useSWR<any>(
-  //   router.query.id
-  //     ? typeof window === "undefined"
-  //       ? null
-  //       : `/api/fictions/${router.query.id}`
-  //     : null
-  // );
-
+  const { data: { fiction, mbtis } = {} } = useSWR<any>(
+    router.query.id
+      ? typeof window === "undefined"
+        ? null
+        : `/api/fictions/${router.query.id}`
+      : null
+  );
   const [editFiction, { loading, data, error }] =
     useMutation<EditFictionMutation>(`/api/fictions/${router.query.id}`);
   const { register, handleSubmit, resetField, watch, setValue } =
@@ -332,7 +310,7 @@ const EditFiction: NextPage<FictionDetailResponse> = ({
   }
 
   return (
-    <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
+    <FictionProvider initialData={{ fiction, mbtis }}>
       <div>
         <form className=" " onSubmit={handleSubmit(onValid, onInvalid)}>
           <div className=" max-w-[1500px]">
@@ -708,140 +686,6 @@ const EditFiction: NextPage<FictionDetailResponse> = ({
       </div>
     </FictionProvider>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const fictionId = ctx?.params?.id;
-  if (!fictionId) {
-    return {
-      props: {},
-    };
-  }
-
-  const fiction = await client.fiction.findUnique({
-    where: {
-      id: +fictionId ?? 1,
-    },
-    include: {
-      fictionStat: true,
-      userFictionStat: {
-        include: {
-          userRationOnFictions: true,
-          _count: {
-            select: {
-              userRationOnFictions: true,
-            },
-          },
-        },
-      },
-      keywords: {
-        include: {
-          keyword: {
-            select: {
-              name: true,
-              isOfHeroine: true,
-              isOfMC: true,
-              isOfCons: true,
-            },
-          },
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-      author: true,
-      comments: {
-        include: {
-          createdBy: {
-            select: {
-              nickname: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const mdHtml = await remark()
-    .use(html)
-    .use(remarkToc)
-    .use(remarkGfm)
-    .process(fiction?.setup || "");
-
-  const arr: any[] = [];
-  fiction?.keywords.map((item) => arr.push(item?.keyword?.name));
-  const keywordSame = arr.map((word) => ({
-    keywords: {
-      some: {
-        keyword: {
-          name: {
-            equals: word,
-          },
-        },
-      },
-    },
-  }));
-
-  const arr2: any[] = [];
-  const similarFictions = await client.fiction.findMany({
-    where: {
-      OR: keywordSame,
-      AND: {
-        id: {
-          not: fiction?.id,
-        },
-      },
-    },
-    select: {
-      id: true,
-      title: true,
-      // setup: true,
-    },
-  });
-
-  similarFictions.map((item) => arr2.push([item.id, item.title]));
-
-  const isLiked = false;
-
-  const groupedByMBTI = await client.$queryRaw`
-  SELECT User.mbti,
-  CAST(SUM(UserRationOnFiction.originality
-  + UserRationOnFiction.synopsisComposition +
-  UserRationOnFiction.value +
-  UserRationOnFiction.writing +
-  UserRationOnFiction.character +
-  UserRationOnFiction.verisimilitude)
-  / (COUNT(*)*6)
-  AS CHAR(32)) AS avg,
-  CAST(COUNT(*) AS CHAR(32)) AS cnt
-  FROM UserRationOnFiction
-  JOIN User ON UserRationOnFiction.userId = User.id
-  JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id
-  WHERE UserFictionStat.fictionId = ${fictionId}
-  GROUP by User.mbti
-  `;
-
-  const mbtis = groupedByMBTI;
-
-  return {
-    props: {
-      fiction: JSON.parse(JSON.stringify(fiction)),
-      similarFictions: JSON.parse(JSON.stringify(similarFictions)),
-      isLiked,
-      mbtis: JSON.parse(JSON.stringify(mbtis)),
-      setup: String(mdHtml),
-    },
-    revalidate: 60 * 60 * 24 * 30,
-  };
 };
 
 export default EditFiction;
