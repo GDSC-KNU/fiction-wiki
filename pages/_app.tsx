@@ -42,7 +42,7 @@ function MyApp({
     };
   }, [router.events]);
 
-  const getLayout = Component.getLayout || ((page) => page);
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <SessionProvider session={session}>
@@ -73,10 +73,8 @@ function MyApp({
           `,
             }}
           />
-          <Layout>
-            <Component {...pageProps} />
-            <Analytics />
-          </Layout>
+          <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+          <Analytics />
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>
