@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import Top from "src/components/top";
-import Footer from "src/components/footer";
+import Top from "@components/layout/top";
+import Footer from "@components/layout/footer";
 
 const Layout = (props: { children: ReactNode }) => {
   return (

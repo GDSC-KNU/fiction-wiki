@@ -1,9 +1,9 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import Button from "src/components/button";
+import Button from "@components/common/button";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import Input from "src/components/input";
-import Textarea from "src/components/textarea";
+import Input from "@components/common/input";
+import Textarea from "@components/common/textarea";
 import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
 import type { NextPage } from "next";

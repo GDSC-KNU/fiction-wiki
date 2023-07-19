@@ -14,9 +14,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import Button from "src/components/button";
-import Input from "src/components/input";
-import Textarea from "src/components/textarea";
+import Button from "@components/common/button";
+import Input from "@components/common/input";
+import Textarea from "@components/common/textarea";
 import useSWR from "swr";
 
 import { FictionProvider } from "@src/context/fictionContext";

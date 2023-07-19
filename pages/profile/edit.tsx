@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Button from "src/components/button";
-import Input from "src/components/input";
+import Button from "@components/common/button";
+import Input from "@components/common/input";
 import useMutation from "@libs/client/useMutation";
 import type { NextPage } from "next";
 // import { useRouter } from "next/router";
