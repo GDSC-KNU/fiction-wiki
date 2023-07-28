@@ -176,7 +176,8 @@ model User {
   clientID      String?
   clientKey     String?
   nickname      String?
-   editedFictions FictionHistory[]
+  editedFictions FictionHistory[]
+  userLevel     Int? @default(1)
 }
 
 model UserRationOnFiction {
