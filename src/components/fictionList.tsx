@@ -53,6 +53,7 @@ export default function FictionList({
   authorsCount,
 }: any) {
   const router = useRouter();
+
   return (
     <div className=" flex justify-center">
       {type === "fictions_list" ? (
@@ -145,18 +146,14 @@ export default function FictionList({
                         href={`/search/keyword/${keyword?.keyword.name}/1`}
                         passHref
                         title={`${keyword?.keyword.name}`}
-                        className=" mr-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB] bg-gray-200  p-[0.2rem] text-center text-sm text-[#666676] hover:border-gray-400 hover:bg-gray-200 hover:underline peer-checked:bg-blue-600 peer-checked:text-white"
+                        className=" mr-[0.35rem] mt-1 cursor-pointer whitespace-nowrap rounded-3xl border-[#BBBBBB] bg-gray-200  p-[0.2rem] text-center text-sm text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 hover:underline"
                       >
                         #{keyword?.keyword.name || "loading"}
                       </Link>
                     ))}
                   </p>
                   <p className=" mt-1 h-12 overflow-hidden text-xs ">
-                    {fiction?.synopsis.slice(0, 150) ||
-                      "loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading".slice(
-                        0,
-                        150
-                      )}
+                    {fiction?.setup?.slice(6, 150) || "loading ".slice(0, 150)}
                     ...
                   </p>
                   <p className=" text-xs"></p>

@@ -1,4 +1,8 @@
 export default function urlToString(string: string) {
+  if (!string) {
+    return string;
+  }
+
   if (string.includes("munpia")) string = "문피아";
   else if (string.includes("qidian")) string = "치디엔";
   else if (string.includes("series.naver")) string = "시리즈";

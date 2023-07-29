@@ -45,7 +45,7 @@ async function handler(
 
   // 4) Check if user is an admin
   const isAdmin = session.user.userLevel === 0;
-  console.log(session.user.userLevel);
+
   // 5) Handle requests according to HTTP method
   switch (method) {
     case "GET":

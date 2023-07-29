@@ -1,8 +1,4 @@
 import React, { createContext, useEffect, useState, ReactNode } from "react";
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -11,7 +7,6 @@ import type {
   Fiction,
   FictionStat,
   Keyword,
-  UserRationOnFiction,
   Author,
   Category,
 } from "@prisma/client";
