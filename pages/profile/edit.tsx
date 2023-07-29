@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { FieldErrors, useForm } from "react-hook-form";
 // import Image from "next/image";
 // import useSWR from "swr";
+import { useRouter } from "next/router";
 
 import useUser from "@libs/client/useUser";
 import { useSession } from "next-auth/react";
@@ -22,6 +23,7 @@ interface EditProfileMutation {
 }
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { data: nextSesesion } = useSession();
   const { user, isAdmin } = useUser(
     `/api/users/me?userId=${nextSesesion?.user?.id || ""}`
@@ -44,9 +46,13 @@ const EditProfile: NextPage = () => {
 
   const onValid = async (data: EditProfileForm) => {
     if (loading) return;
-    editProfile(data, "PUT");
-    alert("수정되었습니다.");
-    return;
+    await editProfile(data, "PUT");
+    if (data) {
+      await router.push("/profile");
+      window.location.reload();
+    } else {
+      alert("Error updating profile.");
+    }
   };
 
   const onInvalid = (errors: FieldErrors) => {

@@ -40,7 +40,7 @@ const Profile: NextPage = () => {
   //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
-    <div className="min-h-[213px] max-w-[1300px] ">
+    <div className="mx-auto min-h-[213px] max-w-[1300px]">
       <div className=" mb-7 flex justify-between bg-slate-400 py-4 pl-6">
         <div>
           <h5 className=" font-bold">계정 정보</h5>
@@ -51,7 +51,7 @@ const Profile: NextPage = () => {
               height={64}
               alt={session?.user?.id || ""}
             />
-            <div>{`사용자 - ` + session?.user?.name}</div>
+            <div>{`사용자 - ` + session?.user?.nickname}</div>
           </div>
         </div>
         <Link

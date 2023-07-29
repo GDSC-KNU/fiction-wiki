@@ -6,6 +6,7 @@ declare module "next-auth" {
       id: string;
       mbti?: string;
       sex?: string;
+      nickname?: string;
     };
   }
 }
