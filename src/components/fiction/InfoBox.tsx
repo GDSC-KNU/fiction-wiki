@@ -14,9 +14,14 @@ export default function InfoBox(synopsisRef: any) {
 
   return (
     <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
-      <div className=" col-span-7 flex sm:absolute sm:col-span-2">
+      <div className=" col-span-7 flex-col sm:absolute sm:col-span-2">
         <div className=" ">
-          <div className=" relative h-[178px] w-[120px] sm:h-[278px] sm:w-[187.4157px] ">
+          <div className=" sm:hidden">
+            <div className=" flex-col">
+              <StarRating />
+            </div>
+          </div>
+          <div className=" relative h-[178px] w-[120px] sm:h-[270px] sm:w-[187.4157px] ">
             <Image
               src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fictionContext?.fiction?.image}/fiction`}
               fill
@@ -27,29 +32,6 @@ export default function InfoBox(synopsisRef: any) {
             />
           </div>
         </div>
-        <div className=" ml-2  sm:hidden">
-          <div className=" flex-col px-2">
-            <StarRating />
-
-            <p className=" mt-1 h-[144px] overflow-x-hidden text-xs ">
-              {fictionContext?.fiction?.setup.slice(6, 96) ||
-                "줄거리 업데이트 예정".slice(0, 150)}
-              <button
-                onClick={() => {
-                  synopsisRef?.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }}
-                className=" cursor-pointer text-blue-800"
-              >
-                {fictionContext?.fiction?.setup ? `... 더보기` : ""}
-              </button>
-            </p>
-            <p className=" text-xs"></p>
-            <p className=" overflow-hidden text-xs "></p>
-          </div>
-        </div>
       </div>
 
       <div className=" col-span-7 pt-2 sm:col-span-7 sm:ml-[187.4157px] sm:px-3 sm:pt-0">
@@ -57,23 +39,6 @@ export default function InfoBox(synopsisRef: any) {
           <div className=" flex">
             <StarRating />
           </div>
-        </div>
-        <div className=" hidden overflow-x-hidden border-b-[1px] pb-2 sm:block">
-          <p className="  h-20 text-xs">
-            {fictionContext?.fiction?.setup.slice(6, 206) ||
-              "줄거리 업데이트 예정"}
-            <button
-              className=" cursor-pointer text-blue-600"
-              onClick={() => {
-                synopsisRef?.current?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "center",
-                });
-              }}
-            >
-              {fictionContext?.fiction?.setup ? `... 더보기` : ""}
-            </button>
-          </p>
         </div>
         <div className=" overflow-hidden text-sm">
           <div className=" col-span-10 grid grid-cols-2">

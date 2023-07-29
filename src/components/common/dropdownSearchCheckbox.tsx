@@ -6,6 +6,7 @@ interface Option {
 }
 
 interface DropdownCheckboxProps {
+  label: string;
   options: Option[];
   register: any;
   selected: any;
@@ -15,6 +16,7 @@ interface DropdownCheckboxProps {
 }
 
 const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
+  label,
   options,
   register,
   selected,
@@ -28,22 +30,30 @@ const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchValue.toLowerCase())
   );
-
   return (
     <div className=" mb-2">
       <label
         htmlFor="dropdown-checkbox-with-search"
         className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
       >
-        카테고리
+        {label}
       </label>
       <button
         id="dropdown-checkbox-with-search"
         onClick={() => setIsOpen(!isOpen)}
-        className=" w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:border-blue-400 focus:outline-none focus:ring-blue-400"
+        className=" w-full rounded-md border border-gray-300 px-3 py-2 text-start text-sm font-medium text-gray-900 hover:border-blue-400 focus:outline-none focus:ring-blue-400"
         type="button"
       >
-        {selected.map((item: any) => item.value).join(", ")}
+        {selected.length === 0
+          ? `${label}를(을) 선택해 해주세요`
+          : selected.map((item: any, index: number) => (
+              <span
+                key={index}
+                className=" mr-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
+              >
+                {item.value}
+              </span>
+            ))}
       </button>
 
       {isOpen && (
@@ -54,7 +64,7 @@ const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
                 autoFocus
                 type="text"
                 className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
-                placeholder="카테고리 검색"
+                placeholder={`${label} 검색`}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
@@ -74,11 +84,15 @@ const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
                       (item: any) => item.value === option.value
                     )}
                     onChange={(e) => {
+                      const removeIndex = fields.findIndex(
+                        (field: any) => field.value === e.target.value
+                      );
+
                       if (e.target.checked) {
-                        append({ value: e.target.value });
-                        const removeIndex = fields.findIndex(
-                          (field: any) => field.value === e.target.value
-                        );
+                        if (removeIndex === -1) {
+                          append({ value: e.target.value });
+                        }
+                      } else {
                         if (removeIndex !== -1) {
                           remove(removeIndex);
                         }

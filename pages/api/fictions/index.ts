@@ -3,18 +3,18 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 // import revalidator from "@libs/server/revalidator";
-import { Redis } from "@upstash/redis";
+// import { Redis } from "@upstash/redis";
 
-const redisConfig = {
-  url:
-    process.env.UPSTASH_REDIS_REST_URL ??
-    "https://apn1-sacred-manatee-34786.upstash.io",
-  token:
-    process.env.UPSTASH_REDIS_REST_TOKEN ??
-    "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
-};
+// const redisConfig = {
+//   url:
+//     process.env.UPSTASH_REDIS_REST_URL ??
+//     "https://apn1-sacred-manatee-34786.upstash.io",
+//   token:
+//     process.env.UPSTASH_REDIS_REST_TOKEN ??
+//     "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
+// };
 
-const redis = new Redis(redisConfig);
+// const redis = new Redis(redisConfig);
 
 async function handler(
   req: NextApiRequest,
@@ -24,201 +24,199 @@ async function handler(
     let {
       query: { keywords, genres, nationalities, sorting, page, dateYear },
     } = req;
-    const cache: any = await redis.get(JSON.stringify(req?.query));
+    // const cache: any = await redis.get(JSON.stringify(req?.query));
 
-    if (cache) {
-      // console.log(cache);
-      // return cache;
-      res.json(cache);
-    } else {
-      if (nationalities === "all") nationalities = "";
-      if (genres === "all") genres = "";
-      if (keywords === "all") keywords = "";
-      if (dateYear === "all") dateYear = "";
+    // if (cache) {
+    //   // console.log(cache);
+    //   // return cache;
+    //   res.json(cache);
+    // } else {
 
-      const keywordArray = !Array.isArray(keywords)
-        ? keywords?.split(",")
-        : [""];
-      const keywordManyQuery = [
-        ...(keywordArray?.includes("")
-          ? []
-          : [
-              {
-                AND: [
-                  {
-                    keywords: {
-                      some: {
-                        keyword: {
-                          name: {
-                            in: keywordArray,
-                          },
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            ]),
-      ];
+    if (nationalities === "all") nationalities = "";
+    if (genres === "all") genres = "";
+    if (keywords === "all") keywords = "";
+    if (dateYear === "all") dateYear = "";
 
-      const genresArray = genres?.toString().split(",") || [""];
-      const genresManyquery = [
-        ...(genresArray?.includes("")
-          ? []
-          : [
-              {
-                OR: [
-                  {
-                    categories: {
-                      some: {
-                        category: {
-                          name: {
-                            in: genresArray,
-                          },
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            ]),
-      ];
-
-      const nationalitiesMany =
-        nationalities
-          ?.toString()
-          .split(",")
-          .map((item: string) => ({
-            nationality: (item as string) || undefined,
-          })) || [];
-
-      const sortingOne = function () {
-        if (sorting === "총점" || "") {
-          return {
-            orderBy: { userFictionStat: { total: "desc" } },
-          };
-        } else if (sorting === "캐릭터성") {
-          return {
-            orderBy: { userFictionStat: { character: "desc" } },
-          };
-        } else if (sorting === "오리지널리티") {
-          return {
-            orderBy: { userFictionStat: { originality: "desc" } },
-          };
-        } else if (sorting === "스토리") {
-          return {
-            orderBy: {
-              userFictionStat: { synopsisComposition: "desc" },
-            },
-          };
-        } else if (sorting === "작품성") {
-          return {
-            orderBy: { userFictionStat: { value: "desc" } },
-          };
-        } else if (sorting === "핍진성") {
-          return {
-            orderBy: {
-              userFictionStat: { verisimilitude: "desc" },
-            },
-          };
-        } else if (sorting === "필력") {
-          return {
-            orderBy: { userFictionStat: { writing: "desc" } },
-          };
-        } else if (sorting === "화수") {
-          return {
-            orderBy: { volume: "desc" },
-          };
-        } else {
-          return undefined;
-        }
-      };
-
-      const ReleaseDateFilter = function () {
-        if (dateYear) {
-          return {
-            startDate: {
-              gte: new Date(`${dateYear}-01-01`),
-              lte: new Date(`${dateYear}-12-31`),
-            },
-          };
-        } else {
-          return {};
-        }
-      };
-
-      const fictions = await client.fiction.findMany({
-        take: 18,
-        skip: (+page!.toString() - 1 || 0) * 18,
-        where: {
-          AND: [
-            ...genresManyquery,
+    const keywordArray = !Array.isArray(keywords) ? keywords?.split(",") : [""];
+    const keywordManyQuery = [
+      ...(keywordArray?.includes("")
+        ? []
+        : [
             {
-              OR: [...nationalitiesMany],
-            },
-            ...keywordManyQuery,
-            ReleaseDateFilter(),
-          ],
-        },
-        include: {
-          _count: {
-            select: {
-              favs: true,
-            },
-          },
-          author: true,
-          userFictionStat: {
-            include: {
-              _count: {
-                select: {
-                  userRationOnFictions: true,
+              AND: [
+                {
+                  keywords: {
+                    some: {
+                      keyword: {
+                        name: {
+                          in: keywordArray,
+                        },
+                      },
+                    },
+                  },
                 },
+              ],
+            },
+          ]),
+    ];
+
+    const genresArray = genres?.toString().split(",") || [""];
+    const genresManyquery = [
+      ...(genresArray?.includes("")
+        ? []
+        : [
+            {
+              OR: [
+                {
+                  categories: {
+                    some: {
+                      category: {
+                        name: {
+                          in: genresArray,
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ]),
+    ];
+
+    const nationalitiesMany =
+      nationalities
+        ?.toString()
+        .split(",")
+        .map((item: string) => ({
+          nationality: (item as string) || undefined,
+        })) || [];
+
+    const sortingOne = function () {
+      if (sorting === "총점" || "") {
+        return {
+          orderBy: { userFictionStat: { total: "desc" } },
+        };
+      } else if (sorting === "캐릭터성") {
+        return {
+          orderBy: { userFictionStat: { character: "desc" } },
+        };
+      } else if (sorting === "오리지널리티") {
+        return {
+          orderBy: { userFictionStat: { originality: "desc" } },
+        };
+      } else if (sorting === "스토리") {
+        return {
+          orderBy: {
+            userFictionStat: { synopsisComposition: "desc" },
+          },
+        };
+      } else if (sorting === "작품성") {
+        return {
+          orderBy: { userFictionStat: { value: "desc" } },
+        };
+      } else if (sorting === "핍진성") {
+        return {
+          orderBy: {
+            userFictionStat: { verisimilitude: "desc" },
+          },
+        };
+      } else if (sorting === "필력") {
+        return {
+          orderBy: { userFictionStat: { writing: "desc" } },
+        };
+      } else if (sorting === "화수") {
+        return {
+          orderBy: { volume: "desc" },
+        };
+      } else {
+        return undefined;
+      }
+    };
+
+    const ReleaseDateFilter = function () {
+      if (dateYear) {
+        return {
+          startDate: {
+            gte: new Date(`${dateYear}-01-01`),
+            lte: new Date(`${dateYear}-12-31`),
+          },
+        };
+      } else {
+        return {};
+      }
+    };
+
+    const fictions = await client.fiction.findMany({
+      take: 18,
+      skip: (+page!.toString() - 1 || 0) * 18,
+      where: {
+        AND: [
+          ...genresManyquery,
+          {
+            OR: [...nationalitiesMany],
+          },
+          ...keywordManyQuery,
+          ReleaseDateFilter(),
+        ],
+      },
+      include: {
+        _count: {
+          select: {
+            favs: true,
+          },
+        },
+        author: true,
+        userFictionStat: {
+          include: {
+            _count: {
+              select: {
+                userRationOnFictions: true,
               },
             },
           },
-          keywords: {
-            include: {
-              keyword: true,
-            },
-          },
-          categories: {
-            include: {
-              category: true,
-            },
+        },
+        keywords: {
+          include: {
+            keyword: true,
           },
         },
-        ...sortingOne(),
-      });
-
-      const fictionsCount = await client.fiction.count({
-        where: {
-          AND: [
-            ...genresManyquery,
-            {
-              OR: [...nationalitiesMany],
-            },
-            ...keywordManyQuery,
-            ReleaseDateFilter(),
-          ],
+        categories: {
+          include: {
+            category: true,
+          },
         },
-      });
+      },
+      ...sortingOne(),
+    });
 
-      await redis.setex(
-        JSON.stringify(req.query),
-        3600 * 24 * 7,
-        JSON.stringify({
-          ok: true,
-          fictions,
-          fictionsCount,
-        })
-      );
+    const fictionsCount = await client.fiction.count({
+      where: {
+        AND: [
+          ...genresManyquery,
+          {
+            OR: [...nationalitiesMany],
+          },
+          ...keywordManyQuery,
+          ReleaseDateFilter(),
+        ],
+      },
+    });
 
-      res.json({
-        ok: true,
-        fictions,
-        fictionsCount,
-      });
-    }
+    // await redis.setex(
+    //   JSON.stringify(req.query),
+    //   3600 * 24 * 7,
+    //   JSON.stringify({
+    //     ok: true,
+    //     fictions,
+    //     fictionsCount,
+    //   })
+    // );
+
+    res.json({
+      ok: true,
+      fictions,
+      fictionsCount,
+    });
   }
   if (req.method === "POST") {
     let {
@@ -230,7 +228,7 @@ async function handler(
         relatedAuthor,
         originalAuthor,
         nationality,
-        genre,
+        categories,
         date,
         currentState,
         status: [
@@ -249,7 +247,7 @@ async function handler(
         consKeywords,
         original,
         platforms,
-        thumbId,
+        image,
         volume,
         isTranslated,
         introduction,
@@ -260,13 +258,23 @@ async function handler(
       session: { user },
     } = req;
 
-    genre = genre
-      .split(" ")
-      .join("")
-      .split(",")
-      .filter((item: any) => item !== "");
+    // 전처리
+    relatedTitle =
+      Array.isArray(relatedTitle) && relatedTitle.length === 0
+        ? undefined
+        : relatedTitle.join(",");
 
-    const genreMany = genre.map((item: string) => ({
+    relatedAuthor =
+      Array.isArray(relatedAuthor) && relatedAuthor.length === 0
+        ? undefined
+        : relatedAuthor.join(",");
+
+    platforms = platforms.map((platform: any) => platform.value).join(",");
+    mediaMix = mediaMix.map((item: any) => item.value).join(",");
+
+    categories = categories.map((item: any) => item.value);
+
+    const categoriesMany = categories.map((item: string) => ({
       category: {
         connectOrCreate: {
           where: {
@@ -279,64 +287,76 @@ async function handler(
       },
     }));
 
-    keywords = keywords.filter((item: any) => item !== "");
-    const keywordMany = keywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
+    keywords = keywords?.filter((item: any) => item !== "");
+    const KeywordMany =
+      (keywords &&
+        keywords.map((item: string) => ({
+          keyword: {
+            connectOrCreate: {
+              where: {
+                name: item,
+              },
+              create: {
+                name: item,
+              },
+            },
           },
-          create: {
-            name: item,
-          },
-        },
-      },
-    }));
+        }))) ||
+      [];
 
-    mcKeywords = mcKeywords.filter((item: any) => item !== "");
-    const mcKeywordMany = mcKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
+    mcKeywords = mcKeywords?.filter((item: any) => item !== "");
+    const mcKeywordMany =
+      (mcKeywords &&
+        mcKeywords.map((item: string) => ({
+          keyword: {
+            connectOrCreate: {
+              where: {
+                name: item,
+              },
+              create: {
+                name: item,
+                isOfMC: true,
+              },
+            },
           },
-          create: {
-            name: item,
-            isOfMC: true,
-          },
-        },
-      },
-    }));
+        }))) ||
+      [];
 
-    subKeywords = subKeywords.filter((item: any) => item !== "");
-    const subKeywordMany = subKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
+    subKeywords = subKeywords?.filter((item: any) => item !== "");
+    const subKeywordMany =
+      (subKeywords &&
+        subKeywords.map((item: string) => ({
+          keyword: {
+            connectOrCreate: {
+              where: {
+                name: item,
+              },
+              create: {
+                name: item,
+                isOfHeroine: true,
+              },
+            },
           },
-          create: {
-            name: item,
-            isOfHeroine: true,
-          },
-        },
-      },
-    }));
+        }))) ||
+      [];
 
-    consKeywords = consKeywords.filter((item: any) => item !== "");
-    const consKeywordMany = consKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
+    consKeywords = consKeywords?.filter((item: any) => item !== "");
+    const consKeywordMany =
+      (consKeywords &&
+        consKeywords.map((item: string) => ({
+          keyword: {
+            connectOrCreate: {
+              where: {
+                name: item,
+              },
+              create: {
+                name: item,
+                isOfCons: true,
+              },
+            },
           },
-          create: {
-            name: item,
-            isOfCons: true,
-          },
-        },
-      },
-    }));
+        }))) ||
+      [];
 
     const fiction = await client.fiction.create({
       data: {
@@ -361,10 +381,10 @@ async function handler(
         startDate: new Date(date[0]),
         endDate: date[1] ? new Date(date[1]) : new Date(0),
         original,
-        platforms: platforms[0],
-        image: thumbId,
-        synopsis,
-        characters,
+        platforms,
+        image,
+        synopsis: "",
+        characters: "",
         currentState,
         volume: +volume?.toString(),
         isTranslated,
@@ -373,25 +393,13 @@ async function handler(
         mediaMix: mediaMix || "",
         setup: setup || "",
         categories: {
-          // create: { category: { create: { name: genre } } },
-          create:
-            // category: {
-            //   connectOrCreate: {
-            //     where: {
-            //       name: genre,
-            //     },
-            //     create: {
-            //       name: genre,
-            //     },
-            //   },
-            // },
-            [...genreMany],
+          create: [...categoriesMany],
         },
         keywords: {
           create: [
             ...subKeywordMany,
             ...mcKeywordMany,
-            ...keywordMany,
+            ...KeywordMany,
             ...consKeywordMany,
           ],
         },
