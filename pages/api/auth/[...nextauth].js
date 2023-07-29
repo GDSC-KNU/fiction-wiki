@@ -28,6 +28,7 @@ export const authOptions = {
             ...session.user,
             mbti: user.mbti,
             sex: user.sex || "",
+            userLevel: user.userLevel,
           },
         };
         // console.log(user);
