@@ -10,7 +10,10 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   if (
     req.nextUrl.pathname.startsWith("/fictions/create") &&
-    !req.cookies.get("fdbssession")
+    !(
+      req.cookies.get("__Secure-next-auth.session-token") ||
+      req.cookies.get("next-auth.session-token")
+    )
   ) {
     return NextResponse.rewrite(new URL("/enter", req.url));
   }
