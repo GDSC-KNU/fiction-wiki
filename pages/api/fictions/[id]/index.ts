@@ -276,50 +276,6 @@ async function handler(
         author: true,
       },
     });
-    // const arr: any[] = [];
-    // fiction?.keywords.map((item) => arr.push(item.keyword?.name));
-    // const keywordSame = arr.map((word) => ({
-    //   keywords: {
-    //     some: {
-    //       keyword: {
-    //         name: {
-    //           equals: word,
-    //         },
-    //       },
-    //     },
-    //   },
-    // }));
-
-    // const arr2: any[] = [];
-    // const similarFictions = await client.fiction.findMany({
-    //   where: {
-    //     OR: keywordSame,
-    //     AND: {
-    //       id: {
-    //         not: fiction?.id,
-    //       },
-    //     },
-    //   },
-    //   select: {
-    //     id: true,
-    //     title: true,
-    //   },
-    // });
-
-    // similarFictions.map((item) => arr2.push([item.id, item.title]));
-
-    // const isLiked = Boolean(
-    //   await client.fav.findFirst({
-    //     where: {
-    //       fictionId: fiction?.id,
-    //       userId: session?.user?.id,
-    //     },
-    //     select: {
-    //       id: true,
-    //     },
-    //   })
-    // );
-    // const isLiked = false;
 
     const mbtis = await client.$queryRaw`
     SELECT User.mbti,
@@ -533,7 +489,7 @@ async function handler(
       console.log(error);
     }
 
-    res.json({ ok: true, fiction });
+    res.json({ ok: true });
   }
 }
 
