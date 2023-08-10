@@ -222,6 +222,8 @@ const Create: NextPage = () => {
     { label: "조아라", value: "조아라" },
     { label: "치디엔", value: "치디엔" },
     { label: "타파스", value: "타파스" },
+    { label: "소설가가 되자", value: "소설가가 되자" },
+    { label: "하멜른", value: "하멜른" },
     { label: "기타", value: "기타" },
   ];
 
