@@ -3,7 +3,7 @@ import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import Input from "@components/input";
+import Input from "@components/common/input";
 import { useSWRConfig } from "swr";
 // import { validateRequest } from "twilio/lib/webhooks/webhooks";
 import { useSession } from "next-auth/react";

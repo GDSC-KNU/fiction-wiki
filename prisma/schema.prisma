@@ -45,10 +45,25 @@ model Fiction {
   introduction  String?             @default("") @db.MediumText
   chacracterImages Json?            @default("[]")
   originalTitle String?             @default("")
+  history     FictionHistory[]
 
   @@index([userId])
   @@index([nationality,createdAt])
   @@index([authorId])
+}
+model FictionHistory {
+  id            Int      @id @default(autoincrement())
+  fictionId     Int
+  data          Json?    
+  log           Json?
+  editedBy      User     @relation(fields: [editedById], references: [id], onDelete: Cascade) 
+  editedById    String
+  updatedAt     DateTime @default(now()) 
+
+  fiction       Fiction  @relation(fields: [fictionId], references: [id], onDelete: Cascade)
+
+  @@index([fictionId])
+  @@index([editedById])
 }
 
 model Author {
@@ -162,6 +177,8 @@ model User {
   clientID      String?
   clientKey     String?
   nickname      String?
+  editedFictions FictionHistory[]
+  userLevel     Int? @default(1)
 }
 
 model UserRationOnFiction {

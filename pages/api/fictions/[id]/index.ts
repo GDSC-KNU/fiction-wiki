@@ -4,6 +4,221 @@ import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 // import revalidator from "@libs/server/revalidator";
 import axios from "axios";
+import { getServerSession } from "next-auth";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { Prisma } from "@prisma/client";
+
+import deepDiff from "deep-diff";
+import { diffChars } from "diff";
+
+const preprocessData = (data: any, isRevert: boolean) => {
+  let {
+    title,
+    originalTitle,
+    relatedTitle,
+    author,
+    originalAuthor,
+    relatedAuthor,
+    nationality,
+    genre,
+    startDate,
+    endDate,
+    date = [],
+    categories,
+    currentState,
+    status,
+    synopsis,
+    characters,
+    keywords,
+    mcKeywords,
+    subKeywords,
+    consKeywords,
+    original,
+    platforms,
+    image,
+    volume,
+    type,
+    mediaMix,
+    isTranslated,
+    introduction,
+    setup,
+    nickname,
+  } = data;
+
+  function handleInput(input: Array<string> | string) {
+    if (Array.isArray(input)) {
+      return input.length === 0 ? undefined : input.join(",");
+    } else if (typeof input === "string") {
+      return input;
+    } else {
+      return undefined;
+    }
+  }
+
+  relatedTitle = handleInput(relatedTitle);
+  relatedAuthor = handleInput(relatedAuthor);
+
+  if (isRevert) {
+    // 문서 복구 편집
+    categories = categories.map((item: any) => item.category.name);
+    date[0] = new Date(startDate);
+    date[1] = new Date(endDate);
+    originalAuthor = author.rawName;
+    author = author.name;
+  } else {
+    // 문서 일반 편집
+    categories = categories.map((item: any) => item.value);
+    date[0] = new Date(date[0]);
+    date[1] = new Date(date[1]);
+    platforms = platforms
+      .map((item: any) => item.value)
+      .filter((item: string) => item !== "")
+      .join(",");
+    mediaMix = mediaMix
+      .map((item: any) => item.value)
+      .filter((item: string) => item !== "")
+      .join(",");
+  }
+
+  const categoriesMany = categories.map((item: string) => ({
+    category: {
+      connectOrCreate: {
+        where: { name: item },
+        create: { name: item },
+      },
+    },
+  }));
+
+  const processKeywords = (
+    keywordsArray: any[],
+    isOfMC = false,
+    isOfHeroine = false,
+    isOfCons = false
+  ) => {
+    if (isRevert) {
+      keywordsArray = (
+        keywordsArray?.filter((item: any) => item !== "") || []
+      ).map((item: any) => item.keyword.name);
+    }
+
+    return (keywordsArray?.filter((item: any) => item !== "") || []).map(
+      (item: string) => ({
+        keyword: {
+          connectOrCreate: {
+            where: { name: item },
+            create: {
+              name: item,
+              isOfMC,
+              isOfHeroine,
+              isOfCons,
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const KeywordMany = processKeywords(keywords);
+  const mcKeywordMany = processKeywords(mcKeywords, true);
+  const subKeywordMany = processKeywords(subKeywords, false, true);
+  const consKeywordMany = processKeywords(consKeywords, false, false, true);
+
+  return {
+    title,
+    originalTitle,
+    relatedTitle,
+    author,
+    originalAuthor,
+    relatedAuthor,
+    nationality,
+    genre,
+    date,
+    categories,
+    currentState,
+    status,
+    synopsis,
+    characters,
+    keywords,
+    mcKeywords,
+    subKeywords,
+    consKeywords,
+    original,
+    platforms,
+    image,
+    volume,
+    type,
+    mediaMix,
+    isTranslated,
+    introduction,
+    setup,
+    nickname,
+    categoriesMany,
+    KeywordMany,
+    mcKeywordMany,
+    subKeywordMany,
+    consKeywordMany,
+  };
+};
+
+const createHistoryLog = async (
+  prevFiction: any,
+  updatedFiction: any,
+  fictionId: number,
+  userId: number
+) => {
+  const totalCharactersChanged = countCharactersChanged(
+    prevFiction,
+    updatedFiction
+  );
+  const latestFictionHistory = await client.fictionHistory.findFirst({
+    where: { fictionId },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  if (
+    JSON.stringify(latestFictionHistory?.data) !==
+    JSON.stringify(updatedFiction)
+  ) {
+    const differences = deepDiff(prevFiction, updatedFiction);
+    const jsonCompatibleLog = toJSONCompatible(differences);
+
+    await client.fictionHistory.create({
+      data: {
+        fictionId,
+        data: toJSONCompatible(prevFiction) as Prisma.JsonObject,
+        log: {
+          changeLog: jsonCompatibleLog,
+          charactersChanged: totalCharactersChanged,
+        },
+        editedById: userId.toString(),
+      },
+    });
+  }
+};
+
+function countCharactersChanged(prevFiction: any, updatedFiction: any): number {
+  const prevFictionString = JSON.stringify(prevFiction);
+  const updatedFictionString = JSON.stringify(updatedFiction);
+
+  const characterDifferences = diffChars(
+    prevFictionString,
+    updatedFictionString
+  );
+
+  let charsAdded = 0;
+  let charsRemoved = 0;
+
+  characterDifferences.forEach((part) => {
+    if (part.added) {
+      charsAdded += part.value.length;
+    }
+    if (part.removed) {
+      charsRemoved += part.value.length;
+    }
+  });
+
+  return charsAdded - +charsRemoved;
+}
 
 async function handler(
   req: NextApiRequest,
@@ -13,44 +228,6 @@ async function handler(
     query: { id },
     // session: { user },
   } = req;
-
-  // const session = await getSession({ req });
-
-  // const fiction = await client.fiction.findUnique({
-  //   where: {
-  //     id: +id!.toString(),
-  //   },
-  //   include: {
-  //     fictionStat: true,
-  //     userFictionStat: {
-  //       include: {
-  //         _count: {
-  //           select: {
-  //             userRationOnFictions: true,
-  //           },
-  //         },
-  //       },
-  //     },
-  //     keywords: {
-  //       include: {
-  //         keyword: {
-  //           select: {
-  //             name: true,
-  //             isOfHeroine: true,
-  //             isOfMC: true,
-  //             isOfCons: true,
-  //           },
-  //         },
-  //       },
-  //     },
-  //     categories: {
-  //       include: {
-  //         category: true,
-  //       },
-  //     },
-  //     author: true,
-  //   },
-  // });
 
   if (req.method === "GET") {
     const fiction = await client.fiction.findUnique({
@@ -97,7 +274,6 @@ async function handler(
           },
         },
         author: true,
-        
       },
     });
     // const arr: any[] = [];
@@ -174,131 +350,90 @@ async function handler(
     });
   }
   if (req.method === "PUT") {
+    const session = await getServerSession(req, res, authOptions);
+
     let {
-      query: { id },
-      body: {
-        title,
-        originalTitle,
-        relatedTitle,
-        author,
-        originalAuthor,
-        relatedAuthor,
-        nationality,
-        genre,
-        date,
-        currentState,
-        status: [
-          originality,
-          writing,
-          character,
-          verisimilitude,
-          synopsisComposition,
-          value,
-        ],
-        synopsis,
-        characters,
-        keywords,
-        mcKeywords,
-        subKeywords,
-        consKeywords,
-        original,
-        platforms,
-        thumbId,
-        volume,
-        type,
-        mediaMix,
-        isTranslated,
-        introduction,
-        setup,
-        nickname,
-      },
+      query: { id, Rid },
+      body,
     } = req;
 
-    genre = genre
-      .split(" ")
-      .join("")
-      .split(",")
-      .filter((item: any) => item !== "");
-    const genreMany = genre.map((item: string) => ({
-      category: {
-        connectOrCreate: {
-          where: {
-            name: item,
-          },
-          create: {
-            name: item,
+    const inputData = Rid
+      ? (
+          await client.fictionHistory.findUnique({
+            where: {
+              id: +Rid.toString(),
+            },
+          })
+        )?.data
+      : body;
+
+    const isRevert = Rid ? true : false;
+
+    // destructuting for update
+
+    const {
+      title,
+      originalTitle,
+      relatedTitle,
+      author,
+      originalAuthor,
+      relatedAuthor,
+      nationality,
+      date,
+      categories,
+      currentState,
+      synopsis,
+      characters,
+      keywords,
+      mcKeywords,
+      subKeywords,
+      consKeywords,
+      original,
+      platforms,
+      image,
+      volume,
+      type,
+      mediaMix,
+      isTranslated,
+      introduction,
+      setup,
+      nickname,
+      KeywordMany,
+      mcKeywordMany,
+      subKeywordMany,
+      consKeywordMany,
+      categoriesMany,
+    } = preprocessData(inputData, isRevert);
+
+    // current(previous) fiction Data
+    const prevFiction = await client.fiction.findUnique({
+      where: {
+        id: +id!.toString(),
+      },
+      include: {
+        keywords: {
+          select: {
+            keyword: {
+              select: {
+                name: true,
+                id: true,
+                isOfHeroine: true,
+                isOfMC: true,
+                isOfCons: true,
+              },
+            },
           },
         },
-      },
-    }));
-
-    keywords = keywords.filter((item: any) => item !== "");
-    const KeywordMany = keywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
-          },
-          create: {
-            name: item,
+        categories: {
+          select: {
+            category: true,
           },
         },
+        author: true,
       },
-    }));
+    });
 
-    mcKeywords = mcKeywords.filter((item: any) => item !== "");
-    const mcKeywordMany = mcKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
-          },
-          create: {
-            name: item,
-            isOfMC: true,
-          },
-        },
-      },
-    }));
-
-    subKeywords = subKeywords.filter((item: any) => item !== "");
-    const subKeywordMany = subKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
-          },
-          create: {
-            name: item,
-            isOfHeroine: true,
-          },
-        },
-      },
-    }));
-
-    consKeywords = consKeywords.filter((item: any) => item !== "");
-    const consKeywordMany = consKeywords.map((item: string) => ({
-      keyword: {
-        connectOrCreate: {
-          where: {
-            name: item,
-          },
-          create: {
-            name: item,
-            isOfCons: true,
-          },
-        },
-      },
-    }));
-
-    // const categoryMany = Fiction?.categories.map((item) => ({
-    //   category: {
-    //     upsert: {
-    //       name: item?.category!.name,
-    //     },
-    //   },
-    // }));
-
+    // updating fiction
     const fiction = await client.fiction.update({
       where: {
         id: +id!.toString(),
@@ -321,11 +456,11 @@ async function handler(
         },
         relatedAuthor,
         nationality,
-        startDate: new Date(date[0]),
-        endDate: new Date(date[1]),
+        startDate: date[0],
+        endDate: date[1],
         original,
-        platforms: platforms[0],
-        image: thumbId,
+        platforms,
+        image,
         synopsis,
         characters,
         currentState,
@@ -335,28 +470,11 @@ async function handler(
         introduction,
         mediaMix,
         setup,
-        // categories: {
-        //   deleteMany: {
-        //     fictionId: +id!.toString(),
-        //   },
-        //   create: {
-        //     category: {
-        //       connectOrCreate: {
-        //         where: {
-        //           name: genre,
-        //         },
-        //         create: {
-        //           name: genre,
-        //         },
-        //       },
-        //     },
-        //   },
-        // },
         categories: {
           deleteMany: {
             fictionId: +id!.toString(),
           },
-          create: [...genreMany],
+          create: [...categoriesMany],
         },
         keywords: {
           deleteMany: {
@@ -369,21 +487,40 @@ async function handler(
             ...consKeywordMany,
           ],
         },
-        fictionStat: {
-          update: {
-            originality: +originality,
-            writing: +writing,
-            character: +character,
-            verisimilitude: +verisimilitude,
-            synopsisComposition: +synopsisComposition,
-            value: +value,
-          },
-        },
       },
     });
 
-    //  On-Demand revalidation
-    // revalidator(id, "edit");
+    // updated fiction Data
+    const updatedFiction = await client.fiction.findUnique({
+      where: {
+        id: +id!.toString(),
+      },
+      include: {
+        keywords: {
+          select: {
+            keyword: {
+              select: {
+                name: true,
+                id: true,
+                isOfHeroine: true,
+                isOfMC: true,
+                isOfCons: true,
+              },
+            },
+          },
+        },
+        categories: {
+          select: {
+            category: true,
+          },
+        },
+        author: true,
+      },
+    });
+
+    await createHistoryLog(prevFiction, updatedFiction, +id!, session.user.id);
+
+    // Revalidate (if necessary)
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
@@ -406,3 +543,19 @@ export default withApiSession(
     handler,
   })
 );
+
+function toJSONCompatible(obj: any): any {
+  if (obj instanceof Date) {
+    return obj.toISOString();
+  } else if (Array.isArray(obj)) {
+    return obj.map(toJSONCompatible);
+  } else if (obj && typeof obj === "object") {
+    const newObj: { [key: string]: any } = {};
+    for (const key in obj) {
+      newObj[key] = toJSONCompatible(obj[key]);
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}

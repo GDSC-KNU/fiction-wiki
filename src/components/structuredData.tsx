@@ -21,13 +21,13 @@ export default function StructuredData({ data: fiction }: any) {
     },
     author: {
       "@type": "Person",
-      name: fiction.author.name,
+      name: fiction?.author?.name,
     },
-    url: `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
+    url: `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
     workExample: [
       {
         "@type": "Book",
-        "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction.id}`,
+        "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
         isbn: "",
         bookEdition: "",
         bookFormat: "https://schema.org/EBook",

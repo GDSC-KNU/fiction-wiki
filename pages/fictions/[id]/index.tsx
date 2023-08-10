@@ -23,6 +23,8 @@ import Keywords from "@components/fiction/keywords";
 import SimilarFictions from "@components/fiction/similarFictions";
 import FictionLayout from "@components/layout/FictionLayout";
 import Layout from "@components/layout/Layout";
+import WikiNavBar from "@components/fiction/wikiNavBar";
+
 import type {
   Author,
   Category,
@@ -75,7 +77,7 @@ const FictionPage = () => {
   const { isAdmin } = useUser();
 
   return (
-    <div className=" grid grid-cols-10 px-2">
+    <div className=" grid grid-cols-10 px-2 lg:ml-24">
       <StructuredData data={fictionContext.fiction} />
       <NextSeo
         title={`${fictionContext.fiction?.title}`}
@@ -86,24 +88,6 @@ const FictionPage = () => {
           url: `https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`,
         }}
       />
-      {isAdmin ? (
-        <div className=" col-span-10 mt-2 flex justify-start">
-          <Link
-            className=" mx-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-            passHref
-            href={`/fictions/${fictionContext.fiction?.id}/edit`}
-          >
-            EDIT
-          </Link>
-          <Link
-            className=" ml-1 rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-1 hover:cursor-pointer"
-            passHref
-            href={`/fictions/${fictionContext.fiction?.id}/delete`}
-          >
-            DELETE
-          </Link>
-        </div>
-      ) : null}
       <div className=" col-span-10 flex-col justify-between">
         <h1 className=" pt-2 text-3xl font-semibold">
           {fictionContext.fiction?.title}
@@ -118,15 +102,12 @@ const FictionPage = () => {
         </div>
       </div>
       <div id="main-container" className=" col-span-10 lg:col-span-7">
-        <InfoBox synopsisRef={synopsisRef} />
+        <InfoBox />
         <div className=" mb-3 grid grid-cols-5 "></div>
-        <div className="rounded-md bg-white ">
-          <div className=" mb-3">
-            <div ref={synopsisRef}></div>
-          </div>
+        <div className="my-10 rounded-md bg-white">
           <div
-            className=" prose prose-slate max-w-full prose-h2:w-full prose-h2:pb-2 prose-table:text-xs prose-img:float-right prose-img:my-0"
-            dangerouslySetInnerHTML={{ __html: fictionContext.fiction.setup }}
+            className=" prose prose-slate max-w-full prose-h2:w-full  prose-table:text-xs prose-img:float-right prose-img:my-0"
+            dangerouslySetInnerHTML={{ __html: fictionContext.setup }}
           ></div>
         </div>
         <div className=" row-span-3 flex flex-col">
@@ -140,11 +121,13 @@ const FictionPage = () => {
         id="side-container"
         className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
       >
-        <div className=" col-span-5 sm:col-span-2">
-          <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-            <FictionRadarChart />
-            <UserRate />
+        <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
+          <div className=" flex justify-center px-3">
+            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+              <FictionRadarChart />
+            </div>
           </div>
+          <UserRate />
         </div>
         <Keywords />
         <MbtiBarChart />
@@ -157,23 +140,19 @@ const FictionDetail: NextPageWithLayout<FictionDetailResponse> = ({
   fiction,
   similarFictions,
   mbtis,
+
   setup,
 }) => {
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
       <FictionPage />
-      {/* <>{FictionContext.fiction}</> */}
     </FictionProvider>
   );
 };
 
 // per-page layout
 FictionDetail.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout>
-      <FictionLayout>{page}</FictionLayout>
-    </Layout>
-  );
+  return <FictionLayout>{page}</FictionLayout>;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -244,6 +223,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     .process(fiction?.setup || "");
 
   const arr: any[] = [];
+
   fiction?.keywords.map((item) => arr.push(item?.keyword?.name));
   const keywordSame = arr.map((word) => ({
     keywords: {
@@ -304,7 +284,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       similarFictions: JSON.parse(JSON.stringify(similarFictions)),
       isLiked,
       mbtis: JSON.parse(JSON.stringify(mbtis)),
-      setup: mdHtml.toString(),
+      setup: String(mdHtml),
     },
     revalidate: 60 * 60 * 24 * 30,
   };

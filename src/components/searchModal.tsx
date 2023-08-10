@@ -65,6 +65,7 @@ export default function SearchModal() {
                     />
                     <div className=" flex w-full items-center">
                       <input
+                        autoFocus
                         autoComplete="off"
                         placeholder="검색어를 입력하세요"
                         type="text"

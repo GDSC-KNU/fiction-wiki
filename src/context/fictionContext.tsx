@@ -1,8 +1,4 @@
 import React, { createContext, useEffect, useState, ReactNode } from "react";
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -11,7 +7,6 @@ import type {
   Fiction,
   FictionStat,
   Keyword,
-  UserRationOnFiction,
   Author,
   Category,
 } from "@prisma/client";
@@ -75,22 +70,18 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
     `/api/fictions/${router.query.id}`
   );
 
-  // console.log(fictionContext);
   useEffect(() => {
     const processData = async () => {
       if (data) {
-        data.fiction.startDate = new Date(data.fiction?.startDate || 0);
-        data.fiction.endDate = new Date(data.fiction?.endDate || 0);
+        let updatedFiction = { ...fictionContext.fiction, ...data.fiction };
 
-        const vfile = await remark()
-          .use(html)
-          .use(remarkToc)
-          .use(remarkGfm)
-          .process(data.fiction.setup || "");
-
-        data.fiction.setup = String(vfile);
-
-        setFictionContext(data);
+        updatedFiction.startDate = new Date(updatedFiction.startDate || 0);
+        updatedFiction.endDate = new Date(updatedFiction.endDate || 0);
+        setFictionContext({
+          ...fictionContext,
+          ...data,
+          fiction: updatedFiction,
+        });
       }
     };
 
