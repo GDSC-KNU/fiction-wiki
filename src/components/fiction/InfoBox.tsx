@@ -9,7 +9,7 @@ import StarRating from "@components/starRating";
 import urlToString from "@helper/urlToString";
 import formatDate from "@helper/formatDate";
 
-export default function InfoBox(synopsisRef: any) {
+export default function InfoBox() {
   const fictionContext = useContext(FictionContext);
 
   return (

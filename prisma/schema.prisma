@@ -54,7 +54,8 @@ model Fiction {
 model FictionHistory {
   id            Int      @id @default(autoincrement())
   fictionId     Int
-  data          Json    
+  data          Json?    
+  log           Json?
   editedBy      User     @relation(fields: [editedById], references: [id], onDelete: Cascade) 
   editedById    String
   updatedAt     DateTime @default(now()) 

@@ -51,7 +51,7 @@ const Profile: NextPage = () => {
               height={64}
               alt={session?.user?.id || ""}
             />
-            <div>{`사용자 - ` + session?.user?.nickname}</div>
+            <div>{`사용자 - ` + (session?.user?.nickname || "")}</div>
           </div>
         </div>
         <Link

@@ -1,241 +1,162 @@
-import React, {useState,useEffect} from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import useSWR from "swr";
+import Image from "next/image";
+import Button from "@components/common/button";
+import { Button2, buttonVariants } from "@components/common/button2";
 
-interface Items{
-  title: any;
-  cardTitle: any;
-  updateDate: any;
-  media: {
-    type: any;
-    source: {
-      url: any;
-    };
-  };
+import Restore from "@public/svg/restore.svg";
+import { Fiction, FictionHistory, User } from "@prisma/client";
+import formatDate from "@helper/formatDate";
+import Link from "next/link";
+import { cn } from "@libs/util";
+import { JsonValue } from "@prisma/client/runtime/library";
+import useUser from "@libs/client/useUser";
+
+interface Data {
+  fiction: Fiction;
+  history: FictionHistoryWithUser[];
 }
 
+interface LogItem {
+  path: string;
+}
+
+interface FictionHistoryWithUser extends FictionHistory {
+  log: {
+    changeLog: any[];
+    charactersChanged: number;
+  };
+  editedBy: User;
+}
 
 function History() {
-  const items: Items[] = [
-    {
-      title: "Title A",
-      cardTitle: "Content A",
-      updateDate: "July 1, 2023 4:40 AM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-a.png",
-        },
-      },
-    },
-    {
-      title: "Title B",
-      cardTitle: "Content B",
-      updateDate: "July 2, 2023 3:20 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-b.png",
-        },
-      },
-    },
-    {
-      title: "Title C",
-      cardTitle: "Content C",
-      updateDate: "July 3, 2023 5:10 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-c.png",
-        },
-      },
-    },
-    {
-      title: "Title D",
-      cardTitle: "Content D",
-      updateDate: "July 4, 2023 2:10 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-d.png",
-        },
-      },
-    },
-    {
-      title: "Title E",
-      cardTitle: "Content E",
-      updateDate: "July 5, 2023 4:10 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-e.png",
-        },
-      },
-    },
-    {
-      title: "Title F",
-      cardTitle: "Content F",
-      updateDate: "July 6, 2023 4:10 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-f.png",
-        },
-      },
-    },
-    {
-      title: "Title A",
-      cardTitle: "Content A",
-      updateDate: "July 6, 2023 4:10 PM",
-      media: {
-        type: "IMAGE",
-        source: {
-          url: "https://example.com/file-f.png",
-        },
-      },
-    },
+  const router = useRouter();
+  const { user, isAdmin } = useUser();
+  const fetchKey = router.query.id
+    ? `/api/fictions/${router.query.id}/histories`
+    : null;
 
-  ];
+  const { data, isValidating } = useSWR<Data>(fetchKey);
 
-  const [isLargeScreen, setIsLargeScreen] = useState<boolean>(
-    window.innerWidth >= 800
-  );
-  
-  useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024);
-    };
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
-    window.addEventListener("resize", handleResize);
+  const { fiction, history } = data;
+  const reversedHistory = [...(history || [])].reverse();
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  function handleRevert(rid: number) {
+    if (!user) {
+      alert("로그인해야 사용 가능한 기능입니다.");
+      router.push("/enter");
+      return;
+    }
+    if (window.confirm("Are you sure you want to revert to this revision?")) {
+      fetch(`/api/fictions/${router.query.id}?Rid=${rid}`, {
+        method: "PUT",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          // Handle successful revert (e.g., re-fetch data or navigate to updated page)
+        })
+        .catch((error) => {
+          console.log(error);
+          // Handle error (e.g., show a message to the user)
+        });
+    }
+  }
 
   return (
-    <div className="w-3/4 h-screen mx-auto">
-      <div className="w-full h-1/6 my-2 flex flex-col justify-center">
-        <h1 className="text-3xl md:text-4xl text-center font-bold">
-          Wiki History
+    <div className="mx-auto h-full w-3/4">
+      <div className="my-2 flex h-1/6 w-full flex-col justify-center">
+        <h1 className="text-center text-3xl font-bold md:text-4xl">
+          위키 히스토리
         </h1>
-        <p className="text-xs md:text-xl text-center">
-          A timeline of changes for this wiki
+        <p className="text-center text-xs md:text-xl">
+          위키 편집 내역을 확인할 수 있습니다.
         </p>
       </div>
-      <div className="border-2 flex flex-row md:w-full h-auto rounded-lg">
-        <div className="w-auto hidden md:flex">
-          <img className="h-auto m-2 rounded-lg" src={item.media.source.url} alt="test" />
-        </div>
-        <div className="w-5/6 h-auto m-5 ml-8">
-          <h1 className="text-xl line-clamp-1 font-bold">
-            Robert F. Kennedy Jr.’s Views on Cryptocurrency
-          </h1>
-          <p className="text-s w-auto line-clamp-3 mt-2">
-            Robert F. Kennedy (RFK) Jr. (born January 17, 1954) is an American
-            environmental lawyer, politician, and writer who is running in the
-            2024 US Presidential election as a Democrat. He is the son of U.S.
-            attorney general and Senator Robert F. Kennedy and nephew of U.S.
-            President John F. Kennedy.
+      <div className="flex h-auto flex-row rounded-lg border-2 md:w-full">
+        <div className="hidden w-auto md:flex"></div>
+        <div className="m-5 ml-8 h-auto w-5/6">
+          <h1 className="line-clamp-1 text-xl font-bold">{fiction.title}</h1>
+          <p className="mt-2 line-clamp-3 w-auto text-sm">
+            {`${fiction.setup.slice(6, 150)} ...`}
           </p>
         </div>
       </div>
-      <div className="w-full h-full flex flex-row justify-center mt-2">
-        {isLargeScreen ? (
-          <>
-            <div className="h-full w-1/2 mt-10 flex flex-col items-center">
-              {items.map((item, index) => {
-                if (index % 2 === 1) {
-                  return (
-                    <div
-                      className="w-3/4 h-1/6 border-2 rounded-lg mt-20 ml-20 flex flex-row justify-between items-center"
-                      key={index}
-                    >
-                      <div className="w-full">
-                        <div className="flex flex-row justify-between items-center mb-4">
-                          <div className="flex flex-row items-center">
-                            <img
-                              className="h-6 w-6 m-2 rounded-full"
-                              src={item.media.source.url}
-                              alt={item.title}
-                            />
-                            <h2 className="">{item.title}</h2>
-                          </div>
-                          <p className="text-xs">{item.updateDate}</p>
-                        </div>
-                        <h3 className="mb-8">{item.cardTitle}</h3>
-                      </div>
-                      <div className="w-3 h-3 border-t-2 border-r-2 rotate-45 border-gray-200 relative left-2"></div>
-                    </div>
-                  );
-                }
-                return null;
-              })}
+      <div className=" py-4">
+        {reversedHistory.map((item, index) => (
+          <div
+            key={index}
+            className=" mb-2 border-b-[1px] pb-2 last:border-b-0"
+          >
+            <div className="mb-2 flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center">
+                <div>
+                  <span className=" mr-4">{`${history.length - index}. ${
+                    item.id
+                  }  -`}</span>
+                </div>
+                <div>
+                  <Image
+                    className=" mr-2 rounded-full"
+                    src={item.editedBy.image || ""}
+                    width={26}
+                    height={26}
+                    alt={item.editedBy.nickname || ""}
+                  />
+                </div>
+                <h2 className="">{item.editedBy.nickname}</h2>
+              </div>
+              <p className="text-xs">{formatDate(item.updatedAt, true)}</p>
             </div>
-            <div className="w-1 h-full border-2"></div>
-            <div className="w-1/2 mt-10 flex flex-col justify-center items-center">
-              {items.map((item, index) => {
-                if (index % 2 === 0) {
-                  return (
-                    <div
-                      className="w-3/4 h-1/6 border-2 rounded-lg mb-20 mr-20 flex flex-row justify-between items-center"
-                      key={index}
-                    >
-                      <div className="w-3 h-3 border-b-2 border-l-2 rotate-45 border-gray-200 relative right-2"></div>
-                      <div className="w-full">
-                        <div className="flex flex-row justify-between items-center mb-4">
-                          <div className="flex flex-row items-center">
-                            <img
-                              className="h-6 w-6 m-2 rounded-full"
-                              src={item.media.source.url}
-                              alt={item.title}
-                            />
-                            <h2 className="">{item.title}</h2>
-                          </div>
-                          <p className="text-xs">{item.updateDate}</p>
-                        </div>
-                        <h3 className="mb-8">{item.cardTitle}</h3>
-                      </div>
-                  </div>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          </>
-        ) : (
-          <div className="w-screen h-full flex flex-row">
-            <div className="h-full border-r-4"/>
-              <div className="w-full ml-2">
-                {items.map((item, index) => (
-                  <div
-                    className={"w-full h-1/6 border-2 mt-4 rounded-md flex items-center"}
-                    key={index}
-                  > 
-                    <div className="w-2 h-2 border-b-2 border-l-2 rotate-45 relative right-1.5"/>
-                    <div className="w-full">
-                        <div className="flex flex-row justify-between items-center mb-4">
-                          <div className="flex flex-row items-center">
-                            <img
-                              className="h-6 w-6 m-2 rounded-full"
-                              src={item.media.source.url}
-                              alt={item.title}
-                            />
-                            <h2 className="">{item.title}</h2>
-                          </div>
-                          <p className="text-xs">{item.updateDate}</p>
-                        </div>
-                        <h3 className="mb-8">{item.cardTitle}</h3>
-                      </div>
-                  </div>
-                ))}
+            <div className=" flex flex-col justify-between lg:flex-row">
+              <div className=" mb-2 flex lg:mb-0">
+                <div>
+                  {item.log &&
+                    (item.log.changeLog as any).map((e: any, j: number) => (
+                      <span
+                        key={e.path}
+                        className=" mr-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
+                      >
+                        {e.path}
+                      </span>
+                    ))}
+                </div>
+                <div>
+                  {item.log &&
+                    (item.log.charactersChanged >= 0
+                      ? `+${item.log.charactersChanged}`
+                      : `${item.log.charactersChanged}`)}
+                </div>
+              </div>
+              <div className=" flex justify-end space-x-1">
+                <Link
+                  href={`/fictions/${fiction.id}/revision/${item.id}`}
+                  className={cn(
+                    buttonVariants({ variant: "default", size: "xs" })
+                  )}
+                >
+                  <span className=" whitespace-nowrap">기록 보기</span>
+                </Link>
+                <Button2
+                  onClick={() => handleRevert(item.id)}
+                  size="xs"
+                  variant="default"
+                >
+                  <Restore width={16} height={16} />
+                  <span className=" whitespace-nowrap">되돌리기</span>
+                </Button2>
               </div>
             </div>
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 export default History;
-
-
-
