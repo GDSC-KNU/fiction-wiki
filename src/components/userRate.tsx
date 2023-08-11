@@ -57,10 +57,7 @@ export default function UserStat() {
 
   const buttonFlag = useRef(true);
 
-  // console.log(session);
-
   const onRateClick = async (data: RateUserStatForm) => {
-    console.log(session);
     if (!session || !session.user) return;
 
     if (!buttonFlag.current) {
@@ -91,8 +88,6 @@ export default function UserStat() {
       return;
     }
 
-    // console.log(session);
-
     rateUserStat(data, "POST");
     reset();
     closeDetails();
@@ -100,8 +95,6 @@ export default function UserStat() {
   };
 
   useEffect(() => {
-    // rateUserStat(data, "POST");
-
     mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
     mutate(`/api/fictions/${router.query.id}`);
   }, [data, error]);

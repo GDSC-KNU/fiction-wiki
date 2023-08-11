@@ -74,7 +74,7 @@ function MyApp({
             }}
           />
           <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
-          <Analytics />
+          {/* <Analytics /> */}
         </SWRConfig>
       </RecoilRoot>
     </SessionProvider>
