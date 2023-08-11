@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+
 // import revalidator from "@libs/server/revalidator";
 // import { Redis } from "@upstash/redis";
 
@@ -255,8 +259,11 @@ async function handler(
         mediaMix,
         setup,
       },
-      session: { user },
+      // session: { user },
     } = req;
+    const session = await getServerSession(req, res, authOptions);
+
+    const user = session!.user;
 
     // 전처리
     relatedTitle =
