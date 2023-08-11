@@ -10,7 +10,12 @@ import {
   FictionStat,
   Keyword,
 } from "@prisma/client";
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -283,7 +288,7 @@ const EditFiction: NextPage<FictionDetailResponse> = ({
 
   useEffect(() => {
     if (data?.ok) {
-      router.push(`/fictions/${data.fiction.id}`);
+      router.push(`/fictions/${router.query.id}`);
     }
   }, [data, router]);
 
@@ -383,15 +388,15 @@ const EditFiction: NextPage<FictionDetailResponse> = ({
     { label: "오디오북", value: "오디오북" },
   ];
 
-  const validate = (value: any) => {
-    if (typeof value === "string") {
-      value = value.trim();
-      const isNumber = /^\d+$/;
-      if (value.length === 0) return "This field is required";
-    }
+  // const validate = (value: any) => {
+  //   if (typeof value === "string") {
+  //     value = value.trim();
+  //     const isNumber = /^\d+$/;
+  //     if (value.length === 0) return "This field is required";
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
@@ -694,14 +699,14 @@ const EditFiction: NextPage<FictionDetailResponse> = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   return {
+//     paths: [],
+//     fallback: "blocking",
+//   };
+// };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
   const fictionId = ctx?.params?.id;
   if (!fictionId) {
     return {
@@ -824,7 +829,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       mbtis: JSON.parse(JSON.stringify(mbtis)),
       setup: String(mdHtml),
     },
-    revalidate: 60 * 60 * 24 * 30,
+    // revalidate: 60 * 60 * 24 * 30,
   };
 };
 
