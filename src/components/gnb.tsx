@@ -4,14 +4,20 @@ import useUser from "@libs/client/useUser";
 import Image from "next/image";
 // import logo from "@public/fdb_logo.png";
 import SearchModal from "@components/searchModal";
+import useScrollDirection from "@src/hooks/useScrollDirection";
 
 export default function Gnb() {
   const { data: nextSession } = useSession();
   const { user, isAdmin } = useUser();
+  const isScrollingDown = useScrollDirection();
   // console.log(user);
 
   return (
-    <header className=" fixed top-0 z-20 h-12 w-full bg-white  py-2 shadow-md">
+    <header
+      className={` fixed top-0 z-20 h-[48px] w-full bg-white py-2  shadow-md transition-transform duration-1000 ${
+        isScrollingDown ? "translate-y-[-48px]" : " translate-y-[0px] "
+      }`}
+    >
       <nav className="flex w-full items-center justify-between">
         <ul className=" ml-2 flex items-center space-x-2 whitespace-nowrap uppercase ">
           <li className=" cursor-pointer ">
