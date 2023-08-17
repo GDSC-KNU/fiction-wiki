@@ -5,6 +5,7 @@ import Image from "next/image";
 // import logo from "@public/fdb_logo.png";
 import SearchModal from "@components/searchModal";
 import useScrollDirection from "@src/hooks/useScrollDirection";
+import { motion } from "framer-motion";
 
 export default function Gnb() {
   const { data: nextSession } = useSession();
@@ -12,11 +13,16 @@ export default function Gnb() {
   const isScrollingDown = useScrollDirection();
   // console.log(user);
 
+  const animateProps = {
+    y: isScrollingDown ? -100 : 0,
+  };
+
   return (
-    <header
-      className={` fixed top-0 z-20 h-[48px] w-full bg-white py-2  shadow-md transition-transform duration-1000 ${
-        isScrollingDown ? "translate-y-[-48px]" : " translate-y-[0px] "
-      }`}
+    <motion.header
+      initial={{ y: 0 }}
+      animate={animateProps}
+      transition={{ duration: 0.3, type: "tween" }}
+      className="fixed top-0 z-20 h-12 w-full bg-white py-2 shadow-md"
     >
       <nav className="flex w-full items-center justify-between">
         <ul className=" ml-2 flex items-center space-x-2 whitespace-nowrap uppercase ">
@@ -109,6 +115,6 @@ export default function Gnb() {
           </li>
         ) : null}
       </ul>
-    </header>
+    </motion.header>
   );
 }
