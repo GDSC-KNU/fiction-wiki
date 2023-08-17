@@ -179,7 +179,9 @@ export default function FictionList({
                       {fiction?.volume || "???"}화 &nbsp;
                       {fiction?.currentState || "???화 완결"}
                     </strong>
-                    <strong className=" w-20">{fiction?.isTranslated}</strong>
+                    <strong className=" w-20 whitespace-nowrap">
+                      {fiction?.isTranslated}
+                    </strong>
                   </p>
                 </div>
               </li>

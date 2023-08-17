@@ -82,7 +82,7 @@ const FictionPage = () => {
       <NextSeo
         title={`${fictionContext.fiction?.title}`}
         // !! SEO는 Setup이 아닌 fiction.sysnopsis에 의존 (2023.05.30)
-        description={fictionContext.fiction?.synopsis}
+        description={`${fictionContext.fiction?.synopsis.slice(0,157)}...`}
         canonical={`https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`}
         openGraph={{
           url: `https://fictiondbs.com/fictions/${fictionContext.fiction?.id}`,

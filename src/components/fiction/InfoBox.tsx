@@ -11,38 +11,74 @@ import formatDate from "@helper/formatDate";
 
 export default function InfoBox() {
   const fictionContext = useContext(FictionContext);
-
+  console.log(fictionContext);
   return (
     <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
-      <div className=" col-span-7 flex-col sm:absolute sm:col-span-2">
-        <div className=" ">
-          <div className=" sm:hidden">
+      <div className=" col-span-7 flex-col lg:absolute lg:col-span-2">
+        <div className=" px-2">
+          <div className=" lg:hidden">
             <div className=" flex-col">
               <StarRating />
             </div>
           </div>
-          <div className=" relative h-[178px] w-[120px] sm:h-[270px] sm:w-[187.4157px] ">
-            <Image
-              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fictionContext?.fiction?.image}/fiction`}
-              fill
-              className=" object-contain"
-              alt={fictionContext?.fiction?.title}
-              placeholder="blur"
-              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-            />
+          <div className="  h-[190px] overflow-hidden lg:h-[270px]">
+            <div className=" absolute h-[190px] w-[150px] overflow-hidden lg:relative lg:h-[270px] lg:w-[180px]">
+              <Image
+                src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fictionContext?.fiction?.image}/fiction`}
+                fill
+                className=" object-fill "
+                alt={fictionContext?.fiction?.title}
+                placeholder="blur"
+                blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+              />
+            </div>
+            <div className=" ml-40 lg:hidden">
+              <ul className=" mb-2 inline-flex flex-wrap pt-2 text-xs">
+                {fictionContext.fiction.keywords
+                  ?.filter(
+                    (item) =>
+                      item?.keyword?.isOfHeroine === false &&
+                      item?.keyword?.isOfMC === false &&
+                      item?.keyword?.isOfCons === false
+                  )
+                  .map((item: any, index: any) => (
+                    <li
+                      key={index}
+                      className={
+                        item?.keyword?.isOfMC
+                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-red-500"
+                          : item?.keyword?.isOfHeroine
+                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-blue-500"
+                          : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-[#666676]"
+                      }
+                    >
+                      <Link
+                        href={`/search/keyword/${item?.keyword?.name}/1`}
+                        passHref
+                      >
+                        #{item?.keyword?.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+              <div className=" text-xs">{`${fictionContext.fiction.setup.slice(
+                6,
+                140
+              )}...`}</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className=" col-span-7 pt-2 sm:col-span-7 sm:ml-[187.4157px] sm:px-3 sm:pt-0">
-        <div className=" mb-1 mt-2 hidden  sm:block">
-          <div className=" flex">
+      <div className=" col-span-7 pt-2 lg:col-span-7 lg:ml-[187.4157px] lg:px-3 lg:pt-0">
+        <div className=" mb-1 mt-2 hidden  lg:block">
+          <div className=" flex lg:pl-2">
             <StarRating />
           </div>
         </div>
-        <div className=" overflow-hidden text-sm">
+        <div className=" overflow-hidden px-2 text-lg">
           <div className=" col-span-10 grid grid-cols-2">
-            <dl id="infoBox-left" className=" col-span-2 sm:col-span-1">
+            <dl id="infoBox-left" className=" col-span-2 lg:col-span-1">
               <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">
                 <dt className=" col-span-4 font-sans font-bold">원제</dt>
                 <dd className=" col-span-6">
@@ -124,8 +160,8 @@ export default function InfoBox() {
                 </dd>
               </div>
             </dl>
-            <dl id="infoBox-right" className=" col-span-2 sm:col-span-1">
-              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] sm:border-t-[0px]">
+            <dl id="infoBox-right" className=" col-span-2 lg:col-span-1">
+              <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px] lg:border-t-[0px]">
                 <dt className=" col-span-4 font-sans font-bold">플랫폼</dt>
                 <dd className=" col-span-6 ">
                   <span
