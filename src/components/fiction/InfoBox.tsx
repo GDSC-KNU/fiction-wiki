@@ -70,7 +70,7 @@ export default function InfoBox() {
         </div>
       </div>
 
-      <div className=" col-span-7 pt-2 lg:col-span-7 lg:ml-[187.4157px] lg:px-3 lg:pt-0">
+      <div className=" col-span-7 pt-2 text-sm lg:col-span-7 lg:ml-[187.4157px] lg:px-3 lg:pt-0">
         <div className=" mb-1 mt-2 hidden  lg:block">
           <div className=" flex lg:pl-2">
             <StarRating />
