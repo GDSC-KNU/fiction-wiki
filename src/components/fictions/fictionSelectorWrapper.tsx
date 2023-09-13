@@ -94,6 +94,7 @@ export default function FictionSelectorWrapper({
 
   const { data } = useSWR<FictionsResponse>(queryString);
 
+  if (!data) return <div>loading</div>;
   return (
     <div>
       <FictionSelector
@@ -111,9 +112,9 @@ export default function FictionSelectorWrapper({
         </div>
       ) : null} */}
       <FictionList
-        data={data?.fictions}
+        data={data.fictions}
         type={"fictions_list"}
-        count={data?.fictionsCount}
+        count={data.fictionsCount}
       />
     </div>
   );
