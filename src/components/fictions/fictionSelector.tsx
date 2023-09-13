@@ -12,11 +12,9 @@ import {
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import FictionList from "@components/fictionList";
-import useSWR, { mutate } from "swr";
+
 import ClipLoader from "react-spinners/ClipLoader";
-import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "@/store/atoms";
+
 import { ParsedUrlQueryInput } from "querystring";
 
 import ExpandDown from "@public/svg/expandDown.svg";
@@ -37,15 +35,6 @@ interface FictionWithMore extends Fiction {
 
 interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
   keyword: Keyword;
-}
-
-interface FictionsResponse {
-  ok: boolean;
-  fictions: FictionWithMore[];
-  fictionsCount: number;
-  keywords: Keyword[];
-  categories: string[];
-  nationalities: string[];
 }
 
 interface QueryObject extends ParsedUrlQueryInput {
@@ -120,7 +109,6 @@ export default function FictionSelector({
       page: queryObject.page == page ? 1 : +page,
     };
 
-    // console.log(updatedQueryObject);
     setQueryObject(updatedQueryObject);
   }, [
     checkedItems,
@@ -215,7 +203,7 @@ export default function FictionSelector({
 
     const baseUrl = process.env.NEXT_PUBLIC_HOST + "/fictions";
     const newUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-    console.log(newUrl);
+
     window.history.pushState(null, "", newUrl);
   }, [queryObject]);
 

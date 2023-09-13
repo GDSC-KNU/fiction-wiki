@@ -14,7 +14,9 @@ let nextConfig = {
   //   serverComponents: true, */
   //   reactMode: "concurrent",
   // },
-
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     domains: [
       "lh3.googleusercontent.com",

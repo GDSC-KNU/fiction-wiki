@@ -184,7 +184,7 @@ export async function GET(
       return {};
     }
   };
-  console.log(page);
+
   const fictions = await client.fiction.findMany({
     take: 18,
     skip: (+page!.toString() - 1 || 0) * 18,

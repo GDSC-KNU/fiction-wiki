@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Fiction, User, Comment, UserFictionStat } from "@prisma/client";
-import useSWR from "swr";
+import { Fiction, Comment, UserFictionStat } from "@prisma/client";
+
 import Image from "next/image";
 import EditSVG from "@public/svg/edit_pen-to-square.svg";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,7 @@ export default function Profile() {
   // );
   // console.log(userDetailedInfo);
   //  mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <div className="mx-auto min-h-[213px] max-w-[1300px]">
       <div className=" mb-7 flex justify-between bg-slate-400 py-4 pl-6">

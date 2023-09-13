@@ -68,7 +68,7 @@ export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
   const searchparams = useSearchParams();
-  const page = searchparams.get("page");
+  // const page = searchparams.get("page");
 
   const [queryObject, setQueryObject] = useState<QueryObject>({
     keywords: "all",
@@ -94,7 +94,6 @@ export default function FictionSelectorWrapper({
 
   const { data } = useSWR<FictionsResponse>(queryString);
 
-  if (!data) return <div>loading</div>;
   return (
     <div>
       <FictionSelector
@@ -112,9 +111,9 @@ export default function FictionSelectorWrapper({
         </div>
       ) : null} */}
       <FictionList
-        data={data.fictions}
+        data={data?.fictions}
         type={"fictions_list"}
-        count={data.fictionsCount}
+        count={data?.fictionsCount}
       />
     </div>
   );

@@ -126,7 +126,7 @@ export default function Pagination({
       // setPage(newPage);
     } else {
       const url = generateUrl(newPage);
-      console.log(url);
+
       // router.push(createQueryString("key", "value"));
     }
   };

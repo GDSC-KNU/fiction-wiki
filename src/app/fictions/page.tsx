@@ -1,4 +1,6 @@
 import React from "react";
+import { Suspense } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
 
@@ -11,10 +13,22 @@ export default async function FictionsPage() {
       },
     }
   ).then((res) => res.json());
-  console.log(staticData);
-  return (
-    <div className=" ">
-      <FictionSelectorWrapper staticData={staticData} />
+
+  const Fallback = () => (
+    <div className=" flex justify-center">
+      <ClipLoader
+        size={100}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
     </div>
+  );
+
+  return (
+    <>
+      <Suspense fallback={<Fallback />}>
+        <FictionSelectorWrapper staticData={staticData} />
+      </Suspense>
+    </>
   );
 }
