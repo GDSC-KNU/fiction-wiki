@@ -45,7 +45,7 @@ export default async function FictionLayout({
     "@type": "Book",
     name: fiction?.title,
     image: fiction?.image,
-    description: fiction?.setup.slice(6, 150) + "...",
+    description: fiction?.setup.value.slice(6, 150) + "...",
     genre: fiction?.categories?.[0]?.category?.name,
     keywords: fiction?.keywords.reduce(
       (acc: any, cur: any) => acc + cur.keyword.name + ",",
@@ -76,7 +76,7 @@ export default async function FictionLayout({
 
   return (
     <FictionProvider
-      initialData={{ fiction, mbtis, setup: setup.value, similarFictions }}
+      initialData={{ fiction, mbtis, setup: setup?.value, similarFictions }}
     >
       <script
         type="application/ld+json"

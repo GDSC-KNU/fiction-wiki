@@ -2,10 +2,7 @@ import { ReactNode } from "react";
 import Top from "@components/layout/top";
 import Footer from "@components/layout/footer";
 import React, { Suspense } from "react";
-import { SessionProvider } from "next-auth/react";
-// import { SWRConfig } from "swr";
-// import { RecoilRoot } from "recoil";
-// import { Session } from "next-auth";
+
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@libs/gtag";
@@ -68,7 +65,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
         <Analytics />
-        {/* <SessionProvider> */}
+
         <RecoilProvider>
           <SWRProvider>
             <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
@@ -80,7 +77,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
           </SWRProvider>
         </RecoilProvider>
-        {/* </SessionProvider> */}
       </body>
     </html>
   );

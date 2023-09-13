@@ -106,7 +106,7 @@ const Create: NextPage = () => {
 
   const onValid = async (data: CreateFictionForm) => {
     if (loading) return;
-    console.log(data);
+    // console.log(data);
     if (data.image && data.image.length > 0 && data.image[0] instanceof File) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
       const form = new FormData();
@@ -142,9 +142,9 @@ const Create: NextPage = () => {
 
   const onInvalid = () => {
     if (loading) return;
-    console.log(watch());
-    console.log("errors");
-    console.log(errors);
+    // console.log(watch());
+    // console.log("errors");
+    // console.log(errors);
     // alert("작품 세부사항을 포함한 필수항목을 모두 입력해주세요.");
   };
 

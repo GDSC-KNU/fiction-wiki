@@ -2,8 +2,6 @@ import React from "react";
 import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
 import FictionList from "@/components/fictionList";
-// import HeadMeta from "@components/headMeata";
-import { NextSeo } from "next-seo";
 import { Metadata } from "next";
 
 export interface UserFictionStatWithMore extends UserFictionStat {
@@ -61,15 +59,6 @@ export default async function Home() {
 
   return (
     <div>
-      {/* <HeadMeta /> */}
-      {/* <NextSeo
-        title="Home"
-        description="국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요"
-        canonical="https://fictiondbs.com"
-        openGraph={{
-          url: "https://fictiondbs.com",
-        }}
-      /> */}
       <div className="  mx-auto max-w-[1200px]">
         <div className=" mt-3 border-b-[1px] px-1 text-xl font-bold  md:py-1">
           평점 TOP
