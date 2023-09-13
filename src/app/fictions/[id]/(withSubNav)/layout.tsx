@@ -75,7 +75,9 @@ export default async function FictionLayout({
   };
 
   return (
-    <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
+    <FictionProvider
+      initialData={{ fiction, mbtis, setup: setup.value, similarFictions }}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

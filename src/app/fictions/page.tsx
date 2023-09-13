@@ -11,7 +11,7 @@ export default async function FictionsPage() {
       },
     }
   ).then((res) => res.json());
-
+  console.log(staticData);
   return (
     <div className=" ">
       <FictionSelectorWrapper staticData={staticData} />
