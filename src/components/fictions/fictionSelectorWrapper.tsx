@@ -16,7 +16,6 @@ import FictionList from "@components/fictionList";
 import useSWR from "swr";
 
 import { ParsedUrlQueryInput } from "querystring";
-import { useSearchParams } from "next/navigation";
 
 import FictionSelector from "@components/fictions/fictionSelector";
 
@@ -67,7 +66,6 @@ interface FictionSelectorProps {
 export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
-  const searchparams = useSearchParams();
   // const page = searchparams.get("page");
 
   const [queryObject, setQueryObject] = useState<QueryObject>({
