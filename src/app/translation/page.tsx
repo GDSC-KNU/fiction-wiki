@@ -159,7 +159,6 @@ const Translation = () => {
   );
 
   const handleGlossaryKeyUpdate = async () => {
-    console.log("갱신 버튼");
     const originalTitle = response.originalTitle;
     await updateFav({ originalTitle }, "PUT");
 
@@ -300,23 +299,23 @@ const Translation = () => {
 
 export default Translation;
 
-export const metadata: Metadata = {
-  title: " 번역 | FDBS",
-  description:
-    "웹소설을 직접 번역해서 감상하세요. 용어집을 등록해서 번역 편의성을 높일 수 있습니다.",
-  twitter: {
-    card: "summary_large_image",
-    site: "@site",
-  },
-  openGraph: {
-    type: "website",
-    locale: "ko_KR",
-    url: "https://fictiondbs.com/translation",
-    siteName: "FDBS",
-    title: " FDBS | 웹소설위키",
-    images: [`/fdbs_logo.png`],
-  },
-  icons: {
-    icon: `/favicon/favicon.ico`,
-  },
-};
+// export const metadata: Metadata = {
+//   title: " 번역 | FDBS",
+//   description:
+//     "웹소설을 직접 번역해서 감상하세요. 용어집을 등록해서 번역 편의성을 높일 수 있습니다.",
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@site",
+//   },
+//   openGraph: {
+//     type: "website",
+//     locale: "ko_KR",
+//     url: "https://fictiondbs.com/translation",
+//     siteName: "FDBS",
+//     title: " FDBS | 웹소설위키",
+//     images: [`/fdbs_logo.png`],
+//   },
+//   icons: {
+//     icon: `/favicon/favicon.ico`,
+//   },
+// };
