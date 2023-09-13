@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Author,
   CategoriesOnFictions,
@@ -11,13 +13,13 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import Pagination from "@components/pagination";
-import { useRouter } from "next/router";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import React from "react";
 import CountryFlag_China from "@public/svg/countryFlag_China.svg";
 import CountryFlag_Korea from "@public/svg/countryFlag_Korea.svg";
 import CountryFlag_Japan from "@public/svg/countryFlag_Japan.svg";
 import CountryFlag_USA from "@public/svg/countryFlag_USA.svg";
-import fictions from "pages/api/fictions";
+// import fictions from "app/api/fictions"
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -51,15 +53,25 @@ export default function FictionList({
   pagination,
   checkedParams,
   authorsCount,
-}: any) {
+  count,
+}: {
+  data: any;
+  type: string;
+  pagination?: any;
+  checkedParams?: any;
+  authorsCount?: number;
+  count?: number;
+}) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageQuery = searchParams.get("page");
 
   return (
     <div className=" flex justify-center">
       {type === "fictions_list" ? (
         <div className="">
           <ul className=" grid grid-cols-1 py-2 md:grid-cols-2 xl:grid-cols-3 ">
-            {data?.fictions?.map((fiction: FictionWithMore, i: number) => (
+            {data?.map((fiction: FictionWithMore, i: number) => (
               <li
                 key={fiction?.id || i}
                 className=" m-2 flex border-[#BBBBBB] bg-white"
@@ -97,7 +109,10 @@ export default function FictionList({
                 <div className=" flex-col px-2 pb-2">
                   <p className=" mr-[0.35rem] mt-[2.5px] flex text-xs text-gray-400">
                     <span className=" mr-2 hover:underline">
-                      <Link href={`/search/type/${fiction?.type}/1`}>
+                      <Link
+                        title={`${fiction?.type}`}
+                        href={`/search/type/${fiction?.type}/1`}
+                      >
                         {fiction?.type || "type?"}
                       </Link>
                     </span>
@@ -106,11 +121,12 @@ export default function FictionList({
                       {(fiction?.categories || Array.from({ length: 1 })).map(
                         (category, i) => (
                           <Link
+                            title={`${category?.category?.name}`}
                             key={i}
-                            href={`/search/genre/${category?.category?.name}/1`}
+                            href={`/search/category/${category?.category?.name}/1`}
                             className=" mr-[0.35rem] text-xs text-gray-400 hover:underline"
                           >
-                            {category?.category?.name || "genre"}
+                            {category?.category?.name || "category"}
                           </Link>
                         )
                       )}
@@ -190,14 +206,12 @@ export default function FictionList({
           <div className=" ">
             {pagination === false ? null : (
               <Pagination
-                activePage={+(router?.query?.page || 1)?.toString()}
-                itemsCountPerPage={18}
-                totalItemsCount={data?.fictionsCount || 0}
-                totalPagesCount={Math.ceil((data?.fictionsCount || 1) / 18)}
+                // activePage={+(pageQuery || 1)?.toString()}
+                // itemsCountPerPage={18}
+                totalItemsCount={count || 0}
+                totalPagesCount={Math.ceil((count || 1) / 18)}
                 pageRangeDisplayed={5}
-                pageGroup={
-                  Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
-                }
+                pageGroup={Math.ceil(+(pageQuery || 1)?.toString() / 5) || 1}
                 checkedParams={checkedParams}
                 // onChange={() => {}}
               />
@@ -221,7 +235,7 @@ export default function FictionList({
                   height={160}
                   alt={author.name}
                 />
-                <div className=" absolute bottom-[17.2rem] z-10 ml-1"></div>
+                {/* <div className=" absolute bottom-[17.2rem] z-10 ml-1"></div> */}
                 <div className=" flex-col px-2 pb-2">
                   <div className=" flex justify-between"></div>
                   <div className=" text-center text-sm">{author.name}</div>
@@ -232,14 +246,12 @@ export default function FictionList({
           <div className=" ">
             {pagination === false ? null : (
               <Pagination
-                activePage={+(router?.query?.page || 1)?.toString()}
-                itemsCountPerPage={18}
+                // activePage={+(pageQuery || 1)?.toString()}
+                // itemsCountPerPage={18}
                 totalItemsCount={authorsCount || 0}
                 totalPagesCount={Math.ceil((authorsCount || 1) / 18)}
                 pageRangeDisplayed={5}
-                pageGroup={
-                  Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1
-                }
+                pageGroup={Math.ceil(+(pageQuery || 1)?.toString() / 5) || 1}
                 checkedParams={checkedParams}
               />
             )}

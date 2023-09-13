@@ -1,17 +1,17 @@
+"use client";
+
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
-// import logo from "@public/fdb_logo.png";
 import SearchModal from "@components/searchModal";
-import useScrollDirection from "@src/hooks/useScrollDirection";
+import useScrollDirection from "@/hooks/useScrollDirection";
 import { motion } from "framer-motion";
 
 export default function Gnb() {
-  const { data: nextSession } = useSession();
+  // const { data: nextSession } = useSession();
   const { user, isAdmin } = useUser();
   const isScrollingDown = useScrollDirection();
-  // console.log(user);
 
   const animateProps = {
     y: isScrollingDown ? -100 : 0,
@@ -50,6 +50,11 @@ export default function Gnb() {
                   번역
                 </Link>
               </li>
+              <li className="mr-3">
+                <Link href="/glossaries" passHref>
+                  용어집
+                </Link>
+              </li>
               {isAdmin ? (
                 <li className="mr-3">
                   <Link href="/fictions/create">Create</Link>
@@ -65,7 +70,7 @@ export default function Gnb() {
           </li>
           {/* <SearchAutoComplete /> */}
           {isAdmin ? <li className="mr-3">Admin</li> : null}
-          {nextSession ? (
+          {user ? (
             <li className=" mr-3 flex min-w-[26px] cursor-pointer items-center p-0">
               <Link
                 className=" flex items-center rounded-full"
@@ -74,15 +79,15 @@ export default function Gnb() {
               >
                 <Image
                   className=" rounded-full"
-                  src={nextSession?.user?.image ?? ""}
+                  src={user?.image ?? ""}
                   width={26}
                   height={26}
-                  alt={nextSession?.user?.id ?? ""}
+                  alt={user?.id ?? ""}
                 ></Image>
               </Link>
             </li>
           ) : null}
-          {nextSession ? (
+          {user ? (
             <li className=" mr-5 font-bold">
               <button onClick={() => signOut()}>로그아웃</button>
             </li>
@@ -109,9 +114,14 @@ export default function Gnb() {
             번역
           </Link>
         </li>
+        <li className="">
+          <Link href="/glossaries" passHref>
+            용어집
+          </Link>
+        </li>
         {isAdmin ? (
           <li className="">
-            <Link href="/fictions/create">Create</Link>
+            <Link href="/fictions/create">새 문서</Link>
           </li>
         ) : null}
       </ul>

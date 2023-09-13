@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { useSession } from "next-auth/react";
@@ -105,7 +107,7 @@ const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
                     className=" peer hidden"
                     onChange={() => handleSexSelect("남")}
                   />
-                  <div className="  rounded-md bg-white px-5  py-2 text-gray-700 hover:bg-blue-600 peer-checked:bg-blue-500 peer-checked:text-white">
+                  <div className="  rounded-md bg-white px-5  py-2 text-gray-700 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-600">
                     남
                   </div>
                 </label>
@@ -119,7 +121,7 @@ const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
                     className=" peer hidden"
                     onChange={() => handleSexSelect("여")}
                   />
-                  <div className="  rounded-md  bg-white px-5 py-2 text-gray-700  hover:bg-blue-600 focus:ring peer-checked:bg-blue-500 peer-checked:text-white">
+                  <div className="  rounded-md  bg-white px-5 py-2 text-gray-700  peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-600 focus:ring">
                     여
                   </div>
                 </label>

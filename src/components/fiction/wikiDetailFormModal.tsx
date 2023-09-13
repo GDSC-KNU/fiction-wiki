@@ -1,6 +1,8 @@
-import { FictionContext } from "@src/context/fictionContext";
+"use client";
+
+import { FictionContext } from "@/context/fictionContext";
 import { useContext } from "react";
-import useKeyHandler from "@src/hooks/useKeyHandler";
+import useKeyHandler from "@/hooks/useKeyHandler";
 
 const WikiDetailFormModal = ({ isOpen, onClose, children }: any) => {
   let fictionContext = useContext(FictionContext);

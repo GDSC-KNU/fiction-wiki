@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
-import { useRouter } from "next/router";
+import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Input from "@components/common/input";
 import { useSWRConfig } from "swr";
@@ -22,11 +24,12 @@ export default function UserStat() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
-  // const { mutate: unboundMutate } = useSWRConfig();
+
+  const params = useParams();
+  const { id } = params;
+
   const [rateUserStat, { loading, data, error }] =
-    useMutation<RateUserStatMutation>(
-      `/api/fictions/${router.query.id}/userRate`
-    );
+    useMutation<RateUserStatMutation>(`/api/fictions/${id}/userRate`);
   const { mutate } = useSWRConfig();
 
   interface RateUserStatMutation {
@@ -95,8 +98,8 @@ export default function UserStat() {
   };
 
   useEffect(() => {
-    mutate(`/api/fictions/${router.query.id}/comment?page=${1}`);
-    mutate(`/api/fictions/${router.query.id}`);
+    mutate(`/api/fictions/${id}/comment?page=${1}`);
+    mutate(`/api/fictions/${id}`);
   }, [data, error]);
 
   const closeDetails = () => {

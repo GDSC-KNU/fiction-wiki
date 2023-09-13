@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useContext } from "react";
 import {
   Chart as ChartJS,
@@ -21,10 +23,10 @@ import type {
 import { PrismaClient } from "@prisma/client";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
-import { useRouter } from "next/router";
+import { useRouter, useParams } from "next/navigation";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
-import { FictionContext } from "@src/context/fictionContext";
+import { FictionContext } from "@/context/fictionContext";
 
 interface FictionDetailResponse {
   ok: boolean;
@@ -81,9 +83,14 @@ export const options = {
 function MbtiBarChart({ mbtis }: any) {
   let fictionContext = useContext(FictionContext);
   const router = useRouter();
+  const params = useParams();
+  const { id } = params;
+
   const { data: fiction, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-    router.query.id ? `/api/fictions/${router.query.id}` : null
+    id ? `/api/fictions/${id}` : null
   );
+
+  if (!fiction) return <div>loading...</div>;
 
   const data = {
     labels: Array.from(fictionContext.mbtis).map((item: any, i) => {

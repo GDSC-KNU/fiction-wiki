@@ -1,6 +1,8 @@
+"use client";
+
 import useSWR from "swr";
 import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "../../src/store/atoms";
+import { fictionPageAtom } from "@/store/atoms";
 
 export default function useSearch(search: string | undefined) {
   const [page, setPage] = useRecoilState(fictionPageAtom);

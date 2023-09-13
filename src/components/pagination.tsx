@@ -1,11 +1,19 @@
-import { useRouter } from "next/router";
+"use client";
+
+import {
+  useRouter,
+  usePathname,
+  useSearchParams,
+  useParams,
+} from "next/navigation";
 import { cls } from "@libs/client/utils";
+import Link from "next/link";
 import { useRecoilState } from "recoil";
 import { fictionPageAtom } from "@store/atoms";
 
 interface PaginationProps {
-  activePage: number;
-  itemsCountPerPage: number;
+  // activePage: number;
+  // itemsCountPerPage: number;
   totalItemsCount: number;
   pageRangeDisplayed: number;
   totalPagesCount: number;
@@ -18,20 +26,61 @@ interface PaginationProps {
   };
 }
 
+function replaceLastSegment(url: string, newPage: number) {
+  const parts = url.split("/");
+  parts[parts.length - 1] = newPage.toString();
+  return parts.join("/");
+}
+
 export default function Pagination({
-  activePage,
-  itemsCountPerPage,
+  // activePage,
+  // itemsCountPerPage,
   totalItemsCount,
   totalPagesCount,
   pageRangeDisplayed,
   pageGroup,
 }: PaginationProps) {
-  const router = useRouter();
-  const [page, setPage] = useRecoilState(fictionPageAtom);
+  const pathname = usePathname();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const pageQuery = searchParams.get("page");
+  // const searchQuery = searchParams.get("search");
+  // const params = useParams();
+  let search = searchParams.get("search");
+  const { page } = params;
+  // const [page, setPage] = useRecoilState(fictionPageAtom);
+
+  const generateUrl = (newPage: number) => {
+    let baseUrl;
+    if (pathname !== "/fictions") {
+      baseUrl = replaceLastSegment(pathname, newPage);
+      return {
+        pathname: baseUrl,
+      };
+    } else {
+      const query: any = {
+        keywords: searchParams.get("keywords") || "all",
+        nationalities: searchParams.get("nationalities") || "all",
+        categories: searchParams.get("categories") || "all",
+        sorting: searchParams.get("sorting") || "all",
+        releaseTimeFilter: searchParams.get("releaseTimeFilter") || "all",
+        dateYear: searchParams.get("dateYear") || "all",
+        search: search || "",
+        page: newPage || 1,
+      };
+
+      if (!search) delete query.search;
+
+      return {
+        pathname: baseUrl,
+        query,
+      };
+    }
+  };
 
   // Pagination Rendering function
   const pageButtons = () => {
-    pageGroup = Math.ceil(+(router?.query?.page || 1)?.toString() / 5) || 1;
+    pageGroup = Math.ceil(+(pageQuery || 1)?.toString() / 5) || 1;
     let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
 
     let lastNumber =
@@ -51,16 +100,11 @@ export default function Pagination({
     }
 
     return arr.map((item) => {
-      // console.log(router?.query?.page || page);
-      const currentPage = router?.query?.page || page;
-      // console.log(currentPage === item);
-      // console.log(currentPage);
       return (
-        <div
-          onClick={pageChangeHandler}
+        <Link
           aria-current="page"
           className={
-            +currentPage === +item
+            +(pageQuery || page || 1) === +item
               ? cls(
                   "relative z-10 inline-flex cursor-pointer items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20"
                 )
@@ -69,164 +113,40 @@ export default function Pagination({
                 )
           }
           key={item}
+          href={generateUrl(item)}
         >
           {item}
-        </div>
+        </Link>
       );
     });
   };
 
-  const pageChangeHandler = (e: any) => {
-    const newPage = +e.target.innerHTML;
-    if (router?.pathname.includes("/fictions")) {
-      setPage(newPage || 1);
-    } else if (router?.pathname.includes("/authors/")) {
-      router.push({
-        pathname: `/authors/[page]`,
-        query: {
-          page: newPage,
-        },
-      });
-    } else if (router?.pathname.includes("/search/title")) {
-      router.push({
-        pathname: `/search/title/[title]`,
-        query: {
-          title: router?.query?.search || "?",
-          page: newPage,
-        },
-      });
-    } else if (router?.pathname.includes("/search/keyword")) {
-      router.push({
-        pathname: `/search/keyword/[keyword]/[page]`,
-        query: {
-          keyword: router?.query?.search || "?",
-          page: newPage,
-        },
-      });
-    } else if (router?.pathname.includes("/search/genre")) {
-      router.push({
-        pathname: `/search/genre/[genre]/[page]`,
-        query: {
-          genre: router?.query?.search || "?",
-          page: newPage,
-        },
-      });
-    } else if (router?.pathname.includes("/search/type")) {
-      router.push({
-        pathname: `/search/type/[type]/[page]`,
-        query: {
-          type: router?.query?.search || "?",
-          page: newPage,
-        },
-      });
+  const navigateToPage = (newPage: number) => {
+    if (pathname.includes("/fictions")) {
+      // setPage(newPage);
+    } else {
+      const url = generateUrl(newPage);
+      console.log(url);
+      // router.push(createQueryString("key", "value"));
     }
   };
 
   const nextHandler = (e: any) => {
-    const isLastGroup =
-      pageGroup * pageRangeDisplayed >= totalPagesCount ? true : false;
-    if (isLastGroup) {
-      alert("마지막 페이지목록입니다.");
-      e.preventDefault();
-      return;
-    }
-
-    const baseUrl = router.pathname;
-    const currentPage = +(router?.query?.page || page || 1);
+    const currentPage = +(pageQuery || page || 1);
     pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
-    let firstPageOfNextPageGroup =
+    const nextPage =
       (pageGroup + 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
 
-    if (router?.pathname.includes("/fictions?")) {
-      // 동적 페이지 페이지 이동(/fictions)
-      setPage(firstPageOfNextPageGroup);
-    } else {
-      // 정적 페이지 페이지 이동
-      const query: any = {
-        search: router?.query?.search || "",
-        page: firstPageOfNextPageGroup,
-      };
-
-      if (!router.query.search) delete query.search;
-
-      router.push({
-        pathname: baseUrl,
-        query: query,
-      });
-    }
-
-    // else if (router?.pathname.includes("/authors/")) {
-    //   router.push({
-    //     pathname: `/authors/[page]`,
-    //     query: {
-    //       page: +e?.target?.innerHTML || 1,
-    //     },
-    //   });
-    // } else if (router?.pathname.includes("/search/title")) {
-    //   router.push({
-    //     pathname: `/search/title/[title]`,
-    //     query: {
-    //       title: router?.query?.search || "?",
-    //       page: firstPageOfNextPageGroup,
-    //     },
-    //   });
-    // } else if (router?.pathname.includes("/search/keyword")) {
-    //   router.push({
-    //     pathname: `/search/keyword/[keyword]/[page]`,
-    //     query: {
-    //       keyword: router?.query?.search || "?",
-    //       page: firstPageOfNextPageGroup,
-    //     },
-    //   });
-    // } else if (router?.pathname.includes("/search/genre")) {
-    //   router.push({
-    //     pathname: `/search/genre/[genre]/[page]`,
-    //     query: {
-    //       genre: router?.query?.search || "?",
-    //       page: firstPageOfNextPageGroup,
-    //     },
-    //   });
-    // } else if (router?.pathname.includes("/search/type")) {
-    //   router.push({
-    //     pathname: `/search/type/[type]/[page]`,
-    //     query: {
-    //       type: router?.query?.search || "?",
-    //       page: firstPageOfNextPageGroup,
-    //     },
-    //   });
-    // }
+    navigateToPage(nextPage);
   };
 
   const prevHandler = (e: any) => {
-    const isFirstGruop = pageGroup === 1 ? true : false;
-    if (isFirstGruop) {
-      alert("첫 페이지목록 입니다.");
-      e.preventDefault();
-      return;
-    }
-    const baseUrl = router.pathname;
-    const currentPage = +(router?.query?.page || page || 1);
+    const currentPage = +(pageQuery || page || 1);
     pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
-    const firstPageOfPrevPageGroup =
+    const prevPage =
       (pageGroup - 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
 
-    if (router?.pathname.includes("/fictions/")) {
-      // 동적 페이지 페이지 이동(/fictions)
-      setPage(firstPageOfPrevPageGroup);
-    } else {
-      // 정적 페이지 페이지 이동
-      const query: any = {
-        search: router?.query?.search || "",
-        page: firstPageOfPrevPageGroup,
-      };
-
-      if (!router.query.search) delete query.search;
-
-      router.push({
-        pathname: baseUrl,
-        query: query,
-      });
-    }
+    navigateToPage(prevPage);
   };
 
   return (

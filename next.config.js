@@ -29,11 +29,12 @@ let nextConfig = {
   env: {
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },
-  webpack: (config) => {
+  webpack: (config, isServer) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+
     return config;
   },
 };

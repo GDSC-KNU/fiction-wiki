@@ -1,7 +1,9 @@
+"use client";
+
 import { useContext } from "react";
 import Link from "next/link";
 
-import { FictionContext } from "@src/context/fictionContext";
+import { FictionContext } from "@/context/fictionContext";
 
 export default function SimilarFictions() {
   const fictionContext = useContext(FictionContext);

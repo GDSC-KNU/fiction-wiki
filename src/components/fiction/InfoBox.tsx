@@ -1,17 +1,21 @@
+"use client";
+
 import { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { FictionContext } from "@src/context/fictionContext";
+import { FictionContext } from "@/context/fictionContext";
 
-import StarRating from "@components/starRating";
+import StarRating from "@/components/starRating";
 
 import urlToString from "@helper/urlToString";
 import formatDate from "@helper/formatDate";
 
 export default function InfoBox() {
   const fictionContext = useContext(FictionContext);
-  console.log(fictionContext);
+
+  if (!fictionContext) return <div>loading</div>;
+
   return (
     <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
       <div className=" col-span-7 flex-col lg:absolute lg:col-span-2">
@@ -27,14 +31,14 @@ export default function InfoBox() {
                 src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fictionContext?.fiction?.image}/fiction`}
                 fill
                 className=" object-fill "
-                alt={fictionContext?.fiction?.title}
+                alt={fictionContext.fiction?.title}
                 placeholder="blur"
                 blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
               />
             </div>
             <div className=" ml-40 lg:hidden">
               <ul className=" mb-2 inline-flex flex-wrap pt-2 text-xs">
-                {fictionContext.fiction.keywords
+                {fictionContext.fiction?.keywords
                   ?.filter(
                     (item) =>
                       item?.keyword?.isOfHeroine === false &&
@@ -61,7 +65,7 @@ export default function InfoBox() {
                     </li>
                   ))}
               </ul>
-              <div className=" text-xs">{`${fictionContext.fiction.setup.slice(
+              <div className=" text-xs">{`${fictionContext.fiction?.setup.slice(
                 6,
                 140
               )}...`}</div>
@@ -76,7 +80,7 @@ export default function InfoBox() {
             <StarRating />
           </div>
         </div>
-        <div className=" overflow-hidden px-2 text-lg">
+        <div className=" overflow-hidden px-2">
           <div className=" col-span-10 grid grid-cols-2">
             <dl id="infoBox-left" className=" col-span-2 lg:col-span-1">
               <div className=" col-span-10 grid w-full grid-cols-10 py-[5px] ">

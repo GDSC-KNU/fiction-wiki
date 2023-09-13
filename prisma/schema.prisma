@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["orderByNulls"]
+  // previewFeatures = ["orderByNulls"]
 }
 
 datasource db {
@@ -33,7 +33,7 @@ model Fiction {
   image         String              @db.MediumText
   synopsis      String              @db.MediumText
   characters    String              @db.MediumText
-  setup         String              @db.LongText  @default("")
+  setup         String              @db.LongText 
   user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        String
   favs          Fav[]
@@ -42,15 +42,30 @@ model Fiction {
   author        Author?              @relation(fields: [authorId], references: [id])
   authorId      Int?                 
   isTranslated  String?             @default("")
-  introduction  String?             @default("") @db.MediumText
+  introduction  String?             @db.MediumText
   chacracterImages Json?            @default("[]")
   originalTitle String?             @default("")
   history     FictionHistory[]
+  glossaryUrl  String?             @default("")
+  glossary    Glossary[]       
 
   @@index([userId])
   @@index([nationality,createdAt])
   @@index([authorId])
 }
+
+model Glossary {
+  id            Int      @id @default(autoincrement())
+  chinese       String
+  english       String?
+  korean        String
+  category      String?
+  fiction       Fiction  @relation(fields: [fictionId], references: [id], onDelete: Cascade)
+  fictionId     Int
+
+  @@index ([fictionId])
+}
+
 model FictionHistory {
   id            Int      @id @default(autoincrement())
   fictionId     Int
@@ -176,9 +191,12 @@ model User {
   sex           String?
   clientID      String?
   clientKey     String?
+  naverAccessKey String?
+  naverSecretKey String?
   nickname      String?
   editedFictions FictionHistory[]
   userLevel     Int? @default(1)
+ 
 }
 
 model UserRationOnFiction {
@@ -218,7 +236,9 @@ model Fav {
   fictionId     Int
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  glossaryKey   String?
 
+  @@unique([userId, fictionId], name: "favIdentifier")
   @@index([userId])
   @@index([fictionId])
 }
@@ -267,7 +287,7 @@ model Comment {
   id                Int      @id @default(autoincrement())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt @default(now())
-  comment           String   @db.MediumText @default("")
+  comment           String   @db.MediumText 
   createdBy         User?     @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById       String?
   fiction           Fiction?     @relation(fields: [fictionId], references: [id], onDelete:Cascade)

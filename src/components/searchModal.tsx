@@ -1,8 +1,10 @@
+"use client";
+
 import SearchIcon from "@public/svg/searchIcon.svg";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/router";
-import useKeyHandler from "@src/hooks/useKeyHandler";
+import { useRouter } from "next/navigation";
+import useKeyHandler from "@/hooks/useKeyHandler";
 
 export default function SearchModal() {
   const router = useRouter();
@@ -18,7 +20,7 @@ export default function SearchModal() {
     deferredQuery !== ""
       ? typeof window === "undefined"
         ? null
-        : `/api/search/title/${deferredQuery}?page=1`
+        : `/api/search/title/${deferredQuery}/1`
       : null,
     {
       revalidateIfStale: false,
@@ -53,7 +55,7 @@ export default function SearchModal() {
                   className=" w-full pb-2"
                   onSubmit={() => {
                     setShowModal(false);
-                    router.push(`/search/title/${query}?page=1`);
+                    router.push(`/search/title/${query}/1`);
                   }}
                 >
                   <div className=" flex items-center">

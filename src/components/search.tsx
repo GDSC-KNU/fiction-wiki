@@ -1,7 +1,9 @@
+"use client";
+
 import React from "react";
 import Input from "@components/common/input";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface SearchForm {
   title?: string;
@@ -15,7 +17,7 @@ export default function Search() {
 
   const onValid = async (data: SearchForm) => {
     if (!data.title) return;
-    router.push(`/search/title/${data.title}?page=1`);
+    router.push(`/search/title/${data.title}/1`);
   };
 
   //   const { result } = useSearch(search);

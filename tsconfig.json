@@ -22,9 +22,14 @@
       "@store/*": ["src/store/*"],
       "@constants/*": ["src/constants/*"],
       "@helper/*": ["src/helper/*"],
-      "@src/*": ["src/*"]
-    }
+      "@/*": ["src/*"]
+    },
     // "types": ["@types/gtag.js"]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "src/type/custom.d.ts",
@@ -35,7 +40,10 @@
     "types/**/*.ts",
     "types/**/*.js",
     "pages/api/auth/[...nextauth].js",
-    "pages/_document.js"
+    "pages/_document.js",
+    ".next/types/**/*.ts",
+    "src/utils/authOption.js",
+    "src/utils/authOptions.js"
   ],
   "exclude": ["node_modules", ".next"]
 }

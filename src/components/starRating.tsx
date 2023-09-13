@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useContext, useState } from "react";
 import { Rating, Star } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
-import { FictionContext } from "@src/context/fictionContext";
+import { FictionContext } from "@/context/fictionContext";
 
 // fictionContext?.fiction.userFictionStat?.total || 0
 

@@ -1,11 +1,13 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-import { FictionContext } from "@src/context/fictionContext";
+import { FictionContext } from "@/context/fictionContext";
 
 export default function Comments() {
   let fictionContext = useContext(FictionContext);
@@ -14,15 +16,17 @@ export default function Comments() {
   const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
 
-  const [deleteComment] = useMutation(
-    `/api/fictions/${router.query.id}/comment`
-  );
+  const searchParams = useSearchParams();
+  const pageQuery = searchParams.get("page");
+
+  const [deleteComment] = useMutation(`/api/fictions/${pageQuery}/comment`);
 
   if (!fictionContext) return <div>loading</div>;
 
-  const {
-    fiction: { comments },
-  } = fictionContext;
+  const { fiction } = fictionContext;
+  const comments = fiction?.comments;
+
+  if (!comments) return <div>loading</div>;
 
   const nextHandler = (e: any) => {
     const isBiggerThanLastPage =
@@ -69,7 +73,7 @@ export default function Comments() {
                             "DELETE"
                           );
 
-                          mutate(`/api/fictions/${router.query.id}`);
+                          mutate(`/api/fictions/${pageQuery}`);
                         }}
                         className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
                       >

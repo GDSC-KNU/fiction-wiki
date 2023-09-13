@@ -1,6 +1,8 @@
+"use client";
+
 import React, { createContext, useEffect, useState, ReactNode } from "react";
 
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
 import type {
@@ -63,11 +65,14 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
   children,
   initialData,
 }) => {
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get("id");
   const router = useRouter();
   const [fictionContext, setFictionContext] = useState(initialData);
 
   const { data, mutate: boundMutate } = useSWR<any>(
-    `/api/fictions/${router.query.id}`
+    id ? `/api/fictions/${id}` : null
   );
 
   useEffect(() => {

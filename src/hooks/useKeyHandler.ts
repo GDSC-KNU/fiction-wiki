@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 
 function useKeyHandler(handler: () => void, key: string = "Escape") {
