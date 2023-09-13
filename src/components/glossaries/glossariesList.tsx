@@ -1,7 +1,7 @@
 "use client";
 
 import { Fiction, Glossary } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import useSWR from "swr";
 import GlossariesPagination from "./glossariesPagination";
 
@@ -66,9 +66,9 @@ export default function GlossariesList() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
             </svg>
@@ -110,7 +110,7 @@ export default function GlossariesList() {
           <tbody>
             {searchData &&
               searchData.glossaries.map((glossary) => (
-                <>
+                <Fragment key={glossary.id}>
                   <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                     <td className="">
                       <div className="flex items-center"></div>
@@ -136,18 +136,18 @@ export default function GlossariesList() {
                       ></a>
                     </td>
                   </tr>
-                </>
+                </Fragment>
               ))}
           </tbody>
         </table>
       </div>
-      {searchData && (
+      {
         <GlossariesPagination
           showingCount={searchData?.glossaries.length}
           count={searchData?.glossariesCount}
           setQueryObject={setQueryObject}
         />
-      )}
+      }
     </div>
   );
 }

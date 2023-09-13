@@ -1,5 +1,3 @@
-"use client";
-
 import { ReactNode } from "react";
 import Top from "@components/layout/top";
 import Footer from "@components/layout/footer";
@@ -70,19 +68,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
         <Analytics />
-        <SessionProvider>
-          <RecoilProvider>
-            <SWRProvider>
-              <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
-                <Top />
-                <section className="  mt-[80px] w-full items-center  pb-[60px] md:mt-[48px]">
-                  {children}
-                </section>
-                <Footer />
-              </div>
-            </SWRProvider>
-          </RecoilProvider>
-        </SessionProvider>
+        {/* <SessionProvider> */}
+        <RecoilProvider>
+          <SWRProvider>
+            <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
+              <Top />
+              <section className="  mt-[80px] w-full items-center  pb-[60px] md:mt-[48px]">
+                {children}
+              </section>
+              <Footer />
+            </div>
+          </SWRProvider>
+        </RecoilProvider>
+        {/* </SessionProvider> */}
       </body>
     </html>
   );

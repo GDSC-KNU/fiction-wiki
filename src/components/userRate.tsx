@@ -7,11 +7,10 @@ import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Input from "@components/common/input";
 import { useSWRConfig } from "swr";
-// import { validateRequest } from "twilio/lib/webhooks/webhooks";
-import { useSession } from "next-auth/react";
 import { useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import MbtiInputModal from "@components/mbtiInputModal";
+import useUser from "@libs/client/useUser";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
@@ -23,7 +22,8 @@ export default function UserStat() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session } = useSession();
+
+  const { user: session } = useUser();
 
   const params = useParams();
   const { id } = params;
@@ -61,7 +61,7 @@ export default function UserStat() {
   const buttonFlag = useRef(true);
 
   const onRateClick = async (data: RateUserStatForm) => {
-    if (!session || !session.user) return;
+    if (!session) return;
 
     if (!buttonFlag.current) {
       alert("평가는 한번만 가능합니다.");
@@ -73,6 +73,7 @@ export default function UserStat() {
     }, 5000);
     btnOnOff();
     if (!session) {
+      console.log(session);
       alert("로그인 해주세요");
       btnOnOff();
       return;
@@ -107,8 +108,8 @@ export default function UserStat() {
   };
 
   const handleBeforeSubmit = () => {
-    if (!session || !session.user) return alert("로그인 해주세요");
-    if (session.user.mbti === null || session.user.sex === null) {
+    if (!session) return alert("로그인 해주세요");
+    if (session.mbti === null || session.sex === null) {
       setIsModalOpen(true);
     }
   };

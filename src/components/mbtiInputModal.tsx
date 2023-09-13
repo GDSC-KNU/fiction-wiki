@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import useMutation from "@libs/client/useMutation";
-import { useSession } from "next-auth/react";
 
 interface Props {
   isOpen: boolean;
@@ -40,7 +39,6 @@ function isValidMBTI(str: string) {
 }
 
 const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
-  const { data: session } = useSession();
   const [mbti, setMBTI] = useState("");
   const [sex, setSex] = useState("");
   const [submitUserInfo, { loading, data, error }] =

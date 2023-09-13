@@ -9,7 +9,8 @@ import Input from "@components/common/input";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import { useRouter } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
+import useUser from "@libs/client/useUser";
 
 interface EnterForm {
   email?: string;
@@ -25,7 +26,8 @@ interface MutationResult {
 }
 
 const Enter: NextPage = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { user: session } = useUser();
   const [enter, { loading, data }] =
     useMutation<MutationResult>("/api/users/enter");
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
