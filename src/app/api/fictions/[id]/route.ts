@@ -346,8 +346,9 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
   const numId = Number(id);
 
   // Fetch all data
-  const fiction = await getFiction(numId);
-
+  let fiction = (await getFiction(numId)) as any;
+  fiction.startDate = fiction?.startDate?.toISOString() || "";
+  fiction.endDate = fiction?.endDate?.toISOString() || "";
   const mbtis = await getMBTIs(numId);
 
   const mdHtml = await processMarkdown(fiction?.setup || "");

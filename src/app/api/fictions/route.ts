@@ -65,9 +65,9 @@ export async function GET(
     return NextResponse.json({
       // fictions: JSON.parse(JSON.stringify(fictions)),
       // fictionsCount: JSON.parse(JSON.stringify(fictionsCount)),
-      keywords: keywords,
-      nationalities: nationalities,
-      categories: categories,
+      keywords: JSON.parse(JSON.stringify(keywords)),
+      nationalities: JSON.parse(JSON.stringify(nationalities)),
+      categories: JSON.parse(JSON.stringify(categories)),
     });
   }
 

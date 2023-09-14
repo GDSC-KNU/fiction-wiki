@@ -13,10 +13,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import client from "@libs/server/client";
 
 import {
-  FieldErrors,
+
   FormProvider,
   useFieldArray,
   useForm,
@@ -31,10 +30,6 @@ import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
 
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 
 interface CreateFictionForm {
   title: string;

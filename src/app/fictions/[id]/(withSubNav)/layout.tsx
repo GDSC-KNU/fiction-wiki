@@ -74,6 +74,31 @@ export default async function FictionLayout({
     ],
   };
 
+  function deepCloneAndConvertDates(obj: object) {
+    if (obj === null) return null;
+    if (typeof obj !== "object") return obj;
+
+    if (obj instanceof Date) {
+      return obj.toISOString(); // Convert Date object to ISO string
+    }
+
+    if (Array.isArray(obj)) {
+      const newArr = [];
+      for (let i = 0; i < obj.length; i++) {
+        newArr[i] = deepCloneAndConvertDates(obj[i]);
+      }
+      return newArr;
+    }
+
+    const newObj: { [key: string]: any } = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        newObj[key] = deepCloneAndConvertDates(obj[key]);
+      }
+    }
+    return newObj;
+  }
+
   return (
     <FictionProvider
       initialData={{
@@ -86,7 +111,7 @@ export default async function FictionLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredReviewData),
+          __html: JSON.parse(JSON.stringify(structuredReviewData)),
         }}
       />
       <div className=" block lg:flex">
