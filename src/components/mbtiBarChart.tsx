@@ -20,11 +20,9 @@ import type {
   Category,
 } from "@prisma/client";
 // import client from "@libs/server/client";
-import { PrismaClient } from "@prisma/client";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
-import { useRouter, useParams } from "next/navigation";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { useParams } from "next/navigation";
 
 import { FictionContext } from "@/context/fictionContext";
 
@@ -80,9 +78,8 @@ export const options = {
   },
 };
 
-function MbtiBarChart({ mbtis }: any) {
+export default function MbtiBarChart({ mbtis }: any) {
   let fictionContext = useContext(FictionContext);
-  const router = useRouter();
   const params = useParams();
   const { id } = params;
 
@@ -125,47 +122,3 @@ function MbtiBarChart({ mbtis }: any) {
     </>
   );
 }
-
-export default MbtiBarChart;
-
-// export const getServerSideProps: GetServerSideProps<{ mbtis: any }> = async (
-//   ctx
-// ) => {
-//   const fictionId = ctx?.params?.id;
-//   if (!fictionId) {
-//     return {
-//       props: {
-//         mbtis: null,
-//       },
-//     };
-//   }
-//   try {
-//     const groupedByMBTI = await new PrismaClient().$queryRaw`
-//   SELECT User.mbti,
-//   CAST(SUM(UserRationOnFiction.originality
-//   + UserRationOnFiction.synopsisComposition +
-//   UserRationOnFiction.value +
-//   UserRationOnFiction.writing +
-//   UserRationOnFiction.character +
-//   UserRationOnFiction.verisimilitude)
-//   / (COUNT(*)*6)
-//   AS CHAR(32)) AS avg,
-//   CAST(COUNT(*) AS CHAR(32)) AS cnt
-//   FROM UserRationOnFiction
-//   JOIN User ON UserRationOnFiction.userId = User.id
-//   JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id
-//   WHERE UserFictionStat.fictionId = ${fictionId}
-//   GROUP by User.mbti
-//   `;
-
-//     const mbtis = JSON.stringify(groupedByMBTI);
-
-//     return { props: { mbtis } };
-//   } catch (e) {
-//     return {
-//       props: {
-//         mbtis: null, // or provide a default value in case of an error
-//       },
-//     };
-//   }
-// };

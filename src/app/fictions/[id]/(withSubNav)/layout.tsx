@@ -73,10 +73,15 @@ export default async function FictionLayout({
       },
     ],
   };
-  // console.log(setup.value);
+
   return (
     <FictionProvider
-      initialData={{ fiction, mbtis, setup: setup?.value, similarFictions }}
+      initialData={{
+        fiction: JSON.parse(JSON.stringify(fiction)),
+        mbtis: JSON.parse(JSON.stringify(mbtis)),
+        setup: JSON.parse(JSON.stringify(setup.value)),
+        similarFictions: JSON.parse(JSON.stringify(similarFictions)),
+      }}
     >
       <script
         type="application/ld+json"

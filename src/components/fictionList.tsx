@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import Pagination from "@components/pagination";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import CountryFlag_China from "@public/svg/countryFlag_China.svg";
 import CountryFlag_Korea from "@public/svg/countryFlag_Korea.svg";

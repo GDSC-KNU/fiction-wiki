@@ -30,11 +30,7 @@ export default function Search() {
   const {
     register,
     handleSubmit,
-    reset,
-    resetField,
-    watch,
     formState: { errors },
-    setValue,
   } = useForm<SearchForm>({ mode: "onBlur" });
 
   return (

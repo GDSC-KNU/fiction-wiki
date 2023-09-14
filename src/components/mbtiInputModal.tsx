@@ -13,32 +13,13 @@ interface SubmitUserInfoMutation {
   ok: boolean;
 }
 
-const MBTI_List = [
-  "ISTJ",
-  "ISFJ",
-  "INFJ",
-  "INTJ",
-  "ISTP",
-  "ISFP",
-  "INFP",
-  "INTP",
-  "ESTP",
-  "ESFP",
-  "ENFP",
-  "ENTP",
-  "ESTJ",
-  "ESFJ",
-  "ENFJ",
-  "ENTJ",
-];
-
 function isValidMBTI(str: string) {
   const mbtiRegex =
     /^(ISTJ|ISFJ|INFJ|INTJ|ISTP|ISFP|INFP|INTP|ESTP|ESFP|ENFP|ENTP|ESTJ|ESFJ|ENFJ|ENTJ)$/i;
   return mbtiRegex.test(str);
 }
 
-const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
+export default function MBTIInputModal({ isOpen, closeModal }: any) {
   const [mbti, setMBTI] = useState("");
   const [sex, setSex] = useState("");
   const [submitUserInfo, { loading, data, error }] =
@@ -145,6 +126,4 @@ const MBTIInputModal: React.FC<Props> = ({ isOpen, closeModal }) => {
       </div>
     </div>
   );
-};
-
-export default MBTIInputModal;
+}

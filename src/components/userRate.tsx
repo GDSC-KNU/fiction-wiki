@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Input from "@components/common/input";
 import { useSWRConfig } from "swr";
@@ -19,8 +19,6 @@ interface RateUserStatForm {
 
 export default function UserStat() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   const { user: session } = useUser();

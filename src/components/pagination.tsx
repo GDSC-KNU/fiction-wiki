@@ -8,8 +8,6 @@ import {
 } from "next/navigation";
 import { cls } from "@libs/client/utils";
 import Link from "next/link";
-import { useRecoilState } from "recoil";
-import { fictionPageAtom } from "@store/atoms";
 
 interface PaginationProps {
   // activePage: number;
@@ -33,8 +31,6 @@ function replaceLastSegment(url: string, newPage: number) {
 }
 
 export default function Pagination({
-  // activePage,
-  // itemsCountPerPage,
   totalItemsCount,
   totalPagesCount,
   pageRangeDisplayed,
@@ -44,11 +40,9 @@ export default function Pagination({
   const params = useParams();
   const searchParams = useSearchParams();
   const pageQuery = searchParams.get("page");
-  // const searchQuery = searchParams.get("search");
-  // const params = useParams();
+
   let search = searchParams.get("search");
   const { page } = params;
-  // const [page, setPage] = useRecoilState(fictionPageAtom);
 
   const generateUrl = (newPage: number) => {
     let baseUrl;
