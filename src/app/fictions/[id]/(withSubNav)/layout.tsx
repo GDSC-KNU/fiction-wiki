@@ -45,7 +45,7 @@ export default async function FictionLayout({
     "@type": "Book",
     name: fiction?.title,
     image: fiction?.image,
-    description: fiction?.setup.value.slice(6, 150) + "...",
+    description: fiction?.setup.slice(6, 150) + "...",
     genre: fiction?.categories?.[0]?.category?.name,
     keywords: fiction?.keywords.reduce(
       (acc: any, cur: any) => acc + cur.keyword.name + ",",
@@ -73,7 +73,7 @@ export default async function FictionLayout({
       },
     ],
   };
-
+  // console.log(setup.value);
   return (
     <FictionProvider
       initialData={{ fiction, mbtis, setup: setup?.value, similarFictions }}
@@ -202,10 +202,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
 
   const fiction = await fetchFiction(id);
