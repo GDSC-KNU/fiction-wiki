@@ -18,14 +18,13 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && env-cmd -f .env.production next build",
-    "buildLocal": "prisma generate && env-cmd -f .env.local next build",
+    "build": "env-cmd -f .env.production next build",
+    "buildLocal": "env-cmd -f .env.local next build",
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
     "postbuild": "next-sitemap",
-    "connect": "pscale connect fdbs-ver1 main",
-    "postinstall": "prisma generate"
+    "connect": "pscale connect fdbs-ver1 main"
   },
   "dependencies": {
     "@babel/core": "^7.22.1",
