@@ -19,5 +19,13 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "tailwindcss/classname-order": "off"
+  },
+  "settings": {
+    "tailwindcss": {
+      "config": "tailwindcss.config.js"
+    },
+    "next": {
+      "rootDir": true
+    }
   }
 }

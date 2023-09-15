@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useRouter,
-  usePathname,
-  useSearchParams,
-  useParams,
-} from "next/navigation";
+import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { cls } from "@libs/client/utils";
 import Link from "next/link";
 

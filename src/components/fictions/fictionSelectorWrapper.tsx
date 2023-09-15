@@ -9,6 +9,8 @@ import {
   Author,
   Category,
 } from "@prisma/client";
+import { Suspense } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import React, { useMemo, useState } from "react";
 
@@ -63,11 +65,15 @@ interface FictionSelectorProps {
   };
 }
 
+const Fallback = () => (
+  <div className=" flex justify-center">
+    <ClipLoader size={100} aria-label="Loading Spinner" data-testid="loader" />
+  </div>
+);
+
 export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
-  // const page = searchparams.get("page");
-
   const [queryObject, setQueryObject] = useState<QueryObject>({
     keywords: "all",
     nationalities: "all",
@@ -92,27 +98,23 @@ export default function FictionSelectorWrapper({
 
   const { data } = useSWR<FictionsResponse>(queryString);
 
+  let parsedData;
+  if (data) parsedData = JSON.parse(data as any);
+
   return (
-    <div>
+    <>
+      {/* <Suspense fallback={<Fallback />}> */}
       <FictionSelector
         staticData={staticData}
         queryObject={queryObject}
         setQueryObject={setQueryObject}
       />
-      {/* {isValidating && !data ? (
-        <div className=" flex justify-center">
-          <ClipLoader
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      ) : null} */}
       <FictionList
-        data={data?.fictions}
+        data={parsedData?.fictions}
         type={"fictions_list"}
-        count={data?.fictionsCount}
+        count={parsedData?.fictionsCount}
       />
-    </div>
+      {/* </Suspense> */}
+    </>
   );
 }

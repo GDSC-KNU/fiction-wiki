@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 
@@ -11,7 +11,6 @@ import { FictionContext } from "@/context/fictionContext";
 
 export default function Comments() {
   let fictionContext = useContext(FictionContext);
-  const router = useRouter();
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);

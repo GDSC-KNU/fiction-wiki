@@ -341,6 +341,7 @@ function toJSONCompatible(obj: any): any {
 ////
 export async function GET(req: NextRequest, { params }: { params: any }) {
   const { id } = params;
+
   if (!id) return NextResponse.json({ ok: false }, { status: 502 });
 
   const numId = Number(id);
@@ -360,9 +361,9 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
 
   return NextResponse.json({
     ok: true,
-    fiction: JSON.parse(JSON.stringify(fiction)),
-    similarFictions: JSON.parse(JSON.stringify(similarFictions)),
-    mbtis: JSON.parse(JSON.stringify(mbtis)),
+    fiction: toJSONCompatible(fiction),
+    similarFictions: similarFictions,
+    mbtis: mbtis,
     setup: String(mdHtml),
   });
 }

@@ -251,11 +251,13 @@ export async function GET(
   //   })
   // );
 
-  return NextResponse.json({
-    ok: true,
-    fictions,
-    fictionsCount,
-  });
+  return NextResponse.json(
+    JSON.stringify({
+      ok: true,
+      fictions,
+      fictionsCount,
+    })
+  );
 }
 
 const arrayToString = (arr: any[]) =>
@@ -410,7 +412,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ ok: true, fiction });
+    return NextResponse.json(JSON.stringify({ ok: true, fiction }));
   } catch (error) {
     console.error("An error occurred:", error);
     return NextResponse.json({ ok: false, error: "An error occurred" });

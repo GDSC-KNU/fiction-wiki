@@ -10,8 +10,10 @@ import SWRProvider from "./swr-provider";
 import RecoilProvider from "./recoil-provider";
 import "./globals.css";
 import { Metadata } from "next";
+import config from "@/config/site";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(config.url),
   title: "FDBS | 웹소설위키",
   description:
     "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요.",
@@ -35,16 +37,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
-      <body>
+      <body suppressHydrationWarning={true}>
         <link rel="icon" href="/favicon/favicon.ico" />
         <meta
           name="naver-site-verification"
           content="30cd8ea963377b6866389d39ec426e76543df5cd"
         />
-        <Script
+        {/* <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-        />
+        /> */}
         <Script
           id="gtag-init"
           strategy="afterInteractive"

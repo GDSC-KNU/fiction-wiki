@@ -2,7 +2,7 @@
 
 import React, { createContext, useEffect, useState, ReactNode } from "react";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
 import type {
@@ -68,11 +68,10 @@ export const FictionProvider: React.FC<FictionProviderProps> = ({
   const searchParams = useSearchParams();
 
   const id = searchParams.get("id");
-  const router = useRouter();
   const [fictionContext, setFictionContext] = useState(initialData);
 
   const { data, mutate: boundMutate } = useSWR<any>(
-    id ? `/api/fictions/${id}` : null
+    id ? `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}` : null
   );
 
   useEffect(() => {

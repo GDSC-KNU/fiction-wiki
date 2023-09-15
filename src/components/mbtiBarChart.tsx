@@ -15,11 +15,10 @@ import type {
   FictionStat,
   Keyword,
   UserRationOnFiction,
-  // KeywordsOnFictions,
   Author,
   Category,
 } from "@prisma/client";
-// import client from "@libs/server/client";
+
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
@@ -109,9 +108,6 @@ export default function MbtiBarChart({ mbtis }: any) {
       // }
     ],
   };
-
-  // const userRationOnFictions =
-  //   fiction?.fiction?.userFictionStat?.userRationOnFictions;
 
   return (
     <>

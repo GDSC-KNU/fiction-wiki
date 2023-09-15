@@ -3,7 +3,7 @@ import client from "@libs/server/client";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
-export async function GET(req: NextRequest, { searchParams }: any) {
+export async function GET(req: NextRequest) {
   // const {
   //   query: { id, page },
   //   // session: { user },
@@ -11,6 +11,7 @@ export async function GET(req: NextRequest, { searchParams }: any) {
   // } = req;
 
   const body = await req.json();
+  const searchParams = req.nextUrl.searchParams;
   // const { id, page } = searchParams.get();
   const id = searchParams.get("id");
   const page = searchParams.get("page");

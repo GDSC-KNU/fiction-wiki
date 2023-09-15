@@ -11,9 +11,7 @@ import {
 } from "@prisma/client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-
-import ClipLoader from "react-spinners/ClipLoader";
+import { useSearchParams } from "next/navigation";
 
 import { ParsedUrlQueryInput } from "querystring";
 
@@ -67,7 +65,6 @@ export default function FictionSelector({
     nationalityList: nationalities,
     categoryList: categories,
   } = staticData;
-  const router = useRouter();
   //expand
   const [isExpanded, setIsExpanded] = useState(true);
 

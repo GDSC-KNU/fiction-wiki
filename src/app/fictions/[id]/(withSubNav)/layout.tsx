@@ -1,14 +1,10 @@
 import { FictionProvider } from "@/context/fictionContext";
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
-import client from "@libs/server/client";
+
 import { ReactNode } from "react";
-import { Fiction } from "@prisma/client";
 
 import WikiNavBar from "@components/fiction/wikiNavBar";
 import type { Metadata, ResolvingMetadata } from "next";
+import config from "@/config/site";
 
 interface FictionLayoutProps {
   children: ReactNode;
@@ -21,24 +17,19 @@ export default async function FictionLayout({
   children,
   params,
 }: FictionLayoutProps) {
-  const { id: fictionIdStr } = params;
-  const fictionId = parseInt(fictionIdStr, 10);
+  const { id } = params;
 
-  const fiction: any = await fetchFiction(fictionId)!;
-  if (!fiction) return <div>loading</div>;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}`,
+    { cache: "no-store" }
+    // {
+    //   next: {
+    //     revalidate: 60 * 60 * 24 * 1,
+    //   },
+    // }
+  ).then((res) => res.json());
 
-  const similarFictions: any = await fetchSimilarFictions(
-    fiction.keywords,
-    +fictionIdStr
-  );
-
-  const mbtis = await groupByMBTI(fictionId);
-
-  let setup = await remark()
-    .use(html)
-    .use(remarkToc)
-    .use(remarkGfm)
-    .process(fiction?.setup || "");
+  const { fiction, mbtis, setup, similarFictions } = await response;
 
   const structuredReviewData = {
     "@context": "https://schema.org",
@@ -74,37 +65,12 @@ export default async function FictionLayout({
     ],
   };
 
-  function deepCloneAndConvertDates(obj: object) {
-    if (obj === null) return null;
-    if (typeof obj !== "object") return obj;
-
-    if (obj instanceof Date) {
-      return obj.toISOString(); // Convert Date object to ISO string
-    }
-
-    if (Array.isArray(obj)) {
-      const newArr = [];
-      for (let i = 0; i < obj.length; i++) {
-        newArr[i] = deepCloneAndConvertDates(obj[i]);
-      }
-      return newArr;
-    }
-
-    const newObj: { [key: string]: any } = {};
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        newObj[key] = deepCloneAndConvertDates(obj[key]);
-      }
-    }
-    return newObj;
-  }
-
   return (
     <FictionProvider
       initialData={{
         fiction: JSON.parse(JSON.stringify(fiction)),
         mbtis: JSON.parse(JSON.stringify(mbtis)),
-        setup: JSON.parse(JSON.stringify(setup.value)),
+        setup: JSON.parse(JSON.stringify(setup)),
         similarFictions: JSON.parse(JSON.stringify(similarFictions)),
       }}
     >
@@ -124,108 +90,7 @@ export default async function FictionLayout({
   );
 }
 
-async function fetchFiction<FictionWithMore>(fictionId: number | string) {
-  return await client.fiction.findUnique({
-    where: {
-      id: +fictionId ?? 1,
-    },
-    include: {
-      fictionStat: true,
-
-      userFictionStat: {
-        include: {
-          userRationOnFictions: true,
-          _count: {
-            select: {
-              userRationOnFictions: true,
-            },
-          },
-        },
-      },
-      keywords: {
-        include: {
-          keyword: {
-            select: {
-              name: true,
-              isOfHeroine: true,
-              isOfMC: true,
-              isOfCons: true,
-            },
-          },
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-      author: true,
-      comments: {
-        include: {
-          createdBy: {
-            select: {
-              nickname: true,
-            },
-          },
-        },
-      },
-    },
-  });
-}
-
-async function fetchSimilarFictions(
-  keywords: any,
-  fictionId: number
-): Promise<Partial<Fiction>[]> {
-  const keywordConditions = keywords.map((keyword: any) => ({
-    keywords: {
-      some: {
-        keyword: {
-          name: {
-            equals: keyword.name,
-          },
-        },
-      },
-    },
-  }));
-
-  return await client.fiction.findMany({
-    where: {
-      OR: keywordConditions,
-      AND: {
-        id: {
-          not: fictionId,
-        },
-      },
-    },
-    select: {
-      id: true,
-      title: true,
-    },
-  });
-}
-
-async function groupByMBTI(fictionId: number) {
-  return await client.$queryRaw`
-      SELECT User.mbti,
-      CAST(SUM(UserRationOnFiction.originality
-      + UserRationOnFiction.synopsisComposition +
-      UserRationOnFiction.value +
-      UserRationOnFiction.writing +
-      UserRationOnFiction.character +
-      UserRationOnFiction.verisimilitude)
-      / (COUNT(*)*6)
-      AS CHAR(32)) AS avg,
-      CAST(COUNT(*) AS CHAR(32)) AS cnt
-      FROM UserRationOnFiction
-      JOIN User ON UserRationOnFiction.userId = User.id
-      JOIN UserFictionStat ON UserRationOnFiction.userFictionStatId = UserFictionStat.id
-      WHERE UserFictionStat.fictionId = ${fictionId}
-      GROUP by User.mbti
-      `;
-}
-
-export const revalidate = 60 * 60 * 24 * 30;
+// export const revalidate = 60 * 60 * 24 * 30;
 
 type Props = {
   params: { id: string };
@@ -235,17 +100,26 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
 
-  const fiction = await fetchFiction(id);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}`
+  ).then((res) => res.json());
+
+  const { fiction } = response;
 
   if (!fiction)
     return {
+      metadataBase: new URL(config.url),
       title: "FDBS | 소설위키",
       description: fiction,
       openGraph: {},
     };
 
   return {
-    title: `${fiction.title} | FDBS`,
+    metadataBase: new URL(config.url),
+    title: {
+      default: `${fiction.title}`,
+      template: `%s | FDBS`,
+    },
     description: fiction.setup.slice(6, 150),
     keywords: `${fiction.title}, ${fiction.author?.name}, ${fiction.originalTitle}, ${fiction.relatedTitle}`,
     openGraph: {
