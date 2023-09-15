@@ -24,7 +24,8 @@
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
     "postbuild": "next-sitemap",
-    "connect": "pscale connect fdbs-ver1 main"
+    "connect": "pscale connect fdbs-ver1 main",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@babel/core": "^7.22.1",
