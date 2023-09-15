@@ -251,13 +251,11 @@ export async function GET(
   //   })
   // );
 
-  return NextResponse.json(
-    JSON.stringify({
-      ok: true,
-      fictions,
-      fictionsCount,
-    })
-  );
+  return NextResponse.json({
+    ok: true,
+    fictions,
+    fictionsCount,
+  });
 }
 
 const arrayToString = (arr: any[]) =>

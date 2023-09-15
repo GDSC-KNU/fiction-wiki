@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
 
@@ -14,7 +14,7 @@ export default async function FictionsPage() {
 
   return (
     <>
-      <FictionSelectorWrapper staticData={JSON.parse(staticData)} />
+      <FictionSelectorWrapper staticData={staticData} />
     </>
   );
 }

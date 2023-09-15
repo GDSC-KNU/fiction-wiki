@@ -65,12 +65,6 @@ interface FictionSelectorProps {
   };
 }
 
-const Fallback = () => (
-  <div className=" flex justify-center">
-    <ClipLoader size={100} aria-label="Loading Spinner" data-testid="loader" />
-  </div>
-);
-
 export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
@@ -98,23 +92,20 @@ export default function FictionSelectorWrapper({
 
   const { data } = useSWR<FictionsResponse>(queryString);
 
-  let parsedData;
-  if (data) parsedData = JSON.parse(data as any);
-
   return (
     <>
-      {/* <Suspense fallback={<Fallback />}> */}
       <FictionSelector
         staticData={staticData}
         queryObject={queryObject}
         setQueryObject={setQueryObject}
       />
-      <FictionList
-        data={parsedData?.fictions}
-        type={"fictions_list"}
-        count={parsedData?.fictionsCount}
-      />
-      {/* </Suspense> */}
+      {data && (
+        <FictionList
+          data={data?.fictions || {}}
+          type={"fictions_list"}
+          count={data?.fictionsCount || 0}
+        />
+      )}
     </>
   );
 }
