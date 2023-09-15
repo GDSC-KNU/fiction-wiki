@@ -61,7 +61,6 @@ export default async function AuthorDetail({ params }: any) {
     `${process.env.NEXTAUTH_URL}/api/authors/name/${slug}`
   ).then((res) => res.json());
 
-  if (!author) return <div>..loading</div>;
   return (
     <div className=" mx-auto min-h-[213px] px-2">
       {/* <NextSeo
@@ -105,11 +104,13 @@ export default async function AuthorDetail({ params }: any) {
         <div className=" col-span-12 lg:col-span-12">
           <div className=" mt-5"></div>
           <h2 className=" text-xl font-bold">작품 목록</h2>
-          <FictionList
-            data={author?.fictions}
-            type={"fictions_list"}
-            pagination={false}
-          />
+          {author && author?.fictions && (
+            <FictionList
+              data={author?.fictions}
+              type={"fictions_list"}
+              pagination={false}
+            />
+          )}
         </div>
       </div>
       <div className=" mb-4  grid grid-cols-12 bg-white">

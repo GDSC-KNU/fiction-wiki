@@ -19,7 +19,11 @@ export default async function SearchTypePage({ params }: any) {
 
   const response = await fetch(
     `${process.env.NEXTAUTH_URL}/api/search/type/${search}?page=${page}`,
-    { cache: "no-store" }
+    {
+      next: {
+        revalidate: 60 * 60 * 24 * 1,
+      },
+    }
   ).then((res) => res.json());
 
   const { fictions, fictionsCount } = response;
@@ -30,7 +34,7 @@ export default async function SearchTypePage({ params }: any) {
         <h5 className=" font-bold">분류: {decodeURI(search)}</h5>
       </div>
       <div className="">
-        {response && (
+        {fictions && (
           <FictionList
             data={fictions}
             type={"fictions_list"}

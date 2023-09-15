@@ -25,7 +25,11 @@ export default async function SearchKeywordPage({ params }: ParamTypes) {
 
   const response = await fetch(
     `${process.env.NEXTAUTH_URL}/api/search/keyword/${search}?page=${page}`,
-    { cache: "no-store" }
+    {
+      next: {
+        revalidate: 60 * 60 * 24 * 1,
+      },
+    }
   ).then((res) => res.json());
 
   const { fictions, fictionsCount } = response;
@@ -36,7 +40,7 @@ export default async function SearchKeywordPage({ params }: ParamTypes) {
         <h5 className=" font-bold">키워드: {decodeURI(search)}</h5>
       </div>
       <div className=" ">
-        {response && (
+        {fictions && (
           <FictionList
             data={fictions}
             type={"fictions_list"}

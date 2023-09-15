@@ -8,7 +8,12 @@ export default async function SearchGenrePage({ params }: any) {
   const { page, search } = params;
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/search/category/${search}?page=${page}`
+    `${process.env.NEXTAUTH_URL}/api/search/category/${search}?page=${page}`,
+    {
+      next: {
+        revalidate: 60 * 60 * 24 * 1,
+      },
+    }
   ).then((res) => res.json());
 
   const { fictions, fictionsCount } = response;
@@ -19,7 +24,7 @@ export default async function SearchGenrePage({ params }: any) {
         <h5 className=" font-bold">장르: {decodeURI(search)}</h5>
       </div>
       <div className=" ">
-        {response && (
+        {fictions && (
           <FictionList
             data={fictions}
             type={"fictions_list"}

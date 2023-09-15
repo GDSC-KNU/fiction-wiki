@@ -16,7 +16,7 @@ export default async function TitleSearchPage({ params }: any) {
       <div className=" mb-7 bg-slate-100 py-4 pl-6">
         <h5 className=" font-bold">제목: {decodeURIComponent(search)}</h5>
       </div>
-      {response && (
+      {fictions && (
         <FictionList
           data={fictions}
           type={"fictions_list"}
