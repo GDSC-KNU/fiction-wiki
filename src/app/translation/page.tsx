@@ -198,14 +198,14 @@ const Translation = () => {
       />
       <div className=" mb-2 ml-5 text-gray-500">
         1. 지원사이트 목록:{" "}
-        <a
+        {/* <a
           className=" text-blue-500 underline"
           title="https://www.qidian.com/"
           href="https://www.qidian.com/"
         >
           qidian
         </a>
-        ,{`${" "}`}
+        ,{`${" "}`} */}
         <a
           className=" text-blue-500 underline"
           title="https://www.aixdzs.com/"

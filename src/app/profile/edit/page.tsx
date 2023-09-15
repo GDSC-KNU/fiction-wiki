@@ -87,7 +87,7 @@ export default function EditProfile() {
             <Input
               register={register("naverAccessKey", { required: true })}
               required
-              label="naverAccessKey"
+              label="naverAccessKey (https://www.ncloud.com/mypage/manage/authkey 참고)"
               name="naverAccessKey"
               type="text_detail"
             />
@@ -101,7 +101,7 @@ export default function EditProfile() {
             <Input
               register={register("papagoClientID", { required: true })}
               required
-              label="papagoClientID"
+              label="papagoClientID (https://console.ncloud.com/papago-translation/apis 참고)"
               name="papagoClientID"
               type="text_detail"
             />

@@ -11,6 +11,8 @@ interface UpdatedData {
   nickname?: string;
   clientID?: string;
   clientKey?: string;
+  naverAccessKey?: string;
+  naverSecretKey?: string;
 }
 
 async function getUserToken(req: NextRequest) {
@@ -72,6 +74,8 @@ export async function PUT(req: NextRequest) {
       sex: body.sex,
       clientID: body.papagoClientID,
       clientKey: body.papagoClientKey,
+      naverAccessKey: body.naverAccessKey,
+      naverSecretKey: body.naverSecretKey,
     };
 
     await client.user.update({
