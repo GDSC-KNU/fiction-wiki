@@ -19,11 +19,13 @@ export default async function SearchGenrePage({ params }: any) {
         <h5 className=" font-bold">장르: {decodeURI(search)}</h5>
       </div>
       <div className=" ">
-        <FictionList
-          data={fictions}
-          type={"fictions_list"}
-          count={fictionsCount}
-        />
+        {response && (
+          <FictionList
+            data={fictions}
+            type={"fictions_list"}
+            count={fictionsCount}
+          />
+        )}
       </div>
     </section>
   );

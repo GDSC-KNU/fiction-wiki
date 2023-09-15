@@ -36,12 +36,13 @@ export default async function SearchKeywordPage({ params }: ParamTypes) {
         <h5 className=" font-bold">키워드: {decodeURI(search)}</h5>
       </div>
       <div className=" ">
-        <FictionList
-        
-          data={fictions}
-          type={"fictions_list"}
-          count={fictionsCount}
-        />
+        {response && (
+          <FictionList
+            data={fictions}
+            type={"fictions_list"}
+            count={fictionsCount}
+          />
+        )}
       </div>
     </section>
   );
