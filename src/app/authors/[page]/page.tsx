@@ -14,7 +14,7 @@ export default async function Authors({
   const { page } = params;
 
   const response: AuthorResponse = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/authors/${page}`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/authors/${page}`,
     {
       next: {
         revalidate: 60 * 60 * 24 * 14,
@@ -23,8 +23,6 @@ export default async function Authors({
   ).then((res) => res.json());
 
   const { authors, authorsCount } = response;
-
-  if (!response) return <div>...loading</div>;
 
   return (
     <div className="">
@@ -36,11 +34,13 @@ export default async function Authors({
           url: `https://fictiondbs.com/authors/${page}`,
         }}
       /> */}
-      <FictionList
-        data={authors}
-        type="authors_list"
-        authorsCount={authorsCount}
-      />
+      {response && (
+        <FictionList
+          data={authors}
+          type="authors_list"
+          authorsCount={authorsCount}
+        />
+      )}
     </div>
   );
 }
