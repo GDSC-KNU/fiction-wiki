@@ -12,13 +12,10 @@ export async function GET(req: NextRequest) {
 
   const nationalityList = fictionList.map((fiction) => fiction.nationality);
   const uniqueNationalityList = Array.from(new Set(nationalityList));
-
-  return NextResponse.json(
-    JSON.stringify({
-      ok: true,
-      categoryList: categoryList,
-      keywordList: keywordList,
-      nationalityList: uniqueNationalityList,
-    })
-  );
+  return NextResponse.json({
+    ok: true,
+    categoryList: categoryList,
+    keywordList: keywordList,
+    nationalityList: uniqueNationalityList,
+  });
 }
