@@ -8,7 +8,7 @@ export default async function SearchGenrePage({ params }: any) {
   const { page, search } = params;
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/search/category/${search}?page=${page}`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/search/category/${search}?page=${page}`,
     {
       next: {
         revalidate: 60 * 60 * 24 * 1,

@@ -5,7 +5,7 @@ export default async function TitleSearchPage({ params }: any) {
   const { search, page } = params;
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/search/title/${search}?page=${page}`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/search/title/${search}?page=${page}`,
     { cache: "no-store" }
   ).then((res) => res.json());
 

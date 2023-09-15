@@ -24,7 +24,7 @@ export default async function SearchKeywordPage({ params }: ParamTypes) {
   const { page, search } = params;
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/search/keyword/${search}?page=${page}`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/search/keyword/${search}?page=${page}`,
     {
       next: {
         revalidate: 60 * 60 * 24 * 1,
