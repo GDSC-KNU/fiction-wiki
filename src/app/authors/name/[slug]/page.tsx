@@ -58,7 +58,7 @@ export default async function AuthorDetail({ params }: any) {
   const { slug } = params;
 
   const { author }: any = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/authors/name/${slug}`
+    `${process.env.NEXT_PUBLIC_HOST}/api/authors/name/${slug}`
   ).then((res) => res.json());
 
   return (
