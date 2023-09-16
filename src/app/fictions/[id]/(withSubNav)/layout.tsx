@@ -101,7 +101,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}`
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}`,
+    {
+      next: {
+        tags: ["fiction"],
+      },
+    }
   ).then((res) => res.json());
 
   const { fiction } = response;

@@ -12,12 +12,7 @@ import {
   FictionStat,
   Keyword,
 } from "@prisma/client";
-import type {
-  GetServerSideProps,
-  GetStaticPaths,
-  GetStaticProps,
-  NextPage,
-} from "next";
+
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,11 +24,6 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import html from "remark-html";
-import remarkToc from "remark-toc";
-
 import DropdownSearchCheckbox from "@components/common/dropdownSearchCheckbox";
 import KeywordsInputBox from "@components/common/keywordsInputBox";
 import Select from "@components/common/select";
@@ -42,7 +32,7 @@ import { FictionProvider } from "@/context/fictionContext";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
-import { val } from "cheerio/lib/api/attributes";
+
 import useSWR from "swr";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
@@ -128,7 +118,8 @@ export default function EditFiction({ params }: { params: any }) {
   const { id: fictionId } = params;
 
   const { data: fictionData, isValidating } = useSWR(
-    fictionId ? `/api/fictions/${fictionId}` : ""
+    fictionId ? `/api/fictions/${fictionId}` : "",
+    { suspense: true }
   );
 
   const { fiction, similarFictions, mbtis, setup } = fictionData || {};
@@ -338,11 +329,6 @@ export default function EditFiction({ params }: { params: any }) {
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-
-  // before suspense fallback(임시)
-  if (!fiction) {
-    return <div>Loading...</div>;
-  }
 
   const typeOptions = [
     { label: "웹소설", value: "웹소설" },

@@ -8,6 +8,9 @@ const siteConfig = {
   //   twitter: "https://twitter.com/shadcn",
   // //   github: "https://github.com/shadcn/taxonomy",
   // },
+  revalidateFrequency: {
+    authors: 60 * 60 * 24 * 7,
+  },
 };
 
 export default siteConfig;

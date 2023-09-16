@@ -51,7 +51,7 @@ const preprocessData = (data: any, isRevert: boolean) => {
     setup,
     nickname,
   } = data;
-
+  // console.log(data);
   function handleInput(input: Array<string> | string) {
     if (Array.isArray(input)) {
       return input.length === 0 ? undefined : input.join(",");
@@ -67,27 +67,27 @@ const preprocessData = (data: any, isRevert: boolean) => {
 
   if (isRevert) {
     // 문서 복구 편집
-    categories = categories.map((item: any) => item.category.name);
+    categories = categories?.map((item: any) => item.category.name);
     date[0] = new Date(startDate);
     date[1] = new Date(endDate);
     originalAuthor = author.rawName;
     author = author.name;
   } else {
     // 문서 일반 편집
-    categories = categories.map((item: any) => item.value);
+    categories = categories?.map((item: any) => item.value);
     date[0] = new Date(date[0]);
     date[1] = new Date(date[1]);
     platforms = platforms
-      .map((item: any) => item.value)
+      ?.map((item: any) => item.value)
       .filter((item: string) => item !== "")
       .join(",");
     mediaMix = mediaMix
-      .map((item: any) => item.value)
+      ?.map((item: any) => item.value)
       .filter((item: string) => item !== "")
       .join(",");
   }
 
-  const categoriesMany = categories.map((item: string) => ({
+  const categoriesMany = categories?.map((item: string) => ({
     category: {
       connectOrCreate: {
         where: { name: item },
@@ -105,10 +105,10 @@ const preprocessData = (data: any, isRevert: boolean) => {
     if (isRevert) {
       keywordsArray = (
         keywordsArray?.filter((item: any) => item !== "") || []
-      ).map((item: any) => item.keyword.name);
+      )?.map((item: any) => item.keyword.name);
     }
 
-    return (keywordsArray?.filter((item: any) => item !== "") || []).map(
+    return (keywordsArray?.filter((item: any) => item !== "") || [])?.map(
       (item: string) => ({
         keyword: {
           connectOrCreate: {
@@ -204,8 +204,8 @@ const createHistoryLog = async (
 };
 
 function countCharactersChanged(prevFiction: any, updatedFiction: any): number {
-  const prevFictionString = prevFiction;
-  const updatedFictionString = updatedFiction;
+  const prevFictionString = JSON.stringify(toJSONCompatible(prevFiction));
+  const updatedFictionString = JSON.stringify(toJSONCompatible(updatedFiction));
 
   const characterDifferences = diffChars(
     prevFictionString,
@@ -382,7 +382,7 @@ export async function PUT(
       { status: 500 }
     );
 
-  let { body } = req;
+  let body = await req.json();
 
   const { id, Rid } = params;
 
@@ -551,10 +551,9 @@ export async function PUT(
 
   try {
     await axios.post(
-      `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`,
+      `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
       {
         id: +id!.toString(),
-        type: "edit",
       }
     );
   } catch (error) {

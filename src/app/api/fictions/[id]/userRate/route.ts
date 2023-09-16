@@ -1,4 +1,5 @@
 import client from "@libs/server/client";
+import axios from "axios";
 import { getToken } from "next-auth/jwt";
 // import revalidator from "@libs/server/revalidator";
 
@@ -221,7 +222,17 @@ export async function POST(req: NextRequest, { params }: any) {
   //  On-Demand revalidation
   // await revalidator(id, "comment");
 
-  revalidatePath("/fictions/[id]");
+  // revalidatePath("/fictions/[id]");
+  try {
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
+      {
+        id: +id!.toString(),
+      }
+    );
+  } catch (error) {
+    return NextResponse.json({ ok: false }, { status: 500 });
+  }
 
   return NextResponse.json({ ok: true, Ration });
 }
