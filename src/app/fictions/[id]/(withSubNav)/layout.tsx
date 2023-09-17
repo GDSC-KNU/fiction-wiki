@@ -21,12 +21,12 @@ export default async function FictionLayout({
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${id}`,
-    { cache: "no-store" }
-    // {
-    //   next: {
-    //     revalidate: 60 * 60 * 24 * 1,
-    //   },
-    // }
+    // { cache: "no-store" }
+    {
+      next: {
+        revalidate: 60 * 60 * 24 * 1,
+      },
+    }
   ).then((res) => res.json());
 
   const { fiction, mbtis, setup, similarFictions } = await response;
