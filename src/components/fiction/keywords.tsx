@@ -1,24 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import { useContext } from "react";
 
-import { FictionContext } from "@/context/fictionContext";
-
-export default function Keywords() {
-  const fictionContext = useContext(FictionContext);
-
-  if (!fictionContext) return <div>loading</div>;
-
+export default function Keywords({ fiction }: any) {
   return (
     <>
       <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 sm:mr-3">
         <div className=" mb-3 h-full w-full rounded-md sm:mb-0">
           <h2 className=" border-b-[1px] pt-1 font-bold">메인 태그</h2>
           <ul className=" inline-flex flex-wrap pt-2">
-            {fictionContext.fiction?.keywords
+            {fiction?.keywords
               ?.filter(
-                (item) =>
+                (item: any) =>
                   item?.keyword?.isOfHeroine === false &&
                   item?.keyword?.isOfMC === false &&
                   item?.keyword?.isOfCons === false
@@ -45,8 +36,8 @@ export default function Keywords() {
           </ul>
           <div className=" border-b-[1px] pt-1 font-bold">주인공 태그</div>
           <ul className=" inline-flex flex-wrap pt-2">
-            {fictionContext.fiction?.keywords
-              .filter((item) => item?.keyword?.isOfMC === true)
+            {fiction?.keywords
+              .filter((item: any) => item?.keyword?.isOfMC === true)
               .map((item: any, index: any) => (
                 <li
                   key={index}
@@ -63,8 +54,8 @@ export default function Keywords() {
           </ul>
           <div className=" border-b-[1px] pt-1 font-bold">히로인 태그</div>
           <ul className=" inline-flex flex-wrap pt-2">
-            {fictionContext?.fiction?.keywords
-              .filter((item) => item?.keyword?.isOfHeroine === true)
+            {fiction?.keywords
+              .filter((item: any) => item?.keyword?.isOfHeroine === true)
               .map((item: any, index: any) => (
                 <li
                   key={index}
@@ -81,8 +72,8 @@ export default function Keywords() {
           </ul>
           <div className=" border-b-[1px] pt-1 font-bold">호불호 태그</div>
           <ul className=" inline-flex flex-wrap pt-2">
-            {fictionContext.fiction?.keywords
-              .filter((item) => item?.keyword?.isOfCons === true)
+            {fiction?.keywords
+              .filter((item: any) => item?.keyword?.isOfCons === true)
               .map((item: any, index: any) => (
                 <li
                   key={index}

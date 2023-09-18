@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import {
   Chart as ChartJS,
@@ -11,9 +10,6 @@ import {
   Legend,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
-import { useContext } from "react";
-
-import { FictionContext } from "@/context/fictionContext";
 
 ChartJS.register(
   RadialLinearScale,
@@ -24,21 +20,19 @@ ChartJS.register(
   Legend
 );
 
-export default function FictionRadarChart(props: any) {
-  let fictionContext = useContext(FictionContext);
-
+export default function FictionRadarChart({ fiction }: any) {
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [
       {
         label: "FDBS (admin)",
         data: [
-          fictionContext?.fiction?.fictionStat.originality,
-          fictionContext?.fiction?.fictionStat.writing,
-          fictionContext?.fiction?.fictionStat.character,
-          fictionContext?.fiction?.fictionStat.verisimilitude,
-          fictionContext?.fiction?.fictionStat.synopsisComposition,
-          fictionContext?.fiction?.fictionStat.value,
+          fiction?.fictionStat.originality,
+          fiction?.fictionStat.writing,
+          fiction?.fictionStat.character,
+          fiction?.fictionStat.verisimilitude,
+          fiction?.fictionStat.synopsisComposition,
+          fiction?.fictionStat.value,
         ],
         backgroundColor: "rgba(191, 219, 254, 0.5)",
         borderColor: "rgba(187, 187, 187, 1)",
@@ -46,16 +40,15 @@ export default function FictionRadarChart(props: any) {
       },
       {
         label: `유저 ${
-          fictionContext?.fiction?.userFictionStat?._count
-            ?.userRationOnFictions || 0
+          fiction?.userFictionStat?._count?.userRationOnFictions || 0
         }명`,
         data: [
-          fictionContext?.fiction?.userFictionStat?.originality,
-          fictionContext?.fiction?.userFictionStat?.writing,
-          fictionContext?.fiction?.userFictionStat?.character,
-          fictionContext?.fiction?.userFictionStat?.verisimilitude,
-          fictionContext?.fiction?.userFictionStat?.synopsisComposition,
-          fictionContext?.fiction?.userFictionStat?.value,
+          fiction?.userFictionStat?.originality,
+          fiction?.userFictionStat?.writing,
+          fiction?.userFictionStat?.character,
+          fiction?.userFictionStat?.verisimilitude,
+          fiction?.userFictionStat?.synopsisComposition,
+          fiction?.userFictionStat?.value,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         borderColor: "rgba(187, 187, 187, 1)",

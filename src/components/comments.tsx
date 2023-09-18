@@ -1,16 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useSWRConfig } from "swr";
 
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
-import { FictionContext } from "@/context/fictionContext";
-
-export default function Comments() {
-  let fictionContext = useContext(FictionContext);
+export default function Comments({ fiction }: any) {
   const { user } = useUser();
   const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
@@ -20,9 +17,6 @@ export default function Comments() {
 
   const [deleteComment] = useMutation(`/api/fictions/${pageQuery}/comment`);
 
-  if (!fictionContext) return <div>loading</div>;
-
-  const { fiction } = fictionContext;
   const comments = fiction?.comments;
 
   if (!comments) return <div>loading</div>;

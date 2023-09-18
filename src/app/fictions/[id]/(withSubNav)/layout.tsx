@@ -66,14 +66,16 @@ export default async function FictionLayout({
   };
 
   return (
-    <FictionProvider
-      initialData={{
-        fiction: JSON.parse(JSON.stringify(fiction)),
-        mbtis: JSON.parse(JSON.stringify(mbtis)),
-        setup: JSON.parse(JSON.stringify(setup)),
-        similarFictions: JSON.parse(JSON.stringify(similarFictions)),
-      }}
-    >
+    // <FictionProvider
+    //   initialData={{
+    //     fiction: JSON.parse(JSON.stringify(fiction)),
+    //     mbtis: JSON.parse(JSON.stringify(mbtis)),
+    //     setup: JSON.parse(JSON.stringify(setup)),
+    //     similarFictions: JSON.parse(JSON.stringify(similarFictions)),
+    //   }}
+    // >
+
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -86,7 +88,7 @@ export default async function FictionLayout({
         </div>
         {children}
       </div>
-    </FictionProvider>
+    </>
   );
 }
 
@@ -125,8 +127,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       default: `${fiction.title}`,
       template: `%s | FDBS`,
     },
-    description: fiction.setup.slice(6, 150),
-    keywords: `${fiction.title}, ${fiction.author?.name}, ${fiction.originalTitle}, ${fiction.relatedTitle}`,
+    description: fiction.setup.slice(6, 150) || "줄거리 업데이트 예정입니다.",
+    keywords: `${fiction.title}, ${fiction.author?.name}, ${fiction.originalTitle}, ${fiction?.relatedTitle}`,
     openGraph: {
       type: "website",
 

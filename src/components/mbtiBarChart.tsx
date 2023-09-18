@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,50 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import type {
-  Fiction,
-  FictionStat,
-  Keyword,
-  UserRationOnFiction,
-  Author,
-  Category,
-} from "@prisma/client";
 
 import { Bar } from "react-chartjs-2";
-import useSWR from "swr";
-import { useParams } from "next/navigation";
-
-import { FictionContext } from "@/context/fictionContext";
-
-interface FictionDetailResponse {
-  ok: boolean;
-  fiction: FictionWithMore;
-  similarFictions: Fiction[];
-  isLiked: boolean;
-  reviews: any;
-}
-
-interface FictionWithMore extends Fiction {
-  keywords: [
-    {
-      keyword: Keyword;
-    }
-  ];
-  fictionStat: FictionStat;
-  userFictionStat: {
-    userRationOnFictions: [UserRationOnFiction];
-    total: number;
-    _count: {
-      userRationOnFictions: number;
-    };
-  };
-  author: Author;
-  categories: [
-    {
-      category: Category;
-    }
-  ];
-}
 
 ChartJS.register(
   CategoryScale,
@@ -78,24 +36,14 @@ export const options = {
 };
 
 export default function MbtiBarChart({ mbtis }: any) {
-  let fictionContext = useContext(FictionContext);
-  const params = useParams();
-  const { id } = params;
-
-  const { data: fiction, mutate: boundMutate } = useSWR<FictionDetailResponse>(
-    id ? `/api/fictions/${id}` : null
-  );
-
-  if (!fiction) return <div>loading...</div>;
-
   const data = {
-    labels: Array.from(fictionContext.mbtis).map((item: any, i) => {
+    labels: Array.from(mbtis).map((item: any, i) => {
       return item?.mbti;
     }),
     datasets: [
       {
         label: "평균 평점",
-        data: Array.from(fictionContext.mbtis)
+        data: Array.from(mbtis)
           .map((item: any, i) => {
             return item?.avg;
           })

@@ -17,7 +17,7 @@ interface RateUserStatForm {
   comment: string;
 }
 
-export default function UserStat() {
+export default function UserStat({ fiction }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
