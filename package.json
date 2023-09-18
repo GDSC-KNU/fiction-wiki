@@ -32,7 +32,7 @@
     "@next-auth/prisma-adapter": "^1.0.5",
     "@next/bundle-analyzer": "^13.1.6",
     "@next/env": "^13.2.4",
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "^5.3.1",
     "@sendgrid/mail": "^7.7.0",
     "@smastrom/react-rating": "^1.2.2",
     "@types/crypto-js": "^4.1.2",

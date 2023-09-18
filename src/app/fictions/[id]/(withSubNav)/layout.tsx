@@ -24,7 +24,7 @@ export default async function FictionLayout({
     // { cache: "no-store" }
     {
       next: {
-        revalidate: 60 * 60 * 24 * 1,
+        revalidate: 60 * 60 * 24 * 2,
       },
     }
   ).then((res) => res.json());
