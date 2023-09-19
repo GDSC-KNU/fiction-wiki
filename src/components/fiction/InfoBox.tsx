@@ -15,57 +15,55 @@ export default function InfoBox({
   return (
     <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
       <div className=" col-span-7 flex-col lg:absolute lg:col-span-2">
-        <div className=" ">
-          <div className=" lg:hidden">
-            <div className=" flex-col">
-              <StarRating />
-            </div>
+        <div className=" lg:hidden">
+          <div className=" flex-col">
+            <StarRating />
           </div>
-          <div className="  h-[190px] overflow-hidden lg:h-[213px]">
-            <div className=" absolute h-[190px] w-[150px] overflow-hidden lg:relative lg:h-[213px] lg:w-[160px]">
-              <Image
-                src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
-                fill
-                className=" object-fill "
-                alt={fiction?.title}
-                placeholder="blur"
-                blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-              />
-            </div>
-            <div className=" ml-40 lg:hidden">
-              <ul className=" mb-2 inline-flex flex-wrap pt-2 text-xs">
-                {fiction?.keywords
-                  ?.filter(
-                    (item: any) =>
-                      item?.keyword?.isOfHeroine === false &&
-                      item?.keyword?.isOfMC === false &&
-                      item?.keyword?.isOfCons === false
-                  )
-                  .map((item: any, index: any) => (
-                    <li
-                      key={index}
-                      className={
-                        item?.keyword?.isOfMC
-                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-red-500"
-                          : item?.keyword?.isOfHeroine
-                          ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-blue-500"
-                          : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-[#666676]"
-                      }
+        </div>
+        <div className="  h-[190px] overflow-hidden lg:h-[213px]">
+          <div className=" absolute h-[190px] w-[150px] overflow-hidden lg:relative lg:h-[253px] lg:w-[187px]">
+            <Image
+              src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
+              fill
+              className=" object-fill "
+              alt={fiction?.title}
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+            />
+          </div>
+          <div className=" ml-40 lg:hidden">
+            <ul className=" mb-2 inline-flex flex-wrap pt-2 text-xs">
+              {fiction?.keywords
+                ?.filter(
+                  (item: any) =>
+                    item?.keyword?.isOfHeroine === false &&
+                    item?.keyword?.isOfMC === false &&
+                    item?.keyword?.isOfCons === false
+                )
+                .map((item: any, index: any) => (
+                  <li
+                    key={index}
+                    className={
+                      item?.keyword?.isOfMC
+                        ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-red-500"
+                        : item?.keyword?.isOfHeroine
+                        ? " m-1 h-fit rounded-md border-[#BBBBBB] text-center ring-2 ring-blue-500"
+                        : " m-1 h-fit cursor-pointer whitespace-nowrap rounded-3xl bg-gray-200 p-1 text-center text-[#666676]"
+                    }
+                  >
+                    <Link
+                      href={`/search/keyword/${item?.keyword?.name}/1`}
+                      passHref
                     >
-                      <Link
-                        href={`/search/keyword/${item?.keyword?.name}/1`}
-                        passHref
-                      >
-                        #{item?.keyword?.name}
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
-              <div className=" text-xs">{`${fiction?.setup.slice(
-                6,
-                140
-              )}...`}</div>
-            </div>
+                      #{item?.keyword?.name}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+            <div className=" text-xs">{`${fiction?.setup.slice(
+              6,
+              140
+            )}...`}</div>
           </div>
         </div>
       </div>

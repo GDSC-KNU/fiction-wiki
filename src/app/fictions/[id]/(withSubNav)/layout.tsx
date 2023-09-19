@@ -1,5 +1,3 @@
-import { FictionProvider } from "@/context/fictionContext";
-
 import { ReactNode } from "react";
 
 import WikiNavBar from "@components/fiction/wikiNavBar";
@@ -66,15 +64,6 @@ export default async function FictionLayout({
   };
 
   return (
-    // <FictionProvider
-    //   initialData={{
-    //     fiction: JSON.parse(JSON.stringify(fiction)),
-    //     mbtis: JSON.parse(JSON.stringify(mbtis)),
-    //     setup: JSON.parse(JSON.stringify(setup)),
-    //     similarFictions: JSON.parse(JSON.stringify(similarFictions)),
-    //   }}
-    // >
-
     <>
       <script
         type="application/ld+json"
@@ -91,8 +80,6 @@ export default async function FictionLayout({
     </>
   );
 }
-
-// export const revalidate = 60 * 60 * 24 * 30;
 
 type Props = {
   params: { id: string };
