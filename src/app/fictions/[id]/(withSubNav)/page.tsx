@@ -38,7 +38,7 @@ export default async function FictionPage({ params }: any) {
       <div id="main-container" className=" col-span-10 lg:col-span-7">
         <InfoBox fiction={fiction} />
         <div className=" mb-3 grid grid-cols-5 "></div>
-        <div className="my-10 rounded-md bg-white">
+        <div className="mb-10 rounded-md bg-white">
           <div
             className=" prose prose-slate max-w-full prose-h2:w-full  prose-table:text-xs prose-img:float-right prose-img:my-0"
             dangerouslySetInnerHTML={{ __html: setup }}
