@@ -15,14 +15,14 @@ export default function InfoBox({
   return (
     <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
       <div className=" col-span-7 flex-col lg:absolute lg:col-span-2">
-        <div className=" px-2">
+        <div className=" ">
           <div className=" lg:hidden">
             <div className=" flex-col">
               <StarRating />
             </div>
           </div>
-          <div className="  h-[190px] overflow-hidden lg:h-[270px]">
-            <div className=" absolute h-[190px] w-[150px] overflow-hidden lg:relative lg:h-[270px] lg:w-[180px]">
+          <div className="  h-[190px] overflow-hidden lg:h-[213px]">
+            <div className=" absolute h-[190px] w-[150px] overflow-hidden lg:relative lg:h-[213px] lg:w-[160px]">
               <Image
                 src={`https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`}
                 fill
