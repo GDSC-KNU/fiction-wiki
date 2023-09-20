@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
 
   const nationalityList = fictionList.map((fiction) => fiction.nationality);
   const uniqueNationalityList = Array.from(new Set(nationalityList));
+
   return NextResponse.json(
     {
       ok: true,

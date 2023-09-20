@@ -171,7 +171,7 @@ const createHistoryLog = async (
   prevFiction: any,
   updatedFiction: any,
   fictionId: number,
-  userId: number
+  userId: string
 ) => {
   const totalCharactersChanged = countCharactersChanged(
     prevFiction,
@@ -191,13 +191,23 @@ const createHistoryLog = async (
 
     await client.fictionHistory.create({
       data: {
-        fictionId,
+        // fictionId: fictionId,
+        fiction: {
+          connect: {
+            id: fictionId,
+          },
+        },
         data: toJSONCompatible(prevFiction) as Prisma.JsonObject,
         log: {
           changeLog: jsonCompatibleLog,
           charactersChanged: totalCharactersChanged,
         },
-        editedById: userId.toString(),
+        // editedById: userId.toString(),
+        editedBy: {
+          connect: {
+            id: userId,
+          },
+        },
       },
     });
   }
@@ -547,7 +557,7 @@ export async function PUT(
     },
   });
 
-  await createHistoryLog(prevFiction, updatedFiction, +id!, +token.user.id);
+  await createHistoryLog(prevFiction, updatedFiction, +id!, token.user.id);
 
   try {
     await axios.post(

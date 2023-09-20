@@ -1,10 +1,7 @@
 "use client";
 
-import { FictionContext } from "@/context/fictionContext";
-
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const WikiNavBar = () => {
   const router = useRouter();
@@ -19,7 +16,7 @@ const WikiNavBar = () => {
     { id: "read", name: "읽기", path: `/fictions/${fictionId}` },
     { id: "edit", name: "편집", path: `/fictions/${fictionId}/edit` },
     { id: "history", name: "히스토리", path: `/fictions/${fictionId}/history` },
-    { id: "share", name: "공유", path: `/fictions/${fictionId}/share` },
+    // { id: "share", name: "공유", path: `/fictions/${fictionId}/share` },
   ];
 
   const activeClass = (route: any) => {

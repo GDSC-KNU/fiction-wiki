@@ -73,7 +73,7 @@ export default function FictionSelector({
   const [checkedSortings, setCheckedSortings] = useState("");
   const [checkedReleaseTimeFilter, setCheckedReleaseTimeFilter] = useState("");
   const [checkedDateYear, setCheckedDateYear] = useState("");
-  // const [queryObject, setQueryObject] = useState<QueryObject>();
+
   const sortingList = [
     "총점",
     "캐릭터성",
@@ -84,7 +84,7 @@ export default function FictionSelector({
     "필력",
     "화수",
   ];
-  // const [page, setPage] = useRecoilState(fictionPageAtom);
+
   const searchParams = useSearchParams();
   const page = +(searchParams.get("page") || 1);
   useEffect(() => {
@@ -213,6 +213,7 @@ export default function FictionSelector({
     thisYear - 5,
   ];
 
+  // console.log(categories);
   return (
     <div className=" m-2 justify-center rounded bg-white p-2">
       <form className=" ">
@@ -322,10 +323,9 @@ export default function FictionSelector({
                       <input
                         onChange={(e) => checkHandler(e)}
                         type="checkbox"
-                        // id="genre"
                         className=" peer hidden"
                         value={category.name}
-                        name="genre"
+                        name="category"
                         // checked={checkedCategories.has(category.name)}
                       />
                       <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 ">

@@ -57,7 +57,7 @@ export default function Gnb() {
               </li>
               {isAdmin ? (
                 <li className="mr-3">
-                  <Link href="/fictions/create">Create</Link>
+                  <Link href="/fictions/create">새 문서</Link>
                 </li>
               ) : null}
             </ul>
