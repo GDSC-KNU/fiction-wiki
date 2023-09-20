@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import useSWR from "swr";
 import Image from "next/image";
-import Button from "@components/common/button";
+
 import { Button2, buttonVariants } from "@components/common/button2";
 
 import Restore from "@public/svg/restore.svg";
@@ -12,7 +12,7 @@ import { Fiction, FictionHistory, User } from "@prisma/client";
 import formatDate from "@helper/formatDate";
 import Link from "next/link";
 import { cn } from "@libs/util";
-import { JsonValue } from "@prisma/client/runtime/library";
+
 import useUser from "@libs/client/useUser";
 
 interface Data {
@@ -39,7 +39,7 @@ export default function History() {
   const { user, isAdmin } = useUser();
   const fetchKey = id ? `/api/fictions/${id}/histories` : null;
 
-  const { data, isValidating } = useSWR<Data>(fetchKey);
+  const { data } = useSWR<Data>(fetchKey);
 
   if (!data) {
     return <div>Loading...</div>;

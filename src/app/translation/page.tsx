@@ -212,6 +212,10 @@ const Translation = () => {
           href="https://www.aixdzs.com/"
         >
           aixdzs
+          <p className=" text-xs text-gray-600 no-underline">
+            (ex: https://www.aixdzs.com/read/167/167176/p1.html (모바일 URL
+            미지원))
+          </p>
         </a>
       </div>
       <div className=" mb-2 ml-5 text-gray-500">
