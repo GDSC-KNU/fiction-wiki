@@ -25,25 +25,28 @@ export async function generateMetadata(
 
   if (!author)
     return {
-      title: "FDBS | 소설위키",
-      description: "소설위키 FDBS 입니다.",
+      title: "소설위키",
+      description: "소설위키 입니다.",
       openGraph: {},
     };
 
   return {
-    title: `${author.name} | FDBS`,
+    title: {
+      template: "%s | 소설위키",
+      default: `${author.name}  | 소설위키`,
+    },
     description: author.description
       ? author.description?.slice(0, 150)
       : `${author.name} 작가의 작품 목록, SNS 등의 상세정보를 확인하세요.`,
     keywords: `${author.name}, ${author.rawName}, ${author.relatedName}`,
     openGraph: {
-      title: `${author.name} | FDBS`,
+      title: `${author.name} | 소설위키`,
       description: author.description
         ? author.description?.slice(0, 150)
         : `${author.name} 작가의 작품 목록, SNS 등의 상세정보를 확인하세요.`,
       locale: "ko_KR",
       url: `https://fictiondbs.com/authors/name/${author.name}`,
-      siteName: "FDBS",
+      siteName: "소설위키",
       images: author.fictions.map((fiction: Fiction) => fiction.image),
     },
     twitter: {

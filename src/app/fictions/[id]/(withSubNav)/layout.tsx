@@ -103,7 +103,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!fiction)
     return {
       metadataBase: new URL(config.url),
-      title: "FDBS | 소설위키",
+      title: "소설위키",
       description: fiction,
       openGraph: {},
     };
@@ -111,22 +111,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     metadataBase: new URL(config.url),
     title: {
-      default: `${fiction.title}`,
-      template: `%s | FDBS`,
+      template: "%s | 소설위키",
+      default: `${fiction.title} | 소설위키`,
     },
     description: fiction.setup.slice(6, 150) || "줄거리 업데이트 예정입니다.",
     keywords: `${fiction.title}, ${fiction.author?.name}, ${fiction.originalTitle}, ${fiction?.relatedTitle}`,
     openGraph: {
       type: "website",
 
-      title: `${fiction.title} | FDBS`,
+      title: `${fiction.title} | 소설위키`,
       description: fiction.setup.slice(6, 150),
       locale: "ko_KR",
       url: `https://fictiondbs.com/fictions/${id}`,
       images: [`${fiction.image}`],
     },
     twitter: {
-      title: `${fiction.title} | FDBS`,
+      title: `${fiction.title} | 소설위키`,
       description: fiction.setup.slice(6, 150),
       images: [`${fiction.image}`],
       site: "@fdbs",

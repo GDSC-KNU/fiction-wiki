@@ -14,9 +14,9 @@ import config from "@/config/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(config.url),
-  title: "FDBS | 웹소설위키",
+  title: "소설위키",
   description:
-    "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요.",
+    "국내외 웹소설 위키, 리뷰, 랭킹 정보를 제공합니다. 작품을 직접 검색하고 평가하세요.",
   twitter: {
     card: "summary_large_image",
     site: "@site",
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://fictiondbs.com/",
-    siteName: "FDBS",
-    title: " FDBS | 웹소설위키",
+    siteName: "소설위키",
+    title: " 소설위키",
     images: [`/fdbs_logo.png`],
   },
   icons: {
