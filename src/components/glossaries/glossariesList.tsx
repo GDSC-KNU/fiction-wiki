@@ -30,8 +30,9 @@ export default function GlossariesList() {
     ""
   );
 
-  const { data: searchData } = useSWR<ISearchData>(
-    `${process.env.NEXT_PUBLIC_HOST}/api/glossaries?${queryString}`
+  const { data: searchData, isValidating } = useSWR<ISearchData>(
+    `${process.env.NEXT_PUBLIC_HOST}/api/glossaries?${queryString}`,
+    { suspense: true }
   );
 
   const searchHandler = async (e: any) => {
@@ -108,46 +109,43 @@ export default function GlossariesList() {
             </tr>
           </thead>
           <tbody>
-            {searchData &&
-              searchData.glossaries.map((glossary) => (
-                <Fragment key={glossary.id}>
-                  <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                    <td className="">
-                      <div className="flex items-center"></div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap px-2 py-1 font-medium text-gray-900 dark:text-white"
-                    >
-                      <div className=" flex flex-col">
-                        <div>{glossary.fiction.title}</div>
-                        <div className=" text-xs text-gray-600">
-                          {glossary.fiction.originalTitle}
-                        </div>
+            {searchData?.glossaries.map((glossary) => (
+              <Fragment key={glossary.id}>
+                <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                  <td className="">
+                    <div className="flex items-center"></div>
+                  </td>
+                  <th
+                    scope="row"
+                    className="whitespace-nowrap px-2 py-1 font-medium text-gray-900 dark:text-white"
+                  >
+                    <div className=" flex flex-col">
+                      <div>{glossary.fiction.title}</div>
+                      <div className=" text-xs text-gray-600">
+                        {glossary.fiction.originalTitle}
                       </div>
-                    </th>
-                    <td className="px-2 py-1">{glossary.chinese}</td>
-                    <td className="px-2 py-1">{glossary.korean}</td>
-                    <td className="px-2 py-1">{glossary.category}</td>
-                    <td className="px-2 py-1">
-                      <a
-                        href="#"
-                        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                      ></a>
-                    </td>
-                  </tr>
-                </Fragment>
-              ))}
+                    </div>
+                  </th>
+                  <td className="px-2 py-1">{glossary.chinese}</td>
+                  <td className="px-2 py-1">{glossary.korean}</td>
+                  <td className="px-2 py-1">{glossary.category}</td>
+                  <td className="px-2 py-1">
+                    <a
+                      href="#"
+                      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                    ></a>
+                  </td>
+                </tr>
+              </Fragment>
+            ))}
           </tbody>
         </table>
       </div>
-      {
-        <GlossariesPagination
-          showingCount={searchData?.glossaries.length}
-          count={searchData?.glossariesCount}
-          setQueryObject={setQueryObject}
-        />
-      }
+      <GlossariesPagination
+        showingCount={searchData?.glossaries.length}
+        count={searchData?.glossariesCount}
+        setQueryObject={setQueryObject}
+      />
     </div>
   );
 }
