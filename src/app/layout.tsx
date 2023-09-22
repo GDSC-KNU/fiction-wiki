@@ -43,10 +43,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           name="naver-site-verification"
           content="30cd8ea963377b6866389d39ec426e76543df5cd"
         />
-        {/* <Script
+        <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-        /> */}
+        />
         <Script
           id="gtag-init"
           strategy="afterInteractive"
