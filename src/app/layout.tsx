@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(config.url),
   title: "소설위키",
   description:
-    "국내외 웹소설 위키, 리뷰, 랭킹 정보를 제공합니다. 작품을 직접 검색하고 평가하세요.",
+    "국내외 소설들의 위키, 리뷰, 랭킹 정보를 제공합니다. 작품을 직접 검색하고 평가하세요.",
   twitter: {
     card: "summary_large_image",
     site: "@site",

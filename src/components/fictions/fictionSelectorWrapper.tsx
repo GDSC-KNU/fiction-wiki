@@ -9,8 +9,6 @@ import {
   Author,
   Category,
 } from "@prisma/client";
-import { Suspense } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 
 import React, { useMemo, useState } from "react";
 
@@ -20,6 +18,7 @@ import useSWR from "swr";
 import { ParsedUrlQueryInput } from "querystring";
 
 import FictionSelector from "@components/fictions/fictionSelector";
+import { useSearchParams } from "next/navigation";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -48,9 +47,9 @@ interface FictionsResponse {
 }
 
 interface QueryObject extends ParsedUrlQueryInput {
-  keywords: string;
+  keywords: string[];
   nationalities: string;
-  categories: string;
+  categories: string[];
   sorting: string;
   releaseTimeFilter: string;
   dateYear: string;
@@ -68,26 +67,35 @@ interface FictionSelectorProps {
 export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
+  const searchParams = useSearchParams();
   const [queryObject, setQueryObject] = useState<QueryObject>({
-    keywords: "all",
-    nationalities: "all",
-    categories: "all",
-    sorting: "all",
-    releaseTimeFilter: "all",
-    dateYear: "all",
-    page: 1,
+    keywords: searchParams.get("keywords")?.split(",") || [],
+    nationalities: searchParams.get("nationalities") || "all",
+    categories: searchParams.get("categories")?.split(",") || [],
+    sorting: searchParams.get("sorting") || "all",
+    releaseTimeFilter: searchParams.get("releaseTimeFilter") || "all",
+    dateYear: searchParams.get("dateYear") || "all",
+    page: parseInt(searchParams.get("page") || "1"),
   });
 
   let queryString = useMemo(() => {
     const queryString = Object.entries(queryObject)
-      .map(([key, value]) => `${key}=${value}`)
+      .map(
+        ([key, value]) =>
+          `${key}=${
+            Array.isArray(value)
+              ? value.length
+                ? value.join(",")
+                : "all"
+              : value
+          }`
+      )
       .join("&");
 
     if (queryString === "undefined") {
       return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}`;
-    }
-
-    return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${queryString}`;
+    } else
+      return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${queryString}`;
   }, [queryObject]);
 
   const { data } = useSWR<FictionsResponse>(queryString);

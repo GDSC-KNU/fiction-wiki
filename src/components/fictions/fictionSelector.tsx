@@ -34,9 +34,9 @@ interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
 }
 
 interface QueryObject extends ParsedUrlQueryInput {
-  keywords: string;
+  keywords: string[];
   nationalities: string;
-  categories: string;
+  categories: string[];
   sorting: string;
   releaseTimeFilter: string;
   dateYear: string;
@@ -52,6 +52,16 @@ interface FictionSelectorProps {
   queryObject: QueryObject;
   setQueryObject: React.Dispatch<React.SetStateAction<QueryObject>>;
 }
+
+type UpdatedQueryObjectType = {
+  keywords: string[];
+  nationalities: string;
+  categories: string[];
+  sorting: string;
+  releaseTimeFilter: string;
+  dateYear: string;
+  page: number;
+};
 
 export default function FictionSelector({
   staticData,
@@ -87,34 +97,6 @@ export default function FictionSelector({
 
   const searchParams = useSearchParams();
   const page = +(searchParams.get("page") || 1);
-  useEffect(() => {
-    const updatedQueryObject = {
-      keywords: Array.from(checkedItems).sort().reverse().join(",") || "all",
-      nationalities:
-        Array.from(checkedNationalities).sort().reverse().join(",") || "all",
-      categories:
-        Array.from(checkedCategories).sort().reverse().join(",") || "all",
-      sorting: checkedSortings || "all",
-      releaseTimeFilter: checkedReleaseTimeFilter.toString() || "all",
-      dateYear:
-        checkedReleaseTimeFilter.toString() === "전체"
-          ? "all"
-          : checkedDateYear || "all",
-      // page 초기화
-      page: queryObject.page == page ? 1 : +page,
-    };
-
-    setQueryObject(updatedQueryObject);
-  }, [
-    checkedItems,
-    checkedNationalities,
-    checkedCategories,
-    checkedSortings,
-    checkedReleaseTimeFilter,
-    checkedDateYear,
-    page,
-    setQueryObject,
-  ]);
 
   const checkHandler = ({
     currentTarget,
@@ -124,83 +106,72 @@ export default function FictionSelector({
 
   const checkedItemHandler = (target: EventTarget & HTMLInputElement) => {
     const { value, checked: isChecked, name } = target;
+    const updatedQueryObject = { ...queryObject };
 
-    if (isChecked) {
-      switch (name) {
-        case "keyword":
-          setCheckedItems((prev) => new Set([...prev, value]));
-          break;
-        case "nationality":
-          setCheckedNationalities((prev) => new Set([...prev, value]));
-          break;
-        case "category":
-          setCheckedCategories((prev) => new Set([...prev, value]));
-          break;
-        case "sorting":
-          setCheckedSortings(() => value);
-          break;
-        case "releaseTimeFilter":
-          setCheckedReleaseTimeFilter((prev) => {
-            if (prev === "전체") setCheckedDateYear("all");
-            return value;
-          });
-          break;
-        case "dateYear":
-          setCheckedDateYear(() => value);
-          break;
-        default:
-          break;
-      }
-    } else {
-      switch (name) {
-        case "keyword":
-          setCheckedItems((prev) => {
-            prev.delete(value);
-            return new Set([...prev]);
-          });
-          break;
-        case "nationality":
-          setCheckedNationalities((prev) => {
-            prev.delete(value);
-            return new Set([...prev]);
-          });
-          break;
-        case "category":
-          setCheckedCategories((prev) => {
-            prev.delete(value);
-            return new Set([...prev]);
-          });
-          break;
-        case "sorting":
-          setCheckedSortings(() => "");
-          break;
-        case "releaseTimeFilter":
-          setCheckedReleaseTimeFilter(() => "전체");
-          break;
-        case "dateYear":
-          setCheckedDateYear(() => "");
-          break;
-        default:
-          break;
-      }
-    }
-  };
-
-  useEffect(() => {
-    const path = {
-      pathname: "/fictions",
-      query: queryObject,
+    const updateArr = (name: "keywords" | "categories", value: string) => {
+      if (isChecked) updatedQueryObject[name].push(value);
+      else
+        updatedQueryObject[name] = updatedQueryObject[name].filter(
+          (item) => item !== value
+        );
     };
 
+    switch (name) {
+      case "keyword":
+        updateArr("keywords", value);
+        break;
+      case "nationalities":
+        // updateArr("nationalities", value);
+        updatedQueryObject.nationalities = isChecked ? value : "all";
+        break;
+      case "category":
+        updateArr("categories", value);
+        break;
+      case "sorting":
+        updatedQueryObject.sorting = isChecked ? value : "all";
+        break;
+      case "releaseTimeFilter":
+        updatedQueryObject.releaseTimeFilter = isChecked ? value : "all";
+        if (updatedQueryObject.releaseTimeFilter === "전체")
+          updatedQueryObject.dateYear = "all";
+        break;
+      case "dateYear":
+        updatedQueryObject.dateYear = isChecked ? value : "all";
+        break;
+      // case "page":
+      //   updatedQueryObject.page = isChecked ? +value : 1;
+      //   break;
+      default:
+        break;
+    }
+
+    // Finally, set the updated queryObject
+    setQueryObject(updatedQueryObject);
+  };
+
+  let queryString = useMemo(() => {
     const queryString = Object.entries(queryObject)
-      .map(([key, value]) => `${key}=${value}`)
+      .map(
+        ([key, value]) =>
+          `${key}=${
+            Array.isArray(value)
+              ? value.length
+                ? value.join(",")
+                : "all"
+              : value
+          }`
+      )
       .join("&");
 
-    const baseUrl = process.env.NEXT_PUBLIC_HOST + "/fictions";
-    const newUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-
-    window.history.pushState(null, "", newUrl);
+    if (queryString === "undefined") {
+      return `${process.env.NEXT_PUBLIC_HOST + "/fictions"}`;
+    } else
+      return `${process.env.NEXT_PUBLIC_HOST + "/fictions"}?${queryString}`;
   }, [queryObject]);
+
+  useEffect(() => {
+    window.history.pushState(null, "", queryString);
+  }, [queryObject, queryString]);
 
   const releaseTimeFilters = ["전체", "연도별"];
   const thisYear = new Date().getFullYear();
@@ -213,7 +184,7 @@ export default function FictionSelector({
     thisYear - 5,
   ];
 
-  // console.log(categories);
+  console.log(queryObject);
   return (
     <div className=" m-2 justify-center rounded bg-white p-2">
       <form className=" ">
@@ -231,7 +202,7 @@ export default function FictionSelector({
                   // id="releaseTimeFilter"
                   value={criteria}
                   name="releaseTimeFilter"
-                  checked={checkedReleaseTimeFilter === criteria}
+                  checked={queryObject.releaseTimeFilter === criteria}
                 />
                 <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-lg  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
                   {criteria}
@@ -240,7 +211,7 @@ export default function FictionSelector({
             ))}
           </div>
           <div className=" mb-2 flex">
-            {checkedReleaseTimeFilter === "연도별" ? (
+            {queryObject.releaseTimeFilter === "연도별" &&
               yearDummy.map((year, i) => (
                 <label key={i} className=" flex cursor-pointer">
                   <input
@@ -250,16 +221,13 @@ export default function FictionSelector({
                     // id="dateYear"
                     value={year}
                     name="dateYear"
-                    checked={+checkedDateYear === year}
+                    checked={queryObject.dateYear === year.toString()}
                   />
                   <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-xs peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
                     {year}
                   </div>
                 </label>
-              ))
-            ) : (
-              <></>
-            )}
+              ))}
           </div>
         </div>
         <h5 className=" border-b-2 text-sm text-gray-400">Filter by options</h5>
@@ -276,19 +244,21 @@ export default function FictionSelector({
               <tr>
                 <th className=" min-w-[35px]">국가</th>
                 <td className=" flex flex-wrap leading-[1.8rem]">
-                  {nationalities.map((nationality, i) => (
+                  {nationalities.map((nationalities, i) => (
                     <label key={i + 1} className=" flex cursor-pointer">
                       <input
                         onChange={(e) => checkHandler(e)}
                         type="checkbox"
                         className=" peer hidden"
                         // id="nationality"
-                        value={nationality}
-                        name="nationality"
-                        // checked={checkedNationalities.has(nationality)}
+                        value={nationalities}
+                        name="nationalities"
+                        checked={queryObject.nationalities?.includes(
+                          nationalities
+                        )}
                       />
                       <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
-                        {nationality}
+                        {nationalities}
                       </div>
                     </label>
                   ))}
@@ -306,7 +276,7 @@ export default function FictionSelector({
                         id="sorting"
                         value={sorting}
                         name="sorting"
-                        checked={sorting === checkedSortings}
+                        checked={queryObject.sorting === sorting}
                       ></input>
                       <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 ">
                         {sorting}
@@ -326,7 +296,9 @@ export default function FictionSelector({
                         className=" peer hidden"
                         value={category.name}
                         name="category"
-                        // checked={checkedCategories.has(category.name)}
+                        checked={queryObject.categories?.includes(
+                          category.name
+                        )}
                       />
                       <div className=" mx-[0.35rem] mt-1  rounded-md border-[0.5px] border-[#BBBBBB] p-[0.12rem] text-center text-sm  ring-gray-500 peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200 ">
                         {category.name}
@@ -362,6 +334,7 @@ export default function FictionSelector({
                     className=" peer hidden"
                     value={keyword?.name}
                     name="keyword"
+                    checked={queryObject.keywords?.includes(keyword?.name)}
                   />
                   <div className=" ml-[0.2rem] mt-1 h-fit cursor-pointer whitespace-nowrap rounded-lg border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200  ">
                     {keyword?.name}
