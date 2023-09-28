@@ -31,12 +31,12 @@ export async function GET(
 ) {
   // let { keywords, categories, nationalities, sorting, page, dateYear } = params;
   let searchparams = req.nextUrl.searchParams;
-  let keywords = searchparams.get("keywords");
-  let categories = searchparams.get("categories");
-  let nationalities = searchparams.get("nationalities");
+  let keywords = searchparams.get("keywords") || "all";
+  let categories = searchparams.get("categories") || "all";
+  let nationalities = searchparams.get("nationalities") || "all";
   let sorting = searchparams.get("sorting");
-  let page = searchparams.get("page");
-  let dateYear = searchparams.get("dateYear");
+  let page = searchparams.get("page") || 1;
+  let dateYear = searchparams.get("dateYear") || "all";
   // const cache: any = await redis.get(JSON.stringify(req?.query));
 
   // if (cache) {

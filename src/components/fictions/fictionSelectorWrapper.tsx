@@ -10,15 +10,16 @@ import {
   Category,
 } from "@prisma/client";
 
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
 
-import { ParsedUrlQueryInput } from "querystring";
-
 import FictionSelector from "@components/fictions/fictionSelector";
-import { useSearchParams } from "next/navigation";
+
+import { useQueryObject } from "@/hooks/useQueryObject";
+import { useHrefChangeNotifier } from "@/hooks/useHrefChangeNotifier";
+import Pagination from "@components/fictions/pagination";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -46,16 +47,6 @@ interface FictionsResponse {
   nationalities: string[];
 }
 
-interface QueryObject extends ParsedUrlQueryInput {
-  keywords: string[];
-  nationalities: string;
-  categories: string[];
-  sorting: string;
-  releaseTimeFilter: string;
-  dateYear: string;
-  page: number;
-}
-
 interface FictionSelectorProps {
   staticData: {
     keywordList: Keyword[];
@@ -67,52 +58,35 @@ interface FictionSelectorProps {
 export default function FictionSelectorWrapper({
   staticData,
 }: FictionSelectorProps) {
-  const searchParams = useSearchParams();
-  const [queryObject, setQueryObject] = useState<QueryObject>({
-    keywords: searchParams.get("keywords")?.split(",") || [],
-    nationalities: searchParams.get("nationalities") || "all",
-    categories: searchParams.get("categories")?.split(",") || [],
-    sorting: searchParams.get("sorting") || "all",
-    releaseTimeFilter: searchParams.get("releaseTimeFilter") || "all",
-    dateYear: searchParams.get("dateYear") || "all",
-    page: parseInt(searchParams.get("page") || "1"),
-  });
+  const { queryString } = useQueryObject();
 
-  let queryString = useMemo(() => {
-    const queryString = Object.entries(queryObject)
-      .map(
-        ([key, value]) =>
-          `${key}=${
-            Array.isArray(value)
-              ? value.length
-                ? value.join(",")
-                : "all"
-              : value
-          }`
-      )
-      .join("&");
+  const { data } = useSWR<FictionsResponse>(
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`
+  );
 
-    if (queryString === "undefined") {
-      return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}`;
-    } else
-      return `${process.env.NEXT_PUBLIC_HOST + "/api/fictions"}?${queryString}`;
-  }, [queryObject]);
-
-  const { data } = useSWR<FictionsResponse>(queryString);
+  useHrefChangeNotifier();
 
   return (
     <>
       <FictionSelector
         staticData={staticData}
-        queryObject={queryObject}
-        setQueryObject={setQueryObject}
+        // queryObject={queryObject}
+        // setQueryObject={setQueryObject}
       />
       {data && (
-        <FictionList
-          data={data?.fictions || {}}
-          type={"fictions_list"}
-          count={data?.fictionsCount || 0}
-        />
+        <>
+          <FictionList
+            data={data?.fictions || {}}
+            type={"fictions_list"}
+            count={data?.fictionsCount || 0}
+            pagination={false}
+          />
+          <Pagination
+            totalItemsCount={data?.fictionsCount || 0}
+            totalPagesCount={Math.ceil((data?.fictionsCount || 1) / 18)}
+            pageRangeDisplayed={5}
+          />
+        </>
       )}
     </>
   );

@@ -12,6 +12,13 @@ export default async function FictionsPage() {
     }
   ).then((res) => res.json());
 
+  // const staticDataWithAll = {
+  //   ...staticData,
+  //   categoryList: [{ id: 1111, name: "all" }, ...staticData.categoryList],
+  //   keywordList: [{ id: 1111, name: "all" }, ...staticData.keywordList],
+  //   nationalityList: ["all", ...staticData.nationalityList],
+  // };
+
   return (
     <>
       <FictionSelectorWrapper staticData={staticData} />

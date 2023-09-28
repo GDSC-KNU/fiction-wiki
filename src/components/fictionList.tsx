@@ -57,7 +57,7 @@ export default function FictionList({
 }: {
   data: any;
   type: string;
-  pagination?: any;
+  pagination?: boolean;
   checkedParams?: any;
   authorsCount?: number;
   count?: number;

@@ -1,47 +1,12 @@
-import {
-  Fiction,
-  Keyword,
-  FictionStat,
-  KeywordsOnFictions,
-  UserFictionStat,
-  Author,
-  Category,
-} from "@prisma/client";
+import { Keyword, Category } from "@prisma/client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
-
-import { ParsedUrlQueryInput } from "querystring";
 
 import ExpandDown from "@public/svg/expandDown.svg";
 import CollapseUp from "@public/svg/collapseUp.svg";
 
-interface UserFictionStatWithMore extends UserFictionStat {
-  _count: {
-    users: number;
-  };
-}
-
-interface FictionWithMore extends Fiction {
-  keywords: [KeywordsOnFictionsWithMore];
-  fictionStat: [FictionStat];
-  userFictionStat: UserFictionStatWithMore;
-  author: Author;
-}
-
-interface KeywordsOnFictionsWithMore extends KeywordsOnFictions {
-  keyword: Keyword;
-}
-
-interface QueryObject extends ParsedUrlQueryInput {
-  keywords: string[];
-  nationalities: string;
-  categories: string[];
-  sorting: string;
-  releaseTimeFilter: string;
-  dateYear: string;
-  page: number;
-}
+import { useQueryObject } from "@/hooks/useQueryObject";
 
 interface FictionSelectorProps {
   staticData: {
@@ -49,25 +14,11 @@ interface FictionSelectorProps {
     nationalityList: string[];
     categoryList: Category[];
   };
-  queryObject: QueryObject;
-  setQueryObject: React.Dispatch<React.SetStateAction<QueryObject>>;
 }
 
-type UpdatedQueryObjectType = {
-  keywords: string[];
-  nationalities: string;
-  categories: string[];
-  sorting: string;
-  releaseTimeFilter: string;
-  dateYear: string;
-  page: number;
-};
+export default function FictionSelector({ staticData }: FictionSelectorProps) {
+  const { updateQueryObject, queryObject } = useQueryObject();
 
-export default function FictionSelector({
-  staticData,
-  queryObject,
-  setQueryObject,
-}: FictionSelectorProps) {
   const {
     keywordList: keywords,
     nationalityList: nationalities,
@@ -77,12 +28,6 @@ export default function FictionSelector({
   const [isExpanded, setIsExpanded] = useState(true);
 
   //세부 필터링
-  const [checkedItems, setCheckedItems] = useState(new Set());
-  const [checkedCategories, setCheckedCategories] = useState(new Set());
-  const [checkedNationalities, setCheckedNationalities] = useState(new Set());
-  const [checkedSortings, setCheckedSortings] = useState("");
-  const [checkedReleaseTimeFilter, setCheckedReleaseTimeFilter] = useState("");
-  const [checkedDateYear, setCheckedDateYear] = useState("");
 
   const sortingList = [
     "총점",
@@ -101,79 +46,10 @@ export default function FictionSelector({
   const checkHandler = ({
     currentTarget,
   }: React.ChangeEvent<HTMLInputElement>) => {
-    checkedItemHandler(currentTarget);
+    updateQueryObject(currentTarget);
   };
 
-  const checkedItemHandler = (target: EventTarget & HTMLInputElement) => {
-    const { value, checked: isChecked, name } = target;
-    const updatedQueryObject = { ...queryObject };
-
-    const updateArr = (name: "keywords" | "categories", value: string) => {
-      if (isChecked) updatedQueryObject[name].push(value);
-      else
-        updatedQueryObject[name] = updatedQueryObject[name].filter(
-          (item) => item !== value
-        );
-    };
-
-    switch (name) {
-      case "keyword":
-        updateArr("keywords", value);
-        break;
-      case "nationalities":
-        // updateArr("nationalities", value);
-        updatedQueryObject.nationalities = isChecked ? value : "all";
-        break;
-      case "category":
-        updateArr("categories", value);
-        break;
-      case "sorting":
-        updatedQueryObject.sorting = isChecked ? value : "all";
-        break;
-      case "releaseTimeFilter":
-        updatedQueryObject.releaseTimeFilter = isChecked ? value : "all";
-        if (updatedQueryObject.releaseTimeFilter === "전체")
-          updatedQueryObject.dateYear = "all";
-        break;
-      case "dateYear":
-        updatedQueryObject.dateYear = isChecked ? value : "all";
-        break;
-      // case "page":
-      //   updatedQueryObject.page = isChecked ? +value : 1;
-      //   break;
-      default:
-        break;
-    }
-
-    // Finally, set the updated queryObject
-    setQueryObject(updatedQueryObject);
-  };
-
-  let queryString = useMemo(() => {
-    const queryString = Object.entries(queryObject)
-      .map(
-        ([key, value]) =>
-          `${key}=${
-            Array.isArray(value)
-              ? value.length
-                ? value.join(",")
-                : "all"
-              : value
-          }`
-      )
-      .join("&");
-
-    if (queryString === "undefined") {
-      return `${process.env.NEXT_PUBLIC_HOST + "/fictions"}`;
-    } else
-      return `${process.env.NEXT_PUBLIC_HOST + "/fictions"}?${queryString}`;
-  }, [queryObject]);
-
-  useEffect(() => {
-    window.history.pushState(null, "", queryString);
-  }, [queryObject, queryString]);
-
-  const releaseTimeFilters = ["전체", "연도별"];
+  // const releaseTimeFilters = ["전체", "연도별"];
   const thisYear = new Date().getFullYear();
   const yearDummy = [
     thisYear,
@@ -184,16 +60,13 @@ export default function FictionSelector({
     thisYear - 5,
   ];
 
-  console.log(queryObject);
   return (
     <div className=" m-2 justify-center rounded bg-white p-2">
       <form className=" ">
         <div>
-          <h5 className=" border-b-2 text-sm text-gray-400">
-            Filter by Release Time
-          </h5>
+          <h5 className=" border-b-2 text-gray-400">연도별</h5>
           <div className=" flex flex-wrap leading-[1.8rem]">
-            {releaseTimeFilters.map((criteria, i) => (
+            {/* {releaseTimeFilters.map((criteria, i) => (
               <label key={i} className=" flex cursor-pointer">
                 <input
                   onChange={(e) => checkHandler(e)}
@@ -208,29 +81,28 @@ export default function FictionSelector({
                   {criteria}
                 </div>
               </label>
-            ))}
+            ))} */}
           </div>
           <div className=" mb-2 flex">
-            {queryObject.releaseTimeFilter === "연도별" &&
-              yearDummy.map((year, i) => (
-                <label key={i} className=" flex cursor-pointer">
-                  <input
-                    onChange={(e) => checkHandler(e)}
-                    type="checkbox"
-                    className=" peer hidden"
-                    // id="dateYear"
-                    value={year}
-                    name="dateYear"
-                    checked={queryObject.dateYear === year.toString()}
-                  />
-                  <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-xs peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
-                    {year}
-                  </div>
-                </label>
-              ))}
+            {yearDummy.map((year, i) => (
+              <label key={i} className=" flex cursor-pointer">
+                <input
+                  onChange={(e) => checkHandler(e)}
+                  type="checkbox"
+                  className=" peer hidden"
+                  // id="dateYear"
+                  value={year}
+                  name="dateYear"
+                  checked={queryObject.dateYear === year.toString()}
+                />
+                <div className=" mx-[0.35rem] mt-1  p-[0.12rem] text-center text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200">
+                  {year}
+                </div>
+              </label>
+            ))}
           </div>
         </div>
-        <h5 className=" border-b-2 text-sm text-gray-400">Filter by options</h5>
+        <h5 className=" border-b-2 text-gray-400">분류별</h5>
         <div className=" ">
           <table className=" leading-7">
             <thead>
@@ -295,7 +167,7 @@ export default function FictionSelector({
                         type="checkbox"
                         className=" peer hidden"
                         value={category.name}
-                        name="category"
+                        name="categories"
                         checked={queryObject.categories?.includes(
                           category.name
                         )}
@@ -333,7 +205,7 @@ export default function FictionSelector({
                     // id="keyword"
                     className=" peer hidden"
                     value={keyword?.name}
-                    name="keyword"
+                    name="keywords"
                     checked={queryObject.keywords?.includes(keyword?.name)}
                   />
                   <div className=" ml-[0.2rem] mt-1 h-fit cursor-pointer whitespace-nowrap rounded-lg border-[#BBBBBB]  bg-gray-200 p-1 text-center text-sm text-[#666676] peer-checked:bg-blue-600 peer-checked:text-white hover:border-gray-400 hover:bg-gray-200  ">
