@@ -18,7 +18,6 @@ import useSWR from "swr";
 import FictionSelector from "@components/fictions/fictionSelector";
 
 import { useQueryObject } from "@/hooks/useQueryObject";
-import { useHrefChangeNotifier } from "@/hooks/useHrefChangeNotifier";
 import Pagination from "@components/fictions/pagination";
 
 interface UserFictionStatWithMore extends UserFictionStat {
@@ -64,15 +63,9 @@ export default function FictionSelectorWrapper({
     `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`
   );
 
-  useHrefChangeNotifier();
-
   return (
     <>
-      <FictionSelector
-        staticData={staticData}
-        // queryObject={queryObject}
-        // setQueryObject={setQueryObject}
-      />
+      <FictionSelector staticData={staticData} />
       {data && (
         <>
           <FictionList
