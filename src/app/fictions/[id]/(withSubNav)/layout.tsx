@@ -30,37 +30,40 @@ export default async function FictionLayout({
   const { fiction, mbtis, setup, similarFictions } = await response;
 
   const structuredReviewData = {
-    "@context": "https://schema.org",
-    "@type": "Book",
-    name: fiction?.title,
-    image: fiction?.image,
-    description: fiction?.setup.slice(6, 150) + "...",
-    genre: fiction?.categories?.[0]?.category?.name,
-    keywords: fiction?.keywords.reduce(
-      (acc: any, cur: any) => acc + cur.keyword.name + ",",
-      ""
-    ),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: +fiction?.userFictionStat?.total || 0,
-      reviewCount: +fiction?.userFictionStat?.userRationOnFictions?.length || 0,
-      bestRating: "5",
-      worstRating: "0",
-    },
-    author: {
-      "@type": "Person",
-      name: fiction?.author?.name,
-    },
-    url: `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
-    workExample: [
-      {
-        "@type": "Book",
-        "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
-        isbn: "",
-        bookEdition: "",
-        bookFormat: "https://schema.org/EBook",
+    __html: {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      name: fiction?.title,
+      image: fiction?.image,
+      description: fiction?.setup.slice(6, 150) + "...",
+      genre: fiction?.categories?.[0]?.category?.name,
+      keywords: fiction?.keywords.reduce(
+        (acc: any, cur: any) => acc + cur.keyword.name + ",",
+        ""
+      ),
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: +fiction?.userFictionStat?.total || 0,
+        reviewCount:
+          +fiction?.userFictionStat?.userRationOnFictions?.length || 0,
+        bestRating: "5",
+        worstRating: "0",
       },
-    ],
+      author: {
+        "@type": "Person",
+        name: fiction?.author?.name,
+      },
+      url: `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
+      workExample: [
+        {
+          "@type": "Book",
+          "@id": `${process.env.NEXT_PUBLIC_HOST}/${fiction?.id}`,
+          isbn: "",
+          bookEdition: "",
+          bookFormat: "https://schema.org/EBook",
+        },
+      ],
+    },
   };
 
   return (
@@ -70,6 +73,7 @@ export default async function FictionLayout({
         dangerouslySetInnerHTML={{
           __html: JSON.parse(JSON.stringify(structuredReviewData)),
         }}
+        key="product-jsonld"
       />
       <div className=" block lg:flex">
         <div className="static left-0 lg:fixed lg:h-screen lg:w-24 lg:py-10 ">
