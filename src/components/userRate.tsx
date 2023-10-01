@@ -71,7 +71,6 @@ export default function UserStat({ fiction }: any) {
     }, 5000);
     btnOnOff();
     if (!session) {
-      console.log(session);
       alert("로그인 해주세요");
       btnOnOff();
       return;
@@ -90,10 +89,14 @@ export default function UserStat({ fiction }: any) {
       return;
     }
 
-    rateUserStat(data, "POST");
+    await rateUserStat(data, "POST");
     reset();
     closeDetails();
     btnOnOff();
+
+    // const currentUrl = new URL(window.location.href);
+    // currentUrl.searchParams.set("nocache", new Date().getTime().toString());
+    // window.location.href = currentUrl.toString();
   };
 
   useEffect(() => {
