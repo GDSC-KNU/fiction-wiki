@@ -300,8 +300,9 @@ export default async function extractor({
           clientID,
           clientKey,
         });
-        let imgUrl =
-          $index('[itemprop="image"]')?.attr("src")?.toString() || "";
+        // let imgUrl =
+        //   $index('[itemprop="image"]')?.attr("src")?.toString() || "";
+        let imgUrl = $index(".d_af.fdl img").attr("src")?.toString() || "";
 
         let volume = $index("#i-chapter > ul").find("li").length;
         let rawsynopsis = $index(".d_co").text();
@@ -311,6 +312,7 @@ export default async function extractor({
           clientKey,
         });
 
+        console.log(imgUrl, translatedTitle);
         /// download and upload image
         const { id: imageId } = await downloadAndUploadImage(
           imgUrl,

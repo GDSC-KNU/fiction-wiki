@@ -17,7 +17,7 @@ export function useQueryObject() {
 
     const updatedQueryObject = {
       ...queryObject,
-      page: 1, // assuming you always want to reset the page on any update
+      page: 1, 
       [name]: ["keywords", "categories"].includes(name)
         ? updateArr(name, value, isChecked)
         : isChecked

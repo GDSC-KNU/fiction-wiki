@@ -10,19 +10,18 @@ export async function downloadAndUploadImage(
     const response = await axios.get(imgUrl, {
       responseType: "arraybuffer",
     });
-    console.log(typeof response)
-    console.log(response)
+    // console.log(typeof response);
+    // console.log(response);
     // Create a FormData instance
     const formData = new FormData();
     formData.append("file", Buffer.from(response.data), {
       contentType: response.headers["content-type"],
       filename: translatedTitle,
     });
-    
 
     // Fetch the uploadURL from your API route
     const { uploadURL } = await (
-      await fetch(`${process.env.NEXTAUTH_URL}/api/files`, {
+      await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/files`, {
         method: "GET",
       })
     ).json();
@@ -31,7 +30,7 @@ export async function downloadAndUploadImage(
     const { data } = await axios.post(uploadURL, formData, {
       headers: formData.getHeaders(),
     });
-
+    // console.log(data);
     const {
       result: { id },
     } = data;

@@ -94,9 +94,9 @@ export default function UserStat({ fiction }: any) {
     closeDetails();
     btnOnOff();
 
-    // const currentUrl = new URL(window.location.href);
-    // currentUrl.searchParams.set("nocache", new Date().getTime().toString());
-    // window.location.href = currentUrl.toString();
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("nocache", new Date().getTime().toString());
+    window.location.href = currentUrl.toString();
   };
 
   useEffect(() => {
