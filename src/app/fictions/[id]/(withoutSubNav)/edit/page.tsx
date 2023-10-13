@@ -332,7 +332,9 @@ export default function EditFiction({ params }: { params: any }) {
 
   const typeOptions = [
     { label: "웹소설", value: "웹소설" },
+    { label: "일반소설", value: "일반소설" },
     { label: "웹툰", value: "웹툰" },
+    { label: "일반만화", value: "일반만화" },
   ];
 
   const nationalityOptions = [

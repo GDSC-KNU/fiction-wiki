@@ -14,12 +14,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import {
-
-  FormProvider,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 
 import DropdownSearchCheckbox from "@components/common/dropdownSearchCheckbox";
 import KeywordsInputBox from "@components/common/keywordsInputBox";
@@ -29,7 +24,6 @@ import WikiDetailFormModal from "@components/fiction/wikiDetailFormModal";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
-
 
 interface CreateFictionForm {
   title: string;
@@ -178,7 +172,9 @@ const Create: NextPage = () => {
   const handleClose = () => setIsOpen(false);
   const typeOptions = [
     { label: "웹소설", value: "웹소설" },
+    { label: "일반소설", value: "일반소설" },
     { label: "웹툰", value: "웹툰" },
+    { label: "일반만화", value: "일반만화" },
   ];
 
   const nationalityOptions = [
