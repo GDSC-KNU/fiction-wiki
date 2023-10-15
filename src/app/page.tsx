@@ -74,7 +74,7 @@ export default async function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "FDBS | 소설위키",
+  title: "소설위키",
   description:
     "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요.",
 
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://fictiondbs.com/",
-    siteName: "FDBS",
-    title: " FDBS | 소설위키",
+    siteName: "소설위키",
+    title: "소설위키",
   },
 };
