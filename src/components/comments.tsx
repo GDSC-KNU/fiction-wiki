@@ -2,14 +2,26 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { useSWRConfig } from "swr";
+import Image from "next/image";
 
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 
+import { Comment, User } from "@prisma/client";
+import formatDate from "@helper/formatDate";
+
+interface ICommentItem {
+  comment: CommentWithUser;
+  user: any;
+  handleDeleteComment: any;
+}
+
+interface CommentWithUser extends Comment {
+  createdBy: User;
+}
+
 export default function Comments({ fiction }: any) {
   const { user } = useUser();
-  const { mutate } = useSWRConfig();
   const [commentIndex, setCommentIndex] = useState(1);
 
   const searchParams = useSearchParams();
@@ -19,7 +31,7 @@ export default function Comments({ fiction }: any) {
     `/api/fictions/${pageQuery}/comment`
   );
 
-  const comments = fiction?.comments;
+  const comments = fiction?.comments as CommentWithUser[];
 
   if (!comments) return <div>loading</div>;
 
@@ -40,70 +52,69 @@ export default function Comments({ fiction }: any) {
   };
   ///pagination
 
-  async function handleDeleteComment(comment: any) {
+  async function handleDeleteComment(comment: Comment) {
     await deleteComment({ userId: user?.id, commentId: comment.id }, "DELETE");
 
     window.location.href = window.location.href.toString();
   }
 
+  const CommentItem = ({
+    comment,
+    user,
+    handleDeleteComment,
+  }: ICommentItem) => {
+    return (
+      <ul className="relative flex flex-col place-content-between border-b-[1px] pb-1 last:border-b-0 ">
+        <div className=" mb-1 flex justify-between ">
+          <div className=" flex space-x-1 text-center">
+            <Image
+              className=" rounded-full"
+              src={comment?.createdBy?.image ?? ""}
+              width={24}
+              height={24}
+              alt={user?.id ?? ""}
+            ></Image>
+            <div className=" flex items-center text-xs font-bold">
+              {comment?.createdBy?.nickname || "익명"}
+            </div>
+          </div>
+          <div className=" text-xs">{formatDate(comment.createdAt)}</div>
+        </div>
+        <div className=" relative">
+          <div className=" text-sm">
+            <span>{comment.comment}</span>
+            {user && comment?.createdById === user?.id ? (
+              <span
+                onClick={() => handleDeleteComment(comment)}
+                className="absolute right-0 cursor-pointer text-xs text-red-400"
+              >
+                삭제
+              </span>
+            ) : null}
+          </div>
+        </div>
+      </ul>
+    );
+  };
+
+  // const paddedComments = [
+  //   ...(comments || []),
+  //   ...Array(7 - (comments?.length || 0)).fill({}),
+  // ];
+
   return (
     <>
-      <h2 className=" border-b-[1px] py-2 text-xl font-bold">코멘트</h2>
+      <h2 className=" py-2 text-xl font-bold">코멘트</h2>
       <div className=" h-full ">
         <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-          {comments?.length < 7
-            ? (comments || [])
-                .concat(
-                  Array.from({
-                    length: 7 - (comments || []).length,
-                  })
-                )
-                .map((comment: any, index: number) => (
-                  <ul
-                    key={index}
-                    className=" relative flex place-content-between border-b-[1px] pb-1 last:border-b-0"
-                  >
-                    <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                      {comment?.comment || ""}
-                    </li>
-                    {user && comment?.createdById === user?.id ? (
-                      <li
-                        onClick={() => handleDeleteComment(comment)}
-                        className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
-                      >
-                        X
-                      </li>
-                    ) : null}
-                    <li className=" absolute right-[67px] mt-2 text-sm">
-                      {comment?.createdBy?.nickname !== null
-                        ? comment?.createdBy?.nickname?.length > 5
-                          ? `${
-                              comment?.createdBy?.nickname?.slice(0, 5) || ""
-                            }...`
-                          : comment?.createdBy?.nickname
-                        : "익명"}
-                    </li>
-                    <li className=" ml-5 mt-2 min-w-[60px] text-sm">
-                      👍 👎 ()
-                    </li>
-                  </ul>
-                ))
-            : comments?.map((comment: any, index: number) => (
-                <ul
-                  key={index}
-                  className=" relative mx-2 flex place-content-between border-b-2 pb-1 last:border-b-0"
-                >
-                  <li className=" mr-16 mt-2 overflow-hidden text-sm">
-                    {comment?.comment || " asd"}
-                  </li>
-                  <li className=" absolute right-24 mt-2 text-sm">
-                    {`${comment?.createdById?.slice(0, 5)}...`}
-                  </li>
-                  <li className=" ml-5 mt-2 min-w-[78px] text-sm">
-                    👍 👎 (+3)
-                  </li>
-                </ul>
-              ))}
+          {comments.map((comment, index) => (
+            <CommentItem
+              key={index}
+              comment={comment}
+              user={user}
+              handleDeleteComment={handleDeleteComment}
+            />
+          ))}
           <div className=" mb-2 mt-5 flex justify-center">
             <button
               onClick={prevHandler}

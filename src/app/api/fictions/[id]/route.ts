@@ -271,6 +271,7 @@ async function getFiction(id: number) {
           createdBy: {
             select: {
               nickname: true,
+              image: true,
             },
           },
         },
