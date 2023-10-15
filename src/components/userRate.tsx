@@ -178,7 +178,8 @@ export default function UserStat({ fiction }: any) {
             </div>
             <Input
               register={register("comment", {
-                maxLength: 40,
+                minLength: 1,
+                maxLength: 1000,
               })}
               required
               label="코멘트"
