@@ -4,7 +4,6 @@ import Button from "@components/common/button";
 import Input from "@components/common/input";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import useMutation from "@libs/client/useMutation";
-import client from "@libs/server/client";
 import {
   Author,
   Category,
@@ -32,6 +31,8 @@ import { FictionProvider } from "@/context/fictionContext";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
+
+import formatDate from "@helper/formatDate";
 
 import useSWR from "swr";
 
@@ -166,19 +167,6 @@ export default function EditFiction({ params }: { params: any }) {
     name: "mediaMix",
   });
 
-  //날짜변환 function
-  function formatDate(date: any) {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
-  }
-
   // Form에 데이터 주입
   useEffect(() => {
     if (fiction) {
@@ -283,10 +271,11 @@ export default function EditFiction({ params }: { params: any }) {
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      editFiction({ ...data, image: id, setup: md }, "PUT");
+      await editFiction({ ...data, image: id, setup: md }, "PUT");
     } else {
-      editFiction({ ...data, setup: md }, "PUT");
+      await editFiction({ ...data, setup: md }, "PUT");
     }
+    window.location.href = `/fictions/${fictionId}`;
     return;
   };
 

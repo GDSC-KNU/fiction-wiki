@@ -27,7 +27,6 @@ const preprocessData = (data: any, isRevert: boolean) => {
     originalAuthor,
     relatedAuthor,
     nationality,
-    genre,
     startDate,
     endDate,
     date = [],
@@ -49,10 +48,9 @@ const preprocessData = (data: any, isRevert: boolean) => {
     isTranslated,
     introduction,
     setup,
-    nickname,
   } = data;
   // console.log(data);
-  function handleInput(input: Array<string> | string) {
+  function convertToString(input: Array<string> | string) {
     if (Array.isArray(input)) {
       return input.length === 0 ? undefined : input.join(",");
     } else if (typeof input === "string") {
@@ -62,8 +60,8 @@ const preprocessData = (data: any, isRevert: boolean) => {
     }
   }
 
-  relatedTitle = handleInput(relatedTitle);
-  relatedAuthor = handleInput(relatedAuthor);
+  relatedTitle = convertToString(relatedTitle);
+  relatedAuthor = convertToString(relatedAuthor);
 
   if (isRevert) {
     // 문서 복구 편집
@@ -138,7 +136,6 @@ const preprocessData = (data: any, isRevert: boolean) => {
     originalAuthor,
     relatedAuthor,
     nationality,
-    genre,
     date,
     categories,
     currentState,
@@ -158,7 +155,6 @@ const preprocessData = (data: any, isRevert: boolean) => {
     isTranslated,
     introduction,
     setup,
-    nickname,
     categoriesMany,
     KeywordMany,
     mcKeywordMany,
@@ -237,7 +233,6 @@ function countCharactersChanged(prevFiction: any, updatedFiction: any): number {
   return charsAdded - +charsRemoved;
 }
 
-//// GET
 async function getFiction(id: number) {
   return await client.fiction.findUnique({
     where: { id },
@@ -348,7 +343,7 @@ function toJSONCompatible(obj: any): any {
   }
 }
 
-////
+//// GET
 export async function GET(req: NextRequest, { params }: { params: any }) {
   const { id } = params;
 
@@ -382,8 +377,6 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string; Rid: string } }
 ) {
-  // const session = await getServerSession(req, res, authOptions);
-
   const token = await getToken({ req, secret });
 
   if (!token)
@@ -394,9 +387,12 @@ export async function PUT(
 
   let body = await req.json();
 
+  // 문서복구인지 문서편집인지 체크
   const { id, Rid } = params;
+  const isRevert = Rid ? true : false;
 
-  const inputData = Rid
+  // inputData결정 (복구면 fictionHistory에서 가져오고, 편집이면 body)
+  const inputData = isRevert
     ? (
         await client.fictionHistory.findUnique({
           where: {
@@ -406,10 +402,8 @@ export async function PUT(
       )?.data
     : body;
 
-  const isRevert = Rid ? true : false;
-
+  // 업데이트전 inputData 전처리
   // destructuting for update
-
   const {
     title,
     originalTitle,
@@ -436,14 +430,13 @@ export async function PUT(
     isTranslated,
     introduction,
     setup,
-    nickname,
     KeywordMany,
     mcKeywordMany,
     subKeywordMany,
     consKeywordMany,
     categoriesMany,
   } = preprocessData(inputData, isRevert);
-
+  // console.log(preprocessData(inputData, isRevert));
   // current(previous) fiction Data
   const prevFiction = await client.fiction.findUnique({
     where: {
@@ -472,10 +465,11 @@ export async function PUT(
     },
   });
 
-  // updating fiction
+  // Fiction 업데이트
+  // console.log(id);
   const fiction = await client.fiction.update({
     where: {
-      id: +id!.toString(),
+      id: +id,
     },
     data: {
       title,
@@ -557,8 +551,10 @@ export async function PUT(
     },
   });
 
+  // update된 Fiction으로 HistoryLog 생성
   await createHistoryLog(prevFiction, updatedFiction, +id!, token.user.id);
 
+  // revalidation
   try {
     await axios.post(
       `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,

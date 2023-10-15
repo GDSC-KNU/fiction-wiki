@@ -84,7 +84,7 @@ export default function History() {
         <div className="m-5 ml-8 h-auto w-5/6">
           <h1 className="line-clamp-1 text-xl font-bold">{fiction.title}</h1>
           <p className="mt-2 line-clamp-3 w-auto text-sm">
-            {`${fiction.setup.slice(6, 150)} ...`}
+            {`${fiction.setup.slice(7, 150)} ...`}
           </p>
         </div>
       </div>

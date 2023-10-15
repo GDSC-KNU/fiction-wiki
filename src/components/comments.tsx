@@ -15,7 +15,9 @@ export default function Comments({ fiction }: any) {
   const searchParams = useSearchParams();
   const pageQuery = searchParams.get("page");
 
-  const [deleteComment] = useMutation(`/api/fictions/${pageQuery}/comment`);
+  const [deleteComment, { loading }] = useMutation(
+    `/api/fictions/${pageQuery}/comment`
+  );
 
   const comments = fiction?.comments;
 
@@ -37,6 +39,12 @@ export default function Comments({ fiction }: any) {
     setCommentIndex(commentIndex - 1);
   };
   ///pagination
+
+  async function handleDeleteComment(comment: any) {
+    await deleteComment({ userId: user?.id, commentId: comment.id }, "DELETE");
+
+    window.location.href = window.location.href.toString();
+  }
 
   return (
     <>
@@ -60,14 +68,7 @@ export default function Comments({ fiction }: any) {
                     </li>
                     {user && comment?.createdById === user?.id ? (
                       <li
-                        onClick={async () => {
-                          await deleteComment(
-                            { userId: user?.id, commentId: comment.id },
-                            "DELETE"
-                          );
-
-                          mutate(`/api/fictions/${pageQuery}`);
-                        }}
+                        onClick={() => handleDeleteComment(comment)}
                         className=" absolute right-[115px] mt-1 cursor-pointer text-lg text-red-400"
                       >
                         X

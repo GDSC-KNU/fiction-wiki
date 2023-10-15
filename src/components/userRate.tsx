@@ -17,28 +17,24 @@ interface RateUserStatForm {
   comment: string;
 }
 
+interface RateUserStatMutation {
+  ok: boolean;
+  fiction: Fiction;
+}
+
 export default function UserStat({ fiction }: any) {
+  const { register, handleSubmit, watch, reset } = useForm<RateUserStatForm>({
+    mode: "onBlur",
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
   const { user: session } = useUser();
-
   const params = useParams();
   const { id } = params;
 
   const [rateUserStat, { loading, data, error }] =
     useMutation<RateUserStatMutation>(`/api/fictions/${id}/userRate`);
-  const { mutate } = useSWRConfig();
-
-  interface RateUserStatMutation {
-    ok: boolean;
-    fiction: Fiction;
-  }
-
-  // Useform
-  const { register, handleSubmit, watch, reset } = useForm<RateUserStatForm>({
-    mode: "onBlur",
-  });
+  // const { mutate } = useSWRConfig();
 
   const [
     curOriginality,
@@ -49,31 +45,29 @@ export default function UserStat({ fiction }: any) {
     curValue,
   ] = watch()?.UserFictionStat || [0, 0, 0, 0, 0, 0];
 
-  function btnOnOff() {
-    const target = document.getElementById(
-      "rateButton"
-    ) as HTMLButtonElement | null;
-    target!.disabled = !target?.disabled;
-  }
-
-  const buttonFlag = useRef(true);
-
   const onRateClick = async (data: RateUserStatForm) => {
-    if (!session) return;
+    // Session 검증, mbti 확인모달
+    handleBeforeSubmit();
 
-    if (!buttonFlag.current) {
-      alert("평가는 한번만 가능합니다.");
-      return;
-    }
-    buttonFlag.current = !buttonFlag.current;
-    setTimeout(() => {
-      buttonFlag.current = !buttonFlag.current;
-    }, 5000);
-    btnOnOff();
-    if (!session) {
-      alert("로그인 해주세요");
-      btnOnOff();
-      return;
+    await rateUserStat(data, "POST");
+    reset();
+    setIsOpen(false);
+    // btnOnOff();
+
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("nocache", new Date().getTime().toString());
+    window.location.href = currentUrl.toString();
+  };
+
+  // useEffect(() => {
+  //   mutate(`/api/fictions/${id}/comment?page=${1}`);
+  //   mutate(`/api/fictions/${id}`);
+  // }, [data, error]);
+
+  function handleBeforeSubmit() {
+    if (!session) return alert("로그인 해주세요");
+    if (session.mbti === null || session.sex === null) {
+      setIsModalOpen(true);
     }
 
     if (
@@ -84,36 +78,9 @@ export default function UserStat({ fiction }: any) {
       !curSynopsisCompositon ||
       !curValue
     ) {
-      alert("코멘트와 평점을 입력해 주세요");
-      btnOnOff();
-      return;
+      return alert("코멘트와 평점을 입력해 주세요");
     }
-
-    await rateUserStat(data, "POST");
-    reset();
-    closeDetails();
-    btnOnOff();
-
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("nocache", new Date().getTime().toString());
-    window.location.href = currentUrl.toString();
-  };
-
-  useEffect(() => {
-    mutate(`/api/fictions/${id}/comment?page=${1}`);
-    mutate(`/api/fictions/${id}`);
-  }, [data, error]);
-
-  const closeDetails = () => {
-    setIsOpen(false);
-  };
-
-  const handleBeforeSubmit = () => {
-    if (!session) return alert("로그인 해주세요");
-    if (session.mbti === null || session.sex === null) {
-      setIsModalOpen(true);
-    }
-  };
+  }
 
   return (
     <div className=" mx-auto my-2 h-fit w-full px-3">
@@ -126,9 +93,9 @@ export default function UserStat({ fiction }: any) {
           />
         </div>
       ) : (
-        <details open={false}>
+        <details open={isOpen}>
           <summary
-            onClick={handleBeforeSubmit}
+            // onClick={handleBeforeSubmit}
             style={{ listStyle: "none" }}
             className=" my-2 cursor-pointer rounded-md border-[0.5px] border-[#BBBBBB] text-center font-bold"
           >

@@ -1,5 +1,7 @@
 import client from "@libs/server/client";
 
+import axios from "axios";
+
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
@@ -40,6 +42,8 @@ export async function GET(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   // const body = await req.json();
   // const { id, page } = searchParams;
+  const searchParams = req.nextUrl.searchParams;
+  const id = searchParams.get("id");
 
   const headersList = headers();
 
@@ -68,6 +72,18 @@ export async function DELETE(req: NextRequest) {
         id: entity!.id,
       },
     });
+  }
+
+  // revalidation
+  try {
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
+      {
+        id: id,
+      }
+    );
+  } catch (error) {
+    return NextResponse.json({ ok: false }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
