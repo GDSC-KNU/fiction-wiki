@@ -125,7 +125,7 @@ export default function InfoBox({
               </div>
               <div className=" col-span-10 grid w-full grid-cols-10 border-t-[1px] py-[5px]">
                 <dt className=" col-span-4 font-sans font-bold">연재기간</dt>
-                <dd className="col-span-6 whitespace-nowrap">
+                <dd className="col-span-6 overflow-hidden whitespace-nowrap">
                   {`${formatDate(fiction?.startDate)} ~ ${
                     JSON.stringify(fiction?.endDate) ===
                     JSON.stringify(new Date(0))

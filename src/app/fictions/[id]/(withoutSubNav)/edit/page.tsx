@@ -35,6 +35,7 @@ import useUser from "@libs/client/useUser";
 import formatDate from "@helper/formatDate";
 
 import useSWR from "swr";
+import convertStringDateToInputDate from "@helper/convertStringDateToInputDate";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -45,7 +46,7 @@ interface EditFictionForm {
   author: string;
   nationality: string;
   categories: { value: string }[];
-  date: Date[];
+  date: string[];
   status: number[];
   synopsis: string;
   characters: string;
@@ -139,7 +140,7 @@ export default function EditFiction({ params }: { params: any }) {
 
   const { register, handleSubmit, resetField, watch, setValue, control } =
     methods;
-
+  console.log(watch());
   const {
     append: categoriesAppend,
     remove: categoriesRemove,
@@ -202,8 +203,9 @@ export default function EditFiction({ params }: { params: any }) {
       setValue("currentState", fiction?.currentState);
       setValue("synopsis", fiction?.synopsis);
       setValue("characters", fiction?.characters);
-      setValue("date.0", formatDate(fiction?.startDate) as any);
-      setValue("date.1", formatDate(fiction?.endDate) as any);
+
+      setValue("date.0", convertStringDateToInputDate(fiction?.startDate));
+      setValue("date.1", convertStringDateToInputDate(fiction?.endDate));
       setValue("currentState", fiction?.currentState);
       setValue("status.0", fiction?.fictionStat.originality);
       setValue("status.1", fiction?.fictionStat.writing);
