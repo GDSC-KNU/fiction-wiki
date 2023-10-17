@@ -2,7 +2,7 @@ import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import MbtiBarChart from "@components/mbtiBarChart";
 import UserRate from "@components/userRate";
 
-import Comments from "@components/comments";
+import Comments from "@components/fiction/comments";
 
 import InfoBox from "@components/fiction/InfoBox";
 import Keywords from "@components/fiction/keywords";

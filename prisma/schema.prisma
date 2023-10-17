@@ -205,12 +205,12 @@ model UserRationOnFiction {
   userId                String    
   userFictionStat       UserFictionStat @relation(fields: [userFictionStatId], references: [id], onDelete:Cascade)
   userFictionStatId     Int
-  originality           Float
-  verisimilitude        Float
-  synopsisComposition   Float
-  character             Float
-  writing               Float
-  value                 Float
+  originality           Float?
+  verisimilitude        Float?
+  synopsisComposition   Float?
+  character             Float?
+  writing               Float?
+  value                 Float?
   comment               Comment?
 
   @@index([userId])

@@ -14,7 +14,7 @@ import useUser from "@libs/client/useUser";
 
 interface RateUserStatForm {
   UserFictionStat: number[];
-  comment: string;
+  // comment: string;
 }
 
 interface RateUserStatMutation {
@@ -58,11 +58,6 @@ export default function UserStat({ fiction }: any) {
     currentUrl.searchParams.set("nocache", new Date().getTime().toString());
     window.location.href = currentUrl.toString();
   };
-
-  // useEffect(() => {
-  //   mutate(`/api/fictions/${id}/comment?page=${1}`);
-  //   mutate(`/api/fictions/${id}`);
-  // }, [data, error]);
 
   function handleBeforeSubmit() {
     if (!session) return alert("로그인 해주세요");
@@ -176,7 +171,7 @@ export default function UserStat({ fiction }: any) {
                 kind="status"
               />
             </div>
-            <Input
+            {/* <Input
               register={register("comment", {
                 minLength: 1,
                 maxLength: 1000,
@@ -186,7 +181,7 @@ export default function UserStat({ fiction }: any) {
               name="Comment"
               type="text"
               kind="comment"
-            ></Input>
+            ></Input> */}
             <button
               id="rateButton"
               type="submit"

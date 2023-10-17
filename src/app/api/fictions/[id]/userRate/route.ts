@@ -32,7 +32,6 @@ export async function POST(req: NextRequest, { params }: any) {
   const session = token;
 
   let Ration;
-  let commentation;
 
   const alreadyExists = await client.userFictionStat.findFirst({
     include: {
@@ -76,21 +75,21 @@ export async function POST(req: NextRequest, { params }: any) {
             synopsisComposition: +UserFictionStat[4],
             value: +UserFictionStat[5],
             // comment: comment.toString() || "",
-            comment: {
-              create: {
-                comment: comment,
-                createdBy: {
-                  connect: {
-                    id: session?.user?.id,
-                  },
-                },
-                fiction: {
-                  connect: {
-                    id: +id!.toString(),
-                  },
-                },
-              },
-            },
+            // comment: {
+            //   create: {
+            //     comment: comment,
+            //     createdBy: {
+            //       connect: {
+            //         id: session?.user?.id,
+            //       },
+            //     },
+            //     fiction: {
+            //       connect: {
+            //         id: +id!.toString(),
+            //       },
+            //     },
+            //   },
+            // },
           },
         },
         originality: +UserFictionStat[0],
@@ -118,7 +117,7 @@ export async function POST(req: NextRequest, { params }: any) {
       },
     });
   } else {
-    //유저의 id로 userRationOnFiction entity 탐색.
+    // 유저의 id로 userRationOnFiction entity 탐색.
     const userRated = await client.userRationOnFiction.findFirst({
       where: {
         userId: session?.user?.id,
@@ -129,8 +128,47 @@ export async function POST(req: NextRequest, { params }: any) {
         },
       },
     });
+
+    const prevUserRatings = userRated
+      ? [
+          userRated.originality,
+          userRated.writing,
+          userRated.character,
+          userRated.verisimilitude,
+          userRated.synopsisComposition,
+          userRated.value,
+        ]
+      : new Array(6).fill(0);
+
+    const currentRatings = [
+      alreadyExists.originality,
+      alreadyExists.writing,
+      alreadyExists.character,
+      alreadyExists.verisimilitude,
+      alreadyExists.synopsisComposition,
+      alreadyExists.value,
+    ];
+
+    const updatedRatings = UserFictionStat.map(
+      (newRating: string, index: number) => {
+        const total =
+          alreadyExists._count.userRationOnFictions * currentRatings[index] -
+          prevUserRatings[index] +
+          +newRating;
+
+        const updatedCount = !userRated
+          ? +alreadyExists._count.userRationOnFictions + 1
+          : userRated?.originality === null
+          ? +alreadyExists._count.userRationOnFictions + 1
+          : +alreadyExists._count.userRationOnFictions;
+
+        return fixFloat(total / updatedCount);
+      }
+    );
+
     // 유저가 처음 제출하는 경우
     if (!userRated) {
+      // userFictionStat 업데이트
       Ration = await client.userFictionStat.update({
         where: {
           id: alreadyExists.id,
@@ -138,91 +176,68 @@ export async function POST(req: NextRequest, { params }: any) {
         data: {
           userRationOnFictions: {
             create: {
-              userId: session?.user?.id || "1",
+              userId: session.user.id,
               originality: +UserFictionStat[0],
               writing: +UserFictionStat[1],
               character: +UserFictionStat[2],
               verisimilitude: +UserFictionStat[3],
               synopsisComposition: +UserFictionStat[4],
               value: +UserFictionStat[5],
-              comment: {
-                create: {
-                  comment: comment,
-                  createdBy: {
-                    connect: {
-                      id: session?.user?.id,
-                    },
-                  },
-                  fiction: {
-                    connect: {
-                      id: +id!.toString(),
-                    },
-                  },
-                },
+            },
+          },
+          originality: updatedRatings[0],
+          writing: updatedRatings[1],
+          character: updatedRatings[2],
+          verisimilitude: updatedRatings[3],
+          synopsisComposition: updatedRatings[4],
+          value: updatedRatings[5],
+          total: fixFloat(
+            updatedRatings.reduce((acc: number, cur: number) => acc + cur, 0) /
+              updatedRatings.length
+          ),
+        },
+      });
+
+      // }
+      // 유저가 중복 제출하는 경우
+      // else {
+      //   return NextResponse.json({ ok: false }, { status: 400 });
+    } else {
+      Ration = await client.userFictionStat.update({
+        where: {
+          id: alreadyExists.id,
+        },
+        data: {
+          userRationOnFictions: {
+            update: {
+              where: { id: userRated.id },
+              data: {
+                userId: session.user.id,
+                originality: +UserFictionStat[0],
+                writing: +UserFictionStat[1],
+                character: +UserFictionStat[2],
+                verisimilitude: +UserFictionStat[3],
+                synopsisComposition: +UserFictionStat[4],
+                value: +UserFictionStat[5],
               },
             },
           },
-          originality: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[0]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
-          writing: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[1]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
-          character: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[2]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
-          verisimilitude: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[3]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
-          synopsisComposition: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[4]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
-          value: fixFloat(
-            (+alreadyExists.originality *
-              alreadyExists._count.userRationOnFictions +
-              +UserFictionStat[5]) /
-              (+alreadyExists._count.userRationOnFictions + 1)
-          ),
+          originality: updatedRatings[0],
+          writing: updatedRatings[1],
+          character: updatedRatings[2],
+          verisimilitude: updatedRatings[3],
+          synopsisComposition: updatedRatings[4],
+          value: updatedRatings[5],
           total: fixFloat(
-            ((alreadyExists.total || 0) *
-              alreadyExists._count.userRationOnFictions +
-              (+UserFictionStat[0] +
-                +UserFictionStat[1] +
-                +UserFictionStat[2] +
-                +UserFictionStat[3] +
-                +UserFictionStat[4] +
-                +UserFictionStat[5]) /
-                6) /
-              (alreadyExists._count.userRationOnFictions + 1)
+            updatedRatings.reduce((acc: number, cur: number) => acc + cur, 0) /
+              updatedRatings.length
           ),
         },
       });
     }
-    // 유저가 중복 제출하는 경우
-    else {
-      return NextResponse.json({ ok: false }, { status: 400 });
-    }
   }
 
   //  On-Demand revalidation
-  // await revalidator(id, "comment");
-
-  // revalidatePath("/fictions/[id]");
   try {
     await axios.post(
       `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,

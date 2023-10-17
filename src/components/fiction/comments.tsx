@@ -9,6 +9,7 @@ import useUser from "@libs/client/useUser";
 
 import { Comment, User } from "@prisma/client";
 import formatDate from "@helper/formatDate";
+import UserCommentInput from "./userCommentInput";
 
 interface ICommentItem {
   comment: CommentWithUser;
@@ -64,7 +65,7 @@ export default function Comments({ fiction }: any) {
     handleDeleteComment,
   }: ICommentItem) => {
     return (
-      <ul className="relative flex flex-col place-content-between border-b-[1px] pb-1 last:border-b-0 ">
+      <ul className="relative flex flex-col place-content-between border-b-[1px] pb-1 pt-2 last:border-b-0">
         <div className=" mb-1 flex justify-between ">
           <div className=" flex space-x-1 text-center">
             <Image
@@ -104,7 +105,7 @@ export default function Comments({ fiction }: any) {
 
   return (
     <>
-      <h2 className=" py-2 text-xl font-bold">코멘트</h2>
+      <h2 className=" py-2 text-xl font-bold">리뷰</h2>
       <div className=" h-full ">
         <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
           {comments.map((comment, index) => (
@@ -163,6 +164,7 @@ export default function Comments({ fiction }: any) {
             </button>
           </div>
         </div>
+        <UserCommentInput />
       </div>
     </>
   );
