@@ -140,7 +140,7 @@ export default function EditFiction({ params }: { params: any }) {
 
   const { register, handleSubmit, resetField, watch, setValue, control } =
     methods;
-  console.log(watch());
+
   const {
     append: categoriesAppend,
     remove: categoriesRemove,

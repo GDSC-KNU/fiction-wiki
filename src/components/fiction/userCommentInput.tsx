@@ -24,10 +24,10 @@ export default function UserCommentInput() {
   );
 
   const onValid = async (data: PostCommentForm) => {
-    console.log(data);
     await postComment(data, "POST");
+    window.location.href = window.location.href.toString();
   };
-  console.log(watch());
+
   return (
     <div className=" relative">
       <form className=" w-full" onSubmit={handleSubmit(onValid)}>
