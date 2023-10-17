@@ -59,44 +59,45 @@ export async function DELETE(req: NextRequest) {
 
   // if (!commentId) return res.json({ ok: false });
 
-  // const entity = await client.userRationOnFiction.findFirst({
-  //   where: {
-  //     comment: {
-  //       id: commentId,
-  //     },
-  //   },
-  //   select: {
-  //     id: true,
-  //   },
-  // });
-
-  // if (entity) {
-  //   await client.userRationOnFiction.delete({
-  //     where: {
-  //       id: entity!.id,
-  //     },
-  //   });
-
-  // }
-  await client.comment.delete({
+  const entity = await client.userRationOnFiction.findFirst({
     where: {
-      id: +commentId,
+      comment: {
+        id: commentId,
+      },
+    },
+    select: {
+      id: true,
     },
   });
 
-  // revalidation
-  try {
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
-      {
-        id: id,
-      }
-    );
-  } catch (error) {
-    return NextResponse.json({ ok: false }, { status: 500 });
-  }
+  if (entity) {
+    await client.userRationOnFiction.delete({
+      where: {
+        id: entity!.id,
+      },
+    });
 
-  return NextResponse.json({ ok: true });
+    // }
+    // await client.comment.delete({
+    //   where: {
+    //     id: +commentId,
+    //   },
+    // });
+
+    // revalidation
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
+        {
+          id: id,
+        }
+      );
+    } catch (error) {
+      return NextResponse.json({ ok: false }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true });
+  }
 }
 
 async function getUserToken(req: NextRequest) {
