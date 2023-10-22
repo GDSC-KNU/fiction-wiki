@@ -2,15 +2,9 @@
 
 import Button from "@components/common/button";
 import Input from "@components/common/input";
+import Input2 from "@components/common/input2";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import useMutation from "@libs/client/useMutation";
-import {
-  Author,
-  Category,
-  Fiction,
-  FictionStat,
-  Keyword,
-} from "@prisma/client";
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -32,90 +26,17 @@ import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
 
-import formatDate from "@helper/formatDate";
-
 import useSWR from "swr";
 import convertStringDateToInputDate from "@helper/convertStringDateToInputDate";
+import UseEditFictionForms from "@/hooks/useEditFictionForms";
+
+import { EditFictionForm, EditFictionMutation } from "@/type/fiction";
+import { ErrorMessage } from "@hookform/error-message";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-interface EditFictionForm {
-  title: string;
-  author: string;
-  nationality: string;
-  categories: { value: string }[];
-  date: string[];
-  status: number[];
-  synopsis: string;
-  characters: string;
-  currentState: string;
-  keywords: string[];
-  mcKeywords: string[];
-  subKeywords: string[];
-  consKeywords: string[];
-  original: string;
-  platforms: { value: string }[];
-  image?: FileList | string;
-  volume?: number;
-  isTranslated?: string;
-  relatedTitle?: [];
-  relatedAuthor?: [];
-  originalAuthor?: string;
-  type?: string;
-  mediaMix?: { value: string }[];
-  setup?: string;
-  introduction?: string;
-  originalTitle?: string;
-}
-
-interface EditFictionMutation {
-  ok: boolean;
-  fiction: Fiction;
-}
-
-interface FictionDetailResponse {
-  fiction: FictionWithMore;
-  similarFictions: Fiction[];
-  mbtis: any;
-  setup: any;
-}
-
-interface FictionWithMore extends Fiction {
-  fiction: any;
-  keywords: [
-    {
-      keyword: Keyword;
-    }
-  ];
-  fictionStat: FictionStat;
-  userFictionStat: {
-    originality: number;
-    writing: number;
-    verisimilitude: number;
-    value: number;
-    synopsisComposition: number;
-    character: number;
-    total: number;
-    _count: {
-      userRationOnFictions: number;
-    };
-  };
-  author: Author;
-  categories: [
-    {
-      category: Category;
-    }
-  ];
-  comments: Comment[];
-}
-//   {
-//   fiction,
-//   similarFictions,
-//   mbtis,
-//   setup,
-// }
 export default function EditFiction({ params }: { params: any }) {
   const { id: fictionId } = params;
 
@@ -138,8 +59,16 @@ export default function EditFiction({ params }: { params: any }) {
     useMutation<EditFictionMutation>(`/api/fictions/${fictionId}`);
   const methods = useForm<EditFictionForm>({ mode: "onBlur" });
 
-  const { register, handleSubmit, resetField, watch, setValue, control } =
-    methods;
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    resetField,
+    watch,
+    setValue,
+    control,
+    trigger,
+  } = methods;
 
   const {
     append: categoriesAppend,
@@ -309,7 +238,7 @@ export default function EditFiction({ params }: { params: any }) {
   // onInvalid handler
   const onInvalid = (errors: FieldErrors) => {
     if (loading) return;
-
+    console.log("invalid");
     if (errors) {
       console.log(errors);
       return;
@@ -380,30 +309,30 @@ export default function EditFiction({ params }: { params: any }) {
     { label: "오디오북", value: "오디오북" },
   ];
 
-  // const validate = (value: any) => {
-  //   if (typeof value === "string") {
-  //     value = value.trim();
-  //     const isNumber = /^\d+$/;
-  //     if (value.length === 0) return "This field is required";
-  //   }
-
-  //   return true;
-  // };
+  const { title, originalTitle, author, originalAuthor, volume } =
+    UseEditFictionForms({
+      control: methods.control,
+    });
 
   return (
     <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
       <FormProvider {...methods}>
         <div className="">
-          <form onSubmit={handleSubmit(onValid, onInvalid)}>
+          <form
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                trigger();
+              }
+            }}
+            onChange={() => trigger()}
+            onSubmit={(e) => {
+              handleSubmit(onValid, onInvalid)(e);
+            }}
+          >
             <div>
               <div className=" mx-5 mt-7">
-                <Input
-                  register={register("title", { required: true })}
-                  required
-                  label=""
-                  name="title"
-                  type="text_detail"
-                />
+                <Input2 {...title} />
               </div>
               <div className=" my-4 w-full grid-cols-10 lg:grid">
                 <div
@@ -473,34 +402,25 @@ export default function EditFiction({ params }: { params: any }) {
                     <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
                       <div className=" ">
                         <div className=" ">
-                          <Input
-                            register={register("originalTitle", {
-                              required: true,
-                            })}
+                          <Input2
+                            {...originalTitle}
                             required
                             label="제목(원제)"
-                            name="originalTitle"
-                            type="text_detail"
+                            errors={errors}
                           />
                           <KeywordsInputBox
                             name="relatedTitle"
                             label="제목 연관어"
                           />
-                          <Input
-                            register={register("author", { required: true })}
+                          <Input2
+                            {...author}
                             required
                             label="작가 이름(한글)"
-                            name="author"
-                            type="text_detail"
                           />
-                          <Input
-                            register={register("originalAuthor", {
-                              required: true,
-                            })}
-                            required={false}
+                          <Input2
+                            {...originalAuthor}
+                            required={true}
                             label="작가 이름(원어)"
-                            name="originalAuthor"
-                            type="text_detail"
                           />
                           <KeywordsInputBox
                             name="relatedAuthor"
@@ -548,7 +468,7 @@ export default function EditFiction({ params }: { params: any }) {
                             </div>
                           </div>
                           <Input
-                            register={register("original", { required: true })}
+                            register={register("original")}
                             required
                             label="오리지널 링크"
                             name="original"
@@ -570,25 +490,7 @@ export default function EditFiction({ params }: { params: any }) {
                             options={currentStateOptions}
                             label="완결유무"
                           />
-                          <Input
-                            register={register("volume", {
-                              required: {
-                                value: true,
-                                message: "volume is required",
-                              },
-                              validate: (value) =>
-                                value?.toString() !== "" ||
-                                "This field is required",
-                              pattern: {
-                                value: /^\d+$/, // matches any sequence of one or more digits
-                                message: "Only numbers are allowed",
-                              },
-                            })}
-                            required
-                            label="분량"
-                            name="volume"
-                            type="text_detail"
-                          />
+                          <Input2 {...volume} label="분량" />
                           <DropdownSearchCheckbox
                             label="미디어믹스"
                             options={mediaMixOptions}
@@ -681,8 +583,19 @@ export default function EditFiction({ params }: { params: any }) {
                 </div>
               </div>
             </div>
-            <div className=" px-4">
-              <Button text={loading ? "Loading..." : "저장"} />
+            <div className=" flex flex-col px-4">
+              <Button text={loading ? "로딩 중..." : "저장"} />
+              {errors && (
+                <div>
+                  {Object.entries(errors).map(([type, { message }]: any) => {
+                    return (
+                      <div className=" p-1 text-xs text-red-600" key={type}>
+                        {message}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </form>
         </div>

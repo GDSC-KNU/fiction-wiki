@@ -1,8 +1,38 @@
 "use client";
 
 import React from "react";
-import type { UseFormRegisterReturn } from "react-hook-form";
+import type { UseFormRegisterReturn, FieldErrors } from "react-hook-form";
 import SearchIcon from "@public/svg/searchIcon.svg";
+import { ErrorMessage } from "@hookform/error-message";
+
+interface EditFictionForm {
+  title: string;
+  author: string;
+  nationality: string;
+  categories: { value: string }[];
+  date: string[];
+  status: number[];
+  synopsis: string;
+  characters: string;
+  currentState: string;
+  keywords: string[];
+  mcKeywords: string[];
+  subKeywords: string[];
+  consKeywords: string[];
+  original: string;
+  platforms: { value: string }[];
+  image?: FileList | string;
+  volume?: number;
+  isTranslated?: string;
+  relatedTitle?: [];
+  relatedAuthor?: [];
+  originalAuthor?: string;
+  type?: string;
+  mediaMix?: { value: string }[];
+  setup?: string;
+  introduction?: string;
+  originalTitle?: string;
+}
 
 interface InputProps {
   label: string;
@@ -17,9 +47,10 @@ interface InputProps {
     | "comment"
     | "search";
   type: string;
-  register: UseFormRegisterReturn;
+  register: any;
   required: boolean;
   placeholder?: string;
+  errors?: FieldErrors<EditFictionForm>;
 }
 
 export default function Input({
@@ -30,6 +61,7 @@ export default function Input({
   type,
   required,
   placeholder,
+  errors,
 }: InputProps) {
   return (
     <div className=" mb-2">
@@ -54,6 +86,13 @@ export default function Input({
               className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400"
             />
           </div>
+          {/* <ErrorMessage
+            errors={errors}
+            name={name}
+            render={({ message }) => (
+              <p className=" p-1 text-xs text-red-600">{message}</p>
+            )}
+          /> */}
         </>
       ) : null}
       {kind === "search" ? (
@@ -99,7 +138,7 @@ export default function Input({
         </>
       ) : null}
       {kind === "text_detail" ? (
-        <div className="relative flex items-center  rounded-md shadow-sm">
+        <div className="relative flex items-center  rounded-md text-sm shadow-sm">
           <input
             placeholder={placeholder}
             id={name}

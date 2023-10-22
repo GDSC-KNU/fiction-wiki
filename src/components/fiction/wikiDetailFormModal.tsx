@@ -1,11 +1,9 @@
 "use client";
 
-import { FictionContext } from "@/context/fictionContext";
-import { useContext } from "react";
+import React from "react";
 import useKeyHandler from "@/hooks/useKeyHandler";
 
 const WikiDetailFormModal = ({ isOpen, onClose, children }: any) => {
-  let fictionContext = useContext(FictionContext);
   useKeyHandler(() => {
     onClose();
   }, "Escape");
@@ -23,10 +21,10 @@ const WikiDetailFormModal = ({ isOpen, onClose, children }: any) => {
         <div className="sticky top-0 z-30 border-b-[1px] bg-white px-8 py-3">
           세부정보 수정
         </div>
-        <div className="mt-4 max-w-[500px]  px-8">{children}</div>
-        <div className="flex justify-center py-4">
+        <div className="max-w-[600px] px-8  pt-4">{children}</div>
+        <div className="sticky bottom-0 flex justify-center border-t-[1px]  bg-white p-4">
           <button
-            className="rounded bg-blue-500 px-4 py-2 text-white"
+            className="rounded bg-blue-500 px-4 py-1 text-white"
             onClick={onClose}
           >
             닫기
