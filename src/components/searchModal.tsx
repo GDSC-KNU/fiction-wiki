@@ -6,6 +6,8 @@ import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import useKeyHandler from "@/hooks/useKeyHandler";
 
+import XIcon from "@public/svg/x.svg";
+
 export default function SearchModal() {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -20,7 +22,7 @@ export default function SearchModal() {
     deferredQuery !== ""
       ? typeof window === "undefined"
         ? null
-        : `/api/search/title/${deferredQuery}/1`
+        : `/api/search/title/${deferredQuery}?page=1`
       : null,
     {
       revalidateIfStale: false,
@@ -33,7 +35,7 @@ export default function SearchModal() {
   useEffect(() => {
     const debounce = setTimeout(() => {
       return setDeferredQuery(query);
-    }, 300);
+    }, 200);
     return () => clearTimeout(debounce);
   }, [query]);
 
@@ -79,11 +81,11 @@ export default function SearchModal() {
                   </div>
                 </form>
                 <button
-                  className=" text-2xl uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
+                  className=" pr-1 text-2xl uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                   type="button"
                   onClick={() => setShowModal(false)}
                 >
-                  X
+                  <XIcon />
                 </button>
               </div>
               {fictions?.map((fiction: any, i: number) => (

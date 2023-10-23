@@ -52,7 +52,10 @@ export default function UseEditFictionForms({
     control,
     rules: {
       required: true,
-      minLength: 3,
+      minLength: {
+        value: 2,
+        message: "[원제] 최소 2자 이상 입력해주세요.",
+      },
     },
     defaultValue: "",
   });
@@ -70,7 +73,10 @@ export default function UseEditFictionForms({
     name: "originalAuthor",
     control,
     rules: {
-      required: true,
+      required: {
+        value: true,
+        message: "[작가 이름(원어)] 를 입력해주세요.",
+      },
     },
     defaultValue: "",
   });

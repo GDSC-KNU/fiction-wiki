@@ -239,7 +239,7 @@ export default function EditFiction({ params }: { params: any }) {
     if (loading) return;
     console.log("invalid");
     if (errors) {
-      // console.log(errors);
+      console.log(errors);
       return;
     }
   };
