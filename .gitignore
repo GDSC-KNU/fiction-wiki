@@ -38,3 +38,7 @@ fdbs-crt-93ec7b71e5e9.json
 
 # typescript
 *.tsbuildinfo
+
+#yarn
+.yarn
+./yarn/*
