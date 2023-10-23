@@ -83,7 +83,7 @@ export default function UseEditFictionForms({
       //   validate: (value) => value?.toString() !== "" || "This field is required",
       minLength: {
         value: 1,
-        message: "최소 1자 이상 입력해주세요.",
+        message: "[분량] 최소 1자 이상 입력해주세요.",
       },
       pattern: {
         value: /^\d+$/, // matches any sequence of one or more digits

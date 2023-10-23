@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Top from "@components/layout/top";
 import Footer from "@components/layout/footer";
-import React, { Suspense } from "react";
+import React from "react";
 
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";

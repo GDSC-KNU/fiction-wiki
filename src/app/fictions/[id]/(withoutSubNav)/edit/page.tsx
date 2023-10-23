@@ -21,7 +21,6 @@ import DropdownSearchCheckbox from "@components/common/dropdownSearchCheckbox";
 import KeywordsInputBox from "@components/common/keywordsInputBox";
 import Select from "@components/common/select";
 import WikiDetailFormModal from "@components/fiction/wikiDetailFormModal";
-import { FictionProvider } from "@/context/fictionContext";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
@@ -31,7 +30,6 @@ import convertStringDateToInputDate from "@helper/convertStringDateToInputDate";
 import UseEditFictionForms from "@/hooks/useEditFictionForms";
 
 import { EditFictionForm, EditFictionMutation } from "@/type/fiction";
-import { ErrorMessage } from "@hookform/error-message";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -41,11 +39,11 @@ export default function EditFiction({ params }: { params: any }) {
   const { id: fictionId } = params;
 
   const { data: fictionData, isValidating } = useSWR(
-    fictionId ? `/api/fictions/${fictionId}` : "",
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${fictionId}` || "",
     { suspense: true }
   );
 
-  const { fiction, similarFictions, mbtis, setup } = fictionData || {};
+  const { fiction } = fictionData || {};
 
   const [md, setMd] = useState<string | undefined>("");
   const handleChange = useCallback((md: any) => {
@@ -55,13 +53,14 @@ export default function EditFiction({ params }: { params: any }) {
   const router = useRouter();
   const { isAdmin } = useUser();
 
-  const [editFiction, { loading, data, error }] =
-    useMutation<EditFictionMutation>(`/api/fictions/${fictionId}`);
+  const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
+    `/api/fictions/${fictionId}`
+  );
   const methods = useForm<EditFictionForm>({ mode: "onBlur" });
 
   const {
     register,
-    formState: { errors },
+    formState: { errors } = {},
     handleSubmit,
     resetField,
     watch,
@@ -240,7 +239,7 @@ export default function EditFiction({ params }: { params: any }) {
     if (loading) return;
     console.log("invalid");
     if (errors) {
-      console.log(errors);
+      // console.log(errors);
       return;
     }
   };
@@ -315,291 +314,288 @@ export default function EditFiction({ params }: { params: any }) {
     });
 
   return (
-    <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
-      <FormProvider {...methods}>
-        <div className="">
-          <form
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                trigger();
-              }
-            }}
-            onChange={() => trigger()}
-            onSubmit={(e) => {
+    // <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
+    <FormProvider {...methods}>
+      <div className="">
+        <form
+          onChange={() => trigger()}
+          onSubmit={(e) => {
+            if (isOpen) {
+              e.preventDefault();
+            } else {
               handleSubmit(onValid, onInvalid)(e);
-            }}
-          >
-            <div>
-              <div className=" mx-5 mt-7">
-                <Input2 {...title} />
-              </div>
-              <div className=" my-4 w-full grid-cols-10 lg:grid">
-                <div
-                  id="main_container"
-                  className=" col-span-8 mx-5 mb-4 overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 lg:mb-0"
-                >
-                  <div>
-                    <MDEditor
-                      height="70vh"
-                      value={md}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div id="side_container" className=" col-span-2 mx-5 lg:ml-0 ">
-                  <div
-                    id="thumbnail_preview"
-                    className=" mb-4 min-h-[240px] w-full"
-                  >
-                    {thumbPreview ? (
-                      <label className=" relative flex h-[240px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
-                        <Image
-                          className=" object-cover"
-                          src={thumbPreview || "/"}
-                          fill
-                          alt="thumbnail"
-                        />
-                        <input
-                          {...register("image")}
-                          className="hidden"
-                          type="file"
-                        />
-                      </label>
-                    ) : (
-                      <label className="flex h-[240px] w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
-                        <svg
-                          className="h-12 w-12"
-                          stroke="currentColor"
-                          fill="none"
-                          viewBox="0 0 48 48"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-
-                        <input
-                          {...register("image")}
-                          className="hidden"
-                          type="file"
-                        />
-                      </label>
-                    )}
-                  </div>
-
-                  <div className=" my-2 text-center ">
-                    <div
-                      className=" mb-4 cursor-pointer whitespace-nowrap rounded border border-[#BBBBBB] px-4 py-2 font-bold hover:bg-[#EDF2F7]"
-                      onClick={handleOpen}
-                    >
-                      작품 세부정보 수정
-                    </div>
-                    <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
-                      <div className=" ">
-                        <div className=" ">
-                          <Input2
-                            {...originalTitle}
-                            required
-                            label="제목(원제)"
-                            errors={errors}
-                          />
-                          <KeywordsInputBox
-                            name="relatedTitle"
-                            label="제목 연관어"
-                          />
-                          <Input2
-                            {...author}
-                            required
-                            label="작가 이름(한글)"
-                          />
-                          <Input2
-                            {...originalAuthor}
-                            required={true}
-                            label="작가 이름(원어)"
-                          />
-                          <KeywordsInputBox
-                            name="relatedAuthor"
-                            label="작가 이름 연관어"
-                          />
-                          <Select
-                            register={register("type", { required: true })}
-                            options={typeOptions}
-                            label="타입"
-                          />
-                          <Select
-                            register={register("nationality", {
-                              required: true,
-                            })}
-                            options={nationalityOptions}
-                            label="국적"
-                          />
-                          <DropdownSearchCheckbox
-                            label="카테고리"
-                            options={categoryOptions}
-                            register={register}
-                            selected={watch("categories")}
-                            append={categoriesAppend}
-                            remove={categoriesRemove}
-                            fields={categoriesFields}
-                          ></DropdownSearchCheckbox>
-                          <div className=" relative flex items-center justify-between">
-                            <div className=" w-[48%]">
-                              <Input
-                                register={register("date.0")}
-                                required
-                                label="연재 시작일"
-                                name="startDate"
-                                type="date"
-                              />
-                            </div>
-                            <div className=" w-[48%]">
-                              <Input
-                                register={register("date.1")}
-                                required
-                                label="연재 종료일"
-                                name="endDate"
-                                type="date"
-                              />
-                            </div>
-                          </div>
-                          <Input
-                            register={register("original")}
-                            required
-                            label="오리지널 링크"
-                            name="original"
-                            type="text"
-                          />
-                          <DropdownSearchCheckbox
-                            label="플랫폼"
-                            options={platformOptions}
-                            register={register("platforms")}
-                            selected={watch("platforms")}
-                            append={platformsAppend}
-                            remove={platformsRemove}
-                            fields={platformsFields}
-                          ></DropdownSearchCheckbox>
-                          <Select
-                            register={register("currentState", {
-                              required: true,
-                            })}
-                            options={currentStateOptions}
-                            label="완결유무"
-                          />
-                          <Input2 {...volume} label="분량" />
-                          <DropdownSearchCheckbox
-                            label="미디어믹스"
-                            options={mediaMixOptions}
-                            register={register("mediaMix")}
-                            selected={watch("mediaMix")}
-                            append={mediaMixAppend}
-                            remove={mediaMixRemove}
-                            fields={mediaMixFields}
-                          />
-                          <Select
-                            register={register("isTranslated")}
-                            options={isTranslatedOptions}
-                            label="번역여부"
-                          />
-                        </div>
-                        <KeywordsInputBox name="keywords" label="작품 키워드" />
-                        <KeywordsInputBox
-                          name="mcKeywords"
-                          label="메인캐릭터 키워드"
-                        />
-                        <KeywordsInputBox
-                          name="subKeywords"
-                          label="히로인 키워드"
-                        />
-                        <KeywordsInputBox
-                          name="consKeywords"
-                          label="호불호 키워드"
-                        />
-                      </div>
-                    </WikiDetailFormModal>
-                  </div>
-                  {isAdmin ? (
-                    <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
-                      <FictionRadarChart />
-                      <div className=" mx-2 grid grid-cols-2">
-                        <Input
-                          register={register("status.0", {
-                            max: 5,
-                            min: 0,
-                          })}
-                          required
-                          label="오리지널리티"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                        <Input
-                          register={register("status.1")}
-                          required
-                          label="필력"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                        <Input
-                          register={register("status.2")}
-                          required
-                          label="캐릭터성"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                        <Input
-                          register={register("status.3")}
-                          required
-                          label="핍진성"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                        <Input
-                          register={register("status.4")}
-                          required
-                          label="스토리"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                        <Input
-                          register={register("status.5")}
-                          required
-                          label="작품성"
-                          name="status"
-                          type="number"
-                          kind="status"
-                        />
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
+            }
+          }}
+        >
+          <div>
+            <div className=" mx-5 mt-7">
+              <Input2
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                  }
+                }}
+                {...title}
+              />
             </div>
-            <div className=" flex flex-col px-4">
-              <Button text={loading ? "로딩 중..." : "저장"} />
-              {errors && (
+            <div className=" my-4 w-full grid-cols-10 lg:grid">
+              <div
+                id="main_container"
+                className=" col-span-8 mx-5 mb-4 overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 lg:mb-0"
+              >
                 <div>
-                  {Object.entries(errors).map(([type, { message }]: any) => {
-                    return (
-                      <div className=" p-1 text-xs text-red-600" key={type}>
-                        {message}
-                      </div>
-                    );
-                  })}
+                  <MDEditor height="70vh" value={md} onChange={handleChange} />
                 </div>
-              )}
+              </div>
+              <div id="side_container" className=" col-span-2 mx-5 lg:ml-0 ">
+                <div
+                  id="thumbnail_preview"
+                  className=" mb-4 min-h-[240px] w-full"
+                >
+                  {thumbPreview ? (
+                    <label className=" relative flex h-[240px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+                      <Image
+                        className=" object-cover"
+                        src={thumbPreview || "/"}
+                        fill
+                        alt="thumbnail"
+                      />
+                      <input
+                        {...register("image")}
+                        className="hidden"
+                        type="file"
+                      />
+                    </label>
+                  ) : (
+                    <label className="flex h-[240px] w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+                      <svg
+                        className="h-12 w-12"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+
+                      <input
+                        {...register("image")}
+                        className="hidden"
+                        type="file"
+                      />
+                    </label>
+                  )}
+                </div>
+
+                <div className=" my-2 text-center ">
+                  <div
+                    className=" mb-4 cursor-pointer whitespace-nowrap rounded border border-[#BBBBBB] px-4 py-2 font-bold hover:bg-[#EDF2F7]"
+                    onClick={handleOpen}
+                  >
+                    작품 세부정보 수정
+                  </div>
+                  <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
+                    <div className=" ">
+                      <div className=" ">
+                        <Input2
+                          {...originalTitle}
+                          required
+                          label="제목(원제)"
+                          errors={errors}
+                        />
+                        <KeywordsInputBox
+                          name="relatedTitle"
+                          label="제목 연관어"
+                        />
+                        <Input2 {...author} required label="작가 이름(한글)" />
+                        <Input2
+                          {...originalAuthor}
+                          required={true}
+                          label="작가 이름(원어)"
+                        />
+                        <KeywordsInputBox
+                          name="relatedAuthor"
+                          label="작가 이름 연관어"
+                        />
+                        <Select
+                          register={register("type", { required: true })}
+                          options={typeOptions}
+                          label="타입"
+                        />
+                        <Select
+                          register={register("nationality", {
+                            required: true,
+                          })}
+                          options={nationalityOptions}
+                          label="국적"
+                        />
+                        <DropdownSearchCheckbox
+                          label="카테고리"
+                          options={categoryOptions}
+                          register={register}
+                          selected={watch("categories")}
+                          append={categoriesAppend}
+                          remove={categoriesRemove}
+                          fields={categoriesFields}
+                        ></DropdownSearchCheckbox>
+                        <div className=" relative flex items-center justify-between">
+                          <div className=" w-[48%]">
+                            <Input
+                              register={register("date.0")}
+                              required
+                              label="연재 시작일"
+                              name="startDate"
+                              type="date"
+                            />
+                          </div>
+                          <div className=" w-[48%]">
+                            <Input
+                              register={register("date.1")}
+                              required
+                              label="연재 종료일"
+                              name="endDate"
+                              type="date"
+                            />
+                          </div>
+                        </div>
+                        <Input
+                          register={register("original")}
+                          required
+                          label="오리지널 링크"
+                          name="original"
+                          type="text"
+                        />
+                        <DropdownSearchCheckbox
+                          label="플랫폼"
+                          options={platformOptions}
+                          register={register("platforms")}
+                          selected={watch("platforms")}
+                          append={platformsAppend}
+                          remove={platformsRemove}
+                          fields={platformsFields}
+                        ></DropdownSearchCheckbox>
+                        <Select
+                          register={register("currentState", {
+                            required: true,
+                          })}
+                          options={currentStateOptions}
+                          label="완결유무"
+                        />
+                        <Input2 {...volume} label="분량" />
+                        <DropdownSearchCheckbox
+                          label="미디어믹스"
+                          options={mediaMixOptions}
+                          register={register("mediaMix")}
+                          selected={watch("mediaMix")}
+                          append={mediaMixAppend}
+                          remove={mediaMixRemove}
+                          fields={mediaMixFields}
+                        />
+                        <Select
+                          register={register("isTranslated")}
+                          options={isTranslatedOptions}
+                          label="번역여부"
+                        />
+                      </div>
+                      <KeywordsInputBox name="keywords" label="작품 키워드" />
+                      <KeywordsInputBox
+                        name="mcKeywords"
+                        label="메인캐릭터 키워드"
+                      />
+                      <KeywordsInputBox
+                        name="subKeywords"
+                        label="히로인 키워드"
+                      />
+                      <KeywordsInputBox
+                        name="consKeywords"
+                        label="호불호 키워드"
+                      />
+                    </div>
+                  </WikiDetailFormModal>
+                </div>
+                {isAdmin ? (
+                  <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+                    <FictionRadarChart />
+                    <div className=" mx-2 grid grid-cols-2">
+                      <Input
+                        register={register("status.0", {
+                          max: 5,
+                          min: 0,
+                        })}
+                        required
+                        label="오리지널리티"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                      <Input
+                        register={register("status.1")}
+                        required
+                        label="필력"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                      <Input
+                        register={register("status.2")}
+                        required
+                        label="캐릭터성"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                      <Input
+                        register={register("status.3")}
+                        required
+                        label="핍진성"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                      <Input
+                        register={register("status.4")}
+                        required
+                        label="스토리"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                      <Input
+                        register={register("status.5")}
+                        required
+                        label="작품성"
+                        name="status"
+                        type="number"
+                        kind="status"
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </form>
-        </div>
-      </FormProvider>
-    </FictionProvider>
+          </div>
+          <div className=" flex flex-col px-4">
+            <Button text={loading ? "로딩 중..." : "저장"} />
+            {errors && (
+              <div>
+                {Object.entries(errors).map(([type, { message }]: any) => {
+                  return (
+                    <div className=" p-1 text-xs text-red-600" key={type}>
+                      {message}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </form>
+      </div>
+    </FormProvider>
+    // </FictionProvider>
   );
 }
