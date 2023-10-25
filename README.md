@@ -1,6 +1,8 @@
 # FictionWiki
 
-웹소설, 웹툰 등 스낵컨텐츠를 위한 위키 서비스 입니다.
+위키 시스템을 기반으로 작품들에 대한 정보를 제공하는 웹 플랫폼입니다.
+
+작품 정보, 평점 및 코멘트 등록, 용어집 기반 병렬 번역 기능 등의 각종 서비스와 데이터를 유저에게 통합적으로 제공하는 웹 서비스 제공
 
 <div align="center">
 
@@ -25,9 +27,9 @@ https://aromatic-lute-463.notion.site/4f87ada8ed2b417383b2ce1b4b1ca92a?v=0018de4
 
 **Language |** Javascript, Typescript
 
-**Library |** React, Next.js, SWR, TailwindCSS
+**Library |** React, Next.js, SWR, TailwindCSS, Recoil, Framer-motion
 
-**Build |** Webpack, Babel
+**Build |** webpack, turbopack, swc
 
 ### 🧷 백엔드
 
