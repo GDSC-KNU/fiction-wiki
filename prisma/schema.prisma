@@ -296,6 +296,7 @@ model Comment {
   userRationOnFictionsId  Int? @unique
   upVote            Int      @default(0)
   downVote          Int      @default(0)
+  // flaws             String?  @db.MediumText @default("")
 
   @@index([createdById])
   @@index([fictionId])

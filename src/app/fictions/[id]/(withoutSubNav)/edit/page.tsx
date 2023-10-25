@@ -1,33 +1,35 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FieldErrors, FormProvider, useForm } from "react-hook-form";
+
 import Button from "@components/common/button";
 import Input from "@components/common/input";
 import Input2 from "@components/common/input2";
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import useMutation from "@libs/client/useMutation";
-
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import {
-  FieldErrors,
-  FormProvider,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
-
 import DropdownSearchCheckbox from "@components/common/dropdownSearchCheckbox";
 import KeywordsInputBox from "@components/common/keywordsInputBox";
 import Select from "@components/common/select";
 import WikiDetailFormModal from "@components/fiction/wikiDetailFormModal";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
-import useUser from "@libs/client/useUser";
 
-import useSWR from "swr";
-import convertStringDateToInputDate from "@helper/convertStringDateToInputDate";
+import {
+  typeOptions,
+  categoryOptions,
+  nationalityOptions,
+  currentStateOptions,
+  platformOptions,
+  mediaMixOptions,
+  isTranslatedOptions,
+} from "@/constants/options";
+
+import useUser from "@libs/client/useUser";
 import UseEditFictionForms from "@/hooks/useEditFictionForms";
+import useFiction from "@/hooks/useFiction";
 
 import { EditFictionForm, EditFictionMutation } from "@/type/fiction";
 
@@ -35,158 +37,60 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-export default function EditFiction({ params }: { params: any }) {
+export default function EditFiction({ params }: { params: { id: string } }) {
   const { id: fictionId } = params;
-
-  const { data: fictionData, isValidating } = useSWR(
-    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${fictionId}` || "",
-    { suspense: true }
-  );
-
-  const { fiction } = fictionData || {};
-
-  const [md, setMd] = useState<string | undefined>("");
-  const handleChange = useCallback((md: any) => {
-    setMd(md);
-  }, []);
-
-  const router = useRouter();
+  const fiction = useFiction(fictionId);
   const { isAdmin } = useUser();
+  const [thumbPreview, setThumbPreview] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const methods = useForm<EditFictionForm>({
+    mode: "onBlur",
+    defaultValues: fiction,
+  });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch,
+    trigger,
+  } = methods;
+  const image = watch("image");
+
+  const [md, setMd] = useState<string>(fiction?.setup || "");
+  const handleMdChange = (newValue?: string) => {
+    if (newValue !== undefined) {
+      setMd(newValue);
+    }
+  };
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
     `/api/fictions/${fictionId}`
   );
-  const methods = useForm<EditFictionForm>({ mode: "onBlur" });
 
   const {
-    register,
-    formState: { errors } = {},
-    handleSubmit,
-    resetField,
-    watch,
-    setValue,
-    control,
-    trigger,
-  } = methods;
-
-  const {
-    append: categoriesAppend,
-    remove: categoriesRemove,
-    fields: categoriesFields,
-  } = useFieldArray({
-    control,
-    name: "categories",
+    title,
+    originalTitle,
+    author,
+    originalAuthor,
+    volume,
+    categoriesFields,
+    categoriesAppend,
+    categoriesRemove,
+    platformsFields,
+    platformsAppend,
+    platformsRemove,
+    mediaMixFields,
+    mediaMixAppend,
+    mediaMixRemove,
+  } = UseEditFictionForms({
+    control: methods.control,
   });
 
-  const {
-    append: platformsAppend,
-    remove: platformsRemove,
-    fields: platformsFields,
-  } = useFieldArray({
-    control,
-    name: "platforms",
-  });
-
-  const {
-    append: mediaMixAppend,
-    remove: mediaMixRemove,
-    fields: mediaMixFields,
-  } = useFieldArray({
-    control,
-    name: "mediaMix",
-  });
-
-  // Form에 데이터 주입
-  useEffect(() => {
-    if (fiction) {
-      setValue("image", fiction?.image);
-      setValue("title", fiction?.title || "");
-      setValue("originalTitle", fiction?.originalTitle || "");
-      setValue(
-        "relatedTitle",
-        (fiction?.relatedTitle
-          ?.split(",")
-          .filter((item: any) => item.trim() !== "") || []) as []
-      );
-      setValue("author", fiction?.author?.name || "");
-      setValue(
-        "relatedAuthor",
-        fiction?.relatedAuthor
-          ?.split(",")
-          .filter((item: any) => item.trim() !== "") as []
-      );
-      setValue("nationality", fiction?.nationality || "");
-      setValue("type", fiction?.type || "");
-      setValue(
-        "categories",
-        fiction?.categories.map((c: any) => ({ value: c.category.name }))
-      );
-      setValue("original", fiction?.original);
-      setValue(
-        "platforms",
-        fiction?.platforms
-          .split(",")
-          .map((item: any) => ({ value: item.trim() }))
-      );
-      setValue("currentState", fiction?.currentState);
-      setValue("synopsis", fiction?.synopsis);
-      setValue("characters", fiction?.characters);
-
-      setValue("date.0", convertStringDateToInputDate(fiction?.startDate));
-      setValue("date.1", convertStringDateToInputDate(fiction?.endDate));
-      setValue("currentState", fiction?.currentState);
-      setValue("status.0", fiction?.fictionStat.originality);
-      setValue("status.1", fiction?.fictionStat.writing);
-      setValue("status.2", fiction?.fictionStat.character);
-      setValue("status.3", fiction?.fictionStat.verisimilitude);
-      setValue("status.4", fiction?.fictionStat.synopsisComposition);
-      setValue("status.5", fiction?.fictionStat.value);
-      setValue("volume", fiction?.volume || 0);
-      setValue("introduction", fiction?.introduction || "");
-      setValue(
-        "mediaMix",
-        fiction?.mediaMix
-          ?.split(",")
-          .map((item: any) => ({ value: item.trim() }))
-          .filter((item: any) => item.value.trim() !== "")
-      );
-      setValue("isTranslated", fiction?.isTranslated || "");
-      setValue("originalAuthor", fiction?.author.rawName || "");
-      if (md === "") {
-        setMd(fiction?.setup || "");
-      }
-      setValue("setup", fiction?.setup || "");
-      // Keywords, mcKeywords, subKeywords
-      fiction?.keywords
-        .filter(
-          (item: any) =>
-            item.keyword.isOfHeroine === false &&
-            item.keyword.isOfMC === false &&
-            item.keyword.isOfCons === false
-        )
-        .map((item: any, i: number) =>
-          setValue(`keywords.${i}`, item.keyword.name)
-        );
-      fiction?.keywords
-        .filter((item: any) => item.keyword.isOfMC === true)
-        .map((item: any, i: number) =>
-          setValue(`mcKeywords.${i}`, item.keyword.name)
-        );
-      fiction?.keywords
-        .filter((item: any) => item.keyword.isOfHeroine === true)
-        .map((item: any, i: number) =>
-          setValue(`subKeywords.${i}`, item.keyword.name)
-        );
-      fiction?.keywords
-        .filter((item: any) => item.keyword.isOfCons === true)
-        .map((item: any, i: number) =>
-          setValue(`consKeywords.${i}`, item.keyword.name)
-        );
-      // setValue("keywords.0", "asd");
-    }
-  }, [fiction, setValue, md]);
-
-  // Onvalid Handler
+  // Onvalid / OnInvalid Handler
   const onValid = async (data: EditFictionForm) => {
     if (loading) return;
 
@@ -209,14 +113,20 @@ export default function EditFiction({ params }: { params: any }) {
     return;
   };
 
-  useEffect(() => {
-    if (data?.ok) {
-      router.push(`/fictions/${fictionId}`);
+  const onInvalid = (errors: FieldErrors) => {
+    if (loading) return;
+    alert("입력값을 확인해주세요.");
+    if (errors) {
+      console.log(errors);
+      return;
     }
-  }, [data, router]);
+  };
 
-  const [thumbPreview, setThumbPreview] = useState("");
-  const image = watch("image");
+  // useEffect(() => {
+  //   if (data?.ok) {
+  //     router.push(`/fictions/${fictionId}`);
+  //   }
+  // }, [data, router]);
 
   useEffect(() => {
     if (image && image[0] && image[0] instanceof File) {
@@ -234,87 +144,7 @@ export default function EditFiction({ params }: { params: any }) {
     }
   }, [image, fiction]);
 
-  // onInvalid handler
-  const onInvalid = (errors: FieldErrors) => {
-    if (loading) return;
-    console.log("invalid");
-    if (errors) {
-      console.log(errors);
-      return;
-    }
-  };
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
-
-  const typeOptions = [
-    { label: "웹소설", value: "웹소설" },
-    { label: "일반소설", value: "일반소설" },
-    { label: "웹툰", value: "웹툰" },
-    { label: "일반만화", value: "일반만화" },
-  ];
-
-  const nationalityOptions = [
-    { label: "중국", value: "중국" },
-    { label: "일본", value: "일본" },
-    { label: "한국", value: "한국" },
-    { label: "영미권", value: "영미권" },
-  ];
-
-  const categoryOptions = [
-    { label: "판타지", value: "판타지" },
-    { label: "선협", value: "선협" },
-    { label: "무협", value: "무협" },
-    { label: "SF", value: "SF" },
-    { label: "퓨전", value: "퓨전" },
-    { label: "현대판타지", value: "현대판타지" },
-    { label: "미정", value: "미정" },
-  ];
-
-  const isTranslatedOptions = [
-    { label: "", value: null },
-    { label: "번역", value: "번역" },
-    { label: "미번", value: "미번" },
-    { label: "번역(미디어믹스)", value: "번역(미디어믹스)" },
-  ];
-
-  const currentStateOptions = [
-    { label: "완결", value: "완결" },
-    { label: "미완", value: "미완" },
-    { label: "연재중단", value: "연재중단" },
-  ];
-
-  const platformOptions = [
-    { label: "카카오페이지", value: "카카오페이지" },
-    { label: "시리즈", value: "시리즈" },
-    { label: "문피아", value: "문피아" },
-    { label: "노벨피아", value: "노벨피아" },
-    { label: "조아라", value: "조아라" },
-    { label: "치디엔", value: "치디엔" },
-    { label: "타파스", value: "타파스" },
-    { label: "소설가가 되자", value: "소설가가 되자" },
-    { label: "하멜른", value: "하멜른" },
-    { label: "기타", value: "기타" },
-  ];
-
-  const mediaMixOptions = [
-    { label: "웹소설", value: "웹소설" },
-    { label: "만화(웹툰)", value: "만화(웹툰)" },
-    { label: "애니메이션", value: "애니메이션" },
-    { label: "드라마", value: "드라마" },
-    { label: "영화", value: "영화" },
-    { label: "오디오북", value: "오디오북" },
-  ];
-
-  const { title, originalTitle, author, originalAuthor, volume } =
-    UseEditFictionForms({
-      control: methods.control,
-    });
-
   return (
-    // <FictionProvider initialData={{ fiction, mbtis, setup, similarFictions }}>
     <FormProvider {...methods}>
       <div className="">
         <form
@@ -344,7 +174,11 @@ export default function EditFiction({ params }: { params: any }) {
                 className=" col-span-8 mx-5 mb-4 overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 lg:mb-0"
               >
                 <div>
-                  <MDEditor height="70vh" value={md} onChange={handleChange} />
+                  <MDEditor
+                    height="70vh"
+                    value={md}
+                    onChange={handleMdChange}
+                  />
                 </div>
               </div>
               <div id="side_container" className=" col-span-2 mx-5 lg:ml-0 ">
@@ -400,8 +234,8 @@ export default function EditFiction({ params }: { params: any }) {
                     작품 세부정보 수정
                   </div>
                   <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
-                    <div className=" ">
-                      <div className=" ">
+                    <div>
+                      <div>
                         <Input2
                           {...originalTitle}
                           required
@@ -596,6 +430,5 @@ export default function EditFiction({ params }: { params: any }) {
         </form>
       </div>
     </FormProvider>
-    // </FictionProvider>
   );
 }

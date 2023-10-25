@@ -25,8 +25,8 @@ interface EditFictionForm {
   image?: FileList | string;
   volume?: number;
   isTranslated?: string;
-  relatedTitle?: [];
-  relatedAuthor?: [];
+  relatedTitle?: string[];
+  relatedAuthor?: string[];
   originalAuthor?: string;
   type?: string;
   mediaMix?: { value: string }[];
@@ -36,7 +36,7 @@ interface EditFictionForm {
 }
 
 interface FictionWithMore extends Fiction {
-  fiction: any;
+  fiction: Fiction;
   keywords: [
     {
       keyword: Keyword;

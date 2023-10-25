@@ -1,33 +1,5 @@
-import { Control, useController } from "react-hook-form";
-
-interface EditFictionForm {
-  title: string;
-  author: string;
-  nationality: string;
-  categories: { value: string }[];
-  date: string[];
-  status: number[];
-  synopsis: string;
-  characters: string;
-  currentState: string;
-  keywords: string[];
-  mcKeywords: string[];
-  subKeywords: string[];
-  consKeywords: string[];
-  original: string;
-  platforms: { value: string }[];
-  image?: FileList | string;
-  volume?: number;
-  isTranslated?: string;
-  relatedTitle?: [];
-  relatedAuthor?: [];
-  originalAuthor?: string;
-  type?: string;
-  mediaMix?: { value: string }[];
-  setup?: string;
-  introduction?: string;
-  originalTitle?: string;
-}
+import { Control, useController, useFieldArray } from "react-hook-form";
+import { EditFictionForm } from "@/type/fiction";
 
 export default function UseEditFictionForms({
   control,
@@ -99,5 +71,47 @@ export default function UseEditFictionForms({
     defaultValue: 0,
   });
 
-  return { title, originalTitle, author, originalAuthor, volume };
+  const {
+    append: categoriesAppend,
+    remove: categoriesRemove,
+    fields: categoriesFields,
+  } = useFieldArray({
+    control,
+    name: "categories",
+  });
+
+  const {
+    append: platformsAppend,
+    remove: platformsRemove,
+    fields: platformsFields,
+  } = useFieldArray({
+    control,
+    name: "platforms",
+  });
+
+  const {
+    append: mediaMixAppend,
+    remove: mediaMixRemove,
+    fields: mediaMixFields,
+  } = useFieldArray({
+    control,
+    name: "mediaMix",
+  });
+
+  return {
+    title,
+    originalTitle,
+    author,
+    originalAuthor,
+    volume,
+    categoriesFields,
+    categoriesAppend,
+    categoriesRemove,
+    platformsFields,
+    platformsAppend,
+    platformsRemove,
+    mediaMixFields,
+    mediaMixAppend,
+    mediaMixRemove,
+  };
 }
