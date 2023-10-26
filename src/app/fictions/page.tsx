@@ -1,7 +1,15 @@
-import React from "react";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
 
-import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
+// import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
 import { Metadata } from "next";
+import ClipLoader from "react-spinners/ClipLoader";
+import FictionSelector from "@components/fictions/fictionSelector";
+
+const FictionSelectorWrapper = dynamic(
+  () => import("@components/fictions/fictionSelectorWrapper"),
+  { ssr: false }
+);
 
 export default async function FictionsPage() {
   const staticData = await fetch(
@@ -13,16 +21,22 @@ export default async function FictionsPage() {
     }
   ).then((res) => res.json());
 
-  // const staticDataWithAll = {
-  //   ...staticData,
-  //   categoryList: [{ id: 1111, name: "all" }, ...staticData.categoryList],
-  //   keywordList: [{ id: 1111, name: "all" }, ...staticData.keywordList],
-  //   nationalityList: ["all", ...staticData.nationalityList],
-  // };
-
   return (
     <>
-      <FictionSelectorWrapper staticData={staticData} />
+      <FictionSelector staticData={staticData} />
+      <Suspense
+        fallback={
+          <div className="mt-20 flex items-center justify-center">
+            <ClipLoader
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        }
+      >
+        <FictionSelectorWrapper fallbackData={staticData} />
+      </Suspense>
     </>
   );
 }

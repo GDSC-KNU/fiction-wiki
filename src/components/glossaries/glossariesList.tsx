@@ -32,7 +32,7 @@ export default function GlossariesList() {
 
   const { data: searchData, isValidating } = useSWR<ISearchData>(
     `${process.env.NEXT_PUBLIC_HOST}/api/glossaries?${queryString}`,
-    { suspense: true }
+    { suspense: true, fallbackData: { glossaries: [], glossariesCount: 0 } }
   );
 
   const searchHandler = async (e: any) => {
@@ -41,11 +41,6 @@ export default function GlossariesList() {
         setQueryObject({ page: 1, title: "" });
         return;
       }
-      // setData(
-      //   initialData.filter((glossary) =>
-      //     glossary.fiction.title.includes(search)
-      //   )
-      // );
       setQueryObject({ ...queryObject, title: search });
     }
   };
@@ -109,7 +104,7 @@ export default function GlossariesList() {
             </tr>
           </thead>
           <tbody>
-            {searchData?.glossaries.map((glossary) => (
+            {searchData?.glossaries?.map((glossary) => (
               <Fragment key={glossary.id}>
                 <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                   <td className="">

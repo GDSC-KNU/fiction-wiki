@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import {
   Chart as ChartJS,
@@ -10,6 +11,8 @@ import {
   Legend,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
+import useFiction from "@/hooks/useFiction";
+import { FictionResponse } from "@/type/fiction";
 
 ChartJS.register(
   RadialLinearScale,
@@ -20,7 +23,13 @@ ChartJS.register(
   Legend
 );
 
-export default function FictionRadarChart({ fiction }: any) {
+export default function FictionRadarChart({
+  fallbackData,
+}: {
+  fallbackData?: FictionResponse;
+}) {
+  const { fiction } = useFiction({ fallbackData });
+
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],
     datasets: [

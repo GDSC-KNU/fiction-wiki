@@ -1,44 +1,26 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
 
-import useMutation from "@libs/client/useMutation";
+import UserCommentInput from "@components/fiction/userCommentInput";
+import CommentItem from "@/components/fiction/commentItem";
+
 import useUser from "@libs/client/useUser";
+import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";
+import { CommentWithMore, FictionResponse } from "@/type/fiction";
 
-import { Comment, User } from "@prisma/client";
-import formatDate from "@helper/formatDate";
-import UserCommentInput from "./userCommentInput";
-
-interface ICommentItem {
-  comment: CommentWithUser;
-  user: any;
-  handleDeleteComment: any;
-}
-
-interface CommentWithUser extends Comment {
-  createdBy: User;
-}
-
-export default function Comments({ fiction }: any) {
+export default function Comments({
+  fallbackData,
+}: {
+  fallbackData: FictionResponse;
+}) {
   const { user } = useUser();
+  const { comments } = useCommentsIntegrated({ fallbackData });
   const [commentIndex, setCommentIndex] = useState(1);
-
-  const searchParams = useSearchParams();
-  const pageQuery = searchParams.get("page");
-
-  const [deleteComment, { loading }] = useMutation(
-    `/api/fictions/${pageQuery}/comment`
-  );
-
-  const comments = fiction?.comments as CommentWithUser[];
-
-  if (!comments) return <div>loading</div>;
 
   const nextHandler = (e: any) => {
     const isBiggerThanLastPage =
-      commentIndex >= Math.ceil((comments.length || 1) / 7);
+      commentIndex >= Math.ceil((comments?.length || 1) / 7);
     if (isBiggerThanLastPage) return;
 
     setCommentIndex(commentIndex + 1);
@@ -51,71 +33,17 @@ export default function Comments({ fiction }: any) {
 
     setCommentIndex(commentIndex - 1);
   };
-  ///pagination
-
-  async function handleDeleteComment(comment: Comment) {
-    await deleteComment({ userId: user?.id, commentId: comment.id }, "DELETE");
-
-    window.location.href = window.location.href.toString();
-  }
-
-  const CommentItem = ({
-    comment,
-    user,
-    handleDeleteComment,
-  }: ICommentItem) => {
-    return (
-      <ul className="relative flex flex-col place-content-between border-b-[1px] pb-1 pt-2 last:border-b-0">
-        <div className=" mb-1 flex justify-between ">
-          <div className=" flex space-x-1 text-center">
-            <Image
-              className=" rounded-full"
-              src={comment?.createdBy?.image ?? ""}
-              width={24}
-              height={24}
-              alt={user?.id ?? ""}
-            ></Image>
-            <div className=" flex items-center text-xs font-bold">
-              {comment?.createdBy?.nickname || "익명"}
-            </div>
-          </div>
-          <div className=" text-xs">{formatDate(comment.createdAt)}</div>
-        </div>
-        <div className=" relative">
-          <div className=" text-sm">
-            <span>{comment.comment}</span>
-            {user && comment?.createdById === user?.id ? (
-              <span
-                onClick={() => handleDeleteComment(comment)}
-                className="absolute right-0 cursor-pointer text-xs text-red-400"
-              >
-                삭제
-              </span>
-            ) : null}
-          </div>
-        </div>
-      </ul>
-    );
-  };
-
-  // const paddedComments = [
-  //   ...(comments || []),
-  //   ...Array(7 - (comments?.length || 0)).fill({}),
-  // ];
 
   return (
     <>
       <h2 className=" py-2 text-xl font-bold">리뷰</h2>
       <div className=" h-full ">
         <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
-          {comments.map((comment, index) => (
-            <CommentItem
-              key={index}
-              comment={comment}
-              user={user}
-              handleDeleteComment={handleDeleteComment}
-            />
-          ))}
+          <div>
+            {comments?.map((comment: any) => (
+              <CommentItem key={comment.id} comment={comment} user={user} />
+            ))}
+          </div>
           <div className=" mb-2 mt-5 flex justify-center">
             <button
               onClick={prevHandler}
@@ -164,7 +92,7 @@ export default function Comments({ fiction }: any) {
             </button>
           </div>
         </div>
-        <UserCommentInput />
+        <UserCommentInput fallbackData={fallbackData} />
       </div>
     </>
   );

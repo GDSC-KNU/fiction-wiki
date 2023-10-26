@@ -1,3 +1,4 @@
+"use client";
 import { Keyword, Category } from "@prisma/client";
 
 import React, { useState } from "react";

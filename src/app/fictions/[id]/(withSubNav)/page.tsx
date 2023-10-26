@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+
+import ClipLoader from "react-spinners/ClipLoader";
+
 import FictionRadarChart from "@components/fiction/fictionRadarChart";
 import MbtiBarChart from "@components/mbtiBarChart";
 import UserRate from "@components/userRate";
@@ -45,27 +49,52 @@ export default async function FictionPage({ params }: any) {
           ></div>
         </div>
         <div className=" row-span-3 flex flex-col">
-          <Comments fiction={fiction} />
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center">
+                <ClipLoader
+                  size={100}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            }
+          >
+            <Comments fallbackData={response} />
+          </Suspense>
         </div>
         <div className=" mt-12">
           <SimilarFictions similarFiction={similarFictions} />
         </div>
       </div>
-      <div
+
+      <section
         id="side-container"
         className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
       >
-        <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
-          <div className=" flex justify-center px-3">
-            <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-              <FictionRadarChart fiction={fiction} />
+        <Suspense
+          fallback={
+            <div className="relative top-20 flex items-center justify-center">
+              <ClipLoader
+                size={100}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
             </div>
+          }
+        >
+          <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
+            <div className=" flex justify-center px-3">
+              <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
+                <FictionRadarChart fallbackData={response} />
+              </div>
+            </div>
+            <UserRate />
           </div>
-          <UserRate />
-        </div>
-        <Keywords fiction={fiction} />
-        <MbtiBarChart mbtis={mbtis} fiction={fiction} />
-      </div>
+          <Keywords fallbackData={response} />
+          <MbtiBarChart mbtis={mbtis} fallbackData={response} />
+        </Suspense>
+      </section>
     </div>
   );
 }

@@ -1,7 +1,10 @@
+"use client";
+
 import useSWR from "swr";
 
 import { useParams } from "next/navigation";
-import { FictionResponse, FictionWithMore } from "@/type/fiction";
+import useUser from "@libs/client/useUser";
+import { FictionResponse } from "@/type/fiction";
 
 export default function useFiction({
   fallbackData,
@@ -9,6 +12,7 @@ export default function useFiction({
   fallbackData?: FictionResponse;
 }) {
   const params = useParams();
+  const { user } = useUser();
   const { id: fictionId } = params;
 
   const {
@@ -21,8 +25,15 @@ export default function useFiction({
     fallbackData: fallbackData,
   });
 
+  const integratedComments = fictionData?.fiction?.comments?.map(
+    (comment: any) => ({
+      ...comment,
+      canDelete: user?.id === comment?.createdById,
+    })
+  );
+
   return {
-    fiction: fictionData.fiction as FictionWithMore,
+    comments: integratedComments || [],
     mutate,
     isValidating,
     error,

@@ -7,15 +7,12 @@ import {
   KeywordsOnFictions,
   UserFictionStat,
   Author,
-  Category,
 } from "@prisma/client";
 
 import React from "react";
 
 import FictionList from "@components/fictionList";
 import useSWR from "swr";
-
-import FictionSelector from "@components/fictions/fictionSelector";
 
 import { useQueryObject } from "@/hooks/useQueryObject";
 import Pagination from "@components/fictions/pagination";
@@ -46,26 +43,19 @@ interface FictionsResponse {
   nationalities: string[];
 }
 
-interface FictionSelectorProps {
-  staticData: {
-    keywordList: Keyword[];
-    nationalityList: string[];
-    categoryList: Category[];
-  };
-}
-
 export default function FictionSelectorWrapper({
-  staticData,
-}: FictionSelectorProps) {
+  fallbackData,
+}: {
+  fallbackData?: FictionsResponse;
+}) {
   const { queryString } = useQueryObject();
-
   const { data } = useSWR<FictionsResponse>(
-    `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`,
+    { suspense: true }
   );
 
   return (
     <>
-      <FictionSelector staticData={staticData} />
       {data && (
         <>
           <FictionList

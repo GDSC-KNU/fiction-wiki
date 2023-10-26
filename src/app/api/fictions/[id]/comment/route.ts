@@ -96,8 +96,10 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ ok: false }, { status: 500 });
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { status: 200 });
   }
+
+  return NextResponse.json({ ok: false }, { status: 400 });
 }
 
 async function getUserToken(req: NextRequest) {

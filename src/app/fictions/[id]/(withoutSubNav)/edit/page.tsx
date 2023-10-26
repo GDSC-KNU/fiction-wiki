@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 
 import Button from "@components/common/button";
@@ -29,7 +29,7 @@ import {
 
 import useUser from "@libs/client/useUser";
 import UseEditFictionForms from "@/hooks/useEditFictionForms";
-import useFiction from "@/hooks/useFiction";
+import useFiction from "@/hooks/useFictionProcessed";
 
 import { EditFictionForm, EditFictionMutation } from "@/type/fiction";
 
@@ -39,7 +39,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 
 export default function EditFiction({ params }: { params: { id: string } }) {
   const { id: fictionId } = params;
-  const fiction = useFiction(fictionId);
+  const fiction = useFiction({ fallbackData: {} });
   const { isAdmin } = useUser();
   const [thumbPreview, setThumbPreview] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -117,16 +117,10 @@ export default function EditFiction({ params }: { params: { id: string } }) {
     if (loading) return;
     alert("입력값을 확인해주세요.");
     if (errors) {
-      console.log(errors);
+      // console.log(errors);
       return;
     }
   };
-
-  // useEffect(() => {
-  //   if (data?.ok) {
-  //     router.push(`/fictions/${fictionId}`);
-  //   }
-  // }, [data, router]);
 
   useEffect(() => {
     if (image && image[0] && image[0] instanceof File) {
@@ -144,19 +138,18 @@ export default function EditFiction({ params }: { params: { id: string } }) {
     }
   }, [image, fiction]);
 
+  function handleSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+    if (isOpen) {
+      e.preventDefault();
+    } else {
+      handleSubmit(onValid, onInvalid)(e);
+    }
+  }
+
   return (
     <FormProvider {...methods}>
       <div className="">
-        <form
-          onChange={() => trigger()}
-          onSubmit={(e) => {
-            if (isOpen) {
-              e.preventDefault();
-            } else {
-              handleSubmit(onValid, onInvalid)(e);
-            }
-          }}
-        >
+        <form onChange={() => trigger()} onSubmit={handleSubmitHandler}>
           <div>
             <div className=" mx-5 mt-7">
               <Input2

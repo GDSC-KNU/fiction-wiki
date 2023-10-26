@@ -4,6 +4,7 @@ import {
   Fiction,
   FictionStat,
   Keyword,
+  Comment,
 } from "@prisma/client";
 
 interface EditFictionForm {

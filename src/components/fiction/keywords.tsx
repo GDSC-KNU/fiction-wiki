@@ -1,6 +1,19 @@
-import Link from "next/link";
+"use client";
 
-export default function Keywords({ fiction }: any) {
+import useFiction from "@/hooks/useFictionProcessed";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+import { FictionResponse } from "@/type/fiction";
+
+export default function Keywords({
+  fallbackData,
+}: {
+  fallbackData?: FictionResponse;
+}) {
+  const params = useParams();
+  const fiction = useFiction({ fallbackData: null });
+
   return (
     <>
       <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 sm:mr-3">
