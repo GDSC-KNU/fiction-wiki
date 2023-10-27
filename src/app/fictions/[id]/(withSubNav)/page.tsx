@@ -11,6 +11,7 @@ import Comments from "@components/fiction/comments";
 import InfoBox from "@components/fiction/InfoBox";
 import Keywords from "@components/fiction/keywords";
 import SimilarFictions from "@components/fiction/similarFictions";
+import { FictionResponse } from "@/type/fiction";
 
 export default async function FictionPage({ params }: any) {
   const { id } = params;
@@ -24,7 +25,9 @@ export default async function FictionPage({ params }: any) {
         tags: ["fiction"],
       },
     }
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .then((data) => data as FictionResponse);
 
   const { fiction, similarFictions, mbtis, setup } = response;
 
@@ -92,7 +95,7 @@ export default async function FictionPage({ params }: any) {
             <UserRate />
           </div>
           <Keywords fallbackData={response} />
-          <MbtiBarChart mbtis={mbtis} fallbackData={response} />
+          <MbtiBarChart fallbackData={response} />
         </Suspense>
       </section>
     </div>

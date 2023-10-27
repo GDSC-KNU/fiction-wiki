@@ -6,8 +6,10 @@ import { useParams } from "next/navigation";
 export default function useFiction({
   fallbackData,
 }: {
-  fallbackData: FictionResponse | null | {};
+  fallbackData?: FictionResponse | null;
 }) {
+  if (fallbackData === undefined) fallbackData = null;
+
   const defaultFiction = {
     image: undefined,
     title: undefined,
@@ -36,15 +38,6 @@ export default function useFiction({
     subKeywords: [],
     consKeywords: [],
   };
-
-  const params = useParams();
-  const { id: fictionId } = params;
-  const { data: fictionData, isValidating } = useSWR(
-    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${fictionId}`,
-    { suspense: true, fallbackData: fallbackData || defaultFiction }
-  );
-
-  if (!fallbackData) return defaultFiction;
 
   const preprocessFictionData = (fiction: FictionWithMore) => {
     if (!fiction) return null;
@@ -119,5 +112,27 @@ export default function useFiction({
     };
   };
 
-  return preprocessFictionData(fictionData.fiction) || defaultFiction;
+  const params = useParams();
+  const { id: fictionId } = params;
+
+  const { data: fictionData, isValidating } = useSWR(
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions/${fictionId}`,
+    {
+      suspense: true,
+      fallbackData: fallbackData
+        ? preprocessFictionData(fallbackData?.fiction)
+        : defaultFiction,
+    }
+  );
+  // if (fallbackData && Object.keys(fallbackData).length !== 0)
+  //   return preprocessFictionData(fallbackData.fiction as FictionWithMore);
+
+  // if (!fallbackData) return defaultFiction;
+
+  return fallbackData
+    ? preprocessFictionData(fallbackData.fiction)
+    : preprocessFictionData(fictionData.fiction) || defaultFiction;
 }
+
+// Suspesne 사용시 SWR에 fallbackData가 필요.
+// fallback이 있으면 fallback을 사용하고, 없으면 defaultFiction을 사용한다.

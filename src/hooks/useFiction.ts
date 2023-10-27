@@ -22,7 +22,7 @@ export default function useFiction({
   });
 
   return {
-    fiction: fictionData.fiction as FictionWithMore,
+    fictionResponse: fictionData as FictionResponse,
     mutate,
     isValidating,
     error,

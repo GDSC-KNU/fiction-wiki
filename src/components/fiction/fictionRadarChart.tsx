@@ -28,7 +28,9 @@ export default function FictionRadarChart({
 }: {
   fallbackData?: FictionResponse;
 }) {
-  const { fiction } = useFiction({ fallbackData });
+  const {
+    fictionResponse: { fiction },
+  } = useFiction({ fallbackData });
 
   const data = {
     labels: ["오리지널리티", "필력", "캐릭터성", "핍진성", "스토리", "작품성"],

@@ -42,10 +42,17 @@ interface FictionWithMore extends Fiction {
   comments: CommentWithMore[];
 }
 
+interface MBTI {
+  mbti: string;
+  avg: string;
+  cnt: string;
+}
+
 interface FictionResponse {
   ok: boolean;
   fiction: FictionWithMore;
   setup: string;
+  mbtis?: MBTI[];
   similarFictions: FictionWithMore[];
 }
 

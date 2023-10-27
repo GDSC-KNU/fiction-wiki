@@ -12,6 +12,8 @@ import {
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+import { FictionResponse } from "@/type/fiction";
+import useFiction from "@/hooks/useFiction";
 
 ChartJS.register(
   CategoryScale,
@@ -35,7 +37,16 @@ export const options = {
   },
 };
 
-export default function MbtiBarChart({ mbtis }: any) {
+export default function MbtiBarChart({
+  fallbackData,
+}: {
+  fallbackData: FictionResponse;
+}) {
+  const updatedData = useFiction({ fallbackData: fallbackData });
+  const {
+    fictionResponse: { mbtis = [] },
+  } = updatedData;
+
   const data = {
     labels: Array.from(mbtis).map((item: any, i) => {
       return item?.mbti;
