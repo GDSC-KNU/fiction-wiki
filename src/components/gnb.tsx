@@ -1,15 +1,52 @@
 "use client";
 
+import { ReactNode } from "react";
+
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
+
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import SearchModal from "@components/searchModal";
 import useScrollDirection from "@/hooks/useScrollDirection";
 import { motion } from "framer-motion";
+import { User } from "@prisma/client";
+
+function NavbarLink({ href, children }: { href: string; children: ReactNode }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <li
+      className={`${
+        isActive ? "border-b-[1px] border-blue-600 text-blue-600" : ""
+      } cursor-pointer hover:border-b-[1px] hover:border-blue-600 hover:text-blue-600`}
+    >
+      <Link className=" flex h-full items-center" href={href} passHref>
+        {children}
+      </Link>
+    </li>
+  );
+}
+
+function UserAvatar({ user }: { user: User }) {
+  return (
+    <li className="mr-3 flex min-w-[26px] cursor-pointer items-center p-0">
+      <Link className="flex items-center rounded-full" href="/profile" passHref>
+        <Image
+          className="rounded-full hover:brightness-[0.8]"
+          src={user?.image ?? ""}
+          width={26}
+          height={26}
+          alt={user?.id ?? ""}
+        />
+      </Link>
+    </li>
+  );
+}
 
 export default function Gnb() {
-  // const { data: nextSession } = useSession();
   const { user, isAdmin } = useUser();
   const isScrollingDown = useScrollDirection();
 
@@ -17,113 +54,69 @@ export default function Gnb() {
     y: isScrollingDown ? -100 : 0,
   };
 
+  const navLinks = [
+    { href: "/fictions", label: "작품" },
+    { href: "/authors/1", label: "작가" },
+    { href: "/translation", label: "번역" },
+    { href: "/glossaries", label: "용어집" },
+    ...(isAdmin ? [{ href: "/fictions/create", label: "새 문서" }] : []),
+  ];
+
   return (
     <motion.header
       initial={{ y: 0 }}
       animate={animateProps}
       transition={{ duration: 0.3, type: "tween" }}
-      className="fixed top-0 z-20 h-12 w-full bg-white py-2 shadow-md"
+      className="fixed top-0 z-20 h-12 w-full bg-white shadow-md"
     >
-      <nav className="flex w-full items-center justify-between">
-        <ul className=" ml-2 flex items-center space-x-2 whitespace-nowrap uppercase ">
-          <li className=" cursor-pointer ">
+      <nav className="flex h-full w-full items-center justify-between">
+        <ul className="ml-2 flex h-full items-center space-x-2 whitespace-nowrap uppercase">
+          <li className="cursor-pointer">
             <Link
-              className=" items-center font-mono text-2xl font-bold first-letter:flex"
+              className="items-center font-mono text-2xl font-bold"
               href="/"
               passHref
             >
               FDBS
             </Link>
           </li>
-          <li className=" ">
-            <ul className=" hidden md:flex">
-              <li className="mr-3 ">
-                <Link href="/fictions ">작품</Link>
-              </li>
-              <li className="mr-3">
-                <Link href="/authors/1" passHref>
-                  작가
-                </Link>
-              </li>
-              <li className="mr-3">
-                <Link href="/translation" passHref>
-                  번역
-                </Link>
-              </li>
-              <li className="mr-3">
-                <Link href="/glossaries" passHref>
-                  용어집
-                </Link>
-              </li>
-              {isAdmin ? (
-                <li className="mr-3">
-                  <Link href="/fictions/create">새 문서</Link>
-                </li>
-              ) : null}
+          <li className=" h-full">
+            <ul className="hidden h-full space-x-3 md:flex">
+              {navLinks.map((link) => (
+                <NavbarLink key={link.href} href={link.href}>
+                  {link.label}
+                </NavbarLink>
+              ))}
             </ul>
           </li>
         </ul>
-
-        <ul className=" flex items-center whitespace-nowrap">
-          <li>
+        <ul className="flex h-full items-stretch whitespace-nowrap text-center">
+          <li className=" mr-2 flex items-center justify-center">
             <SearchModal />
           </li>
-          {/* <SearchAutoComplete /> */}
-          {isAdmin ? <li className="mr-3">Admin</li> : null}
+          {isAdmin && (
+            <li className="mr-3 flex items-center justify-center">Admin</li>
+          )}
+          {user ? <UserAvatar user={user} /> : null}
           {user ? (
-            <li className=" mr-3 flex min-w-[26px] cursor-pointer items-center p-0">
-              <Link
-                className=" flex items-center rounded-full"
-                href="/profile"
-                passHref
-              >
-                <Image
-                  className=" rounded-full"
-                  src={user?.image ?? ""}
-                  width={26}
-                  height={26}
-                  alt={user?.id ?? ""}
-                ></Image>
-              </Link>
-            </li>
-          ) : null}
-          {user ? (
-            <li className=" mr-5 font-bold">
+            <li className="mr-5 flex items-center justify-center font-bold">
               <button onClick={() => signOut()}>로그아웃</button>
             </li>
           ) : (
-            <li>
-              <Link className=" mr-5 hover:cursor-pointer" href="/enter">
+            <li className=" flex items-center justify-center">
+              <Link className="mr-5 hover:cursor-pointer" href="/enter">
                 Enter
               </Link>
             </li>
           )}
         </ul>
       </nav>
-      <ul className=" flex list-none space-x-6 whitespace-nowrap bg-white px-3 py-2 shadow-md md:hidden">
-        <li>
-          <Link href="/fictions ">작품</Link>
-        </li>
-        <li className="">
-          <Link href="/authors/1" passHref>
-            작가
-          </Link>
-        </li>
-        <li className="">
-          <Link href="/translation" passHref>
-            번역
-          </Link>
-        </li>
-        <li className="">
-          <Link href="/glossaries" passHref>
-            용어집
-          </Link>
-        </li>
-        {isAdmin ? (
-          <li className="">
-            <Link href="/fictions/create">새 문서</Link>
-          </li>
-        ) : null}
+      <ul className="flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-3 shadow-md md:hidden">
+        {navLinks.map((link) => (
+          <NavbarLink key={link.href} href={link.href}>
+            {link.label}
+          </NavbarLink>
+        ))}
       </ul>
     </motion.header>
   );

@@ -40,13 +40,13 @@ export default function SearchModal() {
   }, [query]);
 
   return (
-    <>
+    <div>
       <SearchIcon
         width="24"
         height="24"
-        fill="black"
+        // fill="black"
         onClick={() => setShowModal(true)}
-        className=" mx-4 cursor-pointer "
+        className=" cursor-pointer "
       />
       {showModal ? (
         <>
@@ -110,6 +110,6 @@ export default function SearchModal() {
           <div className="fixed inset-0 z-10 mt-[48px] bg-black opacity-40"></div>
         </>
       ) : null}
-    </>
+    </div>
   );
 }
