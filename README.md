@@ -12,7 +12,7 @@
 
 웹소설, 웹툰 등의 컨텐츠에 대한 위키 서비스를 제공하여 모든 사용자가 문서의 작성에 기여할 수 있습니다.
 <br/><br/>
-https://aromatic-lute-463.notion.site/4f87ada8ed2b417383b2ce1b4b1ca92a?v=0018de45b66f44d9a5b808b143f77158&pvs=4
+
 
 ## 🙌🏻 멤버
 
