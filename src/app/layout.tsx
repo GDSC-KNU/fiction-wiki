@@ -72,7 +72,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <SWRProvider>
             <div className=" relative  flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
               <Top />
-              <section className="  mt-[80px] w-full items-center  pb-[60px] md:mt-[48px]">
+              <section className="  mt-[96px] w-full items-center  pb-[60px] md:mt-[48px]">
                 {children}
               </section>
               <Footer />
