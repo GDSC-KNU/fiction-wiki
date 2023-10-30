@@ -23,7 +23,7 @@ interface EditFictionForm {
   consKeywords: string[];
   original: string;
   platforms: { value: string }[];
-  image?: FileList | string;
+  image?: FileList | string | File[];
   volume?: number;
   isTranslated?: string;
   relatedTitle?: string[];

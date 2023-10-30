@@ -25,7 +25,7 @@ const Input2 = React.forwardRef<HTMLInputElement, InputProps>(
         <div className=" relative flex flex-col rounded-md">
           <input
             className={cn(
-              "flex h-10 w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900",
+              "flex w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm text-sm placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900",
               className
             )}
             ref={ref}
@@ -43,6 +43,6 @@ const Input2 = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-Input2.displayName = "Input";
+Input2.displayName = "Input2";
 
 export default Input2;
