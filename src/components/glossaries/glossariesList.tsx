@@ -3,7 +3,7 @@
 import { Fiction, Glossary } from "@prisma/client";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
-import GlossariesPagination from "./glossariesPagination";
+import GlossariesPagination from "./GlossariesPagination";
 
 interface glossaryWithMore extends Glossary {
   fiction: Fiction;

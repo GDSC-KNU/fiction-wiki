@@ -2,15 +2,15 @@ import { Suspense } from "react";
 
 import ClipLoader from "react-spinners/ClipLoader";
 
-import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import MbtiBarChart from "@components/mbtiBarChart";
-import UserRate from "@components/userRate";
+import FictionRadarChart from "@components/fiction/FictionRadarChart";
+import MbtiBarChart from "@components/MbtiBarChart";
+import UserRate from "@components/UserRate";
 
-import Comments from "@components/fiction/comments";
+import Comments from "@components/fiction/Comments";
 
 import InfoBox from "@components/fiction/InfoBox";
-import Keywords from "@components/fiction/keywords";
-import SimilarFictions from "@components/fiction/similarFictions";
+import Keywords from "@components/fiction/Keywords";
+import SimilarFictions from "@components/fiction/SimilarFictions";
 import { FictionResponse } from "@/type/fiction";
 
 export default async function FictionPage({ params }: any) {

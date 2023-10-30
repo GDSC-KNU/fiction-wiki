@@ -1,8 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { TextArea2 } from "@components/common/textarea2";
-import { Button2 } from "@components/common/button2";
+import { TextArea2 } from "@components/common/Textarea2";
+import { Button2 } from "@components/common/Button2";
 import useMutation from "@libs/client/useMutation";
 import { useParams } from "next/navigation";
 import useFiction from "@/hooks/useFiction";

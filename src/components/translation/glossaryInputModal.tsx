@@ -1,8 +1,8 @@
 "use client";
 
 // InputModal.tsx
-import Input from "@components/common/input";
-import Select from "@components/common/select";
+import Input from "@components/common/Input";
+import Select from "@components/common/Select";
 import useMutation from "@libs/client/useMutation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

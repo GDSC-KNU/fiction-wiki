@@ -104,6 +104,7 @@ export default function UseFictionForms({
       //   message: "[이미지] 를 업로드해 주세요.",
       // },
     },
+    defaultValue: "",
   });
 
   const { field: original } = useController({

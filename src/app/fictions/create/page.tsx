@@ -2,124 +2,114 @@
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import Button from "@components/common/button";
-import FictionRadarChart from "@components/fiction/fictionRadarChart";
-import Input from "@components/common/input";
-import Textarea from "@components/common/textarea";
+import Button from "@components/common/Button";
+import FictionRadarChart from "@components/fiction/FictionRadarChart";
+import Input from "@components/common/Input";
+import Input2 from "@components/common/Input2";
 import useMutation from "@libs/client/useMutation";
-import { Fiction } from "@prisma/client";
-import type { GetStaticProps, NextPage } from "next";
+
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
-import DropdownSearchCheckbox from "@components/common/dropdownSearchCheckbox";
-import KeywordsInputBox from "@components/common/keywordsInputBox";
-import Select from "@components/common/select";
-import WikiDetailFormModal from "@components/fiction/wikiDetailFormModal";
-// import { FictionProvider } from "@src/context/fictionContext";
+import DropdownSearchCheckbox from "@components/common/DropdownSearchCheckbox";
+import KeywordsInputBox from "@components/common/KeywordsInputBox";
+import Select from "@components/common/Select";
+import WikiDetailFormModal from "@components/fiction/WikiDetailFormModal";
+
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
 
-interface CreateFictionForm {
-  title: string;
-  author: string;
-  nationality: string;
-  categories: { value: string }[];
-  date: Date[];
-  status: number[];
-  synopsis: string;
-  characters: string;
-  currentState: string;
-  keywords: string[];
-  mcKeywords: string[];
-  subKeywords: string[];
-  consKeywords: string[];
-  original: string;
-  platforms: { value: string }[];
-  image?: FileList | string;
-  volume?: number;
-  isTranslated?: string;
-  relatedTitle?: [];
-  relatedAuthor?: [];
-  originalAuthor?: string;
-  type?: string;
-  mediaMix?: { value: string }[];
-  setup?: string;
-  introduction?: string;
-  originalTitle?: string;
-}
+import UseCreateFictionForms from "@/hooks/useFictionForms";
 
-interface CreateFictionMutation {
-  ok: boolean;
-  fiction: Fiction;
-}
+import {
+  typeOptions,
+  categoryOptions,
+  nationalityOptions,
+  currentStateOptions,
+  platformOptions,
+  mediaMixOptions,
+  isTranslatedOptions,
+} from "@/constants/options";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-});
+import { CreateFictionMutation, CreateFictionForm } from "@/type/fiction";
+import ClipLoader from "react-spinners/ClipLoader";
 
-const Create: NextPage = () => {
+const MDEditor = lazy(() => import("@uiw/react-md-editor"));
+
+const Create = () => {
+  const [localLoading, setLocalLoading] = useState(false);
   const [md, setMd] = useState<string | undefined>(
     "## 줄거리\n## 개요\n## 등장인물\n### (주인공)\n### 주요인물\n#### (주요인물 1)"
   );
 
   const { isAdmin } = useUser();
+  const router = useRouter();
 
   const handleChange = (md: any) => {
     setMd(md);
   };
-  const router = useRouter();
 
   const [createFiction, { loading, data, error }] =
     useMutation<CreateFictionMutation>("/api/fictions");
 
   const methods = useForm<CreateFictionForm>({
     mode: "onChange",
+    criteriaMode: "all",
   });
 
   const {
     register,
+    formState: { errors },
     handleSubmit,
     resetField,
     watch,
     setValue,
-    control,
     trigger,
-    formState: { errors },
+    getValues,
   } = methods;
 
-  const onValid = async (data: CreateFictionForm) => {
+  const onValid = async (inputData: CreateFictionForm) => {
     if (loading) return;
-    // console.log(data);
-    if (data.image && data.image.length > 0 && data.image[0] instanceof File) {
-      const { uploadURL } = await (await fetch(`/api/files`)).json();
+    setLocalLoading(true);
+
+    if (
+      inputData.image &&
+      inputData.image.length > 0 &&
+      inputData.image[0] instanceof File
+    ) {
+      const { uploadURL } = await (
+        await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/files`)
+      ).json();
       const form = new FormData();
-      form.append("file", data.image[0], data.title);
+      form.append("file", inputData.image[0], inputData.title);
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      createFiction({ ...data, image: id, setup: md }, "POST");
+      /// 성공
+
+      if (id) {
+        const response = JSON.parse(
+          await createFiction({ ...inputData, image: id, setup: md }, "POST")
+        );
+
+        router.push(`/fictions/${response.fiction.id}`);
+
+        setLocalLoading(false);
+      }
     }
     return;
   };
 
-  useEffect(() => {
-    if (data?.ok) {
-      router.push(`/fictions/${data.fiction.id}`);
-    }
-  }, [data, router]);
-
   const [thumbPreview, setThumbPreview] = useState("");
-  const image = watch("image");
 
+  const uploadedImage = watch("image");
   useEffect(() => {
-    if (image && image[0] && image[0] instanceof File) {
-      const file = image[0];
+    if (uploadedImage && uploadedImage[0] && uploadedImage[0] instanceof File) {
+      const file = uploadedImage[0];
       const objectUrl = URL.createObjectURL(file);
       setThumbPreview(objectUrl);
 
@@ -127,147 +117,97 @@ const Create: NextPage = () => {
         URL.revokeObjectURL(objectUrl);
       };
     }
-  }, [image]);
+  }, [uploadedImage, getValues]);
 
   const onInvalid = () => {
     if (loading) return;
-    // console.log(watch());
-    // console.log("errors");
-    // console.log(errors);
-    // alert("작품 세부사항을 포함한 필수항목을 모두 입력해주세요.");
   };
-
-  /// watch state (react-hook-form)
-
-  const {
-    append: categoriesAppend,
-    remove: categoriesRemove,
-    fields: categoriesFields,
-  } = useFieldArray({
-    control,
-    name: "categories",
-  });
-
-  const {
-    append: platformsAppend,
-    remove: platformsRemove,
-    fields: platformsFields,
-  } = useFieldArray({
-    control,
-    name: "platforms",
-  });
-
-  const {
-    append: mediaMixAppend,
-    remove: mediaMixRemove,
-    fields: mediaMixFields,
-  } = useFieldArray({
-    control,
-    name: "mediaMix",
-  });
 
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const typeOptions = [
-    { label: "웹소설", value: "웹소설" },
-    { label: "일반소설", value: "일반소설" },
-    { label: "웹툰", value: "웹툰" },
-    { label: "일반만화", value: "일반만화" },
-  ];
 
-  const nationalityOptions = [
-    { label: "중국", value: "중국" },
-    { label: "일본", value: "일본" },
-    { label: "한국", value: "한국" },
-    { label: "영미권", value: "영미권" },
-  ];
+  const {
+    title,
+    originalTitle,
+    author,
+    originalAuthor,
+    volume,
+    type,
+    nationality,
+    categories,
+    platforms,
+    mediaMix,
+    // image,
+    original,
+    currentState,
+    isTranslated,
+    dateStart,
+    dateEnd,
+  } = UseCreateFictionForms({
+    control: methods.control,
+  });
 
-  const categoryOptions = [
-    { label: "판타지", value: "판타지" },
-    { label: "선협", value: "선협" },
-    { label: "무협", value: "무협" },
-    { label: "SF", value: "SF" },
-    { label: "퓨전", value: "퓨전" },
-    { label: "현대판타지", value: "현대판타지" },
-    { label: "미정", value: "미정" },
-  ];
+  type ErrorMessage = {
+    type: string;
+    message: string;
+  };
 
-  const isTranslatedOptions = [
-    { label: "", value: null },
-    { label: "번역", value: "번역" },
-    { label: "미번", value: "미번" },
-    { label: "번역(미디어믹스)", value: "번역(미디어믹스)" },
-  ];
-
-  const currentStateOptions = [
-    { label: "완결", value: "완결" },
-    { label: "미완", value: "미완" },
-    { label: "연재중단", value: "연재중단" },
-  ];
-
-  const platformOptions = [
-    { label: "카카오페이지", value: "카카오페이지" },
-    { label: "시리즈", value: "시리즈" },
-    { label: "문피아", value: "문피아" },
-    { label: "노벨피아", value: "노벨피아" },
-    { label: "조아라", value: "조아라" },
-    { label: "치디엔", value: "치디엔" },
-    { label: "타파스", value: "타파스" },
-    { label: "소설가가 되자", value: "소설가가 되자" },
-    { label: "하멜른", value: "하멜른" },
-    { label: "기타", value: "기타" },
-  ];
-
-  const mediaMixOptions = [
-    { label: "웹소설", value: "웹소설" },
-    { label: "만화(웹툰)", value: "만화(웹툰)" },
-    { label: "애니메이션", value: "애니메이션" },
-    { label: "드라마", value: "드라마" },
-    { label: "영화", value: "영화" },
-    { label: "오디오북", value: "오디오북" },
-  ];
-
-  const validate = (value: any) => {
-    if (typeof value === "string") {
-      value = value.trim();
-      const isNumber = /^\d+$/;
-      if (value.length === 0) return "This field is required";
-    }
-
-    return true;
+  const extractErrorMessages = (obj: any) => {
+    const messages = [] as ErrorMessage[];
+    Object.entries(obj).forEach(([type, errors]) => {
+      if (Array.isArray(errors)) {
+        const root = (errors as any)?.root;
+        const { type = "", message = "" } = root || errors[0];
+        messages.push({ type, message });
+      } else {
+        const { type, message } = errors as { type: string; message: string };
+        messages.push({ type, message });
+      }
+    });
+    return messages;
   };
 
   return (
     <FormProvider {...methods}>
-      <div className="">
+      <div className=" px-5 pt-7">
         <form onSubmit={handleSubmit(onValid, onInvalid)}>
           <div>
-            <div className=" mx-5 mt-7">
-              <Input
-                register={register("title", {
-                  required: true,
-                  validate,
-                })}
-                placeholder="제목을 입력해주세요"
-                required
-                label=""
-                name="title"
-                type="text_detail"
-                kind="text"
-              />
-            </div>
+            <Input2
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                }
+              }}
+              {...title}
+            />
             <div className=" my-4 w-full grid-cols-10 lg:grid">
               <div
                 id="main_container"
-                className=" col-span-8 mx-5 mb-4 overflow-hidden rounded-md border-[0.5px] border-[#BBBBBB] bg-white p-3 lg:mb-0"
+                className=" col-span-8 mb-4 overflow-hidden bg-white lg:pr-5"
               >
-                <div>
-                  <MDEditor height="70vh" value={md} onChange={handleChange} />
-                </div>
+                <Suspense
+                  fallback={
+                    <div className=" flex h-full items-center justify-center">
+                      <ClipLoader
+                        size={100}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />
+                    </div>
+                  }
+                >
+                  <div className=" rounded-md border-[0.5px] border-[#BBBBBB] lg:mb-0">
+                    <MDEditor
+                      height="70vh"
+                      value={md}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </Suspense>
               </div>
-              <div id="side_container" className=" col-span-2 mx-5 lg:ml-0 ">
+              <div id="side_container" className=" col-span-2 lg:ml-0 ">
                 <div
                   id="thumbnail_preview"
                   className=" mb-4 min-h-[240px] w-full"
@@ -314,7 +254,7 @@ const Create: NextPage = () => {
 
                 <div className=" my-2 text-center ">
                   <div
-                    className=" mb-4 cursor-pointer whitespace-nowrap rounded border border-[#BBBBBB] px-4 py-2 font-bold hover:bg-[#EDF2F7]"
+                    className=" mb-4 cursor-pointer whitespace-nowrap rounded border border-gray-300 px-4 py-2 font-bold hover:bg-[#EDF2F7]"
                     onClick={handleOpen}
                   >
                     작품 세부정보 수정
@@ -322,147 +262,76 @@ const Create: NextPage = () => {
                   <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
                     <div className=" ">
                       <div className=" ">
-                        <Input
-                          register={register("originalTitle", {
-                            required: true,
-                            validate,
-                          })}
-                          required
-                          label="제목(원제) *"
-                          name="originalTitle"
-                          type="text_detail"
-                        />
+                        <Input2 {...originalTitle} label="제목(원제) *" />
                         <KeywordsInputBox
                           name="relatedTitle"
                           label="제목 연관어"
                         />
-                        <Input
-                          register={register("author", {
-                            required: true,
-                            validate,
-                          })}
-                          required
-                          label="작가 이름(한글) *"
-                          name="author"
-                          type="text_detail"
-                        />
-                        <Input
-                          register={register("originalAuthor", {
-                            required: true,
-                            validate,
-                          })}
-                          required={false}
-                          label="작가 이름(원어) *"
-                          name="originalAuthor"
-                          type="text_detail"
-                        />
+                        <Input2 {...author} label="작가 이름(한글) *" />
+                        <Input2 {...originalAuthor} label="작가 이름(원어) *" />
                         <KeywordsInputBox
                           name="relatedAuthor"
                           label="작가 이름 연관어"
                         />
                         <Select
-                          register={register("type", {
-                            required: true,
-                            validate,
-                          })}
+                          {...type}
                           options={typeOptions}
                           label="타입 *"
                         />
                         <Select
-                          register={register("nationality", {
-                            required: true,
-                            validate,
-                          })}
+                          {...nationality}
                           options={nationalityOptions}
                           label="국적 *"
                         />
                         <DropdownSearchCheckbox
+                          {...categories}
+                          name="categories"
+                          errors={errors}
                           label="카테고리 *"
                           options={categoryOptions}
-                          register={register}
-                          selected={watch("categories")}
-                          append={categoriesAppend}
-                          remove={categoriesRemove}
-                          fields={categoriesFields}
-                        ></DropdownSearchCheckbox>
+                          selected={getValues("categories")}
+                        />
                         <div className=" relative flex items-center justify-between">
                           <div className=" w-[48%]">
-                            <Input
-                              register={register("date.0", {})}
-                              required
+                            <Input2
+                              {...dateStart.field}
                               label="연재 시작일 *"
-                              name="startDate"
                               type="date"
                             />
                           </div>
                           <div className=" w-[48%]">
-                            <Input
-                              register={register("date.1")}
-                              required
+                            <Input2
+                              {...dateEnd.field}
                               label="연재 종료일"
-                              name="endDate"
                               type="date"
                             />
                           </div>
                         </div>
-                        <Input
-                          register={register("original", { required: true })}
-                          required
-                          label="오리지널 링크 *"
-                          name="original"
-                          type="text"
-                        />
+                        <Input2 {...original} label="오리지널 링크 *" />
                         <DropdownSearchCheckbox
+                          {...platforms}
+                          name={"platforms"}
+                          errors={errors}
                           label="플랫폼 *"
                           options={platformOptions}
-                          register={register("platforms", {
-                            required: true,
-                            validate: (value: any) =>
-                              value.length !== 0 || "This field is required",
-                          })}
                           selected={watch("platforms")}
-                          append={platformsAppend}
-                          remove={platformsRemove}
-                          fields={platformsFields}
                         ></DropdownSearchCheckbox>
                         <Select
-                          register={register("currentState", {
-                            required: true,
-                            validate,
-                          })}
+                          {...currentState}
                           options={currentStateOptions}
                           label="연재상태 *"
                         />
-                        <Input
-                          register={register("volume", {
-                            required: {
-                              value: true,
-                              message: "volume is required",
-                            },
-                            validate: (value) =>
-                              value?.toString() !== "" ||
-                              "This field is required",
-                            pattern: {
-                              value: /^\d+$/, // matches any sequence of one or more digits
-                              message: "Only numbers are allowed",
-                            },
-                          })}
-                          required
-                          label="분량 *"
-                          name="volume"
-                          type="text_detail"
-                        />
+                        <Input2 {...volume} label="분량 *" />
                         <DropdownSearchCheckbox
+                          {...mediaMix}
+                          name={"mediaMix"}
+                          errors={errors}
                           label="미디어믹스"
                           options={mediaMixOptions}
-                          register={register("mediaMix")}
-                          selected={watch("mediaMix")}
-                          append={mediaMixAppend}
-                          remove={mediaMixRemove}
-                          fields={mediaMixFields}
+                          selected={getValues("mediaMix")}
                         />
                         <Select
-                          register={register("isTranslated")}
+                          {...isTranslated}
                           options={isTranslatedOptions}
                           label="번역여부"
                         />
@@ -484,7 +353,7 @@ const Create: NextPage = () => {
                   </WikiDetailFormModal>
                 </div>
                 {isAdmin ? (
-                  <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-[#BBBBBB] bg-white">
+                  <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-gray-300 bg-white">
                     <FictionRadarChart />
                     <div className=" mx-2 grid grid-cols-2">
                       <Input
@@ -544,8 +413,20 @@ const Create: NextPage = () => {
               </div>
             </div>
           </div>
-          <div className=" px-4">
-            <Button text={loading ? "Loading..." : "저장"} />
+          <div className=" flex flex-col ">
+            <Button disabled={loading} text={loading ? "로딩 중..." : "저장"} />
+            {errors && (
+              <div>
+                {extractErrorMessages(errors).map(({ type, message }) => (
+                  <div
+                    className=" p-1 text-xs text-red-600"
+                    key={`${type}-${message}`}
+                  >
+                    {message}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </form>
       </div>

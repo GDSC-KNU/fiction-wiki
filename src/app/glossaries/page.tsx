@@ -1,4 +1,4 @@
-import GlossariesList from "@components/glossaries/glossariesList";
+import GlossariesList from "@components/glossaries/GlossariesList";
 
 export default async function Glossaries() {
   return (

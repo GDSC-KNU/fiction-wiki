@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import Top from "@components/layout/top";
-import Footer from "@components/layout/footer";
+import Top from "@components/layout/Top";
+import Footer from "@components/layout/Footer";
 import React from "react";
 
 import { Analytics } from "@vercel/analytics/react";

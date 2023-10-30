@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
-import SearchModal from "@components/searchModal";
+import SearchModal from "@components/SearchModal";
 import useScrollDirection from "@/hooks/useScrollDirection";
 import { motion } from "framer-motion";
 import { User } from "@prisma/client";

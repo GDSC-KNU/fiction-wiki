@@ -40,11 +40,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { imageId } = await JSON.parse(req?.body as any);
+  const { imageId } = await req.json();
+
   if (!imageId)
     return NextResponse.json({ ok: false, message: "imageId is required" });
-  // const imageId = await body?.imageId;
-  console.log(imageId);
+
   const response = await (
     await fetch(
       `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v1/${imageId}`,

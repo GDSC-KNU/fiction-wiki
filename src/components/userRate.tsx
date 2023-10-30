@@ -5,11 +5,11 @@ import useMutation from "@libs/client/useMutation";
 import { Fiction } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Input from "@components/common/input";
+import Input from "@components/common/Input";
 import { useSWRConfig } from "swr";
 import { useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import MbtiInputModal from "@components/mbtiInputModal";
+import MbtiInputModal from "@components/MbtiInputModal";
 import useUser from "@libs/client/useUser";
 
 interface RateUserStatForm {

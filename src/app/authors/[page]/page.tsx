@@ -1,5 +1,5 @@
 import { Author } from "@prisma/client";
-import FictionList from "@/components/fictionList";
+import FictionList from "@components/FictionList";
 
 interface AuthorResponse {
   authors: Author[];

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import UserCommentInput from "@components/fiction/userCommentInput";
-import CommentItem from "@/components/fiction/commentItem";
+import UserCommentInput from "@components/fiction/UserCommentInput";
+import CommentItem from "@components/fiction/CommentItem";
 
 import useUser from "@libs/client/useUser";
 import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";

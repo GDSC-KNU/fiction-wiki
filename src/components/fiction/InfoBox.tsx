@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FictionWithMore } from "@/type/type";
 
-import StarRating from "@/components/starRating";
+import StarRating from "@components/StarRating";
 
 import urlToString from "@helper/urlToString";
 import formatDate from "@helper/formatDate";

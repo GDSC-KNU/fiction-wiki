@@ -1,5 +1,5 @@
 import React from "react";
-import FictionList from "@/components/fictionList";
+import FictionList from "@components/FictionList";
 
 export default async function TitleSearchPage({ params }: any) {
   const { search, page } = params;

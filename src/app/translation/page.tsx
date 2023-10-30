@@ -5,7 +5,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import useSWR from "swr";
 import Link from "next/link";
 import useUser from "@libs/client/useUser";
-import GlossaryInputModal from "@components/translation/glossaryInputModal";
+import GlossaryInputModal from "@components/translation/GlossaryInputModal";
 import { useEffect } from "react";
 import useScrollDirection from "@/hooks/useScrollDirection";
 import { motion } from "framer-motion";

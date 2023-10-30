@@ -12,7 +12,7 @@ import {
 } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import Pagination from "@components/pagination";
+import Pagination from "@components/Pagination";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import CountryFlag_China from "@public/svg/countryFlag_China.svg";

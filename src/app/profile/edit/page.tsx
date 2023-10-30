@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Button from "@components/common/button";
-import Input from "@components/common/input";
+import Button from "@components/common/Button";
+import Input from "@components/common/Input";
 import useMutation from "@libs/client/useMutation";
 import type { NextPage } from "next";
 // import { useRouter } from "next/router";

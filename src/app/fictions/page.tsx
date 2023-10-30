@@ -4,10 +4,10 @@ import dynamic from "next/dynamic";
 // import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
 import { Metadata } from "next";
 import ClipLoader from "react-spinners/ClipLoader";
-import FictionSelector from "@components/fictions/fictionSelector";
+import FictionSelector from "@components/fictions/FictionSelector";
 
 const FictionSelectorWrapper = dynamic(
-  () => import("@components/fictions/fictionSelectorWrapper"),
+  () => import("@components/fictions/FictionSelectorWrapper"),
   { ssr: false }
 );
 

@@ -1,8 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 
 import Button from "@components/common/Button";
@@ -165,7 +164,7 @@ export default function EditFictionWrapper({
   //     );
   //   }
   // }, [image, fiction, thumbPreview, setThumbPreview, setValue, value]);
-  const currentImage = getValues("image");
+
   // console.log("currentImage", currentImage);
   // const thumbPreview = `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`;
   // console.log(thumbPreview);
@@ -176,8 +175,6 @@ export default function EditFictionWrapper({
   //   ? `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
   //   : "";
 
-  // DB에 저장된 image를 먼저 보여준다 fiction.image
-  // 이미지가 업로드되면, 업로드된 이미지로 교체 - setValue
   //
   const [thumbPreview, setThumbPreview] = useState(
     `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
@@ -315,9 +312,15 @@ export default function EditFictionWrapper({
                           name="relatedAuthor"
                           label="작가 이름 연관어"
                         />
-                        <Select {...type} options={typeOptions} label="타입" />
+                        <Select
+                          {...type}
+                          errors={errors}
+                          options={typeOptions}
+                          label="타입"
+                        />
                         <Select
                           {...nationality}
+                          errors={errors}
                           options={nationalityOptions}
                           label="국적"
                         />
@@ -349,8 +352,8 @@ export default function EditFictionWrapper({
                             />
                           </div>
                         </div>
-                        <Input
-                          register={register("original")}
+                        <Input2
+                          {...original}
                           required
                           label="오리지널 링크"
                           name="original"
@@ -366,6 +369,7 @@ export default function EditFictionWrapper({
                         ></DropdownSearchCheckbox>
                         <Select
                           {...currentState}
+                          errors={errors}
                           options={currentStateOptions}
                           label="연재상태 *"
                         />
@@ -380,6 +384,7 @@ export default function EditFictionWrapper({
                         />
                         <Select
                           {...isTranslated}
+                          errors={errors}
                           options={isTranslatedOptions}
                           label="번역여부"
                         />

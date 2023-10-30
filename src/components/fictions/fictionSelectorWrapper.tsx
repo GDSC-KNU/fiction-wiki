@@ -11,11 +11,11 @@ import {
 
 import React from "react";
 
-import FictionList from "@components/fictionList";
+import FictionList from "@components/FictionList";
 import useSWR from "swr";
 
 import { useQueryObject } from "@/hooks/useQueryObject";
-import Pagination from "@components/fictions/pagination";
+import Pagination from "@components/fictions/Pagination";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {

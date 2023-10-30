@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import WikiNavBar from "@components/fiction/wikiNavBar";
+import WikiNavBar from "@components/fiction/WikiNavBar";
 import type { Metadata, ResolvingMetadata } from "next";
 import config from "@/config/site";
 

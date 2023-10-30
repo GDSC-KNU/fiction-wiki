@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Input from "@components/common/input";
+import Input from "@components/common/Input";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 

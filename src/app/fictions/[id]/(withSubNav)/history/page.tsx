@@ -5,7 +5,7 @@ import React from "react";
 import useSWR from "swr";
 import Image from "next/image";
 
-import { Button2, buttonVariants } from "@components/common/button2";
+import { Button2, buttonVariants } from "@components/common/Button2";
 
 import Restore from "@public/svg/restore.svg";
 import { Fiction, FictionHistory, User } from "@prisma/client";

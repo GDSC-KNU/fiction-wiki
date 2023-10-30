@@ -1,7 +1,7 @@
 import React from "react";
 import { Author, UserFictionStat } from "@prisma/client";
 import client from "@libs/server/client";
-import FictionList from "@/components/fictionList";
+import FictionList from "@components/FictionList";
 import { Metadata } from "next";
 
 export interface UserFictionStatWithMore extends UserFictionStat {

@@ -1,5 +1,5 @@
 import { FictionResponse } from "@/type/fiction";
-import EditFictionWrapper from "@components/fiction/edit/editFictionWrapper";
+import EditFictionWrapper from "@components/fiction/edit/EditFictionWrapper";
 
 export default async function EditFiction({
   params,

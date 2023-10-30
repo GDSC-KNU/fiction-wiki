@@ -1,7 +1,7 @@
 import client from "@libs/server/client";
 import { Fiction } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import FictionList from "@/components/fictionList";
+import FictionList from "@components/FictionList";
 import React from "react";
 
 export default async function SearchGenrePage({ params }: any) {

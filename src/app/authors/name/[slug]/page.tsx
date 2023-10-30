@@ -1,4 +1,4 @@
-import FictionList from "@components/fictionList";
+import FictionList from "@components/FictionList";
 import { Metadata, ResolvingMetadata } from "next";
 import { Author, Fiction } from "@prisma/client";
 

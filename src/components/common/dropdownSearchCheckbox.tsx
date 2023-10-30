@@ -54,7 +54,7 @@ const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchValue.toLowerCase())
   );
-  console.log("errors", errors, name);
+
   return (
     <div className=" mb-2">
       <label
@@ -140,13 +140,15 @@ const DropdownCheckbox: React.FC<DropdownCheckboxProps> = ({
           </ul>
         </div>
       )}
-      <ErrorMessage
-        errors={errors}
-        name={`${name}.root`}
-        render={({ message }) => {
-          return <p className=" p-1 text-xs text-red-600">{message}</p>;
-        }}
-      />
+      {errors && (
+        <ErrorMessage
+          errors={errors}
+          name={`${name}.root`}
+          render={({ message }) => {
+            return <p className=" p-1 text-xs text-red-600">{message}</p>;
+          }}
+        />
+      )}
     </div>
   );
 };

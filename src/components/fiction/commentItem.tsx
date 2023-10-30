@@ -4,7 +4,7 @@ import formatDate from "@helper/formatDate";
 import dynamic from "next/dynamic";
 
 const CommentDeleteButton = dynamic(
-  () => import("@components/fiction/commentDeleteButton"),
+  () => import("@components/fiction/CommentDeleteButton"),
   {
     ssr: false,
   }

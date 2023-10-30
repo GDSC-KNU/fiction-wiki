@@ -7,7 +7,7 @@ interface UseMutationState<T> {
   error?: object | unknown;
 }
 type UseMutationResult<T> = [
-  (data: any, method: string) => Promise<void>, // Promise return type
+  (data: any, method: string) => Promise<any>, // Promise return type
   UseMutationState<T>
 ];
 
@@ -31,7 +31,9 @@ export default function useMutation<T = any>(
         },
         data: JSON.stringify(data),
       });
+
       setState((prev) => ({ ...prev, data: response.data }));
+      return response.data;
     } catch (error) {
       setState((prev) => ({ ...prev, error: error }));
     } finally {
