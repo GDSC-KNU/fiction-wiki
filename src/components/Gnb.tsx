@@ -59,7 +59,7 @@ export default function Gnb() {
     { href: "/authors/1", label: "작가" },
     { href: "/translation", label: "번역" },
     { href: "/glossaries", label: "용어집" },
-    ...(isAdmin ? [{ href: "/fictions/create", label: "새 문서" }] : []),
+    { href: "/fictions/create", label: "새 문서" },
   ];
 
   return (
