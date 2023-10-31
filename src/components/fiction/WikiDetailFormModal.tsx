@@ -8,9 +8,9 @@ const WikiDetailFormModal = ({ isOpen, onClose, children }: any) => {
     onClose();
   }, "Escape");
 
-  if (!isOpen) {
-    return null;
-  }
+  // if (!isOpen) {
+  //   return null;
+  // }
   return (
     <div
       className={`fixed inset-0 z-30 flex items-center justify-center bg-black/50 pt-24 ${

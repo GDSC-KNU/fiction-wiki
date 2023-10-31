@@ -203,6 +203,7 @@ export default function EditFictionWrapper({
         <form onChange={() => trigger()} onSubmit={handleSubmitHandler}>
           <div>
             <Input2
+              errors={errors}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -302,9 +303,15 @@ export default function EditFictionWrapper({
                           name="relatedTitle"
                           label="제목 연관어"
                         />
-                        <Input2 {...author} required label="작가 이름(한글)" />
+                        <Input2
+                          errors={errors}
+                          {...author}
+                          required
+                          label="작가 이름(한글)"
+                        />
                         <Input2
                           {...originalAuthor}
+                          errors={errors}
                           required={true}
                           label="작가 이름(원어)"
                         />
@@ -354,6 +361,7 @@ export default function EditFictionWrapper({
                         </div>
                         <Input2
                           {...original}
+                          errors={errors}
                           required
                           label="오리지널 링크"
                           name="original"
@@ -373,7 +381,7 @@ export default function EditFictionWrapper({
                           options={currentStateOptions}
                           label="연재상태 *"
                         />
-                        <Input2 {...volume} label="분량" />
+                        <Input2 errors={errors} {...volume} label="분량" />
                         <DropdownSearchCheckbox
                           {...mediaMix}
                           name={"mediaMix"}
@@ -407,7 +415,7 @@ export default function EditFictionWrapper({
                 </div>
                 {isAdmin ? (
                   <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-gray-300 bg-white">
-                    <FictionRadarChart />
+                    <FictionRadarChart fallbackData={fallbackData} />
                     <div className=" mx-2 grid grid-cols-2">
                       <Input
                         register={register("status.0", {

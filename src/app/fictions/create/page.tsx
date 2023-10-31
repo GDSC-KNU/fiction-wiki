@@ -3,7 +3,7 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import Button from "@components/common/Button";
-import FictionRadarChart from "@components/fiction/FictionRadarChart";
+// import FictionRadarChart from "@components/fiction/FictionRadarChart";
 import Input from "@components/common/Input";
 import Input2 from "@components/common/Input2";
 import useMutation from "@libs/client/useMutation";
@@ -58,7 +58,7 @@ const Create = () => {
 
   const methods = useForm<CreateFictionForm>({
     mode: "onChange",
-    criteriaMode: "all",
+    // criteriaMode: "all",
   });
 
   const {
@@ -168,13 +168,14 @@ const Create = () => {
     });
     return messages;
   };
-
+  console.log(errors);
   return (
     <FormProvider {...methods}>
       <div className=" px-5 pt-7">
         <form onSubmit={handleSubmit(onValid, onInvalid)}>
           <div>
             <Input2
+              errors={errors}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -262,24 +263,38 @@ const Create = () => {
                   <WikiDetailFormModal isOpen={isOpen} onClose={handleClose}>
                     <div className=" ">
                       <div className=" ">
-                        <Input2 {...originalTitle} label="제목(원제) *" />
+                        <Input2
+                          errors={errors}
+                          {...originalTitle}
+                          label="제목(원제) *"
+                        />
                         <KeywordsInputBox
                           name="relatedTitle"
                           label="제목 연관어"
                         />
-                        <Input2 {...author} label="작가 이름(한글) *" />
-                        <Input2 {...originalAuthor} label="작가 이름(원어) *" />
+                        <Input2
+                          errors={errors}
+                          {...author}
+                          label="작가 이름(한글) *"
+                        />
+                        <Input2
+                          errors={errors}
+                          {...originalAuthor}
+                          label="작가 이름(원어) *"
+                        />
                         <KeywordsInputBox
                           name="relatedAuthor"
                           label="작가 이름 연관어"
                         />
                         <Select
                           {...type}
+                          errors={errors}
                           options={typeOptions}
                           label="타입 *"
                         />
                         <Select
                           {...nationality}
+                          errors={errors}
                           options={nationalityOptions}
                           label="국적 *"
                         />
@@ -295,6 +310,7 @@ const Create = () => {
                           <div className=" w-[48%]">
                             <Input2
                               {...dateStart.field}
+                              errors={errors}
                               label="연재 시작일 *"
                               type="date"
                             />
@@ -302,12 +318,17 @@ const Create = () => {
                           <div className=" w-[48%]">
                             <Input2
                               {...dateEnd.field}
+                              errors={errors}
                               label="연재 종료일"
                               type="date"
                             />
                           </div>
                         </div>
-                        <Input2 {...original} label="오리지널 링크 *" />
+                        <Input2
+                          errors={errors}
+                          {...original}
+                          label="오리지널 링크 *"
+                        />
                         <DropdownSearchCheckbox
                           {...platforms}
                           name={"platforms"}
@@ -318,10 +339,11 @@ const Create = () => {
                         ></DropdownSearchCheckbox>
                         <Select
                           {...currentState}
+                          errors={errors}
                           options={currentStateOptions}
                           label="연재상태 *"
                         />
-                        <Input2 {...volume} label="분량 *" />
+                        <Input2 errors={errors} {...volume} label="분량 *" />
                         <DropdownSearchCheckbox
                           {...mediaMix}
                           name={"mediaMix"}
@@ -332,6 +354,7 @@ const Create = () => {
                         />
                         <Select
                           {...isTranslated}
+                          errors={errors}
                           options={isTranslatedOptions}
                           label="번역여부"
                         />
@@ -354,7 +377,7 @@ const Create = () => {
                 </div>
                 {isAdmin ? (
                   <div className=" h-max w-full overflow-x-auto rounded-md border-[0.5px] border-gray-300 bg-white">
-                    <FictionRadarChart />
+                    {/* <FictionRadarChart /> */}
                     <div className=" mx-2 grid grid-cols-2">
                       <Input
                         register={register("status.0", {

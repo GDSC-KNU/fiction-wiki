@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 import { useParams } from "next/navigation";
-import { FictionResponse, FictionWithMore } from "@/type/fiction";
+import { FictionResponse } from "@/type/fiction";
 
 export default function useFiction({
   fallbackData,
