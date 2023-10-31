@@ -25,7 +25,10 @@ const WikiDetailFormModal = ({ isOpen, onClose, children }: any) => {
         <div className="sticky bottom-0 flex justify-center border-t-[1px]  bg-white p-4">
           <button
             className="rounded bg-blue-500 px-4 py-1 text-white"
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              onClose();
+            }}
           >
             닫기
           </button>
