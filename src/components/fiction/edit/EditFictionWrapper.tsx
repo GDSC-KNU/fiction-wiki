@@ -8,7 +8,6 @@ import Button from "@components/common/Button";
 import Input from "@components/common/Input";
 import Input2 from "@components/common/Input2";
 import FictionRadarChart from "@components/fiction/FictionRadarChart";
-import useMutation from "@libs/client/useMutation";
 import DropdownSearchCheckbox from "@components/common/DropdownSearchCheckbox";
 import KeywordsInputBox from "@components/common/KeywordsInputBox";
 import Select from "@components/common/Select";
@@ -30,27 +29,22 @@ import useUser from "@libs/client/useUser";
 import UseEditFictionForms from "@/hooks/useFictionForms";
 import useProcessedFiction from "@/hooks/useFictionProcessed";
 
-import {
-  EditFictionForm,
-  EditFictionMutation,
-  FictionResponse,
-} from "@/type/fiction";
+import { EditFictionForm, FictionResponse } from "@/type/fiction";
 import { useParams } from "next/navigation";
 
 const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
 import ClipLoader from "react-spinners/ClipLoader";
+import useEditFiction from "@/hooks/mutation/useEditFiction";
 
 export default function EditFictionWrapper({
   fallbackData,
 }: {
   fallbackData: FictionResponse;
 }) {
-  const params = useParams();
-  const { id: fictionId } = params;
   const fiction = useProcessedFiction({ fallbackData: fallbackData });
   const { isAdmin } = useUser();
-  // const [thumbPreview, setThumbPreview] = useState("");
+
   const [isOpen, setIsOpen] = useState(false);
 
   const methods = useForm<EditFictionForm>({
@@ -66,7 +60,6 @@ export default function EditFictionWrapper({
     getValues,
     setValue,
   } = methods;
-  // const image = watch("image");
 
   const [md, setMd] = useState<string>(fiction?.setup || "");
   const handleMdChange = (newValue?: string) => {
@@ -78,9 +71,7 @@ export default function EditFictionWrapper({
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const [editFiction, { loading, data }] = useMutation<EditFictionMutation>(
-    `/api/fictions/${fictionId}`
-  );
+  const { editFiction, loading, error } = useEditFiction();
 
   const {
     title,
@@ -105,29 +96,11 @@ export default function EditFictionWrapper({
 
   // Onvalid / OnInvalid Handler
   const onValid = async (inputData: EditFictionForm) => {
-    if (loading) return;
+    // if (loading) return;
     if (!fiction) return;
 
-    if (
-      inputData.image &&
-      inputData.image.length > 0 &&
-      inputData.image[0] instanceof File
-    ) {
-      await fetch(`/api/files`, {
-        method: "DELETE",
-        body: JSON.stringify({ imageId: fiction.image }),
-      });
-      const { uploadURL } = await (await fetch(`/api/files`)).json();
-      const form = new FormData();
-      form.append("file", inputData.image[0], inputData.title);
-      const {
-        result: { id },
-      } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-      await editFiction({ ...inputData, image: id, setup: md }, "PUT");
-    } else {
-      await editFiction({ ...inputData, setup: md }, "PUT");
-    }
-    window.location.href = `/fictions/${fictionId}`;
+    editFiction({ inputData, md, image: fiction.image });
+
     return;
   };
 
@@ -147,33 +120,6 @@ export default function EditFictionWrapper({
       handleSubmit(onValid, onInvalid)(e);
     }
   }
-
-  // useEffect(() => {
-  //   if (image && image[0] && image[0] instanceof File) {
-  //     const file = image[0];
-  //     const objectUrl = URL.createObjectURL(file);
-  //     setThumbPreview(objectUrl);
-
-  //     return () => {
-  //       URL.revokeObjectURL(objectUrl);
-  //     };
-  //   } else if (fiction?.image) {
-  //     // setValue("image", fiction?.image);
-  //     setThumbPreview(
-  //       `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
-  //     );
-  //   }
-  // }, [image, fiction, thumbPreview, setThumbPreview, setValue, value]);
-
-  // console.log("currentImage", currentImage);
-  // const thumbPreview = `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`;
-  // console.log(thumbPreview);
-  // console.log(URL.createObjectURL(currentImage?.[0]));
-  // const thumbPreview = (currentImage as FileList)
-  //   ? URL.createObjectURL(currentImage[0])
-  //   : currentImage
-  //   ? `https://imagedelivery.net/vZ0h3NOKMe-QsJIVyNemEg/${fiction?.image}/fiction`
-  //   : "";
 
   //
   const [thumbPreview, setThumbPreview] = useState(
