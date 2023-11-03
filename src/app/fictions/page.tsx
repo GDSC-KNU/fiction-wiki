@@ -1,14 +1,12 @@
-import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import { Suspense, lazy } from "react";
 
 // import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
 import { Metadata } from "next";
 import ClipLoader from "react-spinners/ClipLoader";
 import FictionSelector from "@components/fictions/FictionSelector";
 
-const FictionSelectorWrapper = dynamic(
-  () => import("@components/fictions/FictionSelectorWrapper"),
-  { ssr: false }
+const FictionSelectorWrapper = lazy(
+  () => import("@components/fictions/FictionSelectorWrapper")
 );
 
 export default async function FictionsPage() {
