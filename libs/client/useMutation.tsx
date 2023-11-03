@@ -5,6 +5,7 @@ interface UseMutationState<T> {
   loading: boolean;
   data?: T;
   error?: object | unknown;
+  isSuccess?: boolean;
 }
 type UseMutationResult<T> = [
   (data: any, method: string) => Promise<any>, // Promise return type
@@ -18,6 +19,7 @@ export default function useMutation<T = any>(
     loading: false,
     data: undefined,
     error: undefined,
+    isSuccess: false,
   });
   async function mutation(data: any, method: string) {
     setState((prev) => ({ ...prev, loading: true }));
@@ -37,7 +39,7 @@ export default function useMutation<T = any>(
     } catch (error) {
       setState((prev) => ({ ...prev, error: error }));
     } finally {
-      setState((prev) => ({ ...prev, loading: false }));
+      setState((prev) => ({ ...prev, loading: false, isSuccess: true }));
     }
   }
   return [mutation, { ...state }];
