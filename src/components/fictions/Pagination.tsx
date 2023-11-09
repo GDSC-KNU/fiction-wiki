@@ -5,6 +5,10 @@ import React from "react";
 
 import { useQueryObject } from "@/hooks/useQueryObject";
 
+import PageLeft from "@public/svg/pageLeft.svg";
+import PageRight from "@public/svg/pageRight.svg";
+import { Button2 } from "@components/common/Button2";
+
 interface PaginationProps {
   totalItemsCount: number;
   pageRangeDisplayed: number;
@@ -20,17 +24,19 @@ export default function Pagination({
 
   const { page: pageQuery = 1 }: any = queryObject;
 
+  const currentPage = pageQuery;
+  const pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
+  const totalPagesGroupCount = Math.ceil(totalPagesCount / pageRangeDisplayed);
+  const hasPrev = pageGroup > 1;
+  const hasNext = pageGroup < totalPagesGroupCount;
+
   function handlePageUpdate({
     currentTarget,
   }: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     updatePage(Number(currentTarget.textContent));
   }
 
-  let pageGroup: number;
-
-  // Pagination Rendering function
   const PageButtons = () => {
-    pageGroup = Math.ceil(+(pageQuery || 1)?.toString() / 5) || 1;
     let lastIndexOfPageGroup = pageGroup * pageRangeDisplayed;
 
     let lastNumber =
@@ -51,38 +57,36 @@ export default function Pagination({
     return (
       <>
         {pageButtons.map((item) => (
-          <button
+          <Button2
+            size="icon"
             aria-current="page"
+            variant="outline"
             className={
-              pageQuery == item
+              currentPage == item
                 ? cls(
-                    "relative z-10 inline-flex cursor-pointer items-center border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20"
+                    " z-10 rounded-none border-indigo-300 bg-indigo-50 text-indigo-600"
                   )
-                : cls(
-                    "relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black focus:z-20"
-                  )
+                : cls("rounded-none")
             }
             key={item}
             onClick={handlePageUpdate}
           >
             {item}
-          </button>
+          </Button2>
         ))}
       </>
     );
   };
 
   const nextHandler = (e: any) => {
-    const currentPage = pageQuery;
-    pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
+    if (!hasNext) return;
     const nextPage =
       (pageGroup + 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
     updatePage(nextPage);
   };
 
   const prevHandler = (e: any) => {
-    const currentPage = pageQuery;
-    pageGroup = Math.ceil(currentPage / pageRangeDisplayed);
+    if (!hasPrev) return;
     const prevPage =
       (pageGroup - 1) * pageRangeDisplayed - (pageRangeDisplayed - 1);
     updatePage(prevPage);
@@ -102,49 +106,23 @@ export default function Pagination({
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
             aria-label="Pagination"
           >
-            <a
+            <Button2
+              disabled={!hasPrev}
+              variant="outline"
+              size="icon"
               onClick={prevHandler}
-              id="prev"
-              className=" relative inline-flex items-center rounded-l-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
             >
-              <span className="sr-only">Prev</span>
-
-              <svg
-                className="h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </a>
+              <PageLeft />
+            </Button2>
             <PageButtons />
-            <a
+            <Button2
+              disabled={!hasNext}
+              variant="outline"
+              size="icon"
               onClick={nextHandler}
-              id="next"
-              className=" relative inline-flex items-center rounded-r-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-500 hover:cursor-pointer hover:bg-gray-50 focus:z-20"
             >
-              <span className="sr-only">Next</span>
-
-              <svg
-                className="h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </a>
+              <PageRight />
+            </Button2>
           </nav>
         </div>
       </div>
