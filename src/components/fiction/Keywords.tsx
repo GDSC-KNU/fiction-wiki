@@ -20,9 +20,9 @@ export default function Keywords({
     <div className=" p-2">
       <div className=" mb-3 h-full w-full rounded-md sm:mb-0">
         <h2 className=" border-b-[1px] pt-1 font-bold">메인 태그</h2>
-        <ul className=" inline-flex flex-wrap space-x-1 pt-2">
+        <ul className=" inline-flex flex-wrap space-x-1 ">
           {keywords?.map((item: any, index: any) => (
-            <li key={index}>
+            <li className=" ml-1 mt-1" key={index}>
               <Link href={`/search/keyword/${item}/1`} passHref>
                 <Button2 variant="outline" size="xs">
                   #{item}
@@ -32,9 +32,9 @@ export default function Keywords({
           ))}
         </ul>
         <div className=" border-b-[1px] pt-1 font-bold">주인공 태그</div>
-        <ul className=" inline-flex flex-wrap space-x-1 pt-2">
+        <ul className=" inline-flex flex-wrap space-x-1 ">
           {mcKeywords.map((item: any, index: any) => (
-            <li key={index}>
+            <li className=" ml-1 mt-1" key={index}>
               <Link href={`/search/keyword/${item}/1`} passHref>
                 <Button2 variant="outline" size="xs">
                   #{item}
@@ -44,9 +44,9 @@ export default function Keywords({
           ))}
         </ul>
         <div className=" border-b-[1px] pt-1 font-bold">히로인 태그</div>
-        <ul className=" inline-flex flex-wrap pt-2">
+        <ul className=" inline-flex flex-wrap ">
           {subKeywords.map((item: any, index: any) => (
-            <li key={index}>
+            <li className=" ml-1 mt-1" key={index}>
               <Link href={`/search/keyword/${item}/1`} passHref>
                 <Button2 variant="outline" size="xs">
                   #{item}
@@ -56,9 +56,9 @@ export default function Keywords({
           ))}
         </ul>
         <div className=" border-b-[1px] pt-1 font-bold">호불호 태그</div>
-        <ul className=" inline-flex flex-wrap pt-2">
+        <ul className=" inline-flex flex-wrap">
           {consKeywords.map((item: any, index: any) => (
-            <li key={index}>
+            <li className=" ml-1 mt-1" key={index}>
               <Link href={`/search/keyword/${item}/1`} passHref>
                 <Button2 variant="outline" size="xs">
                   #{item}
