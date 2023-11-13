@@ -14,8 +14,8 @@ interface EditFictionForm {
   categories: { value: string }[];
   date: string[];
   status: number[];
-  synopsis: string;
-  characters: string;
+  synopsis?: string | null | undefined;
+  characters?: string | null | undefined;
   currentState: string;
   keywords: string[];
   mcKeywords: string[];
@@ -65,9 +65,21 @@ interface FictionWithMore extends Fiction {
   comments: Comment[];
 }
 
+interface preprocessedFictionData {
+  keywords: string[];
+  mcKeywords: string[];
+  subKeywords: string[];
+  consKeywords: string[];
+}
+
 interface EditFictionMutation {
   ok: boolean;
   fiction: Fiction;
 }
 
-export type { EditFictionForm, EditFictionMutation, FictionWithMore };
+export type {
+  EditFictionForm,
+  EditFictionMutation,
+  FictionWithMore,
+  preprocessedFictionData,
+};

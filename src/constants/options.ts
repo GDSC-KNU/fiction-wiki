@@ -56,3 +56,12 @@ export const mediaMixOptions = [
   { label: "영화", value: "영화" },
   { label: "오디오북", value: "오디오북" },
 ];
+
+export const userFictionStatOptions = [
+  { value: "originality", kor: "독창성" },
+  { value: "writing", kor: "필력" },
+  { value: "verisimilitude", kor: "핍진성" },
+  { value: "value", kor: "작품성" },
+  { value: "synopsisComposition", kor: "스토리" },
+  { value: "character", kor: "등장인물" },
+];

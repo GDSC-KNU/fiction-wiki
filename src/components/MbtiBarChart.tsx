@@ -59,7 +59,9 @@ export default function MbtiBarChart({
             return item?.avg;
           })
           .sort((a, b) => b - a),
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        // backgroundColor: "rgba(53, 162, 235, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        borderColor: "rgba(187, 187, 187, 1)",
       },
       // {
       //   label: "여성",
@@ -69,11 +71,11 @@ export default function MbtiBarChart({
   };
 
   return (
-    <>
+    <div className=" p-2">
       <h3 className=" mt-4 py-2 text-xl font-bold">MBTI별 선호도</h3>
       <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
         <Bar options={options} data={data} />
       </div>
-    </>
+    </div>
   );
 }

@@ -7,8 +7,8 @@ interface CreateFictionForm {
   categories: { value: string }[];
   date: string[];
   status: number[];
-  synopsis: string;
-  characters: string;
+  synopsis?: string | null | undefined;
+  characters?: string | null | undefined;
   currentState: string;
   keywords: string[];
   mcKeywords: string[];

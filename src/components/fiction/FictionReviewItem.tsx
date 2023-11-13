@@ -4,7 +4,7 @@ import formatDate from "@helper/formatDate";
 import dynamic from "next/dynamic";
 
 const CommentDeleteButton = dynamic(
-  () => import("@components/fiction/CommentDeleteButton"),
+  () => import("@/components/fiction/FictionReviewDeleteButton"),
   {
     ssr: false,
   }
@@ -40,7 +40,9 @@ export default function CommentItem({ comment, user }: ICommentItem) {
       </div>
       <div className=" relative">
         <div className="text-sm">
-          <span>{comment.comment}</span>
+          <div className=" text-ellipsis whitespace-pre-wrap break-words">
+            {comment.comment}
+          </div>
           <CommentDeleteButton comment={comment} />
         </div>
       </div>

@@ -71,7 +71,7 @@ export default async function FictionLayout({
           __html: JSON.stringify(structuredReviewData),
         }}
       />
-      <div className=" block lg:flex">
+      <div className=" block justify-center lg:flex">
         <div className="static left-0 lg:fixed lg:h-screen lg:w-24 lg:py-10 ">
           <WikiNavBar />
         </div>

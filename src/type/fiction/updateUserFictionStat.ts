@@ -56,8 +56,24 @@ interface FictionResponse {
   similarFictions: FictionWithMore[];
 }
 
-interface PostCommentForm {
+interface PostCommentAndRateForm {
   comment: string;
+  userFictionStat: any;
 }
 
-export type { CommentWithMore, FictionResponse, PostCommentForm };
+interface UpdateUserFictionStatForm {
+  comment: string;
+  originality: number;
+  synopsisComposition: number;
+  character: number;
+  value: number;
+  writing: number;
+  verisimilitude: number;
+}
+
+export type {
+  CommentWithMore,
+  FictionResponse,
+  PostCommentAndRateForm,
+  UpdateUserFictionStatForm,
+};

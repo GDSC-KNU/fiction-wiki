@@ -3,19 +3,6 @@ import client from "@libs/server/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-// import revalidator from "@libs/server/revalidator";
-// import { Redis } from "@upstash/redis";
-
-// const redisConfig = {
-//   url:
-//     process.env.UPSTASH_REDIS_REST_URL ??
-//     "https://apn1-sacred-manatee-34786.upstash.io",
-//   token:
-//     process.env.UPSTASH_REDIS_REST_TOKEN ??
-//     "AYfiACQgMWQxNjcyY2QtZWM4MS00NzQxLTgyZGItZGY1MjYwNDEwZGExOWJmODI1MWQzNGRlNDUyMDkzODM2NmE3NGQxZThiMmM=",
-// };
-
-// const redis = new Redis(redisConfig);
 const secret = process.env.NEXTAUTH_SECRET;
 
 export async function GET(
@@ -283,7 +270,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const token = await getToken({ req, secret });
     const user = token!.user;
-
+    // console.log("body,token,user", body, token, user);
     let {
       title,
       originalTitle,
@@ -295,14 +282,14 @@ export async function POST(req: NextRequest) {
       categories: rawCategories,
       date,
       currentState,
-      status: [
-        originality,
-        writing,
-        character,
-        verisimilitude,
-        synopsisComposition,
-        value,
-      ],
+      // status: [
+      //   originality,
+      //   writing,
+      //   character,
+      //   verisimilitude,
+      //   synopsisComposition,
+      //   value,
+      // ],
       synopsis,
       characters,
       keywords: rawKeywords,
@@ -323,7 +310,8 @@ export async function POST(req: NextRequest) {
     // Preprocessing
     const relatedTitle = arrayToString(rawRelatedTitle);
     const relatedAuthor = arrayToString(rawRelatedAuthor);
-    const platforms = arrayToString(rawPlatforms.map((p: any) => p.value));
+    const platforms =
+      arrayToString(rawPlatforms.map((p: any) => p.value)) || "";
     const mediaMix = arrayToString(rawMediaMix.map((m: any) => m.value));
 
     const categoriesMany = rawCategories
@@ -345,8 +333,23 @@ export async function POST(req: NextRequest) {
     const mcKeywordMany = arrayToPrismaObjects(rawMcKeywords, "isOfMC");
     const keywordMany = arrayToPrismaObjects(rawKeywords);
     const consKeywordMany = arrayToPrismaObjects(rawConsKeywords, "isOfCons");
-
+    // console.log(
+    //   "realatedTitle, relatedAuthor, platforms, mediaMix",
+    //   relatedTitle,
+    //   relatedAuthor,
+    //   platforms,
+    //   mediaMix
+    // );
+    // console.log(
+    //   "categoriesMany, subKeywordMany, mcKeywordMany, keywordMany, consKeywordMany",
+    //   categoriesMany,
+    //   subKeywordMany,
+    //   mcKeywordMany,
+    //   keywordMany,
+    //   consKeywordMany
+    // );
     // Database query
+    // console.log("user.id: ", user.id);
     const fiction = await client.fiction.create({
       data: {
         title,
@@ -366,18 +369,18 @@ export async function POST(req: NextRequest) {
         },
         relatedAuthor: relatedAuthor || "",
         nationality,
-        genre: "",
+        // genre: "",
         startDate: new Date(date[0]),
         endDate: date[1] ? new Date(date[1]) : new Date(0),
         original,
-        platforms: platforms || "",
+        platforms: platforms,
         image,
-        synopsis: "",
-        characters: "",
+        // synopsis: "",
+        // characters: "",
         currentState,
-        volume: +volume?.toString(),
-        isTranslated,
-        introduction,
+        volume: +volume || 0,
+        isTranslated: isTranslated || "",
+        // introduction,
         type,
         mediaMix: mediaMix || "",
         setup: setup || "",
@@ -394,25 +397,34 @@ export async function POST(req: NextRequest) {
         },
         fictionStat: {
           create: {
-            originality: +originality,
-            writing: +writing,
-            character: +character,
-            verisimilitude: +verisimilitude,
-            synopsisComposition: +synopsisComposition,
-            value: +value,
+            originality: 0,
+            writing: 0,
+            character: 0,
+            verisimilitude: 0,
+            synopsisComposition: 0,
+            value: 0,
           },
         },
         user: {
-          connect: {
-            id: user?.id,
+          // connect: {
+          //   id: user.id.toString(),
+          // },
+          connectOrCreate: {
+            where: {
+              id: user.id.toString(),
+            },
+            create: {
+              id: user.id.toString() || "",
+              name: user.name || "익명",
+            },
           },
         },
       },
     });
-
+    // console.log("fiction: ", fiction);
     return NextResponse.json(JSON.stringify({ ok: true, fiction }));
   } catch (error) {
-    console.error("An error occurred:", error);
+    // console.error("An error occurred:", error);
     return NextResponse.json({ ok: false, error: "An error occurred" });
   }
 }

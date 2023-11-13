@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { CommentWithMore } from "@/type/fiction";
 import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";
 
-export default function CommentDeleteButton({
+export default function FictionReviewDeleteButton({
   comment,
 }: {
   comment: CommentWithMore;
@@ -17,7 +17,7 @@ export default function CommentDeleteButton({
   const pageQuery = searchParams.get("page");
   const idQuery = searchParams.get("id");
 
-  const [deleteComment] = useMutation(`/api/fictions/${pageQuery}/comment`);
+  const [deleteComment] = useMutation(`/api/fictions/${pageQuery}/review`);
 
   async function handleDeleteComment(comment: CommentWithMore) {
     await deleteComment({ userId: user?.id, commentId: comment.id }, "DELETE");

@@ -1,3 +1,3 @@
 export * from "./editFiction";
-export * from "./comment";
+export * from "./updateUserFictionStat";
 export * from "./createFiction";

@@ -1,10 +1,10 @@
-import { PostCommentForm } from "@/type/fiction";
+import { UpdateUserFictionStatForm } from "@/type/fiction";
 import { Control, useController, useFieldArray } from "react-hook-form";
 
 export default function UsePostReviewForm({
   control,
 }: {
-  control: Control<PostCommentForm>;
+  control: Control<UpdateUserFictionStatForm>;
 }) {
   const { field: comment } = useController({
     name: "comment",

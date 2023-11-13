@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import UserCommentInput from "@components/fiction/UserCommentInput";
-import CommentItem from "@components/fiction/CommentItem";
+import FictionReviewForm from "@components/fiction/FictionReviewForm";
+import CommentItem from "@components/fiction/FictionReviewItem";
 
 import useUser from "@libs/client/useUser";
 import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";
@@ -28,9 +28,7 @@ export default function Comments({
 
   const prevHandler = (e: any) => {
     const isLessThanFirstPage = (commentIndex || 1) <= 1;
-
     if (isLessThanFirstPage) return;
-
     setCommentIndex(commentIndex - 1);
   };
 
@@ -92,7 +90,10 @@ export default function Comments({
             </button>
           </div>
         </div>
-        <UserCommentInput fallbackData={fallbackData} />
+        <div>
+          <h2 className=" py-2 text-xl font-bold">리뷰 작성</h2>
+          <FictionReviewForm fallbackData={fallbackData} />
+        </div>
       </div>
     </>
   );

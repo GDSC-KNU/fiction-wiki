@@ -9,6 +9,11 @@ import { headers } from "next/headers";
 
 const secret = process.env.NEXTAUTH_SECRET;
 
+const fixFloat = function (n: number) {
+  let m = Number((Math.abs(n) * 100).toPrecision(15));
+  return Math.round(m) / (100 * Math.sign(n));
+};
+
 export async function GET(req: NextRequest) {
   // const {
   //   query: { id, page },
@@ -44,8 +49,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  // const body = await req.json();
-  // const { id, page } = searchParams;
   const searchParams = req.nextUrl.searchParams;
   const id = searchParams.get("id");
 
@@ -59,32 +62,26 @@ export async function DELETE(req: NextRequest) {
 
   // if (!commentId) return res.json({ ok: false });
 
-  const entity = await client.userRationOnFiction.findFirst({
-    where: {
-      comment: {
-        id: commentId,
-      },
-    },
-    select: {
-      id: true,
-    },
+  // commentId로 userRationonFiction 탐색 -> entity
+  // const entity = await client.userRationOnFiction.findFirst({
+  //   where: {
+  //     comment: {
+  //       id: +commentId,
+  //     },
+  //   },
+  //   select: {
+  //     id: true,
+  //   },
+  // });
+
+  const comment = await client.comment.findUnique({
+    where: { id: +commentId },
   });
 
-  if (entity) {
+  if (comment && comment.userRationOnFictionsId) {
     await client.userRationOnFiction.delete({
-      where: {
-        id: entity!.id,
-      },
+      where: { id: comment.userRationOnFictionsId },
     });
-
-    // }
-    // await client.comment.delete({
-    //   where: {
-    //     id: +commentId,
-    //   },
-    // });
-
-    // revalidation
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
@@ -95,9 +92,18 @@ export async function DELETE(req: NextRequest) {
     } catch (error) {
       return NextResponse.json({ ok: false }, { status: 500 });
     }
-
     return NextResponse.json({ ok: true }, { status: 200 });
   }
+
+  // entity가 있다면 삭제
+  // if (entity) {
+  // await client.userRationOnFiction.delete({
+  //   where: {
+  //     id: entity!.id,
+  //   },
+  // });
+
+  // revalidation
 
   return NextResponse.json({ ok: false }, { status: 400 });
 }
@@ -116,7 +122,15 @@ export async function POST(req: NextRequest, { params }: any) {
   const session = token;
   if (!id || !session) return NextResponse.json({ ok: false }, { status: 400 });
 
-  const { comment } = await req.json();
+  const {
+    comment,
+    originality,
+    synopsisComposition,
+    value,
+    writing,
+    character,
+    verisimilitude,
+  } = await req.json();
 
   let Ration;
   let commentation;
@@ -149,20 +163,20 @@ export async function POST(req: NextRequest, { params }: any) {
             id: +id,
           },
         },
-        // users: {
-        //   connect: {
-        //     id: session?.user!.id,
-        //   },
-        // },
+        users: {
+          connect: {
+            id: session?.user!.id,
+          },
+        },
         userRationOnFictions: {
           create: {
             userId: session!.user!.id,
-            // originality: +UserFictionStat[0],
-            // writing: +UserFictionStat[1],
-            // character: +UserFictionStat[2],
-            // verisimilitude: +UserFictionStat[3],
-            // synopsisComposition: +UserFictionStat[4],
-            // value: +UserFictionStat[5],
+            originality,
+            writing,
+            character,
+            verisimilitude,
+            synopsisComposition,
+            value,
             // comment: comment.toString() || "",
             comment: {
               create: {
@@ -211,6 +225,49 @@ export async function POST(req: NextRequest, { params }: any) {
         },
       },
     });
+
+    const prevUserRatings = userRated
+      ? [
+          userRated.originality,
+          userRated.writing,
+          userRated.character,
+          userRated.verisimilitude,
+          userRated.synopsisComposition,
+          userRated.value,
+        ]
+      : new Array(6).fill(0);
+
+    const currentRatings = [
+      alreadyExists.originality,
+      alreadyExists.writing,
+      alreadyExists.character,
+      alreadyExists.verisimilitude,
+      alreadyExists.synopsisComposition,
+      alreadyExists.value,
+    ];
+
+    const updatedRatings = [
+      originality,
+      writing,
+      character,
+      verisimilitude,
+      synopsisComposition,
+      value,
+    ].map((newRating: string, index: number) => {
+      const total =
+        alreadyExists._count.userRationOnFictions * currentRatings[index] -
+        prevUserRatings[index] +
+        +newRating;
+
+      const updatedCount = !userRated
+        ? +alreadyExists._count.userRationOnFictions + 1
+        : userRated?.originality === null
+        ? +alreadyExists._count.userRationOnFictions + 1
+        : +alreadyExists._count.userRationOnFictions;
+
+      return fixFloat(total / updatedCount);
+    });
+
     // 유저가 처음 제출하는 경우 (userFictionState 존재)
     if (!userRated) {
       Ration = await client.userFictionStat.update({
@@ -228,67 +285,76 @@ export async function POST(req: NextRequest, { params }: any) {
                   fictionId: +id,
                 },
               },
+              originality,
+              writing,
+              character,
+              verisimilitude,
+              synopsisComposition,
+              value,
             },
           },
+          originality: updatedRatings[0],
+          writing: updatedRatings[1],
+          character: updatedRatings[2],
+          verisimilitude: updatedRatings[3],
+          synopsisComposition: updatedRatings[4],
+          value: updatedRatings[5],
+          total: fixFloat(
+            updatedRatings.reduce((acc: number, cur: number) => acc + cur, 0) /
+              updatedRatings.length
+          ),
         },
       });
-
-      // userRationOnFiction entity 생성
-      // const newRation = await client.userRationOnFiction.create({
-      //   data: {
-      //     userFictionStat: {
-      //       connect: {
-      //         id: alreadyExists.id,
-      //       },
-      //     },
-      //     comment: {
-      //       create: {
-      //         comment: comment,
-      //         createdBy: {
-      //           connect: {
-      //             id: session?.user?.id,
-      //           },
-      //         },
-      //         fiction: {
-      //           connect: {
-      //             id: +id,
-      //           },
-      //         },
-      //       },
-      //     },
-      //     user: {
-      //       connect: {
-      //         id: session.user.id,
-      //       },
-      //     },
-      //   },
-      // });
     }
     // 유저가 중복 제출하는 경우
     else {
-      Ration = await client.userFictionStat.update({
-        where: {
-          id: alreadyExists.id,
-        },
-        data: {
-          userRationOnFictions: {
-            update: {
-              where: {
-                id: userRated.id,
-              },
-              data: {
-                comment: {
-                  create: {
-                    comment: comment,
-                    createdById: session.user.id,
-                    fictionId: +id,
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
+      return NextResponse.json({ ok: false }, { status: 500 });
+      // Ration = await client.userFictionStat.update({
+      //   where: {
+      //     id: alreadyExists.id,
+      //   },
+      //   data: {
+      //     userRationOnFictions: {
+      //       update: {
+      //         where: {
+      //           id: userRated.id,
+      //         },
+      //         data: {
+      //           // comment: {
+      //           //   create: {
+      //           //     comment: comment,
+      //           //     createdById: session.user.id,
+      //           //     fictionId: +id,
+      //           //   },
+      //           // },
+      //           originality,
+      //           writing,
+      //           character,
+      //           verisimilitude,
+      //           synopsisComposition,
+      //           value,
+      //           comment: {
+      //             create: {
+      //               comment: comment,
+      //               createdById: session.user.id,
+      //               fictionId: +id,
+      //             },
+      //           },
+      //         },
+      //       },
+      //     },
+      //     originality: updatedRatings[0],
+      //     writing: updatedRatings[1],
+      //     character: updatedRatings[2],
+      //     verisimilitude: updatedRatings[3],
+      //     synopsisComposition: updatedRatings[4],
+      //     value: updatedRatings[5],
+      //     total: fixFloat(
+      //       updatedRatings.reduce((acc: number, cur: number) => acc + cur, 0) /
+      //         updatedRatings.length
+      //     ),
+      //   },
+      // });
     }
   }
 

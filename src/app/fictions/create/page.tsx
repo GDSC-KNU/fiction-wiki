@@ -23,7 +23,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import useUser from "@libs/client/useUser";
 
-import UseCreateFictionForms from "@/hooks/useFictionForms";
+import UseCreateFictionForms from "@/hooks/forms/useFictionForms";
 
 import {
   typeOptions,

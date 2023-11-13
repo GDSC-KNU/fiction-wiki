@@ -24,15 +24,15 @@ model Fiction {
   relatedTitle  String?
   relatedAuthor String?
   nationality   String
-  genre         String
+  genre         String?
   startDate     DateTime
   endDate       DateTime
   currentState  String      
   original      String
   platforms     String
   image         String              @db.MediumText
-  synopsis      String              @db.MediumText
-  characters    String              @db.MediumText
+  synopsis      String?             @db.MediumText
+  characters    String?             @db.MediumText
   setup         String              @db.LongText 
   user          User                @relation(fields: [userId], references: [id], onDelete:Cascade)
   userId        String
@@ -167,7 +167,7 @@ model CategoriesOnFictions {
 
 
 model User {
-  id        String      @id @default(cuid())
+  id        String      @id @default(cuid()) @unique
   phone     String?     @unique
   email     String?     @unique
   name      String
@@ -200,7 +200,7 @@ model User {
 }
 
 model UserRationOnFiction {
-  id                    Int       @id @default(autoincrement())
+  id                    Int       @id @default(autoincrement()) @unique
   user                  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String?    
   userFictionStat       UserFictionStat @relation(fields: [userFictionStatId], references: [id], onDelete:Cascade)
@@ -211,7 +211,7 @@ model UserRationOnFiction {
   character             Float?
   writing               Float?
   value                 Float?
-  comment               Comment?
+  comment               Comment[]
 
   @@index([userId])
   @@index([userFictionStatId])
@@ -284,7 +284,7 @@ model VerificationToken {
 }
 
 model Comment {
-  id                Int      @id @default(autoincrement())
+  id                Int      @id @default(autoincrement()) @unique
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt @default(now())
   comment           String   @db.MediumText 
@@ -293,10 +293,10 @@ model Comment {
   fiction           Fiction?     @relation(fields: [fictionId], references: [id], onDelete:Cascade)
   fictionId         Int?
   userRationOnFictions    UserRationOnFiction?   @relation(fields: [userRationOnFictionsId], references: [id], onDelete:Cascade)
-  userRationOnFictionsId  Int? @unique
+  userRationOnFictionsId  Int? 
   upVote            Int      @default(0)
   downVote          Int      @default(0)
-  // flaws             String?  @db.MediumText @default("")
+  // flaws             String?  @db.MediumText 
 
   @@index([createdById])
   @@index([fictionId])

@@ -6,12 +6,13 @@ import FictionRadarChart from "@components/fiction/FictionRadarChart";
 import MbtiBarChart from "@components/MbtiBarChart";
 import UserRate from "@components/UserRate";
 
-import Comments from "@components/fiction/Comments";
+import Reviews from "@components/fiction/FictionReviewSection";
 
 import InfoBox from "@components/fiction/InfoBox";
 import Keywords from "@components/fiction/Keywords";
 import SimilarFictions from "@components/fiction/SimilarFictions";
 import { FictionResponse } from "@/type/fiction";
+import FictionHorizonTalBarChart from "@components/fiction/FictionHotizontalBarChart";
 
 export default async function FictionPage({ params }: any) {
   const { id } = params;
@@ -34,7 +35,7 @@ export default async function FictionPage({ params }: any) {
   return (
     <div className=" grid grid-cols-10 px-2 lg:ml-24">
       <div className=" col-span-10 flex-col justify-between">
-        <h1 className=" pt-2 text-3xl font-semibold">{fiction?.title}</h1>
+        <h1 className=" mt-2 text-3xl font-semibold">{fiction?.title}</h1>
         <div className=" mb-2 flex">
           <p className="  text-sm text-gray-500">{fiction?.originalTitle}</p>
           <p className="  ml-2 text-sm text-gray-500">
@@ -42,7 +43,10 @@ export default async function FictionPage({ params }: any) {
           </p>
         </div>
       </div>
-      <div id="main-container" className=" col-span-10 lg:col-span-7">
+      <div
+        id="main-container"
+        className=" col-span-10 max-w-[900px] lg:col-span-7"
+      >
         <InfoBox fiction={fiction} />
         <div className=" mb-3 grid grid-cols-5 "></div>
         <div className="mb-10 rounded-md bg-white">
@@ -63,7 +67,7 @@ export default async function FictionPage({ params }: any) {
               </div>
             }
           >
-            <Comments fallbackData={response} />
+            <Reviews fallbackData={response} />
           </Suspense>
         </div>
         <div className=" mt-12">
@@ -86,16 +90,23 @@ export default async function FictionPage({ params }: any) {
             </div>
           }
         >
-          <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
+          {/* <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
             <div className=" flex justify-center px-3">
               <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
                 <FictionRadarChart fallbackData={response} />
               </div>
             </div>
             <UserRate />
+          </div> */}
+          <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
+            <FictionHorizonTalBarChart fallbackData={response} />
           </div>
-          <Keywords fallbackData={response} />
-          <MbtiBarChart fallbackData={response} />
+          <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 ">
+            <Keywords fallbackData={response} />
+          </div>
+          <div className=" col-span-5 mx-auto mb-3  max-w-[400px] sm:col-span-2  sm:mb-0 ">
+            <MbtiBarChart fallbackData={response} />
+          </div>
         </Suspense>
       </section>
     </div>
