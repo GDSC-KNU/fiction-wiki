@@ -26,7 +26,7 @@ import {
 } from "@/constants/options";
 
 import useUser from "@libs/client/useUser";
-import UseEditFictionForms from "@/hooks/useFictionForms";
+import UseEditFictionForms from "@/hooks/forms/useFictionForms";
 import useProcessedFiction from "@/hooks/useFictionProcessed";
 
 import { EditFictionForm, FictionResponse } from "@/type/fiction";
@@ -319,7 +319,7 @@ export default function EditFictionWrapper({
                           errors={errors}
                           label="플랫폼 *"
                           options={platformOptions}
-                          selected={watch("platforms")}
+                          selected={getValues("platforms")}
                         ></DropdownSearchCheckbox>
                         <Select
                           {...currentState}
