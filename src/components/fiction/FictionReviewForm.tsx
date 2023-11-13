@@ -50,7 +50,7 @@ export default function FictionReviewForm({
 
   const onValid = async (data: UpdateUserFictionStatForm) => {
     if (!user) return alert("로그인 해주세요.");
-    console.log(watch());
+
     await updateUserFictionStat(data, "POST");
 
     reset();

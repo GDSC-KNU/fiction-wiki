@@ -82,6 +82,7 @@ export async function DELETE(req: NextRequest) {
     await client.userRationOnFiction.delete({
       where: { id: comment.userRationOnFictionsId },
     });
+
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
@@ -230,29 +231,29 @@ export async function POST(req: NextRequest, { params }: any) {
       ? [
           userRated.originality,
           userRated.writing,
-          userRated.character,
           userRated.verisimilitude,
-          userRated.synopsisComposition,
           userRated.value,
+          userRated.synopsisComposition,
+          userRated.character,
         ]
       : new Array(6).fill(0);
 
     const currentRatings = [
       alreadyExists.originality,
       alreadyExists.writing,
-      alreadyExists.character,
       alreadyExists.verisimilitude,
-      alreadyExists.synopsisComposition,
       alreadyExists.value,
+      alreadyExists.synopsisComposition,
+      alreadyExists.character,
     ];
 
     const updatedRatings = [
       originality,
       writing,
-      character,
       verisimilitude,
-      synopsisComposition,
       value,
+      synopsisComposition,
+      character,
     ].map((newRating: string, index: number) => {
       const total =
         alreadyExists._count.userRationOnFictions * currentRatings[index] -
@@ -295,10 +296,10 @@ export async function POST(req: NextRequest, { params }: any) {
           },
           originality: updatedRatings[0],
           writing: updatedRatings[1],
-          character: updatedRatings[2],
           verisimilitude: updatedRatings[3],
-          synopsisComposition: updatedRatings[4],
           value: updatedRatings[5],
+          synopsisComposition: updatedRatings[4],
+          character: updatedRatings[2],
           total: fixFloat(
             updatedRatings.reduce((acc: number, cur: number) => acc + cur, 0) /
               updatedRatings.length
