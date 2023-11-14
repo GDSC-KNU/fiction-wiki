@@ -9,7 +9,7 @@ import useUser from "@libs/client/useUser";
 import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";
 import { CommentWithMore, FictionResponse } from "@/type/fiction";
 
-export default function Comments({
+export default function FictionReviewSection({
   fallbackData,
 }: {
   fallbackData: FictionResponse;
@@ -34,9 +34,9 @@ export default function Comments({
 
   return (
     <>
-      <h2 className=" py-2 text-xl font-bold">리뷰</h2>
+      <h2 className=" px-3 py-2 text-xl font-bold">리뷰</h2>
       <div className=" h-full ">
-        <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white">
+        <div className=" flex h-full w-full flex-col justify-between rounded-md bg-white p-3">
           <div>
             {comments?.map((comment: any) => (
               <CommentItem key={comment.id} comment={comment} user={user} />
@@ -91,7 +91,7 @@ export default function Comments({
           </div>
         </div>
         <div>
-          <h2 className=" py-2 text-xl font-bold">리뷰 작성</h2>
+          <h2 className=" px-3 py-2 text-xl font-bold">리뷰 작성</h2>
           <FictionReviewForm fallbackData={fallbackData} />
         </div>
       </div>

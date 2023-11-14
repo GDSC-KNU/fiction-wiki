@@ -118,7 +118,7 @@ export default function FictionHorizonTalBarChart({
   };
 
   return (
-    <div className=" p-2">
+    <div className=" p-3">
       <h3 className=" mt-4 py-2 text-xl font-bold sm:mt-0 sm:py-2">평점</h3>
       <div className=" flex items-center rounded-md bg-[#F4F4F4] sm:mt-0 ">
         <Bar options={options} data={data} />

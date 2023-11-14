@@ -15,7 +15,7 @@ export default function InfoBox({
   fiction: FictionWithMore | any;
 }) {
   return (
-    <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover ">
+    <div className=" mb-3 grid h-fit grid-cols-7 overflow-hidden rounded-md  bg-white object-cover p-3">
       <div className=" col-span-7 flex-col lg:absolute lg:col-span-2">
         <div className=" lg:hidden">
           <div className=" flex-col">

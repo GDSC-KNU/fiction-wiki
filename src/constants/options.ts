@@ -19,6 +19,7 @@ export const categoryOptions = [
   { label: "SF", value: "SF" },
   { label: "퓨전", value: "퓨전" },
   { label: "현대판타지", value: "현대판타지" },
+  { label: "러브코미디", value: "러브코미디" },
   { label: "미정", value: "미정" },
 ];
 

@@ -75,7 +75,7 @@ export default function FictionReviewForm({
     <FormProvider {...methods}>
       <div className=" ">
         <form className=" w-full lg:flex" onSubmit={handleSubmit(onValid)}>
-          <div className=" flex lg:block lg:pr-2">
+          <div className=" flex p-3 lg:block">
             <Table>
               <TableBody>
                 <TableRow className=" flex flex-col sm:block lg:flex lg:flex-col">
@@ -157,9 +157,9 @@ export default function FictionReviewForm({
               </TableBody>
             </Table>
           </div>
-          <div className="relative w-full p-2">
+          <div className="relative flex w-full flex-col p-3 ">
             <TextArea2
-              className="h-full"
+              className=" min-h-[40px] grow"
               {...comment}
               // label="리뷰 작성"
               placeholder={
@@ -168,12 +168,11 @@ export default function FictionReviewForm({
                   : "댓글작성을 위해선 로그인 해주세요."
               }
             ></TextArea2>
-
             <Button2
               disabled={comment.value.length === 0 || loading || !user}
               type="submit"
               size="xs"
-              className="absolute bottom-4 right-4"
+              className="absolute bottom-[18px] right-[18px]"
             >
               작성
             </Button2>

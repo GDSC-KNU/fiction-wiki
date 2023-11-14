@@ -33,11 +33,11 @@ export default async function FictionPage({ params }: any) {
   const { fiction, similarFictions, mbtis, setup } = response;
 
   return (
-    <div className=" grid grid-cols-10 px-2 lg:ml-24">
-      <div className=" col-span-10 flex-col justify-between">
-        <h1 className=" mt-2 text-3xl font-semibold">{fiction?.title}</h1>
-        <div className=" mb-2 flex">
-          <p className="  text-sm text-gray-500">{fiction?.originalTitle}</p>
+    <div className=" grid grid-cols-10 lg:ml-24">
+      <div className=" col-span-10 flex-col justify-between px-3 pt-3">
+        <h1 className=" text-3xl font-semibold">{fiction?.title}</h1>
+        <div className=" mb-2 flex ">
+          <p className=" text-sm text-gray-500">{fiction?.originalTitle}</p>
           <p className="  ml-2 text-sm text-gray-500">
             {`(${new Date(fiction?.startDate).getFullYear()})`}
           </p>
@@ -51,7 +51,7 @@ export default async function FictionPage({ params }: any) {
         <div className=" mb-3 grid grid-cols-5 "></div>
         <div className="mb-10 rounded-md bg-white">
           <div
-            className=" prose prose-slate max-w-full prose-h2:w-full  prose-table:text-xs prose-img:float-right prose-img:my-0"
+            className=" prose prose-slate max-w-full p-3  prose-h2:w-full prose-table:text-xs prose-img:float-right prose-img:my-0"
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
@@ -70,9 +70,9 @@ export default async function FictionPage({ params }: any) {
             <Reviews fallbackData={response} />
           </Suspense>
         </div>
-        <div className=" mt-12">
+        {/* <div className=" mt-12">
           <SimilarFictions similarFiction={similarFictions} />
-        </div>
+        </div> */}
       </div>
 
       <section
@@ -90,21 +90,13 @@ export default async function FictionPage({ params }: any) {
             </div>
           }
         >
-          {/* <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
-            <div className=" flex justify-center px-3">
-              <div className=" h-full w-full rounded-md bg-[#F4F4F4]">
-                <FictionRadarChart fallbackData={response} />
-              </div>
-            </div>
-            <UserRate />
-          </div> */}
           <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
             <FictionHorizonTalBarChart fallbackData={response} />
           </div>
-          <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0 ">
+          <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0">
             <Keywords fallbackData={response} />
           </div>
-          <div className=" col-span-5 mx-auto mb-3  max-w-[400px] sm:col-span-2  sm:mb-0 ">
+          <div className=" col-span-5 mx-auto mb-3  max-w-[400px] sm:col-span-2 sm:mb-0">
             <MbtiBarChart fallbackData={response} />
           </div>
         </Suspense>

@@ -17,7 +17,7 @@ export default function Keywords({
   const { keywords, consKeywords, mcKeywords, subKeywords } =
     fiction as preprocessedFictionData;
   return (
-    <div className=" p-2">
+    <div className=" p-3">
       <div className=" mb-3 h-full w-full rounded-md sm:mb-0">
         <h2 className=" border-b-[1px] pt-1 font-bold">메인 태그</h2>
         <ul className=" inline-flex flex-wrap space-x-1 ">

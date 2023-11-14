@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 
 import { CommentWithMore } from "@/type/fiction";
 import useCommentsIntegrated from "@/hooks/useCommentsIntegrated";
+import { Button2 } from "@components/common/Button2";
 
 export default function FictionReviewDeleteButton({
   comment,
@@ -28,12 +29,14 @@ export default function FictionReviewDeleteButton({
   return (
     <>
       {comment.canDelete && (
-        <span
+        <Button2
+          size="xxs"
+          variant="ghost"
           onClick={() => handleDeleteComment(comment)}
-          className="absolute right-0 cursor-pointer text-xs text-red-400"
+          className="absolute bottom-0 right-0 cursor-pointer text-xs text-red-400"
         >
           삭제
-        </span>
+        </Button2>
       )}
     </>
   );
