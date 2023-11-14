@@ -63,5 +63,5 @@ export const userFictionStatOptions = [
   { value: "verisimilitude", kor: "핍진성" },
   { value: "value", kor: "작품성" },
   { value: "synopsisComposition", kor: "스토리" },
-  { value: "character", kor: "등장인물" },
+  { value: "character", kor: "캐릭터성" },
 ];
