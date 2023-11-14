@@ -416,7 +416,7 @@ export async function PUT(
     date,
     categories,
     currentState,
-    synopsis,
+    // synopsis,
     characters,
     keywords,
     mcKeywords,
@@ -429,7 +429,7 @@ export async function PUT(
     type,
     mediaMix,
     isTranslated,
-    introduction,
+    // introduction,
     setup,
     KeywordMany,
     mcKeywordMany,
@@ -495,13 +495,13 @@ export async function PUT(
       original,
       platforms,
       image,
-      synopsis,
+      // synopsis,
       characters,
       currentState,
       volume: +volume?.toString(),
       type,
       isTranslated,
-      introduction,
+      // introduction,
       mediaMix,
       setup,
       categories: {
@@ -525,38 +525,39 @@ export async function PUT(
   });
 
   // updated fiction Data
-  const updatedFiction = await client.fiction.findUnique({
-    where: {
-      id: +id!.toString(),
-    },
-    include: {
-      keywords: {
-        select: {
-          keyword: {
-            select: {
-              name: true,
-              id: true,
-              isOfHeroine: true,
-              isOfMC: true,
-              isOfCons: true,
+  try {
+    const updatedFiction = await client.fiction.findUnique({
+      where: {
+        id: +id!.toString(),
+      },
+      include: {
+        keywords: {
+          select: {
+            keyword: {
+              select: {
+                name: true,
+                id: true,
+                isOfHeroine: true,
+                isOfMC: true,
+                isOfCons: true,
+              },
             },
           },
         },
-      },
-      categories: {
-        select: {
-          category: true,
+        categories: {
+          select: {
+            category: true,
+          },
         },
+        author: true,
       },
-      author: true,
-    },
-  });
+    });
 
-  // update된 Fiction으로 HistoryLog 생성
-  await createHistoryLog(prevFiction, updatedFiction, +id!, token.user.id);
+    // update된 Fiction으로 HistoryLog 생성
+    await createHistoryLog(prevFiction, updatedFiction, +id!, token.user.id);
 
-  // revalidation
-  try {
+    // revalidation
+
     await axios.post(
       `${process.env.NEXT_PUBLIC_HOST}/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}&tag=fiction`,
       {
@@ -564,6 +565,7 @@ export async function PUT(
       }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 

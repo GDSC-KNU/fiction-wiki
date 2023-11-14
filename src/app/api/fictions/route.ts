@@ -290,8 +290,8 @@ export async function POST(req: NextRequest) {
       //   synopsisComposition,
       //   value,
       // ],
-      synopsis,
-      characters,
+      // synopsis,
+      // characters,
       keywords: rawKeywords,
       mcKeywords: rawMcKeywords,
       subKeywords: rawSubKeywords,
@@ -301,7 +301,7 @@ export async function POST(req: NextRequest) {
       image,
       volume,
       isTranslated,
-      introduction,
+      // introduction,
       type,
       mediaMix: rawMediaMix,
       setup,
@@ -333,23 +333,7 @@ export async function POST(req: NextRequest) {
     const mcKeywordMany = arrayToPrismaObjects(rawMcKeywords, "isOfMC");
     const keywordMany = arrayToPrismaObjects(rawKeywords);
     const consKeywordMany = arrayToPrismaObjects(rawConsKeywords, "isOfCons");
-    // console.log(
-    //   "realatedTitle, relatedAuthor, platforms, mediaMix",
-    //   relatedTitle,
-    //   relatedAuthor,
-    //   platforms,
-    //   mediaMix
-    // );
-    // console.log(
-    //   "categoriesMany, subKeywordMany, mcKeywordMany, keywordMany, consKeywordMany",
-    //   categoriesMany,
-    //   subKeywordMany,
-    //   mcKeywordMany,
-    //   keywordMany,
-    //   consKeywordMany
-    // );
-    // Database query
-    // console.log("user.id: ", user.id);
+
     const fiction = await client.fiction.create({
       data: {
         title,
@@ -424,7 +408,7 @@ export async function POST(req: NextRequest) {
     // console.log("fiction: ", fiction);
     return NextResponse.json(JSON.stringify({ ok: true, fiction }));
   } catch (error) {
-    // console.error("An error occurred:", error);
+    console.error("An error occurred:", error);
     return NextResponse.json({ ok: false, error: "An error occurred" });
   }
 }

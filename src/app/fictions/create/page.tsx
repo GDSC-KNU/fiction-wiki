@@ -86,9 +86,11 @@ const Create = () => {
       ).json();
       const form = new FormData();
       form.append("file", inputData.image[0], inputData.title);
+
       const {
         result: { id },
       } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
+
       /// 성공
 
       if (id) {
@@ -168,7 +170,7 @@ const Create = () => {
     });
     return messages;
   };
-  console.log(errors);
+
   return (
     <FormProvider {...methods}>
       <div className=" px-5 pt-7">
