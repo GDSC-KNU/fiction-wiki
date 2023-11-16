@@ -69,11 +69,11 @@ export default function FictionList({
     <div className=" flex justify-center">
       {type === "fictions_list" ? (
         <div className="">
-          <ul className=" grid grid-cols-1 py-2 md:grid-cols-2 xl:grid-cols-3 ">
+          <ul className=" grid grid-cols-1 py-2 transition-all  md:grid-cols-2 xl:grid-cols-3">
             {data?.map((fiction: FictionWithMore, i: number) => (
               <li
                 key={fiction?.id || i}
-                className=" m-2 flex border-[#BBBBBB] bg-white"
+                className=" m-2 flex overflow-hidden rounded-xl  bg-white shadow-[2px_2px_6px_-4px_rgba(0,0,0,0.7)] duration-200 hover:translate-y-[-4px] hover:shadow-[2px_2px_10px_-4px_rgba(0,0,0,0.7)]"
               >
                 <Link
                   href={`/fictions/${fiction?.id}`}
