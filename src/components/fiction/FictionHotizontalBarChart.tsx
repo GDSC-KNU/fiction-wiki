@@ -43,7 +43,7 @@ export const options = {
   maintainAspectRatio: true,
   indexAxis: "y" as const,
   scales: {
-    r: {
+    x: {
       min: 0,
       max: 5,
       ticks: {

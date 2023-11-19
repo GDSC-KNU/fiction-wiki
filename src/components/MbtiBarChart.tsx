@@ -26,6 +26,7 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
+  // indexAxis: "x" as const,
   plugins: {
     legend: {
       position: "top" as const,
@@ -33,6 +34,16 @@ export const options = {
     title: {
       display: true,
       text: "MBTI별 평균 평점",
+    },
+  },
+  scales: {
+    y: {
+      // This is the x-axis configuration for a horizontal bar chart
+      min: 0, // Minimum value of the scale
+      max: 5, // Maximum value of the scale
+      ticks: {
+        stepSize: 1, // Interval of the scale marks
+      },
     },
   },
 };
