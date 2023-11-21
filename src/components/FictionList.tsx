@@ -78,7 +78,7 @@ export default function FictionList({
                 <Link
                   href={`/fictions/${fiction?.id}`}
                   passHref
-                  className=" relative h-[166px] w-[108px] min-w-[108px]"
+                  className=" relative h-[167px] w-[108px] min-w-[108px]"
                 >
                   <Image
                     className=" cursor-pointer"
