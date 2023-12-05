@@ -20,6 +20,7 @@ interface IInitialQueryObject {
   sorting: string;
   dateYear: string;
   page: number;
+  tab: string;
 }
 
 const initialQueryObject = (): IInitialQueryObject => {
@@ -30,6 +31,7 @@ const initialQueryObject = (): IInitialQueryObject => {
     sorting: "",
     dateYear: "",
     page: 1,
+    tab: "",
   };
 
   if (!globalThis.location) return defaultQueryObject;
@@ -38,6 +40,7 @@ const initialQueryObject = (): IInitialQueryObject => {
   const parsed = qs.parse(search, QS_PARSE_OPTIONS as any);
 
   return {
+    tab: typeof parsed.tab === "string" ? parsed.tab : "",
     keywords: Array.isArray(parsed.keywords) ? parsed.keywords : ([] as any),
     nationalities:
       typeof parsed.nationalities === "string" ? parsed.nationalities : "",

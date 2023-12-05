@@ -38,6 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
       <body suppressHydrationWarning={true}>
+        <div id="modal"></div>
         <link rel="icon" href="/favicon/favicon.ico" />
         <meta
           name="naver-site-verification"

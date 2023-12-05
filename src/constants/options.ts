@@ -66,3 +66,37 @@ export const userFictionStatOptions = [
   { value: "synopsisComposition", kor: "스토리" },
   { value: "character", kor: "캐릭터성" },
 ];
+
+const thisYear = new Date().getFullYear();
+export const yearOptions = [
+  { label: "전체", value: undefined },
+  ...Array.from({ length: 15 }, (_, i) => thisYear - i).map((year) => ({
+    label: year,
+    value: year,
+  })),
+  // ...Array.from({ length: 30 }, (_, i) => thisYear - i)
+];
+
+export const threeYearOptions = [
+  { label: "전체", value: undefined },
+  ...Array.from({ length: 15 }, (_, i) => thisYear - i).map((year) => ({
+    label: `${year - 2}~${year}`,
+    value: year,
+  })),
+];
+
+export const sortingOptions = [
+  "총점",
+  "캐릭터성",
+  "독창성",
+  "스토리",
+  "작품성",
+  "핍진성",
+  "필력",
+  "화수",
+];
+
+export const fictionTabOptions = [
+  { label: "연도별", value: "year" },
+  // { label: "3년별", value: "month" },
+];

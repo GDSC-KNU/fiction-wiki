@@ -67,9 +67,9 @@ export default function Gnb() {
       initial={{ y: 0 }}
       animate={animateProps}
       transition={{ duration: 0.3, type: "tween" }}
-      className="fixed top-0 z-20 h-12 w-full bg-white shadow-md"
+      className="fixed top-0 z-20 h-12 w-screen bg-white shadow-md"
     >
-      <nav className="flex h-full w-full items-center justify-between">
+      <nav className="flex h-full w-full items-center justify-between pl-4">
         <ul className="ml-2 flex h-full items-center space-x-2 whitespace-nowrap uppercase">
           <li className="cursor-pointer">
             <Link

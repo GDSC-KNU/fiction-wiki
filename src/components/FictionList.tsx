@@ -19,7 +19,9 @@ import CountryFlag_China from "@public/svg/countryFlag_China.svg";
 import CountryFlag_Korea from "@public/svg/countryFlag_Korea.svg";
 import CountryFlag_Japan from "@public/svg/countryFlag_Japan.svg";
 import CountryFlag_USA from "@public/svg/countryFlag_USA.svg";
+import useSWR from "swr";
 // import fictions from "app/api/fictions"
+// import { useQueryObject } from "@/hooks/useQueryObject";
 
 interface UserFictionStatWithMore extends UserFictionStat {
   _count: {
@@ -64,6 +66,15 @@ export default function FictionList({
 }) {
   const searchParams = useSearchParams();
   const pageQuery = searchParams.get("page");
+
+  // const { queryString } = useQueryObject();
+  // const { data: fictionDataFromClient, isLoading } = useSWR<any>(
+  //   `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`,
+  //   {
+  //     suspense: true,
+  //     fallbackData: data,
+  //   }
+  // );
 
   return (
     <div className=" flex justify-center">

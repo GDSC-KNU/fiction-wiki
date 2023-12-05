@@ -1,13 +1,14 @@
-import { Suspense, lazy } from "react";
+// import { Suspense, lazy } from "react";
 
-// import FictionSelectorWrapper from "@components/fictions/fictionSelectorWrapper";
+// import FictionPageWrapper from "@components/fictions/fictionSelectorWrapper";
 import { Metadata } from "next";
 import ClipLoader from "react-spinners/ClipLoader";
-import FictionSelector from "@components/fictions/FictionSelector";
+// import FictionSelector from "@components/fictions/FictionSelector";
+import FictionPageWrapper from "@components/fictions/FictionPageWrapper";
 
-const FictionSelectorWrapper = lazy(
-  () => import("@components/fictions/FictionSelectorWrapper")
-);
+// const FictionPageWrapper = lazy(
+//   () => import("@components/fictions/FictionPageWrapper")
+// );
 
 export default async function FictionsPage() {
   const staticData = await fetch(
@@ -19,10 +20,14 @@ export default async function FictionsPage() {
     }
   ).then((res) => res.json());
 
+  const fictionFallbackData = await fetch(
+    `${process.env.NEXT_PUBLIC_HOST}/api/fictions`
+  ).then((res) => res.json());
+  // console.log(fictionFallbackData);
   return (
     <>
-      <FictionSelector staticData={staticData} />
-      <Suspense
+      {/* <FictionSelector staticData={staticData} /> */}
+      {/* <Suspense
         fallback={
           <div className="mt-20 flex items-center justify-center">
             <ClipLoader
@@ -32,9 +37,12 @@ export default async function FictionsPage() {
             />
           </div>
         }
-      >
-        <FictionSelectorWrapper fallbackData={staticData} />
-      </Suspense>
+      > */}
+      <FictionPageWrapper
+        fallbackData={fictionFallbackData}
+        staticDataForSelector={staticData}
+      />
+      {/* </Suspense> */}
     </>
   );
 }

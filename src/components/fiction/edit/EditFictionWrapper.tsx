@@ -30,7 +30,6 @@ import UseEditFictionForms from "@/hooks/forms/useFictionForms";
 import useProcessedFiction from "@/hooks/useFictionProcessed";
 
 import { EditFictionForm, FictionResponse } from "@/type/fiction";
-import { useParams } from "next/navigation";
 
 const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 

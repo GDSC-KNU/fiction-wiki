@@ -7,25 +7,52 @@ export function useQueryObject() {
 
   const updateArr = (key: string, value: string, isChecked: boolean) => {
     const currentValues = queryObject[key as "keywords" | "categories"] || [];
-    return isChecked
+    return !isChecked
       ? [...currentValues, value]
       : currentValues.filter((item: string) => item !== value);
   };
 
-  const updateQueryObject = (target: EventTarget & HTMLInputElement) => {
-    const { value, checked: isChecked, name } = target;
+  const updateQueryObject = (
+    // target: EventTarget & HTMLInputElement
+    {
+      value,
+      name,
+      // ariaChecked,
+      checked,
+      dataset,
+    }: {
+      value: string;
+      name: string;
+      checked?: boolean;
+      // ariaChecked: string;
+      dataset: { value?: string; checked?: string };
+    }
+  ) => {
+    const isChecked = dataset?.checked === "true" || checked === true;
 
     const updatedQueryObject = {
       ...queryObject,
-      page: 1, 
+      page: 1,
       [name]: ["keywords", "categories"].includes(name)
         ? updateArr(name, value, isChecked)
-        : isChecked
-        ? value
+        : !isChecked
+        ? value || dataset.value
         : "",
     };
 
     setQueryObject(updatedQueryObject);
+  };
+
+  const resetQueryObject = () => {
+    setQueryObject({
+      keywords: [],
+      nationalities: "",
+      categories: [],
+      sorting: "",
+      dateYear: "",
+      page: 1,
+      tab: "",
+    });
   };
 
   const updatePage = (value: number) =>
@@ -33,6 +60,7 @@ export function useQueryObject() {
 
   return {
     queryObject,
+    resetQueryObject,
     queryString,
     updateQueryObject,
     updatePage,

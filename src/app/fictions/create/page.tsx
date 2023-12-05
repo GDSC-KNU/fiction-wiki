@@ -85,12 +85,18 @@ const Create = () => {
         await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/files`)
       ).json();
       const form = new FormData();
+      // console.log(inputData.image);
       form.append("file", inputData.image[0], inputData.title);
-
-      const {
-        result: { id },
-      } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-
+      // console.log(uploadURL);
+      // console.log(form);
+      const result = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
+      const { id } = result.result;
+      // console.log(result);
       /// 성공
 
       if (id) {
