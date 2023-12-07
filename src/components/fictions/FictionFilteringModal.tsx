@@ -58,7 +58,7 @@ export default function FictionFilteringModal({
             ))}
           </div>
           <h4 className=" font-bold">카테고리</h4>
-          <div className=" grid grid-cols-[repeat(3,minmax(83px,500px))] gap-1">
+          <div className=" grid grid-cols-[repeat(3,minmax(120px,500px))] gap-1">
             {categories.map((category: any, i) => (
               <Button2
                 key={category.name}

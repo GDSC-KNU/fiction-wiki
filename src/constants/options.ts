@@ -96,7 +96,17 @@ export const sortingOptions = [
   "화수",
 ];
 
-export const fictionTabOptions = [
+export const fictionsTabOptions = [
   { label: "연도별", value: "year" },
   // { label: "3년별", value: "month" },
+];
+
+export const fictionTabOptions = [
+  { label: "작품정보", value: "fiction_info" },
+  // { label: "위키", value: "wiki" },
+  { label: "줄거리", value: "fiction_synopsis" },
+  { label: "리뷰", value: "fiction_reviews" },
+  { label: "키워드", value: "fiction_keywords" },
+  { label: "MBTI 통계", value: "fiction_MBTI_stat" },
+  { label: "유사작품", value: "fiction_similar_fictions" },
 ];

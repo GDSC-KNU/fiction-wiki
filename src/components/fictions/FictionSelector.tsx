@@ -10,9 +10,9 @@ import { useQueryObject } from "@/hooks/useQueryObject";
 import {
   yearOptions,
   sortingOptions,
-  fictionTabOptions,
+  fictionsTabOptions,
 } from "@constants/options";
-import { Button2 } from "@components/common/Button2";
+import { Button2, buttonVariants } from "@components/common/Button2";
 
 import {
   Select,
@@ -28,6 +28,7 @@ import { OverlayProvider } from "@toss/use-overlay";
 import { Tabs, TabsList, TabsTrigger } from "@components/common/Tabs";
 
 import FilteringIcon from "@public/svg/filtering.svg";
+import { cn } from "@libs/util";
 
 interface FictionSelectorProps {
   staticData: {
@@ -58,7 +59,6 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
     dataset,
     checked,
   }: any) => {
-    // console.log(currentTarget, value, name, ariaChecked, dataset);
     if (currentTarget) updateQueryObject(currentTarget);
     else updateQueryObject({ value, name, dataset, checked });
   };
@@ -71,7 +71,7 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
         <div className=" inline-flex h-8 w-full items-center justify-start rounded-none border-b  bg-transparent p-0">
           <Tabs defaultValue="account" className=" h-full ">
             <TabsList className=" space-x-2">
-              {fictionTabOptions.map((option, i) => (
+              {fictionsTabOptions.map((option, i) => (
                 <TabsTrigger
                   key={i}
                   data-value={option.value}
@@ -116,7 +116,7 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
               checkHandler({ value: value, name: "sorting" })
             }
           >
-            <SelectTrigger className="h-full w-fit rounded-3xl border-[1px] p-2 py-2 font-bold">
+            <SelectTrigger className="h-full w-fit rounded-2xl border-[1px] p-2 py-2 font-bold">
               <SelectValue placeholder="총점 순 정렬" />
             </SelectTrigger>
             <SelectContent className=" bg-white">
@@ -127,11 +127,15 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
               ))}
             </SelectContent>
           </Select>
-          <Button2
+          <div
+            id="innerModal"
             ref={filterButton}
-            className=" relative h-full whitespace-nowrap rounded-3xl p-2 font-bold"
-            variant="outline"
-            size="sm"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "relative h-full cursor-pointer whitespace-nowrap rounded-2xl p-2 font-bold"
+            )}
+            // variant="outline"
+            // size="sm"
             onClick={() => {
               overLay.open(({ exit, isOpen, close }) => (
                 <FictionFilteringModal
@@ -145,7 +149,7 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
           >
             <FilteringIcon />
             필터링
-          </Button2>
+          </div>
           {/* <FictionFilteringModal></FictionFilteringModal> */}
         </div>
         <div className=" relative flex text-center leading-[1.8rem] ">

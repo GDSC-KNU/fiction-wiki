@@ -60,44 +60,30 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
     };
   }, [isOpen, controls]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        backSection.current &&
+        !backSection.current.contains(event.target as Node)
+      ) {
+        close();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, close]);
+
   if (!isOpen) return null;
 
   return isMobile
     ? // Bottom sheet
       createPortal(
-        // <div
-        //   ref={backSection}
-        //   onClick={(e) => {
-        //     if (e.target === backSection.current) close();
-        //   }}
-        //   // className=" fixed top-0 h-screen w-screen  bg-red-600  transition duration-300 ease-in-out"
-        //   className={`${
-        //     isOpen ? " " : " translate-y-full"
-        //   } fixed inset-0 z-20 bg-black/50 transition duration-300 ease-in-out`}
-        // >
-        //   <div
-        //     ref={backSection}
-        //     className=" bg-yellow fixed bottom-0 left-0 w-screen rounded-t-xl bg-white p-4"
-        //   >
-        //     <div className=" flex flex-col items-center">
-        //       <button
-        //         id="bottomSheet-header"
-        //         className=" relative bottom-1 h-1 w-10 rounded-xl bg-gray-400"
-        //         onClick={close}
-        //       ></button>
-        //       <div className=" p- mb-4 flex w-full justify-between border-b-[1px]">
-        //         <div className=" font-bold">필터링</div>
-        //         <div
-        //           onClick={close}
-        //           className=" flex items-center justify-center"
-        //         >
-        //           <XIcon className=" h-4 w-4" />
-        //         </div>
-        //       </div>
-        //     </div>
-        //     {children}
-        //   </div>
-        // </div>
         <motion.div
           ref={backSection}
           initial="hidden"
@@ -108,7 +94,7 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
           className="fixed inset-0 z-20 bg-black/50 transition duration-300 ease-in-out"
         >
           <motion.div
-            ref={backSection}
+            // ref={backSection}
             className=" fixed bottom-0 left-0 w-screen overflow-y-scroll rounded-t-xl bg-white p-4"
             variants={{
               hidden: { y: "100%" },
@@ -145,6 +131,7 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
     : // Modal Popup
       createPortal(
         <div
+          ref={backSection}
           onClick={(e) => {
             if (e.target === backSection.current) close();
           }}
@@ -152,10 +139,18 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
           data-te-modal-non-invasive="true"
           className="fixed inset-0 z-[1055] h-screen w-full overflow-hidden outline-none"
         >
+          {/* <div
+          // onClick={(e) => {
+          //   close();
+          // }}
+
+          className=" absolute  top-[220px] z-30 md:left-[20px]"
+        > */}
           <div
+            // ref={backSection}
+            // data-te-modal-dialog-ref
             ref={backSection}
-            data-te-modal-dialog-ref
-            className=" relative flex h-full w-auto translate-y-[-50px] items-center transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:my-7 min-[576px]:max-w-[500px]"
+            className=" relative flex h-full w-auto translate-y-[-50px] cursor-default items-center transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:my-7 min-[576px]:max-w-[500px]"
           >
             <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative bottom-40 flex w-full flex-col rounded-md border-[1px]  bg-white bg-clip-padding text-current shadow-lg dark:bg-neutral-600">
               <div className="flex flex-shrink-0 items-center justify-between rounded-t-md  border-neutral-100 border-opacity-100 px-4 pt-4 dark:border-opacity-50">
@@ -172,7 +167,9 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
             </div>
           </div>
         </div>,
-        modalRoot
+        // </div>
+        // modalRoot
+        document.getElementById("innerModal")!
       );
 };
 

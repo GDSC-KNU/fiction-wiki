@@ -25,19 +25,6 @@ ChartJS.register(
   Legend
 );
 
-// export const options = {
-//   responsive: true,
-//   plugins: {
-//     legend: {
-//       position: "top" as const,
-//     },
-//     title: {
-//       display: true,
-//       text: "MBTI별 평균 평점",
-//     },
-//   },
-// };
-
 export const options = {
   responsive: true,
   maintainAspectRatio: true,

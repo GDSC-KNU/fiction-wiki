@@ -12,7 +12,10 @@ import InfoBox from "@components/fiction/InfoBox";
 import Keywords from "@components/fiction/Keywords";
 import SimilarFictions from "@components/fiction/SimilarFictions";
 import { FictionResponse } from "@/type/fiction";
-import FictionHorizonTalBarChart from "@components/fiction/FictionHotizontalBarChart";
+import FictionHorizonTalBarChart from "@components/fiction/FictionHorizontalBarChart";
+import { fictionTabOptions } from "@constants/options";
+import { Button2, buttonVariants } from "@components/common/Button2";
+import { cn } from "@libs/util";
 
 export default async function FictionPage({ params }: any) {
   const { id } = params;
@@ -36,26 +39,44 @@ export default async function FictionPage({ params }: any) {
     <div className=" grid grid-cols-10 lg:ml-24">
       <div className=" col-span-10 flex-col justify-between px-3 pt-3">
         <h1 className=" text-3xl font-semibold">{fiction?.title}</h1>
-        <div className=" mb-2 flex ">
+        <div className=" mb-2 flex">
           <p className=" text-sm text-gray-500">{fiction?.originalTitle}</p>
           <p className="  ml-2 text-sm text-gray-500">
             {`(${new Date(fiction?.startDate).getFullYear()})`}
           </p>
+        </div>
+        <div>
+          <div className=" relative mt-1 flex touch-auto flex-nowrap justify-start space-x-4 overflow-x-auto overflow-x-auto pb-[2px] font-bold scrollbar  scrollbar-thumb-slate-200 scrollbar-h-[2px]">
+            {fictionTabOptions.map((option) => (
+              <a
+                href={`#${option.value}`}
+                className={cn(
+                  buttonVariants({ variant: "ghost", padding: "sm" }),
+                  "whitespace-nowrap font-bold "
+                )}
+                key={option.value}
+              >
+                {option.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
       <div
         id="main-container"
         className=" col-span-10 max-w-[900px] lg:col-span-7"
       >
+        <div className=" hidden" id="fiction_info"></div>
         <InfoBox fiction={fiction} />
         <div className=" mb-3 grid grid-cols-5 "></div>
         <div className="mb-10 rounded-md bg-white">
           <div
+            id="fiction_synopsis"
             className=" prose prose-slate max-w-full p-3  prose-h2:w-full prose-table:text-xs prose-img:float-right prose-img:my-0"
             dangerouslySetInnerHTML={{ __html: setup }}
           ></div>
         </div>
-        <div className=" row-span-3 flex flex-col">
+        <div id="fiction_reviews" className=" row-span-3 flex flex-col">
           <Suspense
             fallback={
               <div className="flex items-center justify-center">
@@ -74,7 +95,6 @@ export default async function FictionPage({ params }: any) {
           <SimilarFictions similarFiction={similarFictions} />
         </div> */}
       </div>
-
       <section
         id="side-container"
         className=" col-span-10 mt-3 lg:col-span-3 lg:mt-0 lg:pl-3"
@@ -93,10 +113,16 @@ export default async function FictionPage({ params }: any) {
           <div className=" col-span-5 mx-auto max-w-[400px] sm:col-span-2">
             <FictionHorizonTalBarChart fallbackData={response} />
           </div>
-          <div className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0">
+          <div
+            id="fiction_keywords"
+            className=" col-span-5 mb-3 mr-0 sm:col-span-3 sm:mb-0"
+          >
             <Keywords fallbackData={response} />
           </div>
-          <div className=" col-span-5 mx-auto mb-3  max-w-[400px] sm:col-span-2 sm:mb-0">
+          <div
+            id="fiction_MBTI_stat"
+            className=" col-span-5 mx-auto mb-3  max-w-[400px] sm:col-span-2 sm:mb-0"
+          >
             <MbtiBarChart fallbackData={response} />
           </div>
         </Suspense>
