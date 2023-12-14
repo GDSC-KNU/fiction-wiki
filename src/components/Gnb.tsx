@@ -48,7 +48,7 @@ function UserAvatar({ user }: { user: User }) {
 
 export default function Gnb() {
   const { user, isAdmin } = useUser();
-  const isScrollingDown = useScrollDirection();
+  const isScrollingDown = useScrollDirection(48);
 
   const animateProps = {
     y: isScrollingDown ? -100 : 0,
@@ -111,7 +111,7 @@ export default function Gnb() {
           )}
         </ul>
       </nav>
-      <ul className="flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-3 shadow-md md:hidden">
+      <ul className="flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-6 shadow-md md:hidden">
         {navLinks.map((link) => (
           <NavbarLink key={link.href} href={link.href}>
             {link.label}
