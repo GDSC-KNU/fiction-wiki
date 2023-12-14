@@ -4,6 +4,7 @@ import { diffChars } from "diff";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { Fiction, User, FictionHistory } from "@prisma/client";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface Data {
   fiction: Fiction;
@@ -24,6 +25,17 @@ export default function Revision() {
 
   const fetchKey = Rid && id ? `/api/fictions/${id}/histories/${Rid}` : null;
   const { data: historyData } = useSWR<Data>(fetchKey);
+
+  if (!historyData)
+    return (
+      <div className="mt-20 flex items-center justify-center">
+        <ClipLoader
+          size={100}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
   const { history } = historyData || {};
 
   const differences = history ? historyData?.history.log.changeLog : [];
@@ -69,7 +81,7 @@ export default function Revision() {
     return (
       <div>
         {renderedDiff}
-        <div>Character change: {changeLabel}</div>
+        <div>변경된 텍스트 분량: {changeLabel}</div>
       </div>
     );
   };
@@ -91,7 +103,7 @@ export default function Revision() {
           </div>
         ))
       ) : (
-        <div>No changes found or loading...</div>
+        <div>변경 이력이 없습니다.</div>
       )}
     </div>
   );

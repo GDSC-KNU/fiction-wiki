@@ -14,6 +14,8 @@ import Link from "next/link";
 import { cn } from "@libs/util";
 
 import useUser from "@libs/client/useUser";
+import { fictionProperties } from "@constants/options";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface Data {
   fiction: Fiction;
@@ -41,9 +43,16 @@ export default function History() {
 
   const { data } = useSWR<Data>(fetchKey);
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  if (!data)
+    return (
+      <div className="mt-20 flex items-center justify-center">
+        <ClipLoader
+          size={100}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
 
   const { fiction, history } = data;
   const reversedHistory = [...(history || [])].reverse();
@@ -54,7 +63,7 @@ export default function History() {
       router.push("/enter");
       return;
     }
-    if (window.confirm("Are you sure you want to revert to this revision?")) {
+    if (window.confirm("정말로 문서를 되돌리시겠습니까?")) {
       fetch(`/api/fictions/${id}?Rid=${rid}`, {
         method: "PUT",
       })
@@ -110,24 +119,63 @@ export default function History() {
                     alt={item.editedBy.nickname || ""}
                   />
                 </div>
-                <h2 className="">{item.editedBy.nickname}</h2>
+                <h2 className="text-sm">{item.editedBy.nickname}</h2>
               </div>
               <p className="text-xs">{formatDate(item.updatedAt, true)}</p>
             </div>
             <div className=" flex flex-col justify-between lg:flex-row">
               <div className=" mb-2 flex lg:mb-0">
                 <div>
-                  {item.log &&
-                    (item.log.changeLog as any).map((e: any, j: number) => (
-                      <span
-                        key={e.path}
-                        className=" mr-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
-                      >
-                        {e.path}
-                      </span>
-                    ))}
+                  {item.log && (
+                    <>
+                      {item.log.changeLog.map(
+                        (e: any, j: number) =>
+                          fictionProperties[
+                            e.path as keyof typeof fictionProperties
+                          ] && (
+                            <span
+                              key={j}
+                              className={cn(
+                                buttonVariants({
+                                  variant: "default",
+                                  size: "xxs",
+                                  padding: "sm",
+                                }),
+                                "mr-1 bg-blue-600 hover:bg-blue-600"
+                              )}
+                            >
+                              {
+                                fictionProperties[
+                                  e.path as keyof typeof fictionProperties
+                                ]?.label
+                              }
+                            </span>
+                          )
+                      )}
+                      {item.log.changeLog.some(
+                        (e: any) =>
+                          !fictionProperties[
+                            e.path as keyof typeof fictionProperties
+                          ]
+                      ) && (
+                        <span
+                          key="etc"
+                          className={cn(
+                            buttonVariants({
+                              variant: "default",
+                              size: "xxs",
+                              padding: "sm",
+                            }),
+                            "mr-1 bg-blue-600 hover:bg-blue-600"
+                          )}
+                        >
+                          기타
+                        </span>
+                      )}
+                    </>
+                  )}
                 </div>
-                <div>
+                <div className="px-2 font-semibold">
                   {item.log &&
                     (item.log.charactersChanged >= 0
                       ? `+${item.log.charactersChanged}`
@@ -138,7 +186,7 @@ export default function History() {
                 <Link
                   href={`/fictions/${fiction.id}/revision/${item.id}`}
                   className={cn(
-                    buttonVariants({ variant: "default", size: "xs" })
+                    buttonVariants({ variant: "outline", size: "xs" })
                   )}
                 >
                   <span className=" whitespace-nowrap">기록 보기</span>
@@ -146,7 +194,7 @@ export default function History() {
                 <Button2
                   onClick={() => handleRevert(item.id)}
                   size="xs"
-                  variant="default"
+                  variant="outline"
                 >
                   <Restore width={16} height={16} />
                   <span className=" whitespace-nowrap">되돌리기</span>
