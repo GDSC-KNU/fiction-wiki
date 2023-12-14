@@ -1,7 +1,7 @@
 import Modal from "@components/common/Modal";
 import { useQueryObject } from "@/hooks/useQueryObject";
 import { Category, Keyword } from "@prisma/client";
-import { Button2 } from "@components/common/Button2";
+import { Button2, buttonVariants } from "@components/common/Button2";
 
 export default function FictionFilteringModal({
   staticData,

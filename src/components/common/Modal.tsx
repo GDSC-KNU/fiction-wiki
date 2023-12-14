@@ -131,24 +131,12 @@ const Modal = ({ isOpen, close, exit, children }: ModalProps) => {
     : // Modal Popup
       createPortal(
         <div
-          ref={backSection}
           onClick={(e) => {
             if (e.target === backSection.current) close();
           }}
-          data-te-modal-init
-          data-te-modal-non-invasive="true"
           className="fixed inset-0 z-[1055] h-screen w-full overflow-hidden outline-none"
         >
-          {/* <div
-          // onClick={(e) => {
-          //   close();
-          // }}
-
-          className=" absolute  top-[220px] z-30 md:left-[20px]"
-        > */}
           <div
-            // ref={backSection}
-            // data-te-modal-dialog-ref
             ref={backSection}
             className=" relative flex h-full w-auto translate-y-[-50px] cursor-default items-center transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:my-7 min-[576px]:max-w-[500px]"
           >
