@@ -56,19 +56,31 @@ const Enter: NextPage = () => {
   };
 
   const router = useRouter();
-  useEffect(() => {
-    if (tokenData?.ok) {
-      router.push("/");
-    }
-  }, [tokenData, router]);
 
-  // console.log(`session:` + session);
+  useEffect(() => {
+    if (session) {
+      // User is authenticated
+      if (
+        document.referrer &&
+        new URL(document.referrer).hostname === window.location.hostname
+      ) {
+        // Redirect to the referrer page if it's from the same domain
+        router.push(document.referrer);
+      } else {
+        // Use the browser's history to go back or redirect to a default page
+        window.history.length > 2 ? window.history.back() : router.push("/");
+      }
+    }
+  }, [session, router]);
 
   return (
     <div className="mt-16 px-4">
       <h3 className="text-center text-3xl font-bold">
-        Enter to FDBS(현재 구글 로그인만 가능)
+        소설위키에 오신 것을 환영합니다!
       </h3>
+      <div className=" flex justify-center text-red-600">
+        구글 로그인만 지원 중
+      </div>
       <div className="mt-12">
         {data?.ok ? (
           <form
@@ -91,7 +103,7 @@ const Enter: NextPage = () => {
           <>
             <div className="flex flex-col items-center">
               <h5 className="text-sm font-medium text-gray-500">
-                Enter using:
+                아래 방식으로 회원가입하기
               </h5>
               <div className="mt-8 grid  w-full grid-cols-2 border-b ">
                 <button
@@ -103,7 +115,7 @@ const Enter: NextPage = () => {
                   )}
                   onClick={onEmailClick}
                 >
-                  Email
+                  이메일
                 </button>
                 <button
                   className={cls(
@@ -114,7 +126,7 @@ const Enter: NextPage = () => {
                   )}
                   onClick={onPhoneClick}
                 >
-                  Phone
+                  휴대전화
                 </button>
               </div>
             </div>
@@ -128,7 +140,7 @@ const Enter: NextPage = () => {
                     required: true,
                   })}
                   name="email"
-                  label="Email address"
+                  label="이메일 주소"
                   type="email"
                   required
                 />
@@ -137,17 +149,23 @@ const Enter: NextPage = () => {
                 <Input
                   register={register("phone")}
                   name="phone"
-                  label="Phone number"
+                  label="휴대전화 번호"
                   type="number"
                   kind="phone"
                   required
                 />
               ) : null}
               {method === "email" ? (
-                <Button text={loading ? "Loading" : "Get login link"} />
+                <Button
+                  disabled={true}
+                  text={loading ? "로딩 중..." : "임시 로그인 링크 보내기"}
+                />
               ) : null}
               {method === "phone" ? (
-                <Button text={loading ? "Loading" : "Get one-time password"} />
+                <Button
+                  disabled={true}
+                  text={loading ? "로딩 중..." : "임시 비밀번호 보내기"}
+                />
               ) : null}
             </form>
           </>
@@ -158,7 +176,7 @@ const Enter: NextPage = () => {
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center ">
               <span className="bg-white px-2 text-sm text-gray-500">
-                Or enter with
+                혹은 SNS 계정으로 로그인
               </span>
             </div>
           </div>
@@ -202,7 +220,9 @@ const Enter: NextPage = () => {
               <div className=" flex justify-center">
                 <button
                   className=" flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                  onClick={() => signIn("google")}
+                  onClick={() => {
+                    signIn("google");
+                  }}
                 >
                   <span>
                     <svg

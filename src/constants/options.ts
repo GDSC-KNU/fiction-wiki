@@ -110,3 +110,40 @@ export const fictionTabOptions = [
   { label: "MBTI 통계", value: "fiction_MBTI_stat" },
   { label: "유사작품", value: "fiction_similar_fictions" },
 ];
+
+// const fictionPropertiesEx = ;
+
+export const fictionProperties = {
+  updatedAt: {
+    label: "수정날짜",
+    value: "updatedAt",
+  },
+  title: {
+    label: "제목",
+    value: "title",
+  },
+  setup: {
+    label: "위키정보",
+    value: "setup",
+  },
+  currentState: {
+    label: "완결여부",
+    value: "currentState",
+  },
+  startDate: {
+    label: "시작일",
+    value: "startDate",
+  },
+  endDate: {
+    label: "완결일",
+    value: "endDate",
+  },
+  keywords: {
+    label: "키워드",
+    value: "keywords",
+  },
+  categories: {
+    label: "카테고리",
+    value: "categories",
+  },
+};
