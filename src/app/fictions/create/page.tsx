@@ -6,7 +6,6 @@ import Button from "@components/common/Button";
 // import FictionRadarChart from "@components/fiction/FictionRadarChart";
 import Input from "@components/common/Input";
 import Input2 from "@components/common/Input2";
-import useMutation from "@libs/client/useMutation";
 
 import { useRouter } from "next/navigation";
 import React, { Suspense, lazy, useEffect, useState } from "react";
@@ -37,30 +36,31 @@ import {
 
 import { CreateFictionMutation, CreateFictionForm } from "@/type/fiction";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useCreateFiction } from "@/hooks/create/useCreateFiction";
+
+type ErrorMessage = {
+  type: string;
+  message: string;
+};
 
 const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
 const Create = () => {
-  const [localLoading, setLocalLoading] = useState(false);
+  // const [localLoading, setLocalLoading] = useState(false);
+  const router = useRouter();
   const [md, setMd] = useState<string | undefined>(
     "## 줄거리\n## 개요\n## 등장인물\n### (주인공)\n### 주요인물\n#### (주요인물 1)"
   );
 
   const { isAdmin } = useUser();
-  const router = useRouter();
 
   const handleChange = (md: any) => {
     setMd(md);
   };
 
-  const [createFiction, { loading, data, error }] =
-    useMutation<CreateFictionMutation>("/api/fictions");
-
   const methods = useForm<CreateFictionForm>({
     mode: "onChange",
-    // criteriaMode: "all",
   });
-
   const {
     register,
     formState: { errors },
@@ -72,43 +72,14 @@ const Create = () => {
     getValues,
   } = methods;
 
+  const { uploadImageAndCreateFiction, isCreatingLoading: loading } =
+    useCreateFiction();
+
   const onValid = async (inputData: CreateFictionForm) => {
     if (loading) return;
-    setLocalLoading(true);
 
-    if (
-      inputData.image &&
-      inputData.image.length > 0 &&
-      inputData.image[0] instanceof File
-    ) {
-      const { uploadURL } = await (
-        await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/files`)
-      ).json();
-      const form = new FormData();
-      // console.log(inputData.image);
-      form.append("file", inputData.image[0], inputData.title);
-      // console.log(uploadURL);
-      // console.log(form);
-      const result = await (
-        await fetch(uploadURL, {
-          method: "POST",
-          body: form,
-        })
-      ).json();
-      const { id } = result.result;
-      // console.log(result);
-      /// 성공
-
-      if (id) {
-        const response = JSON.parse(
-          await createFiction({ ...inputData, image: id, setup: md }, "POST")
-        );
-
-        router.push(`/fictions/${response.fiction.id}`);
-
-        setLocalLoading(false);
-      }
-    }
+    const fictionId = await uploadImageAndCreateFiction(inputData, md);
+    if (fictionId) router.push(`/fictions/${fictionId}`);
     return;
   };
 
@@ -129,6 +100,7 @@ const Create = () => {
 
   const onInvalid = () => {
     if (loading) return;
+    alert("입력값을 확인해주세요.");
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -156,11 +128,6 @@ const Create = () => {
   } = UseCreateFictionForms({
     control: methods.control,
   });
-
-  type ErrorMessage = {
-    type: string;
-    message: string;
-  };
 
   const extractErrorMessages = (obj: any) => {
     const messages = [] as ErrorMessage[];
