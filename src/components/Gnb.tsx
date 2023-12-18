@@ -70,7 +70,7 @@ export default function Gnb() {
       className="fixed top-0 z-20 h-12 w-screen bg-white shadow-md"
     >
       <nav className="flex h-full w-full items-center justify-between pl-4">
-        <ul className="ml-2 flex h-full items-center space-x-2 whitespace-nowrap uppercase">
+        <ul className="flex h-full items-center space-x-2 whitespace-nowrap uppercase">
           <li className="cursor-pointer">
             <Link
               className="items-center font-mono text-2xl font-bold"
@@ -111,7 +111,7 @@ export default function Gnb() {
           )}
         </ul>
       </nav>
-      <ul className="flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-6 shadow-md md:hidden">
+      <ul className="flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-4 shadow-md md:hidden">
         {navLinks.map((link) => (
           <NavbarLink key={link.href} href={link.href}>
             {link.label}
