@@ -12,6 +12,8 @@ import "./globals.css";
 import { Metadata } from "next";
 import config from "@/config/site";
 
+import { Noto_Sans_KR } from "next/font/google";
+
 export const metadata: Metadata = {
   metadataBase: new URL(config.url),
   title: "소설위키",
@@ -21,6 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@site",
   },
+  applicationName: "소설위키",
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -34,9 +37,20 @@ export const metadata: Metadata = {
   },
 };
 
+// const inter = Inter({
+//   subsets: ["latin"],
+//   display: "swap",
+// });
+
+const NotoSansKR = Noto_Sans_KR({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={NotoSansKR.className}>
       <body suppressHydrationWarning={true}>
         <div id="modal"></div>
         <link rel="icon" href="/favicon/favicon.ico" />

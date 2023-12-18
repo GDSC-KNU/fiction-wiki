@@ -75,6 +75,7 @@ export default async function Home() {
 
 export const metadata: Metadata = {
   title: "소설위키",
+  applicationName: "소설위키",
   description:
     "국내외 웹소설에 관련한 다양한 정보를 제공합니다. 작품을 직접 평가하고 검색하세요.",
 
