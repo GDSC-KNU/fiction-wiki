@@ -50,7 +50,6 @@ export default function FictionsDisplayer({
   const { queryString } = useQueryObject();
   const { data, isLoading, isValidating } = useSWR<FictionsResponse>(
     `${process.env.NEXT_PUBLIC_HOST}/api/fictions?${queryString}`,
-
     {
       suspense: true,
       fallbackData: hasMounted.current ? undefined : fallbackData,
