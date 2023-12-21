@@ -82,11 +82,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
         <Analytics />
-
         <RecoilProvider>
           <SWRProvider>
             <Top />
-            <div className=" relative flex max-h-fit min-h-[100vh] flex-col items-center bg-white">
+            <div className=" flex max-h-fit min-h-[100vh] flex-col items-center">
               <section className="  mt-[96px] w-full items-center  pb-[60px] md:mt-[48px]">
                 {children}
               </section>
