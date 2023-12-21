@@ -91,7 +91,7 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
           </Tabs>
         </div>
         <div>
-          <div className=" relative mt-1 flex touch-auto flex-nowrap justify-start space-x-1 overflow-x-auto overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[5px]">
+          <div className=" relative mt-1 flex touch-auto flex-nowrap justify-start space-x-1 overflow-x-auto overflow-x-auto pb-[2px] scrollbar scrollbar-thumb-slate-200 scrollbar-h-[10px]">
             {yearOptions.map((item, i) => (
               <Button2
                 onClick={(e) => checkHandler(e)}
@@ -156,8 +156,8 @@ export default function FictionSelector({ staticData }: FictionSelectorProps) {
           <div
             className={
               isExpanded
-                ? ` relative flex h-fit touch-auto flex-nowrap justify-start overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[5px]`
-                : ` relative flex h-fit touch-auto flex-wrap justify-start overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[5px]`
+                ? ` relative flex h-fit touch-auto flex-nowrap justify-start overflow-x-auto pb-[2px] scrollbar scrollbar-thumb-slate-200 scrollbar-h-[10px]`
+                : ` relative flex h-fit touch-auto flex-wrap justify-start overflow-x-auto pb-[2px]  scrollbar scrollbar-thumb-slate-200 scrollbar-h-[10px]`
             }
           >
             {keywords

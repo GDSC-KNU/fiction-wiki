@@ -10,22 +10,25 @@ body {
   overflow-y: scroll;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
+  height: 10px;
   width: 12px; /* Adjust the width of the scrollbar */
 }
 
-body::-webkit-scrollbar-track {
-  background: white;
+*::-webkit-scrollbar-track {
+  /* background: white;
+   */
+  background: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: hsl(0, 0%, 45%);
   border-radius: 20px;
   background-clip: padding-box;
   border: 2px solid transparent;
 }
 
-body::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
   background: hsl(0, 0%, 70%);
   background-clip: padding-box;
   border: 2px solid transparent;
