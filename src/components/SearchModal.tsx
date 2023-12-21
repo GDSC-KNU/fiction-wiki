@@ -8,7 +8,7 @@ import useKeyHandler from "@/hooks/useKeyHandler";
 
 import XIcon from "@public/svg/x.svg";
 import { AnimatePresence, motion } from "framer-motion";
-import { set } from "react-hook-form";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function SearchModal() {
   const router = useRouter();
@@ -20,7 +20,11 @@ export default function SearchModal() {
     setQuery("");
   }, "Escape");
 
-  const { data: { fictions } = {} } = useSWR(
+  const {
+    data: { fictions } = {},
+    isValidating,
+    isLoading,
+  } = useSWR(
     deferredQuery !== ""
       ? typeof window === "undefined"
         ? null
@@ -91,11 +95,12 @@ export default function SearchModal() {
     <div>
       <div ref={searchIconRef}>
         <SearchIcon
-          width="24"
+          width=""
           height="24"
           // fill="black"
+          fill={`${showModal ? "#2536eb" : "black"}`}
           onClick={() => setShowModal(true)}
-          className=" cursor-pointer "
+          className={` cursor-pointer`}
         />
       </div>
       <AnimatePresence>
@@ -113,8 +118,6 @@ export default function SearchModal() {
               if (e.target === backgroundRef.current) setShowModal(false);
             }}
           >
-            {/* <div className=" relative mt-[48px] w-full backdrop-blur-sm "> */}
-
             <div className=" relative top-[48px] flex h-[48px] w-full justify-between border-0 bg-white p-2 shadow-lg outline-none backdrop-blur-sm focus:outline-none">
               <form
                 className=" flex w-full items-center"
@@ -156,23 +159,35 @@ export default function SearchModal() {
               </button>
             </div>
             <div className=" relative top-[48px]">
-              {fictions?.map((fiction: any, i: number) => (
-                <div key={fiction.id} className=" bg-white p-3">
-                  <a
-                    className=" ml-7"
-                    href={`/fictions/${fiction.id}`}
-                    onClick={() => {
-                      setShowModal(false);
-                      router.push(`/fictions/${fiction.id}`);
-                    }}
-                  >
-                    {fiction.title} -{" "}
-                    <span className=" text-gray-500">
-                      {fiction.author.name}
-                    </span>
-                  </a>
+              {isLoading ? (
+                <div className="flex items-center justify-center bg-white shadow-md">
+                  <ClipLoader
+                    size={100}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
                 </div>
-              ))}
+              ) : (
+                <div className=" shadow-md">
+                  {fictions?.map((fiction: any, i: number) => (
+                    <div key={fiction.id} className=" bg-white p-3">
+                      <a
+                        className=" ml-7"
+                        href={`/fictions/${fiction.id}`}
+                        onClick={() => {
+                          setShowModal(false);
+                          router.push(`/fictions/${fiction.id}`);
+                        }}
+                      >
+                        {fiction.title} -{" "}
+                        <span className=" text-gray-500">
+                          {fiction.author.name}
+                        </span>
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
         )}
