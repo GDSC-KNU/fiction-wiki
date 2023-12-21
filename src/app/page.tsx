@@ -60,7 +60,7 @@ export default async function Home() {
   return (
     <div>
       <div className="  mx-auto max-w-[1200px]">
-        <div className=" mt-3 border-b-[1px] px-1 text-xl font-bold  md:py-1">
+        <div className=" mt-3 border-b-[1px] px-2 text-xl font-bold  md:py-1">
           평점 TOP
         </div>
         <FictionList

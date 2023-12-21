@@ -143,7 +143,7 @@ export default function InfoBox({
                     title={fiction?.original}
                   >
                     <LinkIcon />
-                    {urlToString(fiction?.original)}
+                    {/* {urlToString(fiction?.original)} */}
                   </a>
                 </dd>
               </div>

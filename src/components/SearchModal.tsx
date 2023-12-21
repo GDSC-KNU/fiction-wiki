@@ -41,30 +41,63 @@ export default function SearchModal() {
     return () => clearTimeout(debounce);
   }, [query]);
 
+  const backgroundRef = useRef(null);
+  const searchIconRef = useRef<any>(null);
+  const [iconPosition, setIconPosition] = useState({ top: 0, left: 0 });
+
   const modalVariants = {
     hidden: {
-      y: -48,
-      zIndex: -1,
+      x: iconPosition.left,
+      y: iconPosition.top - 48,
+      width: 50,
+      height: 48,
       opacity: 0,
-      // transitionEnd: {
-      //   zIndex: 70,
-      // },
     },
-    visible: { y: 0, opacity: 1 },
-    exit: { y: -48, opacity: 0 },
+    visible: {
+      x: 0,
+      y: 0,
+      width: "100%", // Full width
+      height: "100%", // Full height
+      opacity: 1,
+    },
+    exit: {
+      x: iconPosition.left,
+      y: iconPosition.top - 48,
+      width: 50,
+      height: 48,
+      opacity: 0,
+    },
   };
 
-  const backgroundRef = useRef(null);
+  useEffect(() => {
+    const updatePosition = () => {
+      if (searchIconRef.current) {
+        const rect = searchIconRef.current.getBoundingClientRect();
+        setIconPosition({ top: rect.top, left: rect.left });
+      }
+    };
+
+    // Update the position initially and on resize
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+
+    // Cleanup listener
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [searchIconRef]);
 
   return (
     <div>
-      <SearchIcon
-        width="24"
-        height="24"
-        // fill="black"
-        onClick={() => setShowModal(true)}
-        className=" cursor-pointer "
-      />
+      <div ref={searchIconRef}>
+        <SearchIcon
+          width="24"
+          height="24"
+          // fill="black"
+          onClick={() => setShowModal(true)}
+          className=" cursor-pointer "
+        />
+      </div>
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -82,9 +115,7 @@ export default function SearchModal() {
           >
             {/* <div className=" relative mt-[48px] w-full backdrop-blur-sm "> */}
 
-            <div
-              className={` relative top-[48px]  flex h-[48px] w-full justify-between border-0 bg-white p-2 shadow-lg outline-none focus:outline-none`}
-            >
+            <div className=" relative top-[48px] flex h-[48px] w-full justify-between border-0 bg-white p-2 shadow-lg outline-none backdrop-blur-sm focus:outline-none">
               <form
                 className=" flex w-full items-center"
                 onSubmit={(e) => {
