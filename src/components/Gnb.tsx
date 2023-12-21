@@ -69,15 +69,11 @@ export default function Gnb() {
       transition={{ duration: 0.3, type: "tween" }}
       className=" fixed top-0 z-50 h-12 w-screen bg-white shadow-md"
     >
-      <nav className="relative z-50 flex h-full w-full items-center justify-between pl-4">
+      <nav className="relative z-50 flex h-full w-full items-center justify-between pl-2">
         <ul className="flex h-full items-center space-x-2 whitespace-nowrap uppercase">
           <li className="cursor-pointer">
-            <Link
-              className="items-center font-mono text-2xl font-bold"
-              href="/"
-              passHref
-            >
-              FDBS
+            <Link className="items-center text-xl font-bold" href="/" passHref>
+              소설위키
             </Link>
           </li>
           <li className=" h-full">
