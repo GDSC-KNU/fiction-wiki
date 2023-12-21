@@ -67,9 +67,9 @@ export default function Gnb() {
       initial={{ y: 0 }}
       animate={animateProps}
       transition={{ duration: 0.3, type: "tween" }}
-      className=" fixed top-0 h-12 w-screen bg-white shadow-md"
+      className=" fixed top-0 z-50 h-12 w-screen bg-white shadow-md"
     >
-      <nav className="relative z-30 flex h-full w-full items-center justify-between pl-4">
+      <nav className="relative z-50 flex h-full w-full items-center justify-between pl-4">
         <ul className="flex h-full items-center space-x-2 whitespace-nowrap uppercase">
           <li className="cursor-pointer">
             <Link
@@ -111,7 +111,7 @@ export default function Gnb() {
           )}
         </ul>
       </nav>
-      <ul className="z-20 flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-4 shadow-md md:hidden">
+      <ul className="z-40 flex h-12 list-none space-x-6 whitespace-nowrap bg-white px-4 shadow-md md:hidden">
         {navLinks.map((link) => (
           <NavbarLink key={link.href} href={link.href}>
             {link.label}

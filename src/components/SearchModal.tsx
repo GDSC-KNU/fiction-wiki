@@ -8,6 +8,7 @@ import useKeyHandler from "@/hooks/useKeyHandler";
 
 import XIcon from "@public/svg/x.svg";
 import { AnimatePresence, motion } from "framer-motion";
+import { set } from "react-hook-form";
 
 export default function SearchModal() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function SearchModal() {
       zIndex: -1,
       opacity: 0,
       // transitionEnd: {
-      //   zIndex: 25,
+      //   zIndex: 70,
       // },
     },
     visible: { y: 0, opacity: 1 },
@@ -66,7 +67,6 @@ export default function SearchModal() {
       />
       <AnimatePresence>
         {showModal && (
-          // <div className="fixed inset-0 z-30 mt-[48px] bg-black opacity-40">
           <motion.div
             ref={backgroundRef}
             key="modal"
@@ -87,7 +87,8 @@ export default function SearchModal() {
             >
               <form
                 className=" flex w-full items-center"
-                onSubmit={() => {
+                onSubmit={(e) => {
+                  e.preventDefault();
                   setShowModal(false);
                   router.push(`/search/title/${query}/1`);
                 }}
@@ -115,34 +116,36 @@ export default function SearchModal() {
               <button
                 className=" pr-1 text-2xl uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                 type="button"
-                onClick={() => setShowModal(false)}
+                onClick={() => {
+                  setQuery("");
+                  setShowModal(false);
+                }}
               >
                 <XIcon />
               </button>
             </div>
-            {fictions?.map((fiction: any, i: number) => (
-              <div key={fiction.id} className=" bg-white p-3">
-                <a
-                  className=" ml-7"
-                  href={`/fictions/${fiction.id}`}
-                  onClick={() => {
-                    setShowModal(false);
-                    router.push(`/fictions/${fiction.id}`);
-                  }}
-                >
-                  {fiction.title} -{" "}
-                  <span className=" text-gray-500">{fiction.author.name}</span>
-                </a>
-              </div>
-            ))}
-            {/* </div> */}
-
-            {/* <div className="fixed inset-0 z-10 mt-[48px] bg-black opacity-40"></div> */}
+            <div className=" relative top-[48px]">
+              {fictions?.map((fiction: any, i: number) => (
+                <div key={fiction.id} className=" bg-white p-3">
+                  <a
+                    className=" ml-7"
+                    href={`/fictions/${fiction.id}`}
+                    onClick={() => {
+                      setShowModal(false);
+                      router.push(`/fictions/${fiction.id}`);
+                    }}
+                  >
+                    {fiction.title} -{" "}
+                    <span className=" text-gray-500">
+                      {fiction.author.name}
+                    </span>
+                  </a>
+                </div>
+              ))}
+            </div>
           </motion.div>
-          // </div>
         )}
       </AnimatePresence>
     </div>
-    // </motion.div>
   );
 }
