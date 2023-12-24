@@ -60,8 +60,8 @@ export default function SearchModal() {
     visible: {
       x: 0,
       y: 0,
-      width: "100%", // Full width
-      height: "100%", // Full height
+      width: "100%",
+      height: "100%",
       opacity: 1,
     },
     exit: {
@@ -81,11 +81,9 @@ export default function SearchModal() {
       }
     };
 
-    // Update the position initially and on resize
     updatePosition();
     window.addEventListener("resize", updatePosition);
 
-    // Cleanup listener
     return () => {
       window.removeEventListener("resize", updatePosition);
     };
@@ -160,7 +158,7 @@ export default function SearchModal() {
             </div>
             <div className=" relative top-[48px]">
               {isLoading ? (
-                <div className="flex items-center justify-center bg-white shadow-md">
+                <div className="flex items-center justify-center bg-white p-10 shadow-md">
                   <ClipLoader
                     size={100}
                     aria-label="Loading Spinner"

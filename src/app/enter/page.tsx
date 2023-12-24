@@ -68,7 +68,8 @@ const Enter: NextPage = () => {
         router.push(document.referrer);
       } else {
         // Use the browser's history to go back or redirect to a default page
-        window.history.length > 2 ? window.history.back() : router.push("/");
+        // window.history.length > 2 ? window.history.back() : router.push("/");
+        router.push("/");
       }
     }
   }, [session, router]);
