@@ -1,5 +1,3 @@
-import { Author } from "@prisma/client";
-
 import AuthorsPageWrapper from "@components/authors/AuthorsPageWrapper";
 
 // interface AuthorResponse {
@@ -7,14 +5,14 @@ import AuthorsPageWrapper from "@components/authors/AuthorsPageWrapper";
 //   authorsCount: number;
 // }
 
-interface AuthorResponse {
-  authors: Author[];
-}
+// interface AuthorResponse {
+//   authors: Author[];
+// }
 
-type FallbackData = AuthorResponse[][];
+// type FallbackData = AuthorResponse[][];
 
 export default async function Authors() {
-  const response: FallbackData = await fetch(
+  const response: any = await fetch(
     `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=1`
   ).then((res) => res.json());
 
