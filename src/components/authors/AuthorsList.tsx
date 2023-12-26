@@ -4,6 +4,7 @@ import { Author, Fiction } from "@prisma/client";
 
 import { Button2 } from "@components/common/Button2";
 import { useRouter } from "next/navigation";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface authorWithMore extends Author {
   fictions: Fiction[];
@@ -17,7 +18,7 @@ export default function AuthorsList({ data }: { data: any[] }) {
   const handler = (authorName: string) => {
     return router.push(`/authors/name/${authorName}`);
   };
-  if (flattenedData.length < 1) return;
+  if (!flattenedData || flattenedData?.length < 1) return <ClipLoader />;
 
   return (
     <div className="max-w-[900px] ">

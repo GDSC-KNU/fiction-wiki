@@ -26,6 +26,7 @@ export default function AuthorsDisplayer({
 }: {
   fallbackData: any[];
 }) {
+  console.log(fallbackData);
   const { data, error, isLoading, isValidating, mutate, size, setSize } =
     useSWRInfinite(getKey, fetcher, {
       revalidateOnFocus: false,

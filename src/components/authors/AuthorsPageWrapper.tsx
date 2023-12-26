@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import AuthorsDisplayer from "@components/authors/AuthorsDisplayer";
 
-export default async function AuthorsPageWrapper({
+export default function AuthorsPageWrapper({
   fallbackData,
 }: {
   fallbackData: any[];
