@@ -8,7 +8,7 @@ import deepDiff from "deep-diff";
 import { diffChars } from "diff";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getToken, decode } from "next-auth/jwt";
+import { getToken } from "next-auth/jwt";
 
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";

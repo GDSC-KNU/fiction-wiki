@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import client from "@libs/server/client";
 
-export async function GET(req: NextRequest, { params }: any) {
-  const { page } = params;
+export async function GET(req: NextRequest) {
+  // const { page } = params;
+
+  const { searchParams } = new URL(req.url);
+  const page = searchParams.get("page");
+
   if (!page)
     return NextResponse.json(
       { ok: false, message: "no page" },
@@ -10,12 +14,14 @@ export async function GET(req: NextRequest, { params }: any) {
     );
 
   const authors = await client.author.findMany({
-    take: 18,
-    skip: (+page - 1) * 18,
+    take: 12,
+    skip: (+page - 1) * 12,
     include: {
       fictions: {
-        include: {
+        select: {
           userFictionStat: true,
+          title: true,
+          id: true,
         },
       },
     },
@@ -25,6 +31,6 @@ export async function GET(req: NextRequest, { params }: any) {
 
   return NextResponse.json({
     authors: authors,
-    authorsCount: authorsCount,
+    // authorsCount: authorsCount,
   });
 }

@@ -56,7 +56,7 @@ export default function Gnb() {
 
   const navLinks = [
     { href: "/fictions", label: "작품" },
-    { href: "/authors/1", label: "작가" },
+    { href: "/authors", label: "작가" },
     { href: "/translation", label: "번역" },
     { href: "/glossaries", label: "용어집" },
     { href: "/fictions/create", label: "새 문서" },

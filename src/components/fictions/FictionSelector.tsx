@@ -1,18 +1,18 @@
 "use client";
-import { Keyword, Category } from "@prisma/client";
+import { Category, Keyword } from "@prisma/client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import ExpandDown from "@public/svg/expandDown.svg";
 import CollapseUp from "@public/svg/collapseUp.svg";
+import ExpandDown from "@public/svg/expandDown.svg";
 
 import { useQueryObject } from "@/hooks/useQueryObject";
-import {
-  yearOptions,
-  sortingOptions,
-  fictionsTabOptions,
-} from "@constants/options";
 import { Button2, buttonVariants } from "@components/common/Button2";
+import {
+  fictionsTabOptions,
+  sortingOptions,
+  yearOptions,
+} from "@constants/options";
 
 import {
   Select,
@@ -22,13 +22,12 @@ import {
   SelectValue,
 } from "@components/common/Select2";
 
-import FictionFilteringModal from "./FictionFilteringModal";
-import { useOverlay } from "@toss/use-overlay";
-import { OverlayProvider } from "@toss/use-overlay";
 import { Tabs, TabsList, TabsTrigger } from "@components/common/Tabs";
+import { OverlayProvider, useOverlay } from "@toss/use-overlay";
+import FictionFilteringModal from "./FictionFilteringModal";
 
-import FilteringIcon from "@public/svg/filtering.svg";
 import { cn } from "@libs/util";
+import FilteringIcon from "@public/svg/filtering.svg";
 
 interface FictionSelectorProps {
   staticData: {
