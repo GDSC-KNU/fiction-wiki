@@ -1,9 +1,9 @@
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense } from "react";
 
 import ClipLoader from "react-spinners/ClipLoader";
-import AuthorsDisplayer from "@components/authors/authorsDisplayer";
+import AuthorsDisplayer from "@components/authors/AuthorsDisplayer";
 
-export default function AuthorsPageWrapper({
+export default async function AuthorsPageWrapper({
   fallbackData,
 }: {
   fallbackData: any[];
@@ -16,3 +16,4 @@ export default function AuthorsPageWrapper({
     </div>
   );
 }
+``;

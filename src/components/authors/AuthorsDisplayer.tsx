@@ -1,7 +1,7 @@
 "use client";
 
 import { Author } from "@prisma/client";
-import AuthorsList from "@components/AuthorsList";
+import AuthorsList from "@components/authors/AuthorsList";
 
 import useSWRInfinite from "swr/infinite";
 

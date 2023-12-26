@@ -2,7 +2,7 @@ import AuthorIcon from "@public/svg/author.svg";
 
 import { Author, Fiction } from "@prisma/client";
 
-import { Button2 } from "./common/Button2";
+import { Button2 } from "@components/common/Button2";
 import { useRouter } from "next/navigation";
 
 interface authorWithMore extends Author {

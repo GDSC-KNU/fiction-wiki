@@ -1,6 +1,6 @@
 import { Author } from "@prisma/client";
 
-import AuthorsPageWrapper from "@components/authors/authorsPageWrapper";
+import AuthorsPageWrapper from "@components/authors/AuthorsPageWrapper";
 
 // interface AuthorResponse {
 //   authors: Author[];
