@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   // const { page } = params;
 
   const { searchParams } = new URL(req.url);
-  const page = searchParams.get("page");
+  const page = searchParams.get("page") || 1;
 
   if (!page)
     return NextResponse.json(
