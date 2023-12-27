@@ -12,21 +12,23 @@ import AuthorsPageWrapper from "@components/authors/AuthorsPageWrapper";
 // type FallbackData = AuthorResponse[][];
 
 export default async function Authors() {
-  const response: any = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=1`
-  );
+  // const response: any = await fetch(
+  //   `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=1`
+  // );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
-  }
+  // if (!response.ok) {
+  //   throw new Error(`HTTP error: ${response.status}`);
+  // }
 
-  const data = await response.json();
+  // const data = await response.json();
 
-  const reduced = [[data]];
+  // const reduced = [[data]];
 
   return (
     <>
-      <AuthorsPageWrapper fallbackData={reduced} />
+      <AuthorsPageWrapper
+      // fallbackData={reduced}
+      />
     </>
   );
 }

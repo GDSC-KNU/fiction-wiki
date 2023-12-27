@@ -12,14 +12,15 @@ interface authorWithMore extends Author {
 }
 
 export default function AuthorsList({ data }: { data: any[] }) {
-  const flattenedData = data.flatMap((item) => item?.["authors"]);
-
   const router = useRouter();
+  if (!data) return <ClipLoader size={100} />;
+
+  const flattenedData = data.flatMap((item) => item?.["authors"]);
 
   const handler = (authorName: string) => {
     return router.push(`/authors/name/${authorName}`);
   };
-  if (!data || !flattenedData || flattenedData?.length < 2)
+  if (!flattenedData || flattenedData?.length < 2)
     return <ClipLoader size={100} />;
 
   return (

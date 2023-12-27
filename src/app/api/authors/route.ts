@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const authorsCount = await client.author.count({});
+  // const authorsCount = await client.author.count({});
 
   return NextResponse.json({
     authors: authors,

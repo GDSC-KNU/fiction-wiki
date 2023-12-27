@@ -16,7 +16,9 @@ interface AuthorResponse {
 
 const getKey = (pageIndex: number, previousPageData: AuthorResponse) => {
   if (previousPageData && !previousPageData.authors.length) return null;
-  return `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=${pageIndex + 1}`;
+  return `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=${
+    (pageIndex || 0) + 1
+  }`;
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -24,7 +26,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function AuthorsDisplayer({
   fallbackData,
 }: {
-  fallbackData: any[];
+  fallbackData?: any[];
 }) {
   const { data, error, isLoading, isValidating, mutate, size, setSize } =
     useSWRInfinite(getKey, fetcher, {
@@ -36,7 +38,7 @@ export default function AuthorsDisplayer({
     });
 
   const hasMoreData =
-    data && data[data?.length - 1]?.["authors"]?.length === 12;
+    data && data?.[data?.length - 1]?.["authors"]?.length === 12;
 
   const observer = useRef<IntersectionObserver>();
   const lastElementRef = useRef<HTMLDivElement>(null);

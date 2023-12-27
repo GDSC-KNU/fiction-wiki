@@ -6,7 +6,7 @@ import AuthorsDisplayer from "@components/authors/AuthorsDisplayer";
 export default function AuthorsPageWrapper({
   fallbackData,
 }: {
-  fallbackData: any[];
+  fallbackData?: any[];
 }) {
   return (
     <div className=" flex flex-col">
