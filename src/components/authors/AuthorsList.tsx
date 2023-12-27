@@ -1,3 +1,4 @@
+"use client";
 import AuthorIcon from "@public/svg/author.svg";
 
 import { Author, Fiction } from "@prisma/client";
@@ -18,7 +19,8 @@ export default function AuthorsList({ data }: { data: any[] }) {
   const handler = (authorName: string) => {
     return router.push(`/authors/name/${authorName}`);
   };
-  if (!flattenedData || flattenedData?.length < 1) return <ClipLoader />;
+  if (!flattenedData || flattenedData?.length < 2)
+    return <ClipLoader size={100} />;
 
   return (
     <div className="max-w-[900px] ">

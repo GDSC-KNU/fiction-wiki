@@ -5,9 +5,9 @@ export async function GET(req: NextRequest) {
   // const { page } = params;
 
   const { searchParams } = new URL(req.url);
-  const page = searchParams.get("page") || 1;
+  const page = searchParams?.get("page");
 
-  if (!page)
+  if (page === (undefined || null))
     return NextResponse.json(
       { ok: false, message: "no page" },
       { status: 400 }

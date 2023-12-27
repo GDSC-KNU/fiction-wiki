@@ -31,11 +31,12 @@ export default function AuthorsDisplayer({
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       focusThrottleInterval: 5000,
-      //   suspense: true,
-      //   fallbackData: fallbackData,
+      // suspense: true,
+      // fallbackData: fallbackData,
     });
 
-  const hasMoreData = data && data[data.length - 1]?.["authors"]?.length === 12;
+  const hasMoreData =
+    data && data[data?.length - 1]?.["authors"]?.length === 12;
 
   const observer = useRef<IntersectionObserver>();
   const lastElementRef = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export default function AuthorsDisplayer({
 
   return (
     <>
-      {data && <AuthorsList data={data} />}
+      <AuthorsList data={data} />
       <div ref={lastElementRef} />
       {hasMoreData && isValidating && (
         <div className="flex justify-center p-6">
