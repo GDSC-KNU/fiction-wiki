@@ -19,7 +19,7 @@ export default function AuthorsList({ data }: { data: any[] }) {
   const handler = (authorName: string) => {
     return router.push(`/authors/name/${authorName}`);
   };
-  if (!flattenedData || flattenedData?.length < 2)
+  if (!data || !flattenedData || flattenedData?.length < 2)
     return <ClipLoader size={100} />;
 
   return (
