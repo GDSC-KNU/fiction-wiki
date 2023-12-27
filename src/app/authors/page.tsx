@@ -14,9 +14,15 @@ import AuthorsPageWrapper from "@components/authors/AuthorsPageWrapper";
 export default async function Authors() {
   const response: any = await fetch(
     `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=1`
-  ).then((res) => res.json());
+  );
 
-  const reduced = [[response]];
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  const reduced = [[data]];
 
   return (
     <>

@@ -16,7 +16,7 @@ interface AuthorResponse {
 
 const getKey = (pageIndex: number, previousPageData: AuthorResponse) => {
   if (previousPageData && !previousPageData.authors.length) return null;
-  return `/api/authors?page=${pageIndex + 1}`;
+  return `${process.env.NEXT_PUBLIC_HOST}/api/authors?page=${pageIndex + 1}`;
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -26,7 +26,6 @@ export default function AuthorsDisplayer({
 }: {
   fallbackData: any[];
 }) {
-  console.log(fallbackData);
   const { data, error, isLoading, isValidating, mutate, size, setSize } =
     useSWRInfinite(getKey, fetcher, {
       revalidateOnFocus: false,

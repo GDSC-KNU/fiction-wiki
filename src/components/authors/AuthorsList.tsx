@@ -33,7 +33,7 @@ export default function AuthorsList({ data }: { data: any[] }) {
                 onClick={() => handler(authorData.name)}
                 className=" flex cursor-pointer justify-center"
               >
-                <AuthorIcon width={90} height={110} />
+                <AuthorIcon width="90px" height="110px" />
               </div>
               <div className=" w-full flex-col space-y-2 p-2">
                 <div
@@ -60,7 +60,7 @@ export default function AuthorsList({ data }: { data: any[] }) {
                   })}
                 </div>
                 <div className=" line-clamp-2 text-xs">
-                  {authorData.description ? authorData.description : "\n\n\n"}
+                  {authorData.description ? authorData.description : ""}
                 </div>
               </div>
             </div>
