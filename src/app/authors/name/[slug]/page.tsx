@@ -70,62 +70,55 @@ export default async function AuthorDetail({ params }: any) {
   ).then((res) => res.json());
 
   return (
-    <div className=" mx-auto min-h-[213px] px-2">
-      {/* <NextSeo
-        title={author?.name}
-        description={
-          author?.description ||
-          `작가 ${author?.name}의 페이지 입니다. 작품 목록, SNS 피드, 최신 소식을 확인하세요.`
-        }
-        canonical={`${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`}
-        openGraph={{
-          url: `${URL.DOMAIN}${URL.AUTHOR_DETAIL}/${author?.name}`,
-        }}
-      /> */}
-      <div className=" mb-4 border bg-[#F5F5F5]">
-        <div className=" flex ">
+    <article className=" ">
+      <header className=" mx-[-16px] mb-4 border bg-[#F5F5F5] p-3">
+        <div className="flex">
           <Image
             className=" rounded-full py-5 pl-3 pr-5"
-            src="/anoynymous_user.png"
+            src="/anonymous_user.png"
             width={142}
             height={160}
             alt={author.name}
           />
-          <div className=" flex flex-col justify-center">
-            <h1 className=" mb-2 text-xl font-bold">{author?.name}</h1>
+          <div className="flex flex-col justify-center">
+            <h1 className="mb-2 text-xl font-bold">{author?.name}</h1>
             <p>{`${author?.rawName}${
-              author?.relatedName === null ? "" : `, ` + author?.relatedName
+              author?.relatedName ? `, ${author?.relatedName}` : ""
             }`}</p>
-            <div className=" flex">
-              <dt>국적</dt>
-              <dd className=" ml-3">{author?.nationality}</dd>
-            </div>
-            <div className=" flex">
-              <dt>SNS</dt>
-              <dd className=" ml-3">{author?.sns || "업데이트 예정"}</dd>
-            </div>
+            <dl className="flex">
+              <dt className="">국적</dt>
+              <dd className="ml-3 line-clamp-1">{author?.nationality}</dd>
+            </dl>
+            <dl className="flex">
+              <dt className="">SNS</dt>
+              <dd className="ml-3 line-clamp-1">
+                {author?.sns || "업데이트 예정"}
+              </dd>
+            </dl>
           </div>
         </div>
-        <div className=" mb-4 ml-3 pb-2 text-sm"> {author?.description}</div>
-      </div>
-      <div className=" mb-4  grid grid-cols-12">
-        <div className=" col-span-12 lg:col-span-12">
-          <div className=" mt-5"></div>
-          <h2 className=" text-xl font-bold">작품 목록</h2>
-          {author && author?.fictions && (
-            <FictionList
-              data={author?.fictions}
-              type={"fictions_list"}
-              pagination={false}
-            />
-          )}
+        <p className="px-3 text-sm">{author?.description}</p>
+      </header>
+      <section className="min-h-[213px] p-3">
+        <div className="mb-4 grid grid-cols-12">
+          <div className="col-span-12 lg:col-span-12">
+            <h2 className="text-xl font-bold">작품 목록</h2>
+            {author && author?.fictions && (
+              <FictionList
+                data={author?.fictions}
+                type={"fictions_list"}
+                pagination={false}
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <div className=" mb-4  grid grid-cols-12 bg-white">
-        <div className=" col-span-12 lg:col-span-12">
-          <div className="mt-5 text-xl font-bold">SNS</div>
-        </div>
-      </div>
-    </div>
+        <section className="mb-4 grid grid-cols-12 bg-white">
+          <div className="col-span-12 lg:col-span-12">
+            <h2 className="mt-5 text-xl font-bold">SNS</h2>
+            {/* Include SNS related content here */}
+          </div>
+        </section>
+      </section>
+    </article>
   );
 }
