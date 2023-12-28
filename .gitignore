@@ -42,3 +42,7 @@ fdbs-crt-93ec7b71e5e9.json
 #yarn
 .yarn
 ./yarn/*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

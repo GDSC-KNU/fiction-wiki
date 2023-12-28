@@ -58,18 +58,18 @@ export default async function Home() {
   });
 
   return (
-    <div>
-      <div className="  mx-auto max-w-[1200px]">
-        <div className=" mt-3 border-b-[1px] px-2 text-xl font-bold  md:py-1">
-          평점 TOP
-        </div>
+    <main>
+      <section className="  mx-auto max-w-[1200px]">
+        <header className=" mt-3 border-b-[1px] px-2 text-xl font-bold  md:py-1">
+          <h2>평점 TOP</h2>
+        </header>
         <FictionList
           data={data}
           type={"fictions_list"}
           pagination={false}
         ></FictionList>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 
