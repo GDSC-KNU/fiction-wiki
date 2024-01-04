@@ -1,27 +1,82 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Install dependencies
-      run: npm install -g yarn && yarn
-    - name: Install Playwright Browsers
-      run: yarn playwright install --with-deps
-    - name: Run Playwright tests
-      run: yarn playwright test
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - name: Waiting for 200 from the Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.2.0
+        id: waitForDeploy
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: yarn test:e2e
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          COOKIE_PASSWORD: ${{ secrets.COOKIE_PASSWORD }}
+          TWILIO_SID: ${{ secrets.TWILIO_SID }}
+          TWILIO_TOKEN: ${{ secrets.TWILIO_TOKEN }}
+          TWILIO_MSID: ${{ secrets.TWILIO_MSID }}
+          MY_PHONE: ${{ secrets.MY_PHONE }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_SEARCH_ENGINE_ID: ${{ secrets.GOOGLE_SEARCH_ENGINE_ID }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          NEXTAUTH_URL_INTERNAL: ${{ secrets.NEXTAUTH_URL_INTERNAL }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          SECRET: ${{ secrets.SECRET }}
+          NEXT_PUBLIC_SECRET: ${{ secrets.NEXT_PUBLIC_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          REVALIDATION_TOKEN: ${{ secrets.REVALIDATION_TOKEN }}
+          CF_ID: ${{ secrets.CF_ID }}
+          CF_TOKEN: ${{ secrets.CF_TOKEN }}
+          NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
+          ANALYZE: ${{ secrets.ANALYZE }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ORGANIZATION_KEY: ${{ secrets.ORGANIZATION_KEY }}
+          NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
+          NAVER_API_SECRET: ${{ secrets.NAVER_API_SECRET }}
+          PAPAGO_API_URL: ${{ secrets.PAPAGO_API_URL }}
+          PAPAGO_CLIENT_ID: ${{ secrets.PAPAGO_CLIENT_ID }}
+          PAPAGO_CLIENT_SECRET: ${{ secrets.PAPAGO_CLIENT_SECRET }}
+          PAPAGO_CUSTOM_DICT: ${{ secrets.PAPAGO_CUSTOM_DICT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          GOOGLE_CLIENT_ID_TRANSLATION: ${{ secrets.GOOGLE_CLIENT_ID_TRANSLATION }}
+          GOOGLE_GLOSSARY_ID: ${{ secrets.GOOGLE_GLOSSARY_ID }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED: ${{ secrets.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED }}
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          BASE_URL: ${{ steps.waitForDeploy.outputs.url }}
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
